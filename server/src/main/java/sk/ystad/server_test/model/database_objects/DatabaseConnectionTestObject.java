@@ -27,6 +27,12 @@ public class DatabaseConnectionTestObject implements Serializable {
         this.surname = surname;
     }
 
+    public DatabaseConnectionTestObject(int id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+    }
+
     public long getId() {
         return id;
     }

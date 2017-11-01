@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import sk.ystad.server_test.model.database_objects.DatabaseConnectionTestObject;
 import sk.ystad.server_test.model.repositories.DbConnectionTestRepository;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -55,6 +57,13 @@ public class DbTestController {
     public List<DatabaseConnectionTestObject> findTestObjectBySurname(@RequestParam("surname") String surname) {
         Iterable<DatabaseConnectionTestObject> result = connectionTestRepository.findBySurname(surname);
         return (List<DatabaseConnectionTestObject>) result;
+    }
+
+    @RequestMapping("/test_raw_query")
+    public List<DatabaseConnectionTestObject> testRawQuery() {
+        List<DatabaseConnectionTestObject> resultList = null;
+        resultList = new DbRawQueryTest().testConnection();
+        return resultList;
     }
 
 }
