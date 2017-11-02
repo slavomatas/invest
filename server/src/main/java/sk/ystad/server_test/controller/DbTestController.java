@@ -59,11 +59,11 @@ public class DbTestController {
         return (List<DatabaseConnectionTestObject>) result;
     }
 
-    @RequestMapping("/test_raw_query")
-    public List<DatabaseConnectionTestObject> testRawQuery() {
-        List<DatabaseConnectionTestObject> resultList = null;
-        resultList = new DbRawQueryTest().testConnection();
-        return resultList;
-    }
+//    @RequestMapping("/test_raw_query")
+//    public List<DatabaseConnectionTestObject> testRawQuery() {
+//        List<DatabaseConnectionTestObject> resultList = null;
+//        resultList = new DbRawQueryTest().testConnection();
+//        return resultList;
+//    }
 
 }
