@@ -4,8 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-@Entity
-@Table(name = "attributes")
+//@Entity
 public class Attribute implements Serializable {
 
     private static final long serialVersionUID = -1867462836467835799L;
@@ -14,14 +13,12 @@ public class Attribute implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long attributeId;
 
-    @Column(name = "key")
     private String key;
 
-    @Column(name = "value")
     private String value;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "attributes")
-    private Set<Security> securities;
+//    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "attributes")
+//    private Set<Security> securities;
 
 
     public String getKey() {

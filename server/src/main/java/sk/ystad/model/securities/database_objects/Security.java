@@ -1,39 +1,63 @@
 package sk.ystad.model.securities.database_objects;
 
+import org.hibernate.annotations.FilterJoinTables;
+import org.hibernate.annotations.JoinColumnsOrFormulas;
+import org.hibernate.annotations.JoinFormula;
 import org.hibernate.annotations.Type;
-import org.json.JSONObject;
 import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Entity(name = "Security")
-@Table(name = "securities")
+@Entity
 public class Security implements Serializable {
-
-    private static final long serialVersionUID = 7178589967236604342L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long securityId;
+    private Long securityId;
 
-    @Column(name = "symbol", unique = true)
+    @Transient  //Here should be probably custom join
+    private SecurityData securityData;
+
     private String symbol;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "is_active")
+    private String currency;
+
     private boolean isActive;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "securities_attributes", joinColumns = {
-            @JoinColumn(name = "security_id", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "attribute_id", nullable = false, updatable = false)})
-    private Set<Attribute> attributes;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="security")
+    private List<ExternalSecurity> externalIds;
+
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinTable(name = "securities_attributes", joinColumns = {
+//            @JoinColumn(name = "security_id", nullable = false, updatable = false)},
+//            inverseJoinColumns = {@JoinColumn(name = "attribute_id", nullable = false, updatable = false)})
+//    private Set<Attribute> attributes;
+
+    protected Security(){
+        setCurrency("USD"); //temporary implementation - later will be parameter in constructor?(SMA)
+    }
+
+    protected Security(SecurityData securityData) {
+        this();
+        this.securityData = securityData;
+    }
+
+    public Security(SecurityData securityData, String symbol, String name) {
+        this(securityData);
+        setSymbol(symbol);
+        setName(name);
+    }
+
+    public SecurityData getSecurityData() {
+        return securityData;
+    }
 
     public String getSymbol() {
         return symbol;
@@ -51,6 +75,14 @@ public class Security implements Serializable {
         this.name = name;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     public boolean isActive() {
         return isActive;
     }
@@ -59,4 +91,7 @@ public class Security implements Serializable {
         isActive = active;
     }
 
+    public List<ExternalSecurity> getExternalIds() {
+        return externalIds;
+    }
 }
