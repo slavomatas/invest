@@ -1,6 +1,5 @@
 package sk.ystad.loaders.security;
 
-import org.json.JSONObject;
 
 public class SecurityLoadingRunner {
 

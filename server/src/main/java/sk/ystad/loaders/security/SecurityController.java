@@ -7,19 +7,19 @@ import sk.ystad.model.securities.repositories.SecurityRepository;
 
 import java.util.List;
 
-//@Controller
+@Controller
 public class SecurityController {
 
-//    private final SecurityRepository securityRepository;
-//
-//    @Autowired
-//    public SecurityController(SecurityRepository securityRepository) {
-//        this.securityRepository = securityRepository;
-//    }
-//
-//    public void saveSecurities(List<Security> securities){
-//        if(securities != null){
-//            securityRepository.save(securities);
-//        }
-//    }
+    private final SecurityRepository securityRepository;
+
+    @Autowired
+    public SecurityController(SecurityRepository securityRepository) {
+        this.securityRepository = securityRepository;
+    }
+
+    public void saveSecurities(List<Security> securities){
+        if(securities != null){
+            securityRepository.save(securities);
+        }
+    }
 }

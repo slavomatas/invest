@@ -1,6 +1,5 @@
 package sk.ystad.loaders.security;
 
-
 public class SecurityLoader {
 
     public void loadUSETFData() {
