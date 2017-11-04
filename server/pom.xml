@@ -53,6 +53,17 @@
 			<artifactId>android-json</artifactId>
 			<version>RELEASE</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.github.miwurster</groupId>
+			<artifactId>spring-data-influxdb</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.influxdb</groupId>
+			<artifactId>influxdb-java</artifactId>
+			<version>${influx.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
