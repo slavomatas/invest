@@ -4,9 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @MappedSuperclass
-@DiscriminatorColumn(name = "securityType")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class SecurityData implements Serializable {
+public abstract class SecurityData implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long securityDataId;

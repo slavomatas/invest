@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@DiscriminatorColumn(name = "securityType")
 public class Option extends SecurityData {
 
     private Double strike;

@@ -8,9 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.transaction.annotation.Transactional;
 import sk.ystad.model.securities.database_objects.*;
-import sk.ystad.model.securities.repositories.OptionRepository;
 import sk.ystad.model.securities.repositories.SecurityRepository;
 
 import java.util.Date;
@@ -29,16 +27,16 @@ public class ServerApplication {
 	@Bean
 	public CommandLineRunner demo(SecurityRepository securityRepository) {
 		return (args) ->{
-			securityRepository.saveCascade(new Option("S2", "SecondSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
+			securityRepository.save(new Option("S2", "SecondSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
 					PayoffProfile.CALL,	null).getSecurity());
-			securityRepository.saveCascade(new EquityOptionSecurity("S3", "ThirdSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
+			securityRepository.save(new EquityOptionSecurity("S3", "ThirdSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
 					PayoffProfile.CALL,	null).getSecurity());
-			securityRepository.saveCascade(new EquityBarierOptionSecurity("S4", "FourthSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
+			securityRepository.save(new EquityBarierOptionSecurity("S4", "FourthSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
 					PayoffProfile.CALL,	null, 1., "BT", "BD", "MT", "SF").getSecurity());
 
 			log.info("Stored Securities:");
 			for (Security security : securityRepository.findAll()) {
-				log.info("{}:{} [{}]", security.getSymbol(), security.getName(), security.getClass());
+				log.info("{}:{} [{}]", security.getSymbol(), security.getName(), security.getSecurityData().getClass());
 			}
 		};
 	}

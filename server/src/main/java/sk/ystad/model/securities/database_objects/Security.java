@@ -4,6 +4,7 @@ import org.hibernate.annotations.*;
 import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import java.io.Serializable;
@@ -13,14 +14,11 @@ import java.util.Map;
 import java.util.Set;
 
 @Entity
+@Access(AccessType.PROPERTY)
 public class Security implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long securityId;
 
-    @Transient  //Here should be probably custom join
-    //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="security")
     private SecurityData securityData;
 
     private String symbol;
@@ -31,8 +29,7 @@ public class Security implements Serializable {
 
     private boolean isActive;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="security")
-    private List<ExternalSecurity> externalIds;
+    private List<ExternalSecurity> externalIds = new ArrayList<>();
 
 //    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JoinTable(name = "securities_attributes", joinColumns = {
@@ -55,8 +52,14 @@ public class Security implements Serializable {
         setName(name);
     }
 
-    public SecurityData getSecurityData() {
-        return securityData;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long getSecurityId() {
+        return securityId;
+    }
+
+    private void setSecurityId(Long securityId) {
+        this.securityId = securityId;
     }
 
     public String getSymbol() {
@@ -91,7 +94,40 @@ public class Security implements Serializable {
         isActive = active;
     }
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="security")
     public List<ExternalSecurity> getExternalIds() {
         return externalIds;
+    }
+
+    private void setExternalIds(List<ExternalSecurity> externalIds) {
+        this.externalIds = externalIds;
+    }
+
+    @Transient
+    public SecurityData getSecurityData() {
+        return securityData;
+    }
+
+    private void setSecurityData(SecurityData securityData) {
+        if (securityData != null)
+            this.securityData = securityData;
+    }
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy="security")
+    private Etf getEtf(){
+        return securityData instanceof Etf ? (Etf) securityData : null;
+    }
+
+    private void  setEtf(Etf seurityData){
+        setSecurityData(seurityData);
+    }
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy="security")
+    private Option getOption(){
+        return securityData instanceof Option ? (Option) securityData : null;
+    }
+
+    private void  setOption(Option seurityData){
+        setSecurityData(seurityData);
     }
 }
