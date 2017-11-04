@@ -63,22 +63,18 @@ public class ConnectionTest {
 
     @Test
     public void nativeConnectionTest(){
-        InfluxDBProperties influxDbProperties = new InfluxDBProperties();
-            influxDbProperties.setUrl("http://localhost:8096");
-            influxDbProperties.setUsername("invest");
-            influxDbProperties.setPassword("t4gepDLL5SBjxsyj");
-            influxDbProperties.setRetentionPolicy("autogen");
+        String dbName = "DEFAULT";
 
         // Connect to InfluxDB
-        InfluxDB influxDB = InfluxDBFactory.connect(influxDbProperties.getUrl(), influxDbProperties.getUsername(), influxDbProperties.getPassword());
+        InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:9086", "invest", "t4gepDLL5SBjxsyj");
         // Create a database
-        String dbName = "EXAMPLE_DB";
+
         influxDB.createDatabase(dbName);
         // Create a 'batch' of example 'points'
         BatchPoints batchPoints = BatchPoints
                 .database(dbName)
                 .tag("async", "true")
-                .retentionPolicy(influxDbProperties.getRetentionPolicy())
+                .retentionPolicy("autogen")
                 .consistency(InfluxDB.ConsistencyLevel.ALL)
                 .tag("BatchTag", "BatchTagValue") // tag each point in the batch
                 .build();
@@ -119,7 +115,7 @@ public class ConnectionTest {
 
     @Test
     public void createDeleteDatabaseTest(){
-        String dbName = "TEST_DATABASE";
+        String dbName = "DEFAULT";
         InfluxDBProperties influxDBProperties = influxDBTemplate.getConnectionFactory().getProperties();
         influxDBProperties.setDatabase(dbName);
         influxDBTemplate.getConnectionFactory().setProperties(influxDBProperties);
