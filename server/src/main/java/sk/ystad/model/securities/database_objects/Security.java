@@ -1,12 +1,11 @@
 package sk.ystad.model.securities.database_objects;
 
-import org.hibernate.annotations.FilterJoinTables;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
-import org.hibernate.annotations.JoinFormula;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ public class Security implements Serializable {
     private Long securityId;
 
     @Transient  //Here should be probably custom join
+    //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="security")
     private SecurityData securityData;
 
     private String symbol;

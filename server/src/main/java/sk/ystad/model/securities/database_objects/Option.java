@@ -5,18 +5,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "securityType")
-public class Option implements SecurityData {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long securityDataId;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "securityId")
-    @MapsId
-    private Security security;
+public class Option extends SecurityData {
 
     private Double strike;
     private Date expiry;
@@ -24,23 +13,17 @@ public class Option implements SecurityData {
     private PayoffProfile payoffProfile;
     private Security underlyingSecurity;
 
-    public Option() {
-        this.security = new Security(this);
+    public Option(){
     }
 
     public Option(String symbol, String name, Double strike, Date expiry, ExcerciseStyle excerciseStyle,
                   PayoffProfile payoffProfile, Security underlyingSecurity) {
-        this.security = new Security(this, symbol, name);
+        super(symbol, name);
         this.strike = strike;
         this.expiry = expiry;
         this.excerciseStyle = excerciseStyle;
         this.payoffProfile = payoffProfile;
         this.underlyingSecurity = underlyingSecurity;
-    }
-
-    @Override
-    public Security getSecurity() {
-        return security;
     }
 
     public Double getStrike() {
