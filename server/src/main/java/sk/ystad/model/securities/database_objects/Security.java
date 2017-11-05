@@ -1,5 +1,6 @@
 package sk.ystad.model.securities.database_objects;
 
+import org.apache.commons.csv.CSVRecord;
 import org.hibernate.annotations.*;
 import org.springframework.context.annotation.Primary;
 
@@ -129,5 +130,12 @@ public class Security implements Serializable {
 
     private void  setOption(Option seurityData){
         setSecurityData(seurityData);
+    }
+
+    public static class SecurityBuilder {
+
+        public Security buildEtfFromCsv(CSVRecord csvRecord) {
+            return null;
+        }
     }
 }
