@@ -1,5 +1,7 @@
 package sk.ystad.model.securities.database_objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,6 +15,7 @@ public abstract class SecurityData implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "securityId")
     @MapsId
+    @JsonIgnore
     private Security security;
 
     public SecurityData() {

@@ -21,8 +21,8 @@ public class SecurityController {
     }
 
     @RequestMapping("/load_etfs")
-    public List<Etf> loadEtfsData() {
-        List<Etf> etfs = new SecurityLoader().loadEtfs();
+    public List<Security> loadEtfsData() {
+        List<Security> etfs = new SecurityLoader().loadEtfs();
         return etfs;
     }
 

@@ -20,9 +20,9 @@ public class SecurityLoader {
 
     private static final Logger log = LoggerFactory.getLogger(ServerApplication.class);
 
-    public List<Etf> loadEtfs() {
+    public List<Security> loadEtfs() {
         File file = new File("../data/US_ETF.csv");
-        List<Etf> etfs = new ArrayList<>();
+        List<Security> etfs = new ArrayList<>();
         try {
             Reader targetReader = new FileReader(file);
             CSVParser parser = CSVParser.parse(targetReader, CSVFormat.EXCEL.withHeader("CsiNumber", "Symbol", "Name",
@@ -31,7 +31,7 @@ public class SecurityLoader {
             int i = 0;
             for (CSVRecord csvRecord : parser) {
                 Etf tmpEtf = new Etf.EtfBuilder().buildFromCsv(csvRecord);
-                etfs.add(tmpEtf);
+                etfs.add(tmpEtf.getSecurity());
                 log.info("etf line loaded " + i +": "+ tmpEtf);
                 i++;
             }
