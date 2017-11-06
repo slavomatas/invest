@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 public class EquityOptionSecurity extends Option{
-    public EquityOptionSecurity(){
+    protected EquityOptionSecurity(){
     }
 
     public EquityOptionSecurity(String symbol, String name, Double strike, Date expiry, ExcerciseStyle excerciseStyle,

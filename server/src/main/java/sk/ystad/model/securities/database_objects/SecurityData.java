@@ -18,8 +18,7 @@ public abstract class SecurityData implements Serializable {
     @JsonIgnore
     private Security security;
 
-    public SecurityData() {
-        this.security = new Security(this);
+    protected SecurityData() {
     }
 
     public SecurityData(String symbol, String name) {

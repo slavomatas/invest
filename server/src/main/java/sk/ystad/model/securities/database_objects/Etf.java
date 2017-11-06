@@ -8,7 +8,7 @@ import javax.persistence.*;
 @DiscriminatorColumn(name = "securityType")
 public class Etf extends SecurityData {
 
-    public Etf() {
+    protected Etf() {
     }
 
     public Etf(String symbol, String name) {
