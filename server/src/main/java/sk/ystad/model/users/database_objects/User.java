@@ -1,39 +1,34 @@
 package sk.ystad.model.users.database_objects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
+
+    private long userId;
+
+
+    private List<Portfolio> portfolios;
+
     @Id
-    @GeneratedValue
-    private String id;
-
-    @OneToMany(mappedBy = "user")
-    private Set<Portfolio> portfolios = new HashSet<>();
-
-
-    public User(Set<Portfolio> portfolios) {
-        this.portfolios = portfolios;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long getUserId() {
+        return userId;
     }
 
-    public String getId() {
-        return id;
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Set<Portfolio> getPortfolios() {
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="user")
+    public List<Portfolio> getPortfolios() {
         return portfolios;
     }
 
-    public void setPortfolios(Set<Portfolio> portfolios) {
+    public void setPortfolios(List<Portfolio> portfolios) {
         this.portfolios = portfolios;
     }
 }

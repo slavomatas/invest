@@ -1,34 +1,30 @@
 package sk.ystad.model.users.database_objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.jws.soap.SOAPBinding;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Portfolio {
 
-    @Id
-    @GeneratedValue
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
-    @JsonIgnore
-    @ManyToOne
+
+
     private User user;
 
-    public Portfolio() {
-    }
+    public  Portfolio(){
 
+    }
     public Portfolio(String name, User user) {
         this.name = name;
         this.user = user;
     }
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -46,6 +42,8 @@ public class Portfolio {
         this.name = name;
     }
 
+    @ManyToOne(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId")
     public User getUser() {
         return user;
     }
