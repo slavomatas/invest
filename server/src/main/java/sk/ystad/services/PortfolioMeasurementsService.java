@@ -23,7 +23,7 @@ public class PortfolioMeasurementsService {
         this.portfolioMeasureRepository = portfolioMeasureRepository;
     }
 
-    @GetMapping("/cumulativeMeasurement")
+    @GetMapping("/cumulative_measurement")
     public String findByUserId(@RequestParam(value = "portfolioId") String portfolioId, @RequestParam(value="dateFrom") String dateFrom,
                                @RequestParam(value="dateTo") String dateTo) throws Exception {
         LocalDate localDateFrom = LocalDate.parse(dateFrom, formatter);
