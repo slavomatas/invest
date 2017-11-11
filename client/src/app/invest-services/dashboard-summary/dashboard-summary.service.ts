@@ -12,12 +12,25 @@ const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.or
 export class DashboardSummaryService implements IDashboardSummaryService {
   constructor(private http: HttpClient) {}
 
+  /**
+   * @description Gets portfolios for user.
+   * @returns {Promise<Portfolio[]>}
+   */
   public getPortfolios(): Promise<Portfolio[]> {
     return this.http
       .get<Portfolio[]>(GET_PORTFOLIOS_URL)
       .toPromise();
   }
 
+   /**
+   * @description Fetches Cumulative Measurements for given portfolio id
+   *
+   * @param {string} portfolioId Id of portfolio to fetch Cumulative Measurements for
+   * @param {Date} [dateFrom] Date from which measurements should be returned
+   * @param {Date} [dateTo] Date to which measurements should be returned
+   * @returns {Promise<CumulativeMeasurement[]>}
+   * @memberof IDashboardSummaryService
+   */
   public getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Promise<CumulativeMeasurement[]> {
     let params: HttpParams = new HttpParams();
     params = params.set('portfolioId', portfolioId);
