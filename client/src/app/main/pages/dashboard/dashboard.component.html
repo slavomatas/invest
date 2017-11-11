@@ -30,6 +30,13 @@
       <div class="px-16 border-bottom" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
         <app-line-chart></app-line-chart>
       </div>
+
+      <div *ngIf="portfolios">
+        <h2>Portfolios:</h2>
+        <ul>
+          <li *ngFor="let portfolio of portfolios">{{portfolio.name}}</li>
+        </ul>
+      </div>
     </div>
     <!-- / Front -->
 
