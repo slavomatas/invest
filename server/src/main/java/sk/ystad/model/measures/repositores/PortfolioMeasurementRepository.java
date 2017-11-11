@@ -16,12 +16,12 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public class PortfolioMeasureRepository {
+public class PortfolioMeasurementRepository {
 
     private InfluxDB influxDB;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    public PortfolioMeasureRepository(final InfluxDB influxDB) {
+    public PortfolioMeasurementRepository(final InfluxDB influxDB) {
         this.influxDB = influxDB;
     }
 
