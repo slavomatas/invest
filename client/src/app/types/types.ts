@@ -3,7 +3,7 @@ export interface Portfolio {
   id: string;
 }
 
-export interface PortfolioMeasure {
-  date: Date;
+export interface CumulativeMeasurement {
+  name: string;
   value: string;
 }

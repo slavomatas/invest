@@ -1,6 +1,6 @@
-import { Portfolio, PortfolioMeasure } from '../../types/types';
+import { Portfolio, CumulativeMeasurement } from '../../types/types';
 
 export interface IDashboardSummaryService {
   getPortfolios(): Promise<Portfolio[]>;
-  getPortfolioCumulativeMeasure(portfolioId: string, dateFrom?: Date, dateTo?: Date): Promise<PortfolioMeasure[]>;
+  getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Promise<CumulativeMeasurement[]>;
 }

@@ -3,10 +3,10 @@ import { Observable } from 'rxjs/Observable';
 import {HttpParams, HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { IDashboardSummaryService } from './idashboard-summary-service';
-import { Portfolio, PortfolioMeasure } from '../../types/types';
+import { Portfolio, CumulativeMeasurement } from '../../types/types';
 
-const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolioMeasure';
-const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'measurements/cumulativeMeasurement';
+const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';
+const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.org/api/getPortfolioMeasure';
 
 @Injectable()
 export class DashboardSummaryService implements IDashboardSummaryService {
@@ -18,14 +18,21 @@ export class DashboardSummaryService implements IDashboardSummaryService {
       .toPromise();
   }
 
-  public getPortfolioCumulativeMeasure(portfolioId: string, dateFrom?: Date, dateTo?: Date): Promise<PortfolioMeasure[]> {
-    const params: HttpParams = new HttpParams();
-    params.set('portfolioId', portfolioId);
-    params.set('dateFrom', dateFrom.toDateString());
-    params.set('dateTo', dateTo.toDateString());
+  public getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Promise<CumulativeMeasurement[]> {
+    let params: HttpParams = new HttpParams();
+    params = params.set('portfolioId', portfolioId);
 
+    if (dateFrom != null) {
+      params = params.set('dateFrom', dateFrom.toDateString());
+    }
+
+    if (dateTo != null) {
+      params = params.set('dateTo', dateTo.toDateString());
+    }
+
+    console.log(portfolioId);
     return this.http
-    .get<PortfolioMeasure[]>(GET_PORTFOLIO_CUMULATIVE_MEASURE_URL, {
+    .get<CumulativeMeasurement[]>(GET_PORTFOLIO_CUMULATIVE_MEASURE_URL, {
       params: params
     })
     .toPromise();
@@ -50,17 +57,17 @@ export class MockDashboardSummaryService implements IDashboardSummaryService {
     });
   }
 
-  public getPortfolioCumulativeMeasure(portfolioId: string, dateFrom?: Date, dateTo?: Date): Promise<PortfolioMeasure[]> {
-    return new Promise<PortfolioMeasure[]>((resolve) => {
+  public getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Promise<CumulativeMeasurement[]> {
+    return new Promise<CumulativeMeasurement[]>((resolve) => {
       setTimeout(
         () => {
           resolve([
-            {date: new Date(), value: 'val1'},
-            {date: new Date(), value: 'val2'},
-            {date: new Date(), value: 'val3'},
-            {date: new Date(), value: 'val4'},
-            {date: new Date(), value: 'val5'},
-            {date: new Date(), value: 'val6'}
+            {name: 'name1', value: 'val1'},
+            {name: 'name2', value: 'val2'},
+            {name: 'name3', value: 'val3'},
+            {name: 'name4', value: 'val4'},
+            {name: 'name5', value: 'val5'},
+            {name: 'name6', value: 'val6'}
           ]);
         },
         500);
