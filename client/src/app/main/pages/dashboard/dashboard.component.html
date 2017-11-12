@@ -20,29 +20,48 @@
     <!--</div>-->
     <!--&lt;!&ndash; Front &ndash;&gt;-->
   <!--</fuse-widget>-->
+  <div fxLayout="column">
+    <!-- WIDGET 5 -->
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
 
-  <!-- WIDGET 5 -->
-  <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
+      <!-- Front -->
 
-    <!-- Front -->
-    <div class="fuse-widget-front md-white-bg mat-elevation-z2">
+      <div fxLayout="row" fxLayoutAlign="start end" fxFlex="100" fxFill="100" fxLayoutWrap>
+        <div class="h-420 mb-16" fxLayout="row" fxFlex="100" fxFill="100">
 
-      <div class="px-16 border-bottom" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
-        <app-line-chart></app-line-chart>
+      <!--<div class="fuse-widget-front md-white-bg mat-elevation-z2">-->
+
+        <!--<div class="px-16 border-bottom" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>-->
+          <app-line-chart fxFill="100"></app-line-chart>
+        </div>
+
+        <!--<div *ngIf="portfolios">-->
+          <!--<h2>Portfolios:</h2>-->
+          <!--<ul>-->
+            <!--<li *ngFor="let portfolio of portfolios">{{portfolio.name}}</li>-->
+          <!--</ul>-->
+        <!--</div>-->
       </div>
+      <!-- / Front -->
 
-      <div *ngIf="portfolios">
-        <h2>Portfolios:</h2>
-        <ul>
-          <li *ngFor="let portfolio of portfolios">{{portfolio.name}}</li>
-        </ul>
+    </fuse-widget>
+    <!-- / WIDGET 5 -->
+
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
+
+      <!-- Front -->
+
+      <div fxLayout="row" fxLayoutAlign="start end" fxLayoutWrap>
+        <div *ngIf="portfolios">
+          <h2>Portfolios:</h2>
+          <ul>
+            <li *ngFor="let portfolio of portfolios">{{portfolio.name}}</li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <!-- / Front -->
+      <!-- / Front -->
+    </fuse-widget>
 
-  </fuse-widget>
-  <!-- / WIDGET 5 -->
-
-
+  </div>
 
 </div>

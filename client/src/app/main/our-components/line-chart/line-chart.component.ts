@@ -11,15 +11,16 @@ export class LineChartComponent implements OnInit {
   single: any[];
   multi: any[];
 
-  view: any[] = [900, 400];
+  // view: any[] = [900, 400];
 
   // options
+  animations = true;
   showXAxis = true;
   showYAxis = true;
   gradient = false;
   showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel = 'Country';
+  xAxisLabel = 'Date';
   showYAxisLabel = true;
   yAxisLabel = 'Population';
 
