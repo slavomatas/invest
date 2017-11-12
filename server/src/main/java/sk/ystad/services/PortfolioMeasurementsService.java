@@ -36,7 +36,7 @@ public class PortfolioMeasurementsService {
 
         for (int i = 0; i < timeSeries.size(); i++) {
             JSONObject tmpObject = new JSONObject();
-            tmpObject.put("date-time-stamp", timeSeries.times().get(i));
+            tmpObject.put("name", timeSeries.times().get(i));
             tmpObject.put("value", timeSeries.values().get(i));
             dataJson.put(tmpObject);
         }
