@@ -3,6 +3,9 @@ package sk.ystad.model.users.database_objects;
 import javax.persistence.*;
 import java.util.List;
 
+
+//TODO inherent from Spring class "User" and implement User Authetication
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -11,6 +14,14 @@ public class User {
 
 
     private List<Portfolio> portfolios;
+
+    public User() {
+
+    }
+
+    public User(long userId) {
+        this.userId = userId;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

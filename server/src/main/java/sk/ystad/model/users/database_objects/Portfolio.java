@@ -1,4 +1,6 @@
 package sk.ystad.model.users.database_objects;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 
@@ -11,13 +13,20 @@ public class Portfolio {
     private String name;
 
 
-
+    @JsonIgnore
     private User user;
 
     public  Portfolio(){
 
     }
+
     public Portfolio(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
+
+    public Portfolio(Long id, String name, User user) {
+        this.id = id;
         this.name = name;
         this.user = user;
     }
