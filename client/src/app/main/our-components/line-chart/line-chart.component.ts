@@ -1,15 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import {multi} from './dummy-data';
+import { multi } from './dummy-data';
+import { DashboardSummaryService } from '../../../invest-services/dashboard-summary/dashboard-summary.service';
+import { Portfolio, CumulativeMeasurement } from '../../../types/types';
+import { cloneDeep } from 'lodash';
+
+interface ChartModel {
+  name: string;
+  series:
+    {
+      name: string,
+      value: number
+    }[];
+}
 
 @Component({
   selector: 'app-line-chart',
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
+
 export class LineChartComponent implements OnInit {
 
   single: any[];
-  multi: any[];
+  chartData: ChartModel[] = [];
 
   // view: any[] = [900, 400];
 
@@ -30,15 +43,7 @@ export class LineChartComponent implements OnInit {
   // line, area
   autoScale = true;
 
-  constructor() {
-    // Object.assign(this, {single, multi});
-    this.multi = multi.map(group => {
-      group.series = group.series.map(dataItem => {
-        dataItem.name = new Date(dataItem.name).toDateString();
-        return dataItem;
-      });
-      return group;
-    });
+  constructor(private dashboardSummaryService: DashboardSummaryService) {
   }
 
   onSelect(event) {
@@ -46,6 +51,40 @@ export class LineChartComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadChartData();
+  }
+
+  /**
+   * Loads data from DashboardSummaryService into chart component
+   */
+  private loadChartData() {
+    const tempChartData: ChartModel[] = [];
+
+    this.dashboardSummaryService.getPortfolios().then((portfolios: Portfolio[]) => {
+
+      portfolios.map((portfolio: Portfolio) => {
+
+        const portfolioChart: ChartModel = {
+          name: portfolio.name,
+          series: []
+        };
+
+        this.dashboardSummaryService.getCumulativeMeasurements(portfolio.id).then((measurements: CumulativeMeasurement[]) => {
+
+          measurements.map((measurement: CumulativeMeasurement) => {
+            portfolioChart.series.push({
+              name: measurement.name,
+              value: Number.parseFloat(measurement.value)
+            });
+          });
+
+          tempChartData.push(portfolioChart);
+          this.chartData = cloneDeep(tempChartData);
+        });
+
+      });
+
+    });
   }
 
 }
