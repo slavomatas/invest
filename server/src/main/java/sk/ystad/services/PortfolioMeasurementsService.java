@@ -23,11 +23,18 @@ public class PortfolioMeasurementsService {
         this.portfolioMeasurementRepository = portfolioMeasurementRepository;
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/cumulative_measurement")
-    public String cumulativeMeasurement(@RequestParam(value = "portfolioId") String portfolioId, @RequestParam(value="dateFrom") String dateFrom,
-                               @RequestParam(value="dateTo") String dateTo) throws Exception {
-        LocalDate localDateFrom = LocalDate.parse(dateFrom, formatter);
-        LocalDate localDateTo = LocalDate.parse(dateTo, formatter);
+    public String cumulativeMeasurement(@RequestParam(value = "portfolioId") String portfolioId, @RequestParam(value="dateFrom", required=false) String dateFrom,
+                               @RequestParam(value="dateTo", required=false) String dateTo) throws Exception {
+        LocalDate localDateFrom = null;
+        LocalDate localDateTo = null;
+        if (dateFrom != null) {
+            localDateFrom = LocalDate.parse(dateFrom, formatter);
+        }
+        if (dateTo != null) {
+            localDateTo = LocalDate.parse(dateTo, formatter);
+        }
 
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of("PORTFOLIO_CUMULATIVE_RETURN");
         LocalDateDoubleTimeSeries timeSeries = portfolioMeasurementRepository.findMeasure(portfolioId, immutableMeasure, localDateFrom, localDateTo);

@@ -58,8 +58,11 @@ public class PortfolioMeasurementRepository {
         }
 
         LocalDateDoubleTimeSeries timeSeries = builder.build();
-        LocalDateDoubleTimeSeries subTimeSeries = timeSeries.subSeries(dateFrom, dateTo);
-        return subTimeSeries;
+        if (dateFrom != null && dateTo != null) {
+            LocalDateDoubleTimeSeries subTimeSeries = timeSeries.subSeries(dateFrom, dateTo);
+            return subTimeSeries;
+        }
+        return timeSeries;
     }
 
 }
