@@ -24,7 +24,7 @@ public class PortfolioMeasurementsService {
     }
 
     @GetMapping("/cumulative_measurement")
-    public String cumulativeMeasurement(@RequestParam(value = "portfolioId") String portfolioId, @RequestParam(value="dateFrom") String dateFrom,
+    public JSONArray cumulativeMeasurement(@RequestParam(value = "portfolioId") String portfolioId, @RequestParam(value="dateFrom") String dateFrom,
                                @RequestParam(value="dateTo") String dateTo) throws Exception {
         LocalDate localDateFrom = LocalDate.parse(dateFrom, formatter);
         LocalDate localDateTo = LocalDate.parse(dateTo, formatter);
@@ -41,7 +41,7 @@ public class PortfolioMeasurementsService {
             dataJson.put(tmpObject);
         }
 
-        return dataJson.toString();
+        return dataJson;
     }
 
 }

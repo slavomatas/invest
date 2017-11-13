@@ -1,5 +1,7 @@
 package sk.ystad.model.measures.repositores;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -9,6 +11,7 @@ import sk.ystad.model.timeseries.database_objects.date.localdate.ImmutableLocalD
 import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeries;
 import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeriesBuilder;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -17,6 +20,8 @@ import java.util.List;
 
 @Repository
 public class PortfolioMeasurementRepository {
+
+    static Logger LOG = Logger.getLogger(PortfolioMeasurementRepository.class.getName());
 
     private InfluxDB influxDB;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -45,8 +50,8 @@ public class PortfolioMeasurementRepository {
                         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                         Double value = (Double) rowValues.get(1);
                         builder.put(localDate, value);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (ParseException e) {
+                        LOG.error(e.getMessage());
                     }
                 }
             }
