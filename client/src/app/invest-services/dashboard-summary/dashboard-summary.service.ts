@@ -43,7 +43,6 @@ export class DashboardSummaryService implements IDashboardSummaryService {
       params = params.set('dateTo', dateTo.toDateString());
     }
 
-    console.log(portfolioId);
     return this.http
     .get<CumulativeMeasurement[]>(GET_PORTFOLIO_CUMULATIVE_MEASURE_URL, {
       params: params
