@@ -36,11 +36,11 @@ export class DashboardSummaryService implements IDashboardSummaryService {
     params = params.set('portfolioId', portfolioId);
 
     if (dateFrom != null) {
-      params = params.set('dateFrom', dateFrom.toDateString());
+      params = params.set('dateFrom', dateFrom.toISOString());
     }
 
     if (dateTo != null) {
-      params = params.set('dateTo', dateTo.toDateString());
+      params = params.set('dateTo', dateTo.toISOString());
     }
 
     return this.http
