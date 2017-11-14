@@ -70,7 +70,7 @@ public class ConnectionTest {
         // Create a database
 
         influxDB.createDatabase(dbName);
-        // Create a 'batch' of example 'points'
+        // Create a 'batch' of example 'points'a
         BatchPoints batchPoints = BatchPoints
                 .database(dbName)
                 .tag("async", "true")
