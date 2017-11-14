@@ -6,4 +6,5 @@ import sk.ystad.model.securities.database_objects.Security;
 
 @Repository
 public interface SecurityRepository extends CrudRepository<Security, Long> {
+    
 }

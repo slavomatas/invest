@@ -3,6 +3,7 @@ package sk.ystad.loaders.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sk.ystad.loaders.LoaderResult;
 import sk.ystad.model.securities.database_objects.Etf;
 import sk.ystad.model.securities.database_objects.Security;
 import sk.ystad.model.securities.repositories.SecurityRepository;
@@ -21,11 +22,9 @@ public class SecurityController {
     }
 
     @RequestMapping("/load_etfs")
-    public List<Security> loadEtfsData() {
-        List<Security> etfs = new SecurityLoader().loadEtfs();
-        return etfs;
+    public LoaderResult loadEtfsData() {
+        return new SecurityLoader().loadEtfs(securityRepository);
     }
-
 
     private void saveSecurities(List<Security> securities) {
         if (securities != null) {
