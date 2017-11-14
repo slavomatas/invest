@@ -23,7 +23,7 @@ public class ServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
 	}
-
+/*
 	@Bean
 	public CommandLineRunner demo(SecurityRepository securityRepository) {
 		return (args) ->{
@@ -39,5 +39,5 @@ public class ServerApplication {
 				log.info("{}:{} [{}]", security.getSymbol(), security.getName(), security.getSecurityData().getClass());
 			}
 		};
-	}
+	}*/
 }
