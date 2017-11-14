@@ -1,5 +1,6 @@
 package sk.ystad.services;
 
+import io.swagger.annotations.ApiOperation;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class PortfolioMeasurementsService {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/cumulative_measurement")
+    @ApiOperation(value = "Get cumulative measurements for portfolio", notes = "Array of cumulative measurements for given portfolio can be provided.")
     public String cumulativeMeasurement(@RequestParam(value = "portfolioId") String portfolioId, @RequestParam(value="dateFrom", required=false) String dateFrom,
                                @RequestParam(value="dateTo", required=false) String dateTo) throws Exception {
         LocalDate localDateFrom = null;

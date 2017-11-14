@@ -63,7 +63,7 @@ public class PortfolioMeasurementsServiceTest {
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of("PORTFOLIO_CUMULATIVE_RETURN");
         String dateFrom = "2017-01-01";
         LocalDate localDateFrom = LocalDate.parse(dateFrom, formatter);
-        String dateTo = "2017-01-01";
+        String dateTo = "2017-01-07";
         LocalDate localDateTo = LocalDate.parse(dateTo, formatter);
         Mockito.when(portfolioMeasurementRepository.findMeasure(portfolioId, immutableMeasure, localDateFrom, localDateTo))
                 .thenReturn(timeSeries);
