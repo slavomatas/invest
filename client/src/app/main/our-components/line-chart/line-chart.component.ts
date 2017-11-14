@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { multi } from './dummy-data';
 import { DashboardSummaryService } from '../../../invest-services/dashboard-summary/dashboard-summary.service';
 import { Portfolio, CumulativeMeasurement } from '../../../types/types';
 import { cloneDeep } from 'lodash';
@@ -21,7 +20,7 @@ interface ChartModel {
 
 export class LineChartComponent implements OnInit {
 
-  single: any[];
+
   chartData: ChartModel[] = [];
 
   // view: any[] = [900, 400];
