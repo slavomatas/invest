@@ -12,7 +12,7 @@ import sk.ystad.model.securities.repositories.SecurityRepository;
 import java.util.List;
 
 
-//@RequestMapping("/v1")
+@RequestMapping("/v1")
 @RestController
 public class SecurityControllerService {
 
@@ -23,10 +23,11 @@ public class SecurityControllerService {
         this.securityRepository = securityRepository;
     }
 
-    @RequestMapping("/{symbol}/securities")
+    @RequestMapping(value = "/{symbol}/securities", method = RequestMethod.GET)
     public List<Security> getSecurityBySymbol(@PathVariable String symbol){
         return securityRepository.findBySymbol(symbol);
     }
 
 
 }
+
