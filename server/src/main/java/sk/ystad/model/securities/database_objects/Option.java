@@ -14,7 +14,7 @@ public class Option extends SecurityData {
     private PayoffProfile payoffProfile;
     private Security underlyingSecurity;
 
-    public Option(){
+    protected Option(){
     }
 
     public Option(String symbol, String name, Double strike, Date expiry, ExcerciseStyle excerciseStyle,

@@ -11,7 +11,7 @@ public class EquityBarierOptionSecurity extends Option {
     private String monitoringType;
     private String samplingFrequency;
 
-    public EquityBarierOptionSecurity(){
+    protected EquityBarierOptionSecurity(){
     }
 
     public EquityBarierOptionSecurity(String symbol, String name, Double strike, Date expiry, ExcerciseStyle excerciseStyle,
