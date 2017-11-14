@@ -22,6 +22,7 @@ public class Security implements Serializable {
 
     private SecurityData securityData;
 
+    @Column(name = "symbol")
     private String symbol;
 
     private String name;
