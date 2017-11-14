@@ -41,13 +41,13 @@ public class ConnectionTest {
                 .addField("idle", 90L)
                 .addField("user", 9L)
                 .addField("system", 1L)
-                .buildEtfFromCsv();
+                .build();
         final Point p2 = Point.measurement("disk")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .tag("tenant", "default")
                 .addField("used", 80L)
                 .addField("free", 1L)
-                .buildEtfFromCsv();
+                .build();
         influxDBTemplate.write(p1, p2);
 
         // ... and query the latest data
@@ -70,26 +70,26 @@ public class ConnectionTest {
         // Create a database
 
         influxDB.createDatabase(dbName);
-        // Create a 'batch' of example 'points'
+        // Create a 'batch' of example 'points'a
         BatchPoints batchPoints = BatchPoints
                 .database(dbName)
                 .tag("async", "true")
                 .retentionPolicy("autogen")
                 .consistency(InfluxDB.ConsistencyLevel.ALL)
                 .tag("BatchTag", "BatchTagValue") // tag each point in the batch
-                .buildEtfFromCsv();
+                .build();
         Point point1 = Point.measurement("cpu")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("idle", 90L)
                 .addField("user", 9L)
                 .addField("system", 1L)
                 .tag("CpuTag", "CpuTagValue") // tag the individual point
-                .buildEtfFromCsv();
+                .build();
         Point point2 = Point.measurement("disk")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("used", 80L)
                 .addField("free", 1L)
-                .buildEtfFromCsv();
+                .build();
         batchPoints.point(point1);
         batchPoints.point(point2);
         // Write them to InfluxDB
