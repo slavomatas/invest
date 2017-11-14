@@ -16,6 +16,9 @@ import { FuseThemeOptionsComponent } from '../core/components/theme-options/them
 import { FuseShortcutsModule } from '../core/components/shortcuts/shortcuts.module';
 import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.module';
 
+// import { LineChartComponent } from './our-components/line-chart/line-chart.component';
+// import { NgxChartsModule} from '@swimlane/ngx-charts';
+
 @NgModule({
     declarations: [
         FusePagesComponent,
@@ -26,14 +29,16 @@ import { FuseSearchBarModule } from '../core/components/search-bar/search-bar.mo
         FuseToolbarComponent,
         FuseNavbarVerticalToggleDirective,
         FuseThemeOptionsComponent,
-        FuseQuickPanelComponent
+        FuseQuickPanelComponent,
+        // LineChartComponent
     ],
     imports     : [
         SharedModule,
         RouterModule,
         FuseNavigationModule,
         FuseShortcutsModule,
-        FuseSearchBarModule
+        FuseSearchBarModule,
+        // NgxChartsModule
     ],
     exports     : [
         FuseMainComponent
