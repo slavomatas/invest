@@ -10,7 +10,7 @@ import { Portfolio } from '../../../types/types';
 import { DashboardSummaryService } from '../../../invest-services/dashboard-summary/dashboard-summary.service';
 
 @Component({
-    selector   : 'invest-dashboard',
+    selector   : 'fuse-invest-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls  : ['./dashboard.component.scss'],
     animations   : fuseAnimations
