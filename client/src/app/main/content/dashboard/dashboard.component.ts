@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import { FuseTranslationLoaderService } from '../../../core/services/translation-loader.service';
 
 import { locale as english } from './i18n/en';
-import { locale as turkish } from './i18n/tr';
+import { locale as slovak } from './i18n/sk';
 import {fuseAnimations} from '../../../core/animations';
 import {DashboardSummaryService} from '../../../invest-services/dashboard-summary/dashboard-summary.service';
 import {Portfolio} from '../../../types/types';
@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   public portfolios: Portfolio[];
 
   constructor(private dashboardSummaryService: DashboardSummaryService, private translationLoader: FuseTranslationLoaderService) {
-      this.translationLoader.loadTranslations(english, turkish);
+      this.translationLoader.loadTranslations(english, slovak);
   }
 
   ngOnInit() {
