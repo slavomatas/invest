@@ -1,0 +1,39 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+    <div fxLayout="column">
+      <!-- WIDGET 5 -->
+
+      <h2>{{'DASHBOARD.CUMULATIVE_CHART' | translate}}</h2>
+      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
+
+        <!-- Front -->
+
+        <div fxLayout="row" fxLayoutAlign="start end" fxFlex="100" fxFill="100" fxLayoutWrap>
+          <div class="h-420 mb-16" fxLayout="row" fxFlex="100" fxFill="100">
+            <fuse-app-line-chart fxFill="100"></fuse-app-line-chart>
+          </div>
+
+        </div>
+        <!-- / Front -->
+
+      </fuse-widget>
+
+      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
+
+        <!-- Front -->
+
+        <div fxLayout="row" fxLayoutAlign="start end" fxLayoutWrap>
+          <div *ngIf="portfolios">
+            <h2>Portfolios:</h2>
+            <ul>
+              <li *ngFor="let portfolio of portfolios">{{portfolio.name}}</li>
+            </ul>
+          </div>
+        </div>
+        <!-- / Front -->
+      </fuse-widget>
+
+    </div>
+
+
+</div>
