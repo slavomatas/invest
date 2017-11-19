@@ -14,7 +14,7 @@ import { FusePipesModule } from '../pipes/pipes.module';
 import { FuseConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
 import { FuseCountdownComponent } from '../components/countdown/countdown.component';
 import { FuseMatchMedia } from '../services/match-media.service';
-import { FuseNavbarVerticalService } from '../../main/fuse-components/navbar/vertical/navbar-vertical.service';
+import { FuseNavbarVerticalService } from '../../main/navbar/vertical/navbar-vertical.service';
 import { FuseHljsComponent } from '../components/hljs/hljs.component';
 import { FusePerfectScrollbarDirective } from '../directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { FuseIfOnDomDirective } from '../directives/fuse-if-on-dom/fuse-if-on-dom.directive';

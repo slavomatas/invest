@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {APP_BASE_HREF} from '@angular/common';
 import { LineChartComponent } from './line-chart.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MockDashboardSummaryService, DashboardSummaryService } from '../../../invest-services/dashboard-summary/dashboard-summary.service';
+import { MockDashboardSummaryService, DashboardSummaryService } from '../../services/dashboard-summary/dashboard-summary.service';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../../../core/modules/shared.module';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardSummaryService } from '../../../invest-services/dashboard-summary/dashboard-summary.service';
-import { Portfolio, CumulativeMeasurement } from '../../../types/types';
+import { DashboardSummaryService } from '../../services/dashboard-summary/dashboard-summary.service';
+import { Portfolio, CumulativeMeasurement } from '../../types/types';
 import { cloneDeep } from 'lodash';
 
 interface ChartModel {

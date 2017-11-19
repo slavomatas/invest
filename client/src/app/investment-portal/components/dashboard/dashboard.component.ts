@@ -5,8 +5,8 @@ import { FuseTranslationLoaderService } from '../../../core/services/translation
 import { locale as english } from './i18n/en';
 import { locale as slovak } from './i18n/sk';
 import {fuseAnimations} from '../../../core/animations';
-import {DashboardSummaryService} from '../../../invest-services/dashboard-summary/dashboard-summary.service';
-import {Portfolio} from '../../../types/types';
+import {DashboardSummaryService} from '../../services/dashboard-summary/dashboard-summary.service';
+import {Portfolio} from '../../types/types';
 
 
 @Component({

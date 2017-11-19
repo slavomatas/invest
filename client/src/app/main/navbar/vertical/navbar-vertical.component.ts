@@ -1,12 +1,12 @@
 import { Component, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { FuseMatchMedia } from '../../../../core/services/match-media.service';
+import { FuseMatchMedia } from '../../../core/services/match-media.service';
 import { FuseNavbarVerticalService } from './navbar-vertical.service';
 import { ObservableMedia } from '@angular/flex-layout';
-import { FuseMainComponent } from '../../../main.component';
+import { FuseMainComponent } from '../../main.component';
 import { NavigationEnd, Router } from '@angular/router';
-import { FuseNavigationService } from '../../../../core/components/navigation/navigation.service';
-import { FusePerfectScrollbarDirective } from '../../../../core/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
+import { FuseNavigationService } from '../../../core/components/navigation/navigation.service';
+import { FusePerfectScrollbarDirective } from '../../../core/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { animate, AnimationBuilder, AnimationPlayer, style } from '@angular/animations';
 
 @Component({
