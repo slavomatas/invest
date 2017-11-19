@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import sk.ystad.model.securities.database_objects.*;
 import sk.ystad.model.securities.repositories.SecurityRepository;
@@ -14,7 +16,7 @@ import sk.ystad.model.securities.repositories.SecurityRepository;
 import java.util.Date;
 
 @SpringBootApplication
-public class ServerApplication {
+public class ServerApplication extends SpringBootServletInitializer {
 	@PersistenceContext
 	private EntityManager em;
 
@@ -22,6 +24,11 @@ public class ServerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(ServerApplication.class);
 	}
 
 //	@Bean
