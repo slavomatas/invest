@@ -6,8 +6,9 @@ export class NavigationModel
     {
         this.model = [
             {
-                'title': 'Applications',
-                'type' : 'group',
+                'id'      : 'applications',
+                'title'   : 'Applications',
+                'type'    : 'group',
                 'children': [
                     {
                         'title': 'Dashboard',
@@ -15,9 +16,9 @@ export class NavigationModel
                         'icon' : 'dashboard',
                         'url'  : '/dashboard',
                         'badge': {
-                            'title': 25,
-                            'bg'   : '#F44336',
-                            'fg'   : '#FFFFFF'
+                           'title': 25,
+                           'bg'   : '#F44336',
+                           'fg'   : '#FFFFFF'
                         }
                     },
                     {
@@ -26,9 +27,9 @@ export class NavigationModel
                       'icon' : 'trending_up',
                       'url'  : '/portfolios',
                       'badge': {
-                        'title': 25,
-                        'bg'   : '#F44336',
-                        'fg'   : '#FFFFFF'
+                          'title': 25,
+                          'bg'   : '#F44336',
+                          'fg'   : '#FFFFFF'
                       }
                     }
                 ]

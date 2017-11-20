@@ -22,18 +22,19 @@ export class FuseConfigService
         // Set the default settings
         this.defaultSettings = {
             layout          : {
-                navigation: 'left', // 'right', 'left', 'top', 'none'
-                toolbar   : 'below', // 'above', 'below', 'none'
-                footer    : 'none', // 'above', 'below', 'none'
-                mode      : 'fullwidth' // 'boxed', 'fullwidth'
+                navigation      : 'left', // 'right', 'left', 'top', 'none'
+                navigationFolded: false, // true, false
+                toolbar         : 'below', // 'above', 'below', 'none'
+                footer          : 'below', // 'above', 'below', 'none'
+                mode            : 'fullwidth' // 'boxed', 'fullwidth'
             },
             colorClasses    : {
-                toolbar: 'md-white-500-bg',
-                navbar : 'md-fuse-dark-500-bg',
-                footer : 'md-fuse-dark-700-bg'
+                toolbar: 'mat-white-500-bg',
+                navbar : 'mat-fuse-dark-700-bg',
+                footer : 'mat-fuse-dark-900-bg'
             },
             customScrollbars: true,
-            routerAnimation : 'fadeIn'
+            routerAnimation : 'fadeIn' // fadeIn, slideUp, slideDown, slideRight, slideLeft
         };
 
         /**
@@ -44,6 +45,7 @@ export class FuseConfigService
             this.defaultSettings.customScrollbars = false;
         }
 
+        // Set the settings from the default settings
         this.settings = Object.assign({}, this.defaultSettings);
 
         // Reload the default settings on every navigation start
@@ -58,7 +60,6 @@ export class FuseConfigService
 
         // Create the behavior subject
         this.onSettingsChanged = new BehaviorSubject(this.settings);
-
     }
 
     /**
@@ -67,7 +68,10 @@ export class FuseConfigService
      */
     setSettings(settings)
     {
+        // Set the settings from the given object
         this.settings = Object.assign({}, this.settings, settings);
+
+        // Trigger the event
         this.onSettingsChanged.next(this.settings);
     }
 }

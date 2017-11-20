@@ -11,13 +11,13 @@ import { FuseMainModule } from './main/main.module';
 import { FuseSplashScreenService } from './core/services/splash-screen.service';
 import { FuseConfigService } from './core/services/config.service';
 import { FuseNavigationService } from './core/components/navigation/navigation.service';
-import { DashboardModule } from './main/pages/dashboard/dashboard.module';
-import {PortfoliosModule} from './main/pages/portfolios/portfolios.module';
+import { InvestmentPortalModule } from './investment-portal/investment-portal.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 const appRoutes: Routes = [
     {
         path      : '**',
-        redirectTo: 'dashboard'
+        redirectTo: 'investment-portal'
     }
 ];
 
@@ -32,9 +32,9 @@ const appRoutes: Routes = [
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes),
         SharedModule,
+        TranslateModule.forRoot(),
         FuseMainModule,
-        DashboardModule,
-        PortfoliosModule
+        InvestmentPortalModule
     ],
     providers   : [
         FuseSplashScreenService,

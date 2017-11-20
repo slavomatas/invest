@@ -33,21 +33,21 @@ export const fuseAnimations = [
                     stagger('50ms', [
                         animateChild()
                     ])
-                ])),
+                ], {optional: true})),
         transition('void => 100',
             query('@*',
                 [
                     stagger('100ms', [
                         animateChild()
                     ])
-                ])),
+                ], {optional: true})),
         transition('void => 200',
             query('@*',
                 [
                     stagger('200ms', [
                         animateChild()
                     ])
-                ]))
+                ], {optional: true}))
     ]),
 
     trigger('fadeInOut', [
@@ -127,6 +127,17 @@ export const fuseAnimations = [
         })),
         transition('void => *', animate('300ms')),
         transition('* => void', animate('300ms'))
+    ]),
+
+    trigger('expandCollapse', [
+        state('void', style({
+            height: '0px'
+        })),
+        state('*', style({
+            height: '*'
+        })),
+        transition('void => *', animate('300ms ease-out')),
+        transition('* => void', animate('300ms ease-in'))
     ]),
 
     trigger('routerTransitionLeft', [
