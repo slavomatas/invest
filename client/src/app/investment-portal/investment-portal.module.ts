@@ -7,6 +7,8 @@ import { InvestmentPortalComponent } from './investment-portal.component';
 
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { PortfoliosModule } from './components/portfolios/portfolios.module';
+import {FailedActivationModule} from "./components/registration/activation-msg/failed/failed-activation.module";
+import {SuccessfulActivationModule} from "./components/registration/activation-msg/successful/successful-activation.module";
 
 const routes = [
   {
@@ -24,7 +26,9 @@ const routes = [
     SharedModule,
     RouterModule,
     DashboardModule,
-    PortfoliosModule
+    PortfoliosModule,
+    FailedActivationModule,
+    SuccessfulActivationModule
   ],
   exports     : [
     InvestmentPortalComponent
