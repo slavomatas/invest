@@ -1,8 +1,8 @@
 import { Component} from '@angular/core';
 import { NgIf } from '@angular/common';
 
-import { FuseConfigService } from '../../../../core/services/config.service';
-import { fuseAnimations } from '../../../../core/animations';
+import { FuseConfigService } from '../../../../../core/services/config.service';
+import { fuseAnimations } from '../../../../../core/animations';
 
 @Component({
     selector   : 'fuse-invest-activation-msg',

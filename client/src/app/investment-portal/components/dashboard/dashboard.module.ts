@@ -5,7 +5,7 @@ import { SharedModule } from '../../../core/modules/shared.module';
 
 import { DashboardComponent } from './dashboard.component';
 import {FuseWidgetComponent} from '../../../core/components/widget/widget.component';
-import {LineChartComponent} from '../line-chart/line-chart.component';
+import {LineChartComponent} from './line-chart/line-chart.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {DashboardSummaryService} from '../../services/dashboard-summary/dashboard-summary.service';
 

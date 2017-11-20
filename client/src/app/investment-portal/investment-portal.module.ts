@@ -7,7 +7,7 @@ import { InvestmentPortalComponent } from './investment-portal.component';
 
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { PortfoliosModule } from './components/portfolios/portfolios.module';
-import {ActivationMsgModule} from "./components/registration/activation-msg/activation-msg.module";
+import {ActivationMsgModule} from "./components/authentication/registration/activation-msg/activation-msg.module";
 
 const routes = [
   {
