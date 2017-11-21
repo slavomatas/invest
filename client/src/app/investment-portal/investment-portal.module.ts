@@ -7,7 +7,8 @@ import { InvestmentPortalComponent } from './investment-portal.component';
 
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { PortfoliosModule } from './components/portfolios/portfolios.module';
-import {ActivationMsgModule} from "./components/authentication/registration/activation-msg/activation-msg.module";
+import {ActivationMsgModule} from './components/authentication/registration/activation-msg/activation-msg.module';
+import {RegistrationFormModule} from './components/authentication/registration/registration-form/registration-form.module';
 
 const routes = [
   {
@@ -26,7 +27,8 @@ const routes = [
     RouterModule,
     DashboardModule,
     PortfoliosModule,
-    ActivationMsgModule
+    ActivationMsgModule,
+    RegistrationFormModule
   ],
   exports     : [
     InvestmentPortalComponent
