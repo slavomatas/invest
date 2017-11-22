@@ -7,3 +7,7 @@ export interface CumulativeMeasurement {
   name: string;
   value: string;
 }
+
+export interface RequestStatus {
+  success: boolean;
+}
