@@ -30,6 +30,17 @@
             </ul>
           </div>
         </div>
+
+        Count: {{ count$ | async }}
+        <div>
+          <button (click)="increment()">   +   </button>
+        </div>
+        
+        <div>
+          <button (click)="decrement()">   -   </button>
+        </div>
+        
+
         <!-- / Front -->
       </fuse-widget>
 

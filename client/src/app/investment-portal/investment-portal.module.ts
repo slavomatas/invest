@@ -7,10 +7,13 @@ import { InvestmentPortalComponent } from './investment-portal.component';
 
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { PortfoliosModule } from './components/portfolios/portfolios.module';
+import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
+import { InvestmentActions } from './investment-actions';
+import { rootReducer, INITIAL_STATE, AppState } from './store';
 
 const routes = [
   {
-    path     : 'investment-portal',
+    path: 'investment-portal',
     redirectTo: 'dashboard',
     component: InvestmentPortalComponent
   }
@@ -20,17 +23,34 @@ const routes = [
   declarations: [
     InvestmentPortalComponent
   ],
-  imports     : [
+  imports: [
     SharedModule,
     RouterModule,
     DashboardModule,
-    PortfoliosModule
+    PortfoliosModule,
+    NgReduxModule
   ],
-  exports     : [
+  exports: [
     InvestmentPortalComponent
+  ],
+  providers: [
+    InvestmentActions
   ]
 })
 
-export class InvestmentPortalModule
-{
+export class InvestmentPortalModule {
+  constructor(ngRedux: NgRedux<AppState>,
+    devTools: DevToolsExtension) {
+
+    // dev tools
+    const storeEnhancers = devTools.isEnabled() ? [devTools.enhancer()] : [];
+
+    // configure AppStore
+    ngRedux.configureStore(
+      rootReducer,
+      INITIAL_STATE,
+      [],
+      storeEnhancers
+    );
+  }
 }
