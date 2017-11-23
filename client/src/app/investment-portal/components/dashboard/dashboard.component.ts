@@ -20,9 +20,9 @@ import { AppState } from '../../store';
   animations: fuseAnimations
 })
 export class DashboardComponent implements OnInit {
-  public portfolios: Portfolio[];
-  @select() readonly count$: Observable<number>;
-  subscription; // <- New;
+  @select() readonly portfolios$: Observable<Portfolio[]>;
+  @select() readonly isFetchingPortfolios$: Observable<boolean>;
+  @select() readonly fetchingPortfolioError$: Observable<string | undefined>;
 
   constructor(
     private dashboardSummaryService: DashboardSummaryService,
@@ -37,17 +37,14 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dashboardSummaryService.getPortfolios().then((portfolios) => {
-      this.portfolios = portfolios;
-    });
+    // this.dashboardSummaryService.getPortfolios().then((portfolios) => {
+    //   this.portfolios = portfolios;
+    // });
   }
 
-  increment() {
-    this.ngRedux.dispatch(this.actions.increment()); // <- New
+  getAllPortfolios() {
+    this.actions.requestPortfolios();
   }
 
-  decrement() {
-    this.ngRedux.dispatch(this.actions.decrement()); // <- New
-  }
 
 }

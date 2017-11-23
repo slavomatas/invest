@@ -45,6 +45,7 @@
     "ngx-cookie-service": "1.0.9",
     "perfect-scrollbar": "1.0.3",
     "redux": "^3.7.2",
+    "redux-observable": "^0.17.0",
     "rxjs": "5.5.2",
     "web-animations-js": "2.3.1",
     "zone.js": "0.8.18"
