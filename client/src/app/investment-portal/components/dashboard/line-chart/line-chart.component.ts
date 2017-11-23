@@ -59,7 +59,7 @@ export class LineChartComponent implements OnInit {
   private loadChartData() {
     const tempChartData: ChartModel[] = [];
 
-    this.dashboardSummaryService.getPortfolios().then((portfolios: Portfolio[]) => {
+    this.dashboardSummaryService.getPortfolios().subscribe((portfolios: Portfolio[]) => {
 
       portfolios.map((portfolio: Portfolio) => {
 
@@ -68,7 +68,7 @@ export class LineChartComponent implements OnInit {
           series: []
         };
 
-        this.dashboardSummaryService.getCumulativeMeasurements(portfolio.id).then((measurements: CumulativeMeasurement[]) => {
+        this.dashboardSummaryService.getCumulativeMeasurements(portfolio.id).subscribe((measurements: CumulativeMeasurement[]) => {
 
           measurements.map((measurement: CumulativeMeasurement) => {
             portfolioChart.series.push({

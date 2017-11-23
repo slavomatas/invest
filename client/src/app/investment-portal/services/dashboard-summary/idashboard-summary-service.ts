@@ -1,6 +1,7 @@
 import { Portfolio, CumulativeMeasurement } from '../../types/types';
+import { Observable } from 'rxjs/Observable';
 
 export interface IDashboardSummaryService {
-  getPortfolios(): Promise<Portfolio[]>;
-  getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Promise<CumulativeMeasurement[]>;
+  getPortfolios(): Observable<Portfolio[]>;
+  getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]>;
 }

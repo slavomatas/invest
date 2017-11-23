@@ -10,6 +10,9 @@ import { PortfoliosModule } from './components/portfolios/portfolios.module';
 import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
 import { InvestmentActions } from './investment-actions';
 import { rootReducer, INITIAL_STATE, AppState } from './store';
+import { applyMiddleware } from 'redux';
+import { createEpicMiddleware } from 'redux-observable';
+import { DashboardSummaryService } from './services/dashboard-summary/dashboard-summary.service';
 
 const routes = [
   {
@@ -40,16 +43,21 @@ const routes = [
 
 export class InvestmentPortalModule {
   constructor(ngRedux: NgRedux<AppState>,
-    devTools: DevToolsExtension) {
+    devTools: DevToolsExtension,
+    dashboardSummaryServices: DashboardSummaryService) {
 
     // dev tools
     const storeEnhancers = devTools.isEnabled() ? [devTools.enhancer()] : [];
+
+    const middleware = [
+      createEpicMiddleware(dashboardSummaryServices.getPortfoliosEpic)
+    ];
 
     // configure AppStore
     ngRedux.configureStore(
       rootReducer,
       INITIAL_STATE,
-      [],
+      middleware,
       storeEnhancers
     );
   }
