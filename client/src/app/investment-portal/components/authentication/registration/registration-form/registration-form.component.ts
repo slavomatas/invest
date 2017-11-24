@@ -3,6 +3,8 @@ import {FuseConfigService} from '../../../../../core/services/config.service';
 import { fuseAnimations} from '../../../../../core/animations';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 
+import { matchOtherValidator} from './password-validation';
+
 @Component({
   selector: 'fuse-invest-registration-form',
   templateUrl: './registration-form.component.html',
@@ -38,11 +40,12 @@ export class RegistrationFormComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       name           : ['', Validators.required],
       email          : ['', [Validators.required, Validators.email]],
-      password       : ['', Validators.required],
-      passwordConfirm: ['', Validators.required]
+      password       : ['', [Validators.required, Validators.minLength(8)]],
+      passwordConfirm: ['', [Validators.required, Validators.minLength(8), matchOtherValidator('password')]]
     });
 
     this.registerForm.valueChanges.subscribe(() => {
+      // console.log(this.registerForm.get('password'));
       this.onRegisterFormValuesChanged();
     });
   }
