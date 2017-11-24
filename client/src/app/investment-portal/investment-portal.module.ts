@@ -1,18 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
 import { SharedModule } from '../core/modules/shared.module';
-
 import { InvestmentPortalComponent } from './investment-portal.component';
-
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { PortfoliosModule } from './components/portfolios/portfolios.module';
-import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
-import { InvestmentActions } from './investment-actions';
 import { rootReducer, INITIAL_STATE, AppState } from './store';
 import { applyMiddleware } from 'redux';
-import { createEpicMiddleware } from 'redux-observable';
+import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { DashboardSummaryService } from './services/dashboard-summary/dashboard-summary.service';
+import { StoreModule } from './store/store-module';
+import { InvestmentActions } from './store/actions/investment-actions';
 
 const routes = [
   {
@@ -31,34 +28,12 @@ const routes = [
     RouterModule,
     DashboardModule,
     PortfoliosModule,
-    NgReduxModule
+    StoreModule
   ],
   exports: [
     InvestmentPortalComponent
-  ],
-  providers: [
-    InvestmentActions
   ]
 })
 
 export class InvestmentPortalModule {
-  constructor(ngRedux: NgRedux<AppState>,
-    devTools: DevToolsExtension,
-    dashboardSummaryServices: DashboardSummaryService) {
-
-    // dev tools
-    const storeEnhancers = devTools.isEnabled() ? [devTools.enhancer()] : [];
-
-    const middleware = [
-      createEpicMiddleware(dashboardSummaryServices.getPortfoliosEpic)
-    ];
-
-    // configure AppStore
-    ngRedux.configureStore(
-      rootReducer,
-      INITIAL_STATE,
-      middleware,
-      storeEnhancers
-    );
-  }
 }

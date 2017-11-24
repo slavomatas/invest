@@ -1,16 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpParams, HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { IDashboardSummaryService } from './idashboard-summary-service';
 import { Portfolio, CumulativeMeasurement } from '../../types/types';
-import { InvestmentActions } from '../../investment-actions';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/of';
-import { ActionsObservable } from 'redux-observable';
-import 'rxjs/add/operator/toPromise';
 
 const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';
 const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.org/api/getPortfolioMeasure';
@@ -18,19 +10,6 @@ const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.or
 @Injectable()
 export class DashboardSummaryService implements IDashboardSummaryService {
   constructor(private http: HttpClient) { }
-
-  getPortfoliosEpic = (action$: ActionsObservable<any>) => {
-    return action$.ofType(InvestmentActions.REQUEST_PORTFOLIOS)
-      .mergeMap(({ }) => {
-        return this.getPortfolios()
-          .map(result => ({
-            type: InvestmentActions.PORTFOLIOS_FETCH_SUCCESS,
-            payload: result
-          }));
-      }).catch(error => Observable.of({
-        type: InvestmentActions.PORTFOLIOS_FETCH_FAILURE
-      }));
-  }
 
   /**
    * @description Gets portfolios for user.
