@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IDashboardSummaryService } from './idashboard-summary-service';
 import { Portfolio, CumulativeMeasurement } from '../../types/types';
+import { IPortfolioService } from './i-portfolio.service';
 
 const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';
 const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.org/api/getPortfolioMeasure';
 
 @Injectable()
-export class DashboardSummaryService implements IDashboardSummaryService {
+export class PortfolioService implements IPortfolioService {
   constructor(private http: HttpClient) { }
 
   /**
@@ -48,7 +48,7 @@ export class DashboardSummaryService implements IDashboardSummaryService {
   }
 }
 
-export class MockDashboardSummaryService implements IDashboardSummaryService {
+export class MockPortfolioService implements IPortfolioService {
 
   public getPortfolios(): Observable<Portfolio[]> {
 

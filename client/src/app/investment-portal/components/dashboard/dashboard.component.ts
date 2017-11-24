@@ -5,12 +5,12 @@ import { FuseTranslationLoaderService } from '../../../core/services/translation
 import { locale as english } from './i18n/en';
 import { locale as slovak } from './i18n/sk';
 import { fuseAnimations } from '../../../core/animations';
-import { DashboardSummaryService } from '../../services/dashboard-summary/dashboard-summary.service';
 import { Portfolio } from '../../types/types';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../store';
-import { InvestmentActions } from '../../store/actions/investment-actions';
+import { PortfolioActions } from '../../store/actions/portfolio-actions';
+import { PortfolioService } from '../../services/portfolio/portfolio.service';
 
 
 @Component({
@@ -25,9 +25,9 @@ export class DashboardComponent implements OnInit {
   @select() readonly fetchingPortfolioError$: Observable<string | undefined>;
 
   constructor(
-    private dashboardSummaryService: DashboardSummaryService,
+    private portfolioService: PortfolioService,
     private translationLoader: FuseTranslationLoaderService,
-    private actions: InvestmentActions,
+    private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>
   ) {
     this.translationLoader.loadTranslations(english, slovak);

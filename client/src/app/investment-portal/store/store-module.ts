@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { NgRedux, DevToolsExtension, NgReduxModule } from '@angular-redux/store';
 import { AppState, rootReducer, INITIAL_STATE } from '../store';
-import { IDashboardSummaryService } from '../services/dashboard-summary/idashboard-summary-service';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import { PortfolioEpics } from './epics/portfolio-epics';
-import { DashboardSummaryService } from '../services/dashboard-summary/dashboard-summary.service';
-import { InvestmentActions } from './actions/investment-actions';
+import { PortfolioActions } from './actions/portfolio-actions';
 
 @NgModule({
   imports: [
@@ -13,7 +11,7 @@ import { InvestmentActions } from './actions/investment-actions';
   ],
   providers: [
     PortfolioEpics,
-    InvestmentActions
+    PortfolioActions
   ]
 })
 export class StoreModule {
