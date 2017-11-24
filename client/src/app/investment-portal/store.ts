@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { Portfolio } from './types/types';
-import { InvestmentActions } from './store/actions/investment-actions';
+import { PortfolioActions } from './store/actions/portfolio-actions';
 
 export interface AppState {
     portfolios: Portfolio[];
@@ -16,21 +16,21 @@ export const INITIAL_STATE: AppState = {
 
 export function rootReducer(lastState: AppState, action: any): AppState {
     switch (action.type) {
-        case InvestmentActions.FETCH_PORTFOLIOS:
+        case PortfolioActions.FETCH_PORTFOLIOS:
             return {
                 ...lastState,
                 isFetchingPortfolios: true,
                 fetchingPortfolioError: undefined,
                 portfolios: []
             };
-        case InvestmentActions.FETCH_PORTFOLIOS_FULFILLED_SUCCESS:
+        case PortfolioActions.FETCH_PORTFOLIOS_FULFILLED_SUCCESS:
             return {
                 ...lastState,
                 isFetchingPortfolios: false,
                 portfolios: action.payload,
                 fetchingPortfolioError: undefined
             };
-        case InvestmentActions.FETCH_PORTFOLIOS_FULFILLED_FAILURE:
+        case PortfolioActions.FETCH_PORTFOLIOS_FULFILLED_FAILURE:
             return {
                 ...lastState,
                 isFetchingPortfolios: false,

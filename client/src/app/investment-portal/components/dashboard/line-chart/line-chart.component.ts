@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardSummaryService } from '../../../services/dashboard-summary/dashboard-summary.service';
 import { Portfolio, CumulativeMeasurement } from '../../../types/types';
 import { cloneDeep } from 'lodash';
+import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 
 interface ChartModel {
   name: string;
@@ -42,7 +42,7 @@ export class LineChartComponent implements OnInit {
   // line, area
   autoScale = true;
 
-  constructor(private dashboardSummaryService: DashboardSummaryService) {
+  constructor(private portfolioService: PortfolioService) {
   }
 
   onSelect(event) {
@@ -59,7 +59,7 @@ export class LineChartComponent implements OnInit {
   private loadChartData() {
     const tempChartData: ChartModel[] = [];
 
-    this.dashboardSummaryService.getPortfolios().subscribe((portfolios: Portfolio[]) => {
+    this.portfolioService.getPortfolios().subscribe((portfolios: Portfolio[]) => {
 
       portfolios.map((portfolio: Portfolio) => {
 
@@ -68,7 +68,7 @@ export class LineChartComponent implements OnInit {
           series: []
         };
 
-        this.dashboardSummaryService.getCumulativeMeasurements(portfolio.id).subscribe((measurements: CumulativeMeasurement[]) => {
+        this.portfolioService.getCumulativeMeasurements(portfolio.id).subscribe((measurements: CumulativeMeasurement[]) => {
 
           measurements.map((measurement: CumulativeMeasurement) => {
             portfolioChart.series.push({

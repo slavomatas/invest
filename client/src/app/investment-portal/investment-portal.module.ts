@@ -7,9 +7,8 @@ import { PortfoliosModule } from './components/portfolios/portfolios.module';
 import { rootReducer, INITIAL_STATE, AppState } from './store';
 import { applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
-import { DashboardSummaryService } from './services/dashboard-summary/dashboard-summary.service';
 import { StoreModule } from './store/store-module';
-import { InvestmentActions } from './store/actions/investment-actions';
+import { PortfolioActions } from './store/actions/portfolio-actions';
 
 const routes = [
   {
