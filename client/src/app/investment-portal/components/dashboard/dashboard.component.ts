@@ -7,10 +7,10 @@ import { locale as slovak } from './i18n/sk';
 import { fuseAnimations } from '../../../core/animations';
 import { DashboardSummaryService } from '../../services/dashboard-summary/dashboard-summary.service';
 import { Portfolio } from '../../types/types';
-import { InvestmentActions } from '../../investment-actions';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../store';
+import { InvestmentActions } from '../../store/actions/investment-actions';
 
 
 @Component({
@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getAllPortfolios() {
-    this.actions.requestPortfolios();
+    this.actions.fetchPortfolios();
   }
 
 
