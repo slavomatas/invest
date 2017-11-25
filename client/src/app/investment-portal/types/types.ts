@@ -11,3 +11,12 @@ export interface CumulativeMeasurement {
 export interface RequestStatus {
   success: boolean;
 }
+
+export interface ChartModelPortfolio {
+  name: string;
+  series:
+    {
+      name: string,
+      value: number
+    }[];
+}

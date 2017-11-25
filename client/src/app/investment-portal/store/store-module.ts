@@ -23,7 +23,7 @@ export class StoreModule {
     const storeEnhancers = devTools.isEnabled() ? [devTools.enhancer()] : [];
 
     const rootEpic = combineEpics(
-      portfolioEpics.fetchPortfoliosEpic,
+      // portfolioEpics.getPortfoliosCumulativeDataEpic
     );
 
     const epicMiddleware = createEpicMiddleware(rootEpic);

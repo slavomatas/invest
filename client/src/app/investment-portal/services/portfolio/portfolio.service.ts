@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Portfolio, CumulativeMeasurement } from '../../types/types';
+import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../types/types';
 import { IPortfolioService } from './i-portfolio.service';
 
 const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';
@@ -12,7 +12,51 @@ export class PortfolioService implements IPortfolioService {
   constructor(private http: HttpClient) { }
 
   /**
-   * @description Gets portfolios for user.
+   * Fetches cumulative data for all portfolios
+   */
+  public async getPortfoliosCumulativeData(): Promise<ChartModelPortfolio[]> {
+
+    let promises: Promise<ChartModelPortfolio>[];
+
+    await this.getPortfolios().toPromise().then(async (portfolios: Portfolio[]) => {
+      promises = portfolios.map(async (portfolio: Portfolio) => {
+        return await this.getCumulativeDataForPortfolio(portfolio);
+      });
+    });
+
+    let res;
+    await Promise.all(promises).then((cumulativeData: ChartModelPortfolio[]) => {
+      res = cumulativeData;
+    });
+
+    return res;
+  }
+
+  /**
+   * Fetches cumulative data for given portfolio
+   * @param portfolio portfolio to get cumulative data for
+   */
+  public async getCumulativeDataForPortfolio(portfolio: Portfolio): Promise<ChartModelPortfolio> {
+    const portfolioChart: ChartModelPortfolio = {
+      name: portfolio.name,
+      series: []
+    };
+
+    await this.getCumulativeMeasurements(portfolio.id).toPromise().then((measurements: CumulativeMeasurement[]) => {
+
+       measurements.map((measurement: CumulativeMeasurement) => {
+        portfolioChart.series.push({
+          name: measurement.name,
+          value: Number.parseFloat(measurement.value)
+        });
+      });
+    });
+
+    return portfolioChart;
+  }
+
+  /**
+   * @description Gets all portfolios for user.
    * @returns {Observable<Portfolio[]>}
    */
   public getPortfolios(): Observable<Portfolio[]> {
