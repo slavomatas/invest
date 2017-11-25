@@ -19,32 +19,16 @@ import { PortfolioService } from '../../services/portfolio/portfolio.service';
   styleUrls: ['./dashboard.component.scss'],
   animations: fuseAnimations
 })
-export class DashboardComponent implements OnInit {
-  @select() readonly portfolios$: Observable<Portfolio[]>;
-  @select() readonly isFetchingPortfolios$: Observable<boolean>;
-  @select() readonly fetchingPortfolioError$: Observable<string | undefined>;
-
+export class DashboardComponent {
   constructor(
     private portfolioService: PortfolioService,
     private translationLoader: FuseTranslationLoaderService,
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>
   ) {
+
     this.translationLoader.loadTranslations(english, slovak);
 
-
-    // this.count$ = ngRedux.select<number>('count');
   }
-
-  ngOnInit() {
-    // this.dashboardSummaryService.getPortfolios().then((portfolios) => {
-    //   this.portfolios = portfolios;
-    // });
-  }
-
-  getAllPortfolios() {
-    this.actions.fetchPortfolios();
-  }
-
 
 }

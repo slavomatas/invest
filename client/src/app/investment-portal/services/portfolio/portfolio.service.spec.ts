@@ -1,21 +1,22 @@
 import { TestBed, inject } from '@angular/core/testing';
+import { IPortfolioService } from './i-portfolio.service';
+import { MockPortfolioService } from './portfolio.service';
 
-import { MockDashboardSummaryService } from './dashboard-summary.service';
-import { IDashboardSummaryService } from './idashboard-summary-service';
+
 
 describe('DashboardSummaryService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         {
-          provide: MockDashboardSummaryService,
-          useFactory: () =>  new MockDashboardSummaryService()
+          provide: MockPortfolioService,
+          useFactory: () =>  new MockPortfolioService()
         }
       ]
     });
   });
 
-  it('should be created', inject([MockDashboardSummaryService], (service: IDashboardSummaryService) => {
+  it('should be created', inject([MockPortfolioService], (service: IPortfolioService) => {
     expect(service).toBeTruthy();
   }));
 

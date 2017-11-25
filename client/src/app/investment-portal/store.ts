@@ -1,40 +1,39 @@
 import { Action } from 'redux';
-import { Portfolio } from './types/types';
+import { Portfolio, ChartModelPortfolio } from './types/types';
 import { PortfolioActions } from './store/actions/portfolio-actions';
 
 export interface AppState {
-    portfolios: Portfolio[];
-    isFetchingPortfolios: boolean;
-    fetchingPortfolioError: string | undefined;
+    chartPortfolios: ChartModelPortfolio[];
+    isGettingPortfoliosCumulativeData: boolean;
+    cumulativeFetchError: string | undefined;
 }
 
 export const INITIAL_STATE: AppState = {
-    portfolios: [],
-    isFetchingPortfolios: false,
-    fetchingPortfolioError: undefined
+    chartPortfolios: [],
+    isGettingPortfoliosCumulativeData: false,
+    cumulativeFetchError: undefined
 };
 
 export function rootReducer(lastState: AppState, action: any): AppState {
     switch (action.type) {
-        case PortfolioActions.FETCH_PORTFOLIOS:
+        case PortfolioActions.GET_CUMULATIVE_FULFILLED_SUCCESS:
             return {
                 ...lastState,
-                isFetchingPortfolios: true,
-                fetchingPortfolioError: undefined,
-                portfolios: []
+                isGettingPortfoliosCumulativeData: false,
+                chartPortfolios: action.payload,
+                cumulativeFetchError: undefined
             };
-        case PortfolioActions.FETCH_PORTFOLIOS_FULFILLED_SUCCESS:
+        case PortfolioActions.FGET_CUMULATIVE_FULFILLED_FAILURE:
             return {
                 ...lastState,
-                isFetchingPortfolios: false,
-                portfolios: action.payload,
-                fetchingPortfolioError: undefined
+                isGettingPortfoliosCumulativeData: false,
+                cumulativeFetchError: action.payload
             };
-        case PortfolioActions.FETCH_PORTFOLIOS_FULFILLED_FAILURE:
+        case PortfolioActions.GET_PORTFOLIOS_CUMULATIVE_DATA:
             return {
                 ...lastState,
-                isFetchingPortfolios: false,
-                fetchingPortfolioError: 'error while getting portfolios'
+                isGettingPortfoliosCumulativeData: true,
+                cumulativeFetchError: undefined
             };
     }
 
