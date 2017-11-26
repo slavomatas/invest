@@ -36,6 +36,9 @@ export class PortfolioEpics {
     }
 
 
+    // EXAMPLE of how epic middleware can be used:
+    // this middleware is executed AFTER PortfolioActions.FETCH_PORTFOLIOS is taken care of
+    // by corresponding reducer. Epic middleware then return new action that is dispatched.
     // public fetchPortfoliosEpic = (action$: ActionsObservable<any>) => {
     //     return action$.ofType(PortfolioActions.FETCH_PORTFOLIOS)
     //         .mergeMap((action) => {

@@ -15,8 +15,10 @@ import { Observable } from 'rxjs/Observable';
 
 export class LineChartComponent implements OnInit {
 
+  // EXAMPLE of other usage:
   // @select() readonly chartPortfolios$: Observable<ChartModelPortfolio[]>;
   // @select('chartPortfolios') chartPortfolios$: Observable<ChartModelPortfolio[]>;
+
   chartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
 
   chartData: ChartModelPortfolio[] = [];
@@ -59,7 +61,6 @@ export class LineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.actions.getPortfoliosCumulativeData();
     this.portfolioService.getPortfoliosCumulativeData().then((data: ChartModelPortfolio[]) => {
       this.actions.getPortfoliosComulativeDataFullfiled(true, data);
     });

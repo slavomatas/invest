@@ -22,6 +22,9 @@ export class StoreModule {
     // dev tools
     const storeEnhancers = devTools.isEnabled() ? [devTools.enhancer()] : [];
 
+    // EXAMPLE:
+    // This is how multiple Epic middlewares can be used. Currently no 
+    // Epic is being used in project
     const rootEpic = combineEpics(
       // portfolioEpics.getPortfoliosCumulativeDataEpic
     );
