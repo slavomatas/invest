@@ -8,6 +8,7 @@ import {FuseWidgetComponent} from '../../../core/components/widget/widget.compon
 import {LineChartComponent} from './line-chart/line-chart.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {DashboardSummaryService} from '../../services/dashboard-summary/dashboard-summary.service';
+import {LineChartReturnsComponent} from './line-chart-returns/line-chart-returns.component';
 
 const routes = [
   {
@@ -20,7 +21,8 @@ const routes = [
   declarations: [
     DashboardComponent,
     FuseWidgetComponent,
-    LineChartComponent
+    LineChartComponent,
+    LineChartReturnsComponent
   ],
   imports     : [
     SharedModule,
