@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardSummaryService } from '../../services/dashboard-summary/dashboard-summary.service';
-import { Portfolio, CumulativeMeasurement } from '../../types/types';
+import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../types/types';
 import { cloneDeep } from 'lodash';
-
-interface ChartModel {
-  name: string;
-  series:
-    {
-      name: string,
-      value: number
-    }[];
-}
+import { PortfolioService } from '../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../store/actions/portfolio-actions';
+import { NgRedux, select } from '@angular-redux/store';
+import { AppState } from '../../store';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'fuse-app-line-chart',
@@ -20,8 +15,13 @@ interface ChartModel {
 
 export class LineChartComponent implements OnInit {
 
+  // EXAMPLE of other usage:
+  // @select() readonly chartPortfolios$: Observable<ChartModelPortfolio[]>;
+  // @select('chartPortfolios') chartPortfolios$: Observable<ChartModelPortfolio[]>;
 
-  chartData: ChartModel[] = [];
+  chartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
+
+  chartData: ChartModelPortfolio[] = [];
 
   // view: any[] = [900, 400];
 
@@ -42,7 +42,18 @@ export class LineChartComponent implements OnInit {
   // line, area
   autoScale = true;
 
-  constructor(private dashboardSummaryService: DashboardSummaryService) {
+  constructor(
+    private portfolioService: PortfolioService,
+    private actions: PortfolioActions,
+    private ngRedux: NgRedux<AppState>) {
+
+    // subscribe on chartPortfolios from redux Store
+    this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
+      if (data != null && data.length > 0) {
+        this.chartData = cloneDeep(data);
+      }
+    });
+
   }
 
   onSelect(event) {
@@ -50,40 +61,8 @@ export class LineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadChartData();
-  }
-
-  /**
-   * Loads data from DashboardSummaryService into chart component
-   */
-  private loadChartData() {
-    const tempChartData: ChartModel[] = [];
-
-    this.dashboardSummaryService.getPortfolios().then((portfolios: Portfolio[]) => {
-
-      portfolios.map((portfolio: Portfolio) => {
-
-        const portfolioChart: ChartModel = {
-          name: portfolio.name,
-          series: []
-        };
-
-        this.dashboardSummaryService.getCumulativeMeasurements(portfolio.id).then((measurements: CumulativeMeasurement[]) => {
-
-          measurements.map((measurement: CumulativeMeasurement) => {
-            portfolioChart.series.push({
-              name: measurement.name,
-              value: Number.parseFloat(measurement.value)
-            });
-          });
-
-          tempChartData.push(portfolioChart);
-          this.chartData = cloneDeep(tempChartData);
-        });
-
-      });
-
+    this.portfolioService.getPortfoliosCumulativeData().then((data: ChartModelPortfolio[]) => {
+      this.actions.getPortfoliosComulativeDataFullfiled(true, data);
     });
   }
-
 }
