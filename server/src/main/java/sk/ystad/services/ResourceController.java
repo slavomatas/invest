@@ -1,18 +1,13 @@
 package sk.ystad.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import sk.ystad.model.users.database_objects.NewUser;
+import sk.ystad.model.users.database_objects.User;
 
 import java.security.Principal;
-import java.util.List;
 
 /**
  * Created by nydiarra on 06/05/17.
@@ -28,7 +23,12 @@ public class ResourceController {
 
     @RequestMapping(value ="/users", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER')")
-    public String getUsers(@AuthenticationPrincipal NewUser customUser){
+    public String getUsers(@AuthenticationPrincipal User customUser){
         return "B";
+    }
+
+    @RequestMapping("/test")
+    public String test() {
+        return "test";
     }
 }

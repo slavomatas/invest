@@ -7,7 +7,6 @@ import sk.ystad.model.users.database_objects.Portfolio;
 import sk.ystad.model.users.database_objects.User;
 import sk.ystad.model.users.repositores.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

@@ -7,20 +7,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import sk.ystad.model.users.database_objects.NewUser;
-import sk.ystad.model.users.repositores.NewUserRepository;
+import sk.ystad.model.users.database_objects.User;
+import sk.ystad.model.users.repositores.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class AppUserDetailsService implements UserDetailsService {
+
     @Autowired
-    private NewUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        NewUser user = userRepository.findByUsername(s);
+        User user = userRepository.findByUsername(s);
 
         if(user == null) {
             throw new UsernameNotFoundException(String.format("The username %s doesn't exist", s));
@@ -36,4 +37,30 @@ public class AppUserDetailsService implements UserDetailsService {
 
         return userDetails;
     }
+
+    public User registerUser(User user) {
+        if (emailExist(user.getEmail()) || usernameExist(user.getUsername())) {
+            return null;
+        }
+
+        User createdUser = userRepository.save(user);
+        return createdUser;
+    }
+
+    private boolean emailExist(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean usernameExist(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return true;
+        }
+        return false;
+    }
+
 }
