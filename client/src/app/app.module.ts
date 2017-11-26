@@ -34,7 +34,7 @@ const appRoutes: Routes = [
         SharedModule,
         TranslateModule.forRoot(),
         FuseMainModule,
-        InvestmentPortalModule
+        InvestmentPortalModule,
     ],
     providers   : [
         FuseSplashScreenService,
