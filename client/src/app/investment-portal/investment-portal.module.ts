@@ -1,18 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
 import { SharedModule } from '../core/modules/shared.module';
-
 import { InvestmentPortalComponent } from './investment-portal.component';
-
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { PortfoliosModule } from './components/portfolios/portfolios.module';
-import {ActivationMsgModule} from './components/authentication/registration/activation-msg/activation-msg.module';
-import {RegistrationFormModule} from './components/authentication/registration/registration-form/registration-form.module';
+import { ActivationMsgModule } from './components/authentication/registration/activation-msg/activation-msg.module';
+import { RegistrationFormModule } from './components/authentication/registration/registration-form/registration-form.module';
+import { rootReducer, INITIAL_STATE, AppState } from './store';
+import { applyMiddleware } from 'redux';
+import { createEpicMiddleware, combineEpics } from 'redux-observable';
+import { StoreModule } from './store/store-module';
+import { PortfolioActions } from './store/actions/portfolio-actions';
 
 const routes = [
   {
-    path     : 'investment-portal',
+    path: 'investment-portal',
     redirectTo: 'dashboard',
     component: InvestmentPortalComponent
   }
@@ -22,19 +24,19 @@ const routes = [
   declarations: [
     InvestmentPortalComponent
   ],
-  imports     : [
+  imports: [
     SharedModule,
     RouterModule,
     DashboardModule,
     PortfoliosModule,
     ActivationMsgModule,
-    RegistrationFormModule
+    RegistrationFormModule,
+    StoreModule
   ],
-  exports     : [
+  exports: [
     InvestmentPortalComponent
   ]
 })
 
-export class InvestmentPortalModule
-{
+export class InvestmentPortalModule {
 }

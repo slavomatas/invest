@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
 import { SharedModule } from '../../../core/modules/shared.module';
-
 import { DashboardComponent } from './dashboard.component';
-import {FuseWidgetComponent} from '../../../core/components/widget/widget.component';
-import {LineChartComponent} from './line-chart/line-chart.component';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
-import {DashboardSummaryService} from '../../services/dashboard-summary/dashboard-summary.service';
-import {LineChartReturnsComponent} from './line-chart-returns/line-chart-returns.component';
+import { FuseWidgetComponent } from '../../../core/components/widget/widget.component';
+import { LineChartComponent } from '../line-chart/line-chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { LineChartReturnsComponent } from '../line-chart-returns/line-chart-returns.component';
+import { PortfolioService } from '../../services/portfolio/portfolio.service';
 
 const routes = [
   {
@@ -33,7 +31,7 @@ const routes = [
     DashboardComponent
   ],
   providers   : [
-    DashboardSummaryService
+    PortfolioService
   ]
 })
 
