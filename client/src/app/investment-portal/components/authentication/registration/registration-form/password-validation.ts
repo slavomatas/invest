@@ -1,11 +1,17 @@
 import { FormControl} from '@angular/forms';
+/**
+ * @description compare two passwords and validate if they match each other
+ *
+ * @param otherControlName is name of first FormGroup element used to validate with element I'd like to validate
+ * @returns boolean or null. boolean true if values are not the same. null if values are the same. (insipired by validators)
+ **/
 
-export function matchOtherValidator (otherControlName: string) {
+export function passwordValidator (otherControlName: string) {
 
   let thisControl: FormControl;
   let otherControl: FormControl;
 
-  return function matchOtherValidate (control: FormControl) {
+  return function passwordValidate (control: FormControl) {
 
     if (!control.parent) {
       return null;
@@ -16,7 +22,7 @@ export function matchOtherValidator (otherControlName: string) {
       thisControl = control;
       otherControl = control.parent.get(otherControlName) as FormControl;
       if (!otherControl) {
-        throw new Error('matchOtherValidator(): other control is not found in parent group');
+        throw new Error('passwordValidator(): other control is not found in parent group');
       }
       otherControl.valueChanges.subscribe(() => {
         thisControl.updateValueAndValidity();
@@ -35,6 +41,6 @@ export function matchOtherValidator (otherControlName: string) {
 
     return null;
 
-  }
+  };
 
 }
