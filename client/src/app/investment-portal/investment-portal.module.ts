@@ -9,6 +9,8 @@ import { applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { StoreModule } from './store/store-module';
 import { PortfolioActions } from './store/actions/portfolio-actions';
+import {LoginModule} from './components/authentication/login/login.module';
+import {RegistrationFormModule} from './components/authentication/registration/registration-form/registration-form.module';
 
 const routes = [
   {
@@ -27,6 +29,8 @@ const routes = [
     RouterModule,
     DashboardModule,
     PortfoliosModule,
+    LoginModule,
+    RegistrationFormModule,
     StoreModule
   ],
   exports: [

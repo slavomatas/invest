@@ -20,3 +20,7 @@ export interface ChartModelPortfolio {
       value: number
     }[];
 }
+
+export interface RequestStatus {
+  success: boolean
+}

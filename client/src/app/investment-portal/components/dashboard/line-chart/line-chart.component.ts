@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../types/types';
+import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../../types/types';
 import { cloneDeep } from 'lodash';
-import { PortfolioService } from '../../services/portfolio/portfolio.service';
-import { PortfolioActions } from '../../store/actions/portfolio-actions';
+import { PortfolioService } from '../../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
-import { AppState } from '../../store';
+import { AppState } from '../../../store';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
