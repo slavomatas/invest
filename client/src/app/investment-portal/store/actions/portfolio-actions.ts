@@ -11,6 +11,8 @@ export class PortfolioActions {
     static FGET_CUMULATIVE_FULFILLED_FAILURE = 'FGET_CUMULATIVE_FULFILLED_FAILURE';
     static GET_PORTFOLIOS_CUMULATIVE_DATA = 'GET_PORTFOLIOS_CUMULATIVE_DATA';
     static GET_PORTFOLIOS_SUMMARY_DATA = 'GET_PORTFOLIOS_SUMMARY_DATA';
+    static SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED = 'SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED';
+
 
     constructor(private ngRedux: NgRedux<AppState>) { }
 
@@ -28,6 +30,13 @@ export class PortfolioActions {
     public getPortfoliosSummaryData(){
       this.ngRedux.dispatch({
         type: PortfolioActions.GET_PORTFOLIOS_SUMMARY_DATA
+      });
+    }
+
+    public setPortfolioCumulativeChartSelected(data: ChartModelPortfolio[]){
+      this.ngRedux.dispatch({
+        type: PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED,
+        payload: data
       });
     }
 

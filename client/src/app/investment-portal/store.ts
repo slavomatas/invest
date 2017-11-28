@@ -49,6 +49,13 @@ export function rootReducer(lastState: AppState, action: any): AppState {
                 ...lastState,
                 portfolioSummary: action.payload
             };
+        case PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED:
+          return {
+            ...lastState,
+            chartPortfolios: action.payload,
+
+          };
+
     }
 
     // if no no supported action was caught, return last known state
