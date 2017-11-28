@@ -11,7 +11,6 @@ import { applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { StoreModule } from './store/store-module';
 import { PortfolioActions } from './store/actions/portfolio-actions';
-import { LineChartLegendComponent } from './components/line-chart-legend/line-chart-legend.component';
 
 const routes = [
   {
@@ -23,8 +22,7 @@ const routes = [
 
 @NgModule({
   declarations: [
-    InvestmentPortalComponent,
-    LineChartLegendComponent
+    InvestmentPortalComponent
   ],
   imports: [
     SharedModule,
