@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import  {Portfolio, ChartModelPortfolio, PortfolioSummary } from './types/types';
+import {Portfolio, ChartModelPortfolio, PortfolioSummary } from './types/types';
 import { PortfolioActions } from './store/actions/portfolio-actions';
 
 export interface AppState {
