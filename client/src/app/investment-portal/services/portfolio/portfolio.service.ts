@@ -3,13 +3,31 @@ import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../types/types';
 import { IPortfolioService } from './i-portfolio.service';
+import { NgRedux, select } from '@angular-redux/store';
+import { AppState } from '../../store';
+import { cloneDeep } from 'lodash';
+import {isUndefined} from "util";
 
 const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';
 const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.org/api/getPortfolioMeasure';
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {
-  constructor(private http: HttpClient) { }
+
+  chartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
+  oldPortfolioChart: ChartModelPortfolio[] = [];
+
+  constructor(
+    private http: HttpClient,
+    private ngRedux: NgRedux<AppState>) {
+
+    this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
+      if (data != null && data.length > 0) {
+        this.oldPortfolioChart = cloneDeep(data);
+      }
+    });
+
+  }
 
   /**
    * Fetches cumulative data for all portfolios
@@ -37,8 +55,13 @@ export class PortfolioService implements IPortfolioService {
    * @param portfolio portfolio to get cumulative data for
    */
   public async getCumulativeDataForPortfolio(portfolio: Portfolio): Promise<ChartModelPortfolio> {
+
+    let selectedState: ChartModelPortfolio[] = this.oldPortfolioChart.filter(x => x.id == portfolio.id);
+
     const portfolioChart: ChartModelPortfolio = {
       name: portfolio.name,
+      id: portfolio.id,
+      selected: selectedState.length > 0 ? selectedState[0].selected : true,
       series: []
     };
 

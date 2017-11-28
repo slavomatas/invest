@@ -10,6 +10,7 @@ export class PortfolioActions {
     static GET_CUMULATIVE_FULFILLED_SUCCESS = 'GET_CUMULATIVE_FULFILLED_SUCCESS';
     static FGET_CUMULATIVE_FULFILLED_FAILURE = 'FGET_CUMULATIVE_FULFILLED_FAILURE';
     static GET_PORTFOLIOS_CUMULATIVE_DATA = 'GET_PORTFOLIOS_CUMULATIVE_DATA';
+    static GET_PORTFOLIOS_SUMMARY_DATA = 'GET_PORTFOLIOS_SUMMARY_DATA';
 
     constructor(private ngRedux: NgRedux<AppState>) { }
 
@@ -22,6 +23,12 @@ export class PortfolioActions {
             type: success ? PortfolioActions.GET_CUMULATIVE_FULFILLED_SUCCESS : PortfolioActions.FGET_CUMULATIVE_FULFILLED_FAILURE,
             payload: data != null ? data : undefined
         });
+    }
+
+    public getPortfoliosSummaryData(){
+      this.ngRedux.dispatch({
+        type: PortfolioActions.GET_PORTFOLIOS_SUMMARY_DATA
+      });
     }
 
 }

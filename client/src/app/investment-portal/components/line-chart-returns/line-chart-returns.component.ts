@@ -1,4 +1,11 @@
-import {Component, OnInit, NgModule} from '@angular/core';
+import { Component, OnInit, NgModule} from '@angular/core';
+import { ChartModelPortfolio, PortfolioSummary } from '../../types/types';
+import { cloneDeep } from 'lodash';
+import { PortfolioService } from '../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../store/actions/portfolio-actions';
+import { NgRedux, select } from '@angular-redux/store';
+import { AppState } from '../../store';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-line-chart-returns',
@@ -7,17 +14,10 @@ import {Component, OnInit, NgModule} from '@angular/core';
 })
 export class LineChartReturnsComponent implements OnInit {
 
-  // Redux
-  chartSummaryObject = {
-    marketValue: '39584.2455',
-    periodReturn: '4982.19',
-    periodReturnPercentage: '12.86',
-    percentage: 0
-  }
+  portfolioSummary$ =  this.ngRedux.select(state => state.portfolioSummary);
+  chartModelPortfolios$ = this.ngRedux.select(state => state.chartPortfolios);
 
-  // Redux
-  selectedPeriod = '1M';
-  currencySymbol = '$';
+  chartSummaryObject: PortfolioSummary;
 
   private  definedPeriods:Map<string, string> = new Map([
     ['1M', 'last month'],
@@ -28,10 +28,22 @@ export class LineChartReturnsComponent implements OnInit {
     ['ALL', 'all time']
   ]);
 
-  constructor() { }
+  constructor(
+    private portfolioService: PortfolioService,
+    private actions: PortfolioActions,
+    private ngRedux: NgRedux<AppState>) {
+
+    // subscribe on portfolioSummary from redux Store
+    this.portfolioSummary$.subscribe((data: PortfolioSummary) => {
+      if (data != null) {
+        this.chartSummaryObject = cloneDeep(data);
+      }
+    });
+
+    this.chartModelPortfolios$.subscribe();
+  }
 
   ngOnInit() {
-    //TODO: call redux
     this.chartSummaryObject.marketValue = this.numberWithCommas(Number(this.chartSummaryObject.marketValue));
     this.chartSummaryObject.periodReturn = this.numberWithCommas(Number(this.chartSummaryObject.periodReturn));
     this.chartSummaryObject.periodReturnPercentage = this.numberWithCommas(Number(this.chartSummaryObject.periodReturnPercentage));
@@ -43,6 +55,7 @@ export class LineChartReturnsComponent implements OnInit {
   }
 
   periodEvent(event) {
-    this.selectedPeriod = event.srcElement.innerText;
+    this.chartSummaryObject.selectedPeriod = event.srcElement.innerText;
+    //change redux state
   }
 }
