@@ -27,6 +27,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "surname")
+    private String surname;
+
     /**
      * Roles are being eagerly loaded here because
      * they are a fairly small collection of items for this example.
@@ -50,10 +53,11 @@ public class User {
         this.id = id;
     }
 
-    public User(String username, String password, String name, String email) {
+    public User(String username, String password, String name, String surname, String email) {
         this.username = username;
         this.password = password;
         this.name = name;
+        this.surname = surname;
         this.email = email;
     }
 
@@ -111,5 +115,13 @@ public class User {
 
     public void setPortfolios(List<Portfolio> portfolios) {
         this.portfolios = portfolios;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }

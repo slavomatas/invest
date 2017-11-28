@@ -18,10 +18,10 @@ public class AuthorizationController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/register")
-    public Response register(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password,
+    public Response register(@RequestParam(value = "password") String password, @RequestParam(value = "surname") String surname,
                          @RequestParam(value = "name") String name, @RequestParam(value = "email") String email) {
 
-        User user = new User(username, password, name, email);
+        User user = new User(email, password, name, surname, email);
         return appUserDetailsService.registerUser(user);
     }
 }
