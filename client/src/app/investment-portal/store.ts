@@ -6,16 +6,21 @@ export interface AppState {
     chartPortfolios: ChartModelPortfolio[];
     isGettingPortfoliosCumulativeData: boolean;
     cumulativeFetchError: string | undefined;
+
     portfolioSummary: PortfolioSummary;
+    cumulativeChartSelectedPeriod: string;
+    currencySymbol: string;
 }
 
 export const INITIAL_STATE: AppState = {
     chartPortfolios: [],
     isGettingPortfoliosCumulativeData: false,
     cumulativeFetchError: undefined,
+
+    // CumulativeChartControls
+    cumulativeChartSelectedPeriod: '3M',
+    currencySymbol: '$',
     portfolioSummary: {
-        selectedPeriod: '3M',
-        currencySymbol: '$',
         marketValue: 0,
         periodReturn: 0,
         periodReturnPercentage: 0,
@@ -44,10 +49,10 @@ export function rootReducer(lastState: AppState, action: any): AppState {
                 isGettingPortfoliosCumulativeData: true,
                 cumulativeFetchError: undefined
             };
-        case PortfolioActions.GET_PORTFOLIOS_SUMMARY_DATA:
+        case PortfolioActions.SET_CUMULATIVE_CHART_PERIOD:
             return {
                 ...lastState,
-                portfolioSummary: action.payload
+                cumulativeChartSelectedPeriod: action.payload
             };
         case PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED:
           return {

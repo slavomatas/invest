@@ -6,7 +6,6 @@ import { IPortfolioService } from './i-portfolio.service';
 import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';
 import { cloneDeep } from 'lodash';
-import {isUndefined} from 'util';
 
 const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';
 const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.org/api/getPortfolioMeasure';
@@ -14,18 +13,9 @@ const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.or
 @Injectable()
 export class PortfolioService implements IPortfolioService {
 
-  chartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
-  oldPortfolioChart: ChartModelPortfolio[] = [];
-
   constructor(
     private http: HttpClient,
     private ngRedux: NgRedux<AppState>) {
-
-    this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
-      if (data != null && data.length > 0) {
-        this.oldPortfolioChart = cloneDeep(data);
-      }
-    });
 
   }
 
@@ -56,8 +46,12 @@ export class PortfolioService implements IPortfolioService {
    */
   public async getCumulativeDataForPortfolio(portfolio: Portfolio): Promise<ChartModelPortfolio> {
 
-    const selectedState: ChartModelPortfolio[] = this.oldPortfolioChart.filter(x => x.id === portfolio.id);
+    let portfoliosChart: ChartModelPortfolio = this.ngRedux.getState().chartPortfolios;
 
+    let selectedState: ChartModelPortfolio[];
+    if (portfoliosChart != undefined) {
+      selectedState = portfoliosChart.filter(x => x.id == portfolio.id);
+    }
 
     const portfolioChart: ChartModelPortfolio = {
       name: portfolio.name,

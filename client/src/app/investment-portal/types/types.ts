@@ -20,8 +20,6 @@ export interface ChartModelPortfolio {
 }
 
 export interface PortfolioSummary {
-  selectedPeriod: string,
-  currencySymbol: string,
   marketValue: number,
   periodReturn: number,
   periodReturnPercentage: number,

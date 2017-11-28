@@ -15,9 +15,12 @@ import { Observable } from 'rxjs/Observable';
 export class LineChartReturnsComponent implements OnInit {
 
   portfolioSummary$ =  this.ngRedux.select(state => state.portfolioSummary);
-  chartModelPortfolios$ = this.ngRedux.select(state => state.chartPortfolios);
+  cumulativeChartSelectedPeriod$ = this.ngRedux.select(state => state.cumulativeChartSelectedPeriod);
+  currencySymbol$ = this.ngRedux.select(state => state.currencySymbol);
 
-  chartSummaryObject: PortfolioSummary;
+  portfolioSummaryObject: PortfolioSummary;
+  currencySymbol: string;
+  selectedPeriod: string;
 
   private  definedPeriods:Map<string, string> = new Map([
     ['1M', 'last month'],
@@ -36,17 +39,27 @@ export class LineChartReturnsComponent implements OnInit {
     // subscribe on portfolioSummary from redux Store
     this.portfolioSummary$.subscribe((data: PortfolioSummary) => {
       if (data != null) {
-        this.chartSummaryObject = cloneDeep(data);
+        this.portfolioSummaryObject = cloneDeep(data);
       }
     });
 
-    this.chartModelPortfolios$.subscribe();
+    this.cumulativeChartSelectedPeriod$.subscribe((data: string) => {
+      if (data != null) {
+        this.selectedPeriod = data;
+      }
+    });
+
+    this.currencySymbol$.subscribe((data: string) => {
+      if (data != null) {
+        this.currencySymbol = data;
+      }
+    });
   }
 
   ngOnInit() {
-    this.chartSummaryObject.marketValue = this.numberWithCommas(Number(this.chartSummaryObject.marketValue));
-    this.chartSummaryObject.periodReturn = this.numberWithCommas(Number(this.chartSummaryObject.periodReturn));
-    this.chartSummaryObject.periodReturnPercentage = this.numberWithCommas(Number(this.chartSummaryObject.periodReturnPercentage));
+    this.portfolioSummaryObject.marketValue = this.numberWithCommas(Number(this.portfolioSummaryObject.marketValue));
+    this.portfolioSummaryObject.periodReturn = this.numberWithCommas(Number(this.portfolioSummaryObject.periodReturn));
+    this.portfolioSummaryObject.periodReturnPercentage = this.numberWithCommas(Number(this.portfolioSummaryObject.periodReturnPercentage));
   }
 
   private numberWithCommas(x) {
@@ -55,7 +68,6 @@ export class LineChartReturnsComponent implements OnInit {
   }
 
   periodEvent(event) {
-    this.chartSummaryObject.selectedPeriod = event.srcElement.innerText;
-    //change redux state
+    this.actions.setCumulativeChartPeriod(event.srcElement.innerText);
   }
 }

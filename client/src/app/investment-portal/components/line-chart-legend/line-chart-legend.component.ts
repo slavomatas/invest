@@ -35,7 +35,6 @@ export class LineChartLegendComponent implements OnInit {
   legendEvent(event, index) {
     console.log(index);
     this.portfolios[index].selected = !this.portfolios[index].selected;
-    this.portfolios[index].name = 'Selected1';
     // change redux state
     this.actions.setPortfolioCumulativeChartSelected(this.portfolios);
 
