@@ -46,11 +46,11 @@ export class PortfolioService implements IPortfolioService {
    */
   public async getCumulativeDataForPortfolio(portfolio: Portfolio): Promise<ChartModelPortfolio> {
 
-    let portfoliosChart: ChartModelPortfolio = this.ngRedux.getState().chartPortfolios;
+    const portfoliosChart: ChartModelPortfolio[] = this.ngRedux.getState().chartPortfolios;
 
     let selectedState: ChartModelPortfolio[];
-    if (portfoliosChart != undefined) {
-      selectedState = portfoliosChart.filter(x => x.id == portfolio.id);
+    if (portfoliosChart !== undefined) {
+      selectedState = portfoliosChart.filter(x => x.id === portfolio.id);
     }
 
     const portfolioChart: ChartModelPortfolio = {

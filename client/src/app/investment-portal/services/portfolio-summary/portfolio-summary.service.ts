@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { IDashboardSummaryService } from "./i-portfolio-summary.service";
+import { IDashboardSummaryService } from './i-portfolio-summary.service';
+import { NgRedux} from '@angular-redux/store';
+import {AppState} from '../../store';
+import { Observable} from 'rxjs/Observable';
+import { PortfolioSummary} from '../../types/types';
 
 @Injectable()
 export class PortfolioSummaryService implements IDashboardSummaryService {
@@ -15,7 +19,7 @@ export class PortfolioSummaryService implements IDashboardSummaryService {
 
   public computeSummary(): Observable<PortfolioSummary> {
 
-    return
+    return;
   }
 
 }

@@ -37,6 +37,5 @@ export class LineChartLegendComponent implements OnInit {
     this.portfolios[index].selected = !this.portfolios[index].selected;
     // change redux state
     this.actions.setPortfolioCumulativeChartSelected(this.portfolios);
-
   }
 }

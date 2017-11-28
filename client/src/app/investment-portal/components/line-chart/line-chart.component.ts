@@ -6,6 +6,7 @@ import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';
 import { Observable } from 'rxjs/Observable';
+// import {port} from '_debugger';
 
 @Component({
   selector: 'fuse-app-line-chart',
@@ -23,6 +24,7 @@ export class LineChartComponent implements OnInit {
 
   chartData: ChartModelPortfolio[] = [];
 
+
   // view: any[] = [900, 400];
 
   // options
@@ -37,7 +39,7 @@ export class LineChartComponent implements OnInit {
   yAxisLabel = 'Population';
 
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#b71c1c', '#311b92', '#1b5e20', '#ff6f00', '#bf360c',  '#212121']
   };
   // line, area
   autoScale = true;
@@ -50,7 +52,15 @@ export class LineChartComponent implements OnInit {
     // subscribe on chartPortfolios from redux Store
     this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
       if (data != null && data.length > 0) {
-        this.chartData = cloneDeep(data);
+        // clear chart data from previous portfolios
+        this.chartData = [];
+        for (const portfolio of data) {
+          // check wether push the portfolio into the chart
+          if (portfolio.selected) {
+            this.chartData.push(portfolio);
+          }
+        }
+        this.chartData = cloneDeep(this.chartData);
       }
     });
 
@@ -59,6 +69,7 @@ export class LineChartComponent implements OnInit {
   onSelect(event) {
     console.log(event);
   }
+
 
   ngOnInit() {
     this.portfolioService.getPortfoliosCumulativeData().then((data: ChartModelPortfolio[]) => {
