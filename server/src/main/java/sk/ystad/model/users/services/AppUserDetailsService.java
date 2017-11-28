@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import sk.ystad.common.data_structures.Response;
 import sk.ystad.model.users.database_objects.User;
@@ -19,6 +20,9 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -43,9 +47,13 @@ public class AppUserDetailsService implements UserDetailsService {
         if (emailExist(user.getEmail()) || usernameExist(user.getUsername())) {
             return new Response(false, "User already exists");
         }
-
+        hashPassword(user);
         userRepository.save(user);
         return new Response(true, null);
+    }
+
+    private void hashPassword(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
     private boolean emailExist(String email) {

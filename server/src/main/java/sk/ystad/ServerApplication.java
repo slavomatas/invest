@@ -4,14 +4,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import sk.ystad.model.securities.database_objects.*;
 import sk.ystad.model.securities.repositories.SecurityRepository;
+import sk.ystad.model.users.services.AppUserDetailsService;
 
 import java.util.Date;
 
@@ -30,6 +35,8 @@ public class ServerApplication extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		return builder.sources(ServerApplication.class);
 	}
+
+
 
 //	@Bean
 //	public CommandLineRunner demo(SecurityRepository securityRepository) {
