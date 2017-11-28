@@ -1,5 +1,6 @@
 package sk.ystad.services;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,9 +14,7 @@ import sk.ystad.model.users.repositores.UserRepository;
 
 import java.security.Principal;
 
-/**
- * Created by nydiarra on 06/05/17.
- */
+
 @RestController
 @RequestMapping("/v1")
 public class ResourceController {
@@ -25,6 +24,7 @@ public class ResourceController {
 
     @RequestMapping(value ="/user", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Get user", notes = "Returns user details based on submitted token")
     public User getUser(Principal principal){
         User user = userRepository.findByUsername(principal.getName());
         return user;
