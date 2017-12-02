@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../types/types';
 import { cloneDeep } from 'lodash';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
+import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
 import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';
@@ -20,7 +21,8 @@ export class LineChartComponent implements OnInit {
   // @select() readonly chartPortfolios$: Observable<ChartModelPortfolio[]>;
   // @select('chartPortfolios') chartPortfolios$: Observable<ChartModelPortfolio[]>;
 
-  chartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
+  // select chart portfolios and filter just the one with selected === true
+  selectedChartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios.filter(portfolio => portfolio.selected)) ;
 
   chartData: ChartModelPortfolio[] = [];
 
@@ -39,28 +41,21 @@ export class LineChartComponent implements OnInit {
   yAxisLabel = 'Population';
 
   colorScheme = {
-    domain: ['#b71c1c', '#311b92', '#1b5e20', '#ff6f00', '#bf360c',  '#212121']
+    domain: this.sharedVariableService.getColors()
   };
   // line, area
   autoScale = true;
 
   constructor(
     private portfolioService: PortfolioService,
+    private sharedVariableService: SharedVariableService,
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
 
     // subscribe on chartPortfolios from redux Store
-    this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
+    this.selectedChartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
       if (data != null && data.length > 0) {
-        // clear chart data from previous portfolios
-        this.chartData = [];
-        for (const portfolio of data) {
-          // check wether push the portfolio into the chart
-          if (portfolio.selected) {
-            this.chartData.push(portfolio);
-          }
-        }
-        this.chartData = cloneDeep(this.chartData);
+        this.chartData = cloneDeep(data);
       }
     });
 

@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { DashboardSummaryService } from './portfolio-summary.service';
+import { PortfolioSummaryService } from './portfolio-summary.service';
 
-describe('DashboardSummaryService', () => {
+describe('PortfolioSummaryService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DashboardSummaryService]
+      providers: [PortfolioSummaryService]
     });
   });
 
-  it('should be created', inject([DashboardSummaryService], (service: DashboardSummaryService) => {
+  it('should be created', inject([PortfolioSummaryService], (service: PortfolioSummaryService) => {
     expect(service).toBeTruthy();
   }));
 });

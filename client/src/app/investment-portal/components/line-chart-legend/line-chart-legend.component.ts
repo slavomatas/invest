@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PortfolioService} from '../../services/portfolio/portfolio.service';
+import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
 import { PortfolioActions} from '../../store/actions/portfolio-actions';
 import { NgRedux} from '@angular-redux/store';
 import { AppState } from '../../store';
@@ -16,9 +17,10 @@ export class LineChartLegendComponent implements OnInit {
   // chartActivePortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
 
   portfolios: ChartModelPortfolio[] = [];
-  colors: string[] = ['#b71c1c', '#311b92', '#1b5e20', '#ff6f00', '#bf360c',  '#212121'];
+  colors = this.sharedVariableService.getColors();
 
   constructor(private portfolioService: PortfolioService,
+              private sharedVariableService: SharedVariableService,
               private actions: PortfolioActions,
               private ngRedux: NgRedux<AppState>) {
     this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {

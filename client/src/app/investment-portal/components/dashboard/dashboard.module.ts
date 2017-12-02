@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../core/modules/shared.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
+import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
 
 import { DashboardComponent } from './dashboard.component';
 import { FuseWidgetComponent } from '../../../core/components/widget/widget.component';
@@ -34,7 +35,8 @@ const routes = [
     DashboardComponent
   ],
   providers   : [
-    PortfolioService
+    PortfolioService,
+    SharedVariableService
   ]
 })
 
