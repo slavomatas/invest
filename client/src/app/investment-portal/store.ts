@@ -58,7 +58,6 @@ export function rootReducer(lastState: AppState, action: any): AppState {
           return {
             ...lastState,
             chartPortfolios: action.payload,
-
           };
 
     }
