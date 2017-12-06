@@ -2,8 +2,11 @@ package sk.ystad.model.users.database_objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+import sk.ystad.common.data_structures.RandomString;
 
 import javax.persistence.*;
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -29,6 +32,15 @@ public class User {
 
     @Column(name = "surname")
     private String surname;
+
+    @Column(name = "token")
+    private String registrationToken;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date registrationTimestamp;
+
+    @Column(name = "registrationConfirmed")
+    private boolean registrationConfirmed;
 
     /**
      * Roles are being eagerly loaded here because
@@ -59,6 +71,8 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.registrationConfirmed = false;
+        this.registrationToken = new RandomString(32).nextString();
     }
 
     public Long getId() {
@@ -124,4 +138,33 @@ public class User {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    public String getRegistrationToken() {
+        return registrationToken;
+    }
+
+    public void setRegistrationToken(String registrationToken) {
+        this.registrationToken = registrationToken;
+    }
+
+    public Date getRegistrationTimestamp() {
+        return registrationTimestamp;
+    }
+
+    public void setRegistrationTimestamp(Date registrationTimestamp) {
+        this.registrationTimestamp = registrationTimestamp;
+    }
+
+    public void generateNewToken() {
+        this.registrationToken = new RandomString(32).nextString();
+    }
+
+    public boolean isRegistrationConfirmed() {
+        return registrationConfirmed;
+    }
+
+    public void setRegistrationConfirmed(boolean registrationConfirmed) {
+        this.registrationConfirmed = registrationConfirmed;
+    }
 }
+

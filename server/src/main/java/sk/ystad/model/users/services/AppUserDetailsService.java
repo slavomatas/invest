@@ -12,12 +12,15 @@ import sk.ystad.common.data_structures.Response;
 import sk.ystad.model.users.database_objects.User;
 import sk.ystad.model.users.repositores.UserRepository;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
 public class AppUserDetailsService implements UserDetailsService {
 
+    private static final long REGISTRATION_TIME_OUT = 1000 * 60 * 60 * 12;
     @Autowired
     private UserRepository userRepository;
 
@@ -47,9 +50,22 @@ public class AppUserDetailsService implements UserDetailsService {
         if (emailExist(user.getEmail()) || usernameExist(user.getUsername())) {
             return new Response(false, "User already exists");
         }
+        while(tokenExists(user.getRegistrationToken())){
+            user.generateNewToken();
+        }
+        user.setRegistrationTimestamp(new Date());
         hashPassword(user);
         userRepository.save(user);
         return new Response(true, null);
+    }
+
+    private boolean tokenExists(String registrationToken) {
+        User user = userRepository.findByRegistrationToken(registrationToken);
+        if (user != null) {
+            return true;
+        }
+        return false;
+
     }
 
     private void hashPassword(User user) {
@@ -72,4 +88,27 @@ public class AppUserDetailsService implements UserDetailsService {
         return false;
     }
 
+    public Response checkUser(String token) {
+        User user = userRepository.findByRegistrationToken(token);
+        if(user == null) {
+            return new Response(false, null);
+        } else {
+            if(user.isRegistrationConfirmed()){
+                return new Response(true, null);
+            } else {
+                if(registrationExpired(user.getRegistrationTimestamp())){
+                    userRepository.delete(user);
+                    return new Response(false, null);
+                } else {
+                    user.setRegistrationConfirmed(true);
+                    userRepository.save(user);
+                    return new Response(true, null);
+                }
+            }
+        }
+    }
+
+    private boolean registrationExpired(Date registrationTimestamp) {
+        return  (new Date().getTime() - registrationTimestamp.getTime()) > REGISTRATION_TIME_OUT;
+    }
 }
