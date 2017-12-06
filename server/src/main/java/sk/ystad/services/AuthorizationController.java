@@ -14,8 +14,6 @@ public class AuthorizationController {
     @Autowired
     AppUserDetailsService appUserDetailsService;
 
-
-
     @CrossOrigin(origins = "*")
     @PostMapping("/register")
     public Response register(@RequestParam(value = "password") String password, @RequestParam(value = "surname") String surname,
