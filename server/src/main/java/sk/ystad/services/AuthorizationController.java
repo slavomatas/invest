@@ -8,7 +8,7 @@ import sk.ystad.model.users.database_objects.User;
 import sk.ystad.model.users.services.AppUserDetailsService;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthorizationController {
 
     @Autowired
@@ -21,5 +21,11 @@ public class AuthorizationController {
 
         User user = new User(email, password, name, surname, email);
         return appUserDetailsService.registerUser(user);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/register/{token}")
+    public Response register(@PathVariable String token) {
+        return appUserDetailsService.checkUser(token);
     }
 }
