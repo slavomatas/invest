@@ -13,7 +13,9 @@ export class PortfolioSummaryService implements IDashboardSummaryService {
 
   constructor(
     private ngRedux: NgRedux<AppState>) {
-
+    // TODO: Subscribe to portfolio data, and on their change, recompute the values in portfolio summary according to current {period} that is set.
+    // TODO: Subscribe to set period.
+    // TODO: Subscribe to list of selected portfolios
 
   }
 
