@@ -9,6 +9,10 @@ import { applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { StoreModule } from './store/store-module';
 import { PortfolioActions } from './store/actions/portfolio-actions';
+import { AuthComponent } from './components/auth/auth.component';
+import { AuthService, MockAuthService } from './services/auth/auth.service';
+import { IAuthService } from './services/auth/i-auth-service';
+
 
 const routes = [
   {
@@ -20,7 +24,8 @@ const routes = [
 
 @NgModule({
   declarations: [
-    InvestmentPortalComponent
+    InvestmentPortalComponent,
+    AuthComponent
   ],
   imports: [
     SharedModule,
@@ -31,6 +36,12 @@ const routes = [
   ],
   exports: [
     InvestmentPortalComponent
+  ],
+  providers: [
+    {
+      provide: MockAuthService,
+      useFactory: () => new MockAuthService
+    }
   ]
 })
 
