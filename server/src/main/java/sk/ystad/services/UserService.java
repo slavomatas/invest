@@ -17,7 +17,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/v1")
-public class ResourceController {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
