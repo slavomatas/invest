@@ -1,6 +1,8 @@
 package sk.ystad.model.users.services;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +14,6 @@ import sk.ystad.common.data_structures.Response;
 import sk.ystad.model.users.database_objects.User;
 import sk.ystad.model.users.repositores.UserRepository;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,8 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    static Logger log = Logger.getLogger(AppUserDetailsService.class.getName());
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -110,5 +113,21 @@ public class AppUserDetailsService implements UserDetailsService {
 
     private boolean registrationExpired(Date registrationTimestamp) {
         return  (new Date().getTime() - registrationTimestamp.getTime()) > REGISTRATION_TIME_OUT;
+    }
+
+    /**
+     * Method for removing users with expired registration token
+     */
+    @Scheduled(cron="0 0 */6 * * *")
+    public void removeUnActivatedUsers() {
+        List<User> inactiveUsers = userRepository.findByRegistrationConfirmedFalse();
+        //Check all users for expired tokens
+        for (User user: inactiveUsers) {
+            // If token is expired, delete the user
+            if(registrationExpired(user.getRegistrationTimestamp())) {
+                userRepository.delete(user);
+                log.info("Deleted unactived user " + user.getUsername() + " : token expired");
+            };
+        }
     }
 }
