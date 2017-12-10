@@ -101,17 +101,13 @@ export class RegistrationFormComponent implements OnInit {
       console.log(data);
       this.staticAlertClosed = false;
       if (data.success) {
-        // Successful registration
-        this.alertType = 'success';
-        this.registrationMessage = data.msg + ' Now you can log in.';
-        this.registerForm = this.formBuilder.group({
-          name           : ['', Validators.required],
-          surname        : ['', Validators.required],
-          email          : ['', [Validators.required, Validators.email]],
-          password       : ['', [Validators.required, Validators.minLength(8)]],
-          passwordConfirm: ['', [Validators.required, Validators.minLength(8), passwordValidator('password')]]
-        });
-        //this.router.navigate(['login']);
+
+        setTimeout(function () {
+          // Successful registration
+          this.alertType = 'success';
+          this.registrationMessage = ' Now you can log in.';
+        }, 5000);
+        this.router.navigate(['login']);
       }
       else {
         // Failed registration

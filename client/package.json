@@ -49,7 +49,8 @@
     "redux-observable": "^0.17.0",
     "rxjs": "5.5.2",
     "web-animations-js": "2.3.1",
-    "zone.js": "0.8.18"
+    "zone.js": "0.8.18",
+    "ts-md5": "^1.2.2"
   },
   "devDependencies": {
     "@angular/cli": "1.5.0",

@@ -17,10 +17,12 @@ import sk.ystad.ServerApplication;
 import sk.ystad.model.users.database_objects.Portfolio;
 import sk.ystad.model.users.database_objects.User;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 
+import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,10 +59,10 @@ public class UserPortfoliosServiceTest {
 
 
         Mockito.when(
-                userPortfoliosService.findByUserId()).thenReturn(testPortfolios);
+                userPortfoliosService.findByUserId(any(Principal.class))).thenReturn(testPortfolios);
 
 
-        mvc.perform(get("/user/portfolios")
+        mvc.perform(get("/v1/user/portfolios")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
