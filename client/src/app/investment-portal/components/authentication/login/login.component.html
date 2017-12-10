@@ -23,7 +23,7 @@
                 </mat-form-field>
 
                 <mat-form-field>
-                    <input matInput placeholder="Password" formControlName="password">
+                    <input matInput placeholder="Password" type="password" formControlName="password">
                     <mat-error *ngIf="loginFormErrors.password.required">
                         Password is required
                     </mat-error>
@@ -34,15 +34,10 @@
                     <mat-checkbox class="remember-me" aria-label="Remember Me">
                         Remember Me
                     </mat-checkbox>
-
-                  <!-- Forgot Password -->
-                   <!-- <a class="forgot-password" [routerLink]="'/pages/auth/forgot-password'">
-                        Forgot Password?
-                    </a>-->
                 </div>
 
-                <button mat-raised-button color="accent" class="submit-button" aria-label="LOG IN"
-                        [disabled]="loginForm.invalid">
+                <button type="submit" (click)="onLogin()" mat-raised-button color="accent" class="submit-button" aria-label="LOG IN"
+                        [disabled]="loginForm.invalid" >
                     LOGIN
                 </button>
 

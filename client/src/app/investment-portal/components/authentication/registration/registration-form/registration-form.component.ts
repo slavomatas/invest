@@ -4,6 +4,9 @@ import { fuseAnimations} from '../../../../../core/animations';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import { passwordValidator} from './password-validation';
+import {AuthenticationService } from '../../../../services/authentication/authentication.service';
+import {RequestStatus} from '../../../../types/types';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'fuse-invest-registration-form',
@@ -15,7 +18,17 @@ export class RegistrationFormComponent implements OnInit {
   registerForm: FormGroup;
   registerFormErrors: any;
 
+
+
+
+  staticAlertClosed = true;
+  registrationMessage: string;
+  alertType: string;
+
+
   constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router,
     private fuseConfig: FuseConfigService,
     private formBuilder: FormBuilder
   )
@@ -30,6 +43,7 @@ export class RegistrationFormComponent implements OnInit {
 
     this.registerFormErrors = {
       name           : {},
+      surname           : {},
       email          : {},
       password       : {},
       passwordConfirm: {}
@@ -39,6 +53,7 @@ export class RegistrationFormComponent implements OnInit {
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       name           : ['', Validators.required],
+      surname        : ['', Validators.required],
       email          : ['', [Validators.required, Validators.email]],
       password       : ['', [Validators.required, Validators.minLength(8)]],
       passwordConfirm: ['', [Validators.required, Validators.minLength(8), passwordValidator('password')]]
@@ -47,6 +62,8 @@ export class RegistrationFormComponent implements OnInit {
     this.registerForm.valueChanges.subscribe(() => {
       this.onRegisterFormValuesChanged();
     });
+
+
   }
 
   onRegisterFormValuesChanged()
@@ -69,6 +86,39 @@ export class RegistrationFormComponent implements OnInit {
         this.registerFormErrors[field] = control.errors;
       }
     }
+  }
+
+  public onRegister()
+  {
+    let name = this.registerForm.value.name;
+    let surname = this.registerForm.value.surname;
+    let email = this.registerForm.value.email;
+    let password = this.registerForm.value.password;
+
+    console.log(name + " " + email + " " + password);
+
+    this.authenticationService.register( name, surname, email, password).then((data: RequestStatus) => {
+      console.log(data);
+      this.staticAlertClosed = false;
+      if (data.success) {
+        // Successful registration
+        this.alertType = 'success';
+        this.registrationMessage = data.msg + ' Now you can log in.';
+        this.registerForm = this.formBuilder.group({
+          name           : ['', Validators.required],
+          surname        : ['', Validators.required],
+          email          : ['', [Validators.required, Validators.email]],
+          password       : ['', [Validators.required, Validators.minLength(8)]],
+          passwordConfirm: ['', [Validators.required, Validators.minLength(8), passwordValidator('password')]]
+        });
+        //this.router.navigate(['login']);
+      }
+      else {
+        // Failed registration
+        this.registrationMessage = data.msg;
+        this.alertType = 'danger';
+      }
+    });
   }
 
 }

@@ -35,6 +35,9 @@ const routes = [
   ],
   exports: [
     InvestmentPortalComponent
+  ],
+  providers: [
+
   ]
 })
 

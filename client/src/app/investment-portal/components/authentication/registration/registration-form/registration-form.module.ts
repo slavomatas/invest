@@ -6,6 +6,7 @@ import { MaterialModule} from '../../../../../core/modules/material.module';
 
 
 import { RegistrationFormComponent} from './registration-form.component';
+import {AuthenticationService, MockAuthenticationService} from '../../../../services/authentication/authentication.service';
 
 
 const routes = [
@@ -26,6 +27,10 @@ const routes = [
     ],
     exports     : [
       RegistrationFormComponent
+    ],
+    providers   : [
+      AuthenticationService,
+      MockAuthenticationService
     ]
 })
 

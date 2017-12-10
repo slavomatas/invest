@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseConfigService } from '../../../../core/services/config.service';
 import { fuseAnimations } from '../../../../core/animations';
+import {AuthenticationService } from '../../../services/authentication/authentication.service';
+import { AuthenticationActions } from '../../../store/actions/authentication-actions';
+import { Token, User } from '../../../types/types';
+import { Router } from '@angular/router';
 
 @Component({
     selector   : 'fuse-login',
@@ -17,8 +21,12 @@ export class LoginComponent implements OnInit
 
     constructor(
         private fuseConfig: FuseConfigService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private router: Router,
+        private actions: AuthenticationActions,
+        private authenticationService: AuthenticationService
     )
+
     {
         this.fuseConfig.setSettings({
             layout: {
@@ -67,4 +75,22 @@ export class LoginComponent implements OnInit
             }
         }
     }
+
+    public onLogin()
+    {
+      let password = this.loginForm.value.password;
+      let email = this.loginForm.value.email;
+
+      // Get access token
+      this.authenticationService.login( email, password).then( (data: Token) => {
+          this.actions.getAccessTokenFullfiled(true, data);
+          // Get user details
+          this.authenticationService.getUser(data.access_token).then((data: User) => {
+            this.actions.getUserDataFullfiled(true, data);
+            // Forward to dashboard page
+            this.router.navigate(['dashboard']);
+          });
+      });
+    }
+
 }

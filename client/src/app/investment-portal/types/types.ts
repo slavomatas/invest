@@ -10,6 +10,7 @@ export interface CumulativeMeasurement {
 
 export interface RequestStatus {
   success: boolean;
+  msg: string;
 }
 
 export interface ChartModelPortfolio {
@@ -23,4 +24,22 @@ export interface ChartModelPortfolio {
 
 export interface RequestStatus {
   success: boolean
+}
+
+export interface User {
+  name: string;
+  username: string;
+  email: string;
+  role: {
+    name: string,
+    description: string
+  }
+}
+
+export interface Token {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  scope: string;
+  jti: string
 }
