@@ -11,9 +11,8 @@ import { StoreModule } from './store/store-module';
 import { PortfolioActions } from './store/actions/portfolio-actions';
 import {LoginModule} from './components/authentication/login/login.module';
 import {RegistrationFormModule} from './components/authentication/registration/registration-form/registration-form.module';
-import { AuthComponent } from './components/auth/auth.component';
-import { AuthService, MockAuthService } from './services/auth/auth.service';
-import { IAuthService } from './services/auth/i-auth-service';
+import { AuthRootComponent } from './components/authentication/auth-root/auth-root.component';
+import { ActivationMsgModule } from './components/authentication/registration/activation-msg/activation-msg.module';
 
 
 const routes = [
@@ -26,8 +25,7 @@ const routes = [
 
 @NgModule({
   declarations: [
-    InvestmentPortalComponent,
-    AuthComponent
+    InvestmentPortalComponent
   ],
   imports: [
     SharedModule,
@@ -36,16 +34,11 @@ const routes = [
     PortfoliosModule,
     LoginModule,
     RegistrationFormModule,
-    StoreModule
+    StoreModule,
+    ActivationMsgModule
   ],
   exports: [
     InvestmentPortalComponent
-  ],
-  providers: [
-    {
-      provide: MockAuthService,
-      useFactory: () => new MockAuthService
-    }
   ]
 })
 

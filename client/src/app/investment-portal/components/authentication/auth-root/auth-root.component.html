@@ -1,0 +1,8 @@
+<div *ngIf="this.authSuccess==null;else verificationDone">
+    <mat-spinner></mat-spinner>
+    <p>We are verifying your registration, please wait.</p>
+</div>
+
+<ng-template #verificationDone>
+    <fuse-invest-activation-msg [activationResult] = "this.authSuccess"></fuse-invest-activation-msg> 
+</ng-template>

@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { NgIf } from '@angular/common';
 
 import { FuseConfigService } from '../../../../../core/services/config.service';
@@ -12,7 +12,7 @@ import { fuseAnimations } from '../../../../../core/animations';
 })
 
 export class ActivationMsgComponent {
-    activated: boolean = true;
+    @Input() activationResult: boolean;
 
     constructor(
         private fuseConfig: FuseConfigService

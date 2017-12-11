@@ -1,26 +1,35 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../../../../core/modules/shared.module';
 import { RouterModule } from '@angular/router';
-import {ActivationMsgComponent} from './activation-msg.component';
+import { AuthRootComponent } from '../../auth-root/auth-root.component';
+import { ActivationMsgComponent } from './activation-msg.component';
+import { MockAuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 const routes = [
     {
-        path     : 'activation',
-        component: ActivationMsgComponent
+        path: 'auth/register/:token',
+        component: AuthRootComponent
     }
 ];
 
 @NgModule({
     declarations: [
-      ActivationMsgComponent
+        ActivationMsgComponent,
+        AuthRootComponent
     ],
-    imports     : [
+    imports: [
         SharedModule,
         RouterModule.forChild(routes)
     ],
-    exports     : [
-      ActivationMsgComponent
+    exports: [
+        ActivationMsgComponent
+    ],
+    providers: [
+      {
+        provide: MockAuthenticationService,
+        useFactory: () => new MockAuthenticationService
+      }
     ]
 })
 

@@ -4,7 +4,7 @@
 
     <div id="mail-confirm-form" *fuseIfOnDom [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
       <!-- SUCCESS -->
-      <div *ngIf="activated;else failed">
+      <div *ngIf="activationResult;else failed">
 
           <div class="logo">
             <mat-icon class="s-96">check_circle</mat-icon>

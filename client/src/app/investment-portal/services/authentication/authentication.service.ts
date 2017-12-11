@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-import {IAuthenticationService} from './iauthentication.service';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {RequestStatus, Token, User} from '../../types/types';
-import {Md5} from 'ts-md5/dist/md5';
+import { IAuthenticationService } from './iauthentication.service';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { RequestStatus, Token, User } from '../../types/types';
+import { Md5 } from 'ts-md5/dist/md5';
 
 const DOMAIN = 'http://localhost:8085';
 const REGISTER_USER_URL = DOMAIN + '/auth/register';
 const LOGIN_USER_URL = 'http://testjwtclientid:XY7kmzoNzl100@localhost:8085/oauth/token';
 const GET_USER_URL = DOMAIN + '/v1/user';
+const GET_VERIFY_TOKEN_URL = '/auth/register/{token}';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Access-Control-Allow-Origin':'*'
+    'Access-Control-Allow-Origin': '*'
   })
 };
 
@@ -30,9 +31,10 @@ export class AuthenticationService implements IAuthenticationService {
     console.log('GET_USER');
     let headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Bearer ' + token});
+      'Authorization': 'Bearer ' + token
+    });
 
-    return this.http.get<User>(GET_USER_URL, {headers}).toPromise();
+    return this.http.get<User>(GET_USER_URL, { headers }).toPromise();
   }
 
   /**
@@ -47,8 +49,9 @@ export class AuthenticationService implements IAuthenticationService {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa('testjwtclientid:XY7kmzoNzl100')});
-    return this.http.post<Token>('http://localhost:8085/oauth/token', body, {headers}).toPromise();
+      'Authorization': 'Basic ' + btoa('testjwtclientid:XY7kmzoNzl100')
+    });
+    return this.http.post<Token>('http://localhost:8085/oauth/token', body, { headers }).toPromise();
   }
 
 
@@ -70,7 +73,23 @@ export class AuthenticationService implements IAuthenticationService {
       'name': name,
       'email': email
     };
-    return this.http.post<RequestStatus>(REGISTER_USER_URL, user, {params: user}).toPromise();
+    return this.http.post<RequestStatus>(REGISTER_USER_URL, user, { params: user }).toPromise();
+  }
+
+  public async getRegisterVerificationResult(token: string): Promise<boolean> {
+
+    let params: HttpParams = new HttpParams();
+    params = params.set('token', token);
+
+    let result: boolean;
+    await this.http
+      .get<{ result: boolean }>(GET_VERIFY_TOKEN_URL, {
+        params: params
+      }).subscribe((httpResult) => {
+        result = httpResult.result;
+      });
+
+    return result;
   }
 
 }
@@ -84,23 +103,23 @@ export class MockAuthenticationService implements IAuthenticationService {
    */
   getUser(token: string): Promise<User> {
     return new Promise<User>((resolve) => {
-        setTimeout(
-          () => {
-            resolve(
-              {
-                name: 'Slavo Baca',
-                username: 'example@email.com',
-                email: 'example@email.com',
-                role: {
-                  name: 'STANDARD_USER',
-                  description: 'STANDARD_USER'
-                }
+      setTimeout(
+        () => {
+          resolve(
+            {
+              name: 'Slavo Baca',
+              username: 'example@email.com',
+              email: 'example@email.com',
+              role: {
+                name: 'STANDARD_USER',
+                description: 'STANDARD_USER'
               }
-            );
-          },
-          500);
+            }
+          );
+        },
+        500);
 
-      }
+    }
     );
   }
 
@@ -112,19 +131,20 @@ export class MockAuthenticationService implements IAuthenticationService {
    */
   login(email: string, password: string): Promise<Token> {
     return new Promise<Token>((resolve) => {
-        setTimeout(
-          () => {
-            resolve(
-              { "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwiZXhwIjoxNTExOTU4MTk5LCJ1c2VyX25hbWUiOiJhQGIuY29tIiwianRpIjoiOGY2NTA2NGMtZGRmNy00NTJjLTlhZTctYzU5NjRiNGVhZGY4IiwiY2xpZW50X2lkIjoidGVzdGp3dGNsaWVudGlkIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.Qpi_RdaweHb5t3MNLpBJuHNLhwVVsTK3pxoja3WYqFQ",
-                "token_type":"bearer",
-                "expires_in":43199,
-                "scope":"read write",
-                "jti":"8f65064c-ddf7-452c-9ae7-c5964b4eadf8"
-              }
-            );
-          },
-          500);
-      }
+      setTimeout(
+        () => {
+          resolve(
+            {
+              "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwiZXhwIjoxNTExOTU4MTk5LCJ1c2VyX25hbWUiOiJhQGIuY29tIiwianRpIjoiOGY2NTA2NGMtZGRmNy00NTJjLTlhZTctYzU5NjRiNGVhZGY4IiwiY2xpZW50X2lkIjoidGVzdGp3dGNsaWVudGlkIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.Qpi_RdaweHb5t3MNLpBJuHNLhwVVsTK3pxoja3WYqFQ",
+              "token_type": "bearer",
+              "expires_in": 43199,
+              "scope": "read write",
+              "jti": "8f65064c-ddf7-452c-9ae7-c5964b4eadf8"
+            }
+          );
+        },
+        500);
+    }
     );
   }
 
@@ -137,19 +157,27 @@ export class MockAuthenticationService implements IAuthenticationService {
    */
   public register(name: string, surname: string, email: string, password: string): Promise<RequestStatus> {
     return new Promise<RequestStatus>((resolve) => {
-        setTimeout(
-          () => {
-            resolve(
-              {
-                 success: true,
-                 msg: null
-              }
-            );
-          },
-          500);
+      setTimeout(
+        () => {
+          resolve(
+            {
+              success: true,
+              msg: null
+            }
+          );
+        },
+        500);
 
-      }
+    }
     );
+  }
+
+  getRegisterVerificationResult(token: string): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      return setTimeout(() => {
+        resolve(true);
+      }, 1500);
+    });
   }
 
 }
