@@ -11,6 +11,10 @@ import { StoreModule } from './store/store-module';
 import { PortfolioActions } from './store/actions/portfolio-actions';
 import {LoginModule} from './components/authentication/login/login.module';
 import {RegistrationFormModule} from './components/authentication/registration/registration-form/registration-form.module';
+import { AuthComponent } from './components/auth/auth.component';
+import { AuthService, MockAuthService } from './services/auth/auth.service';
+import { IAuthService } from './services/auth/i-auth-service';
+
 
 const routes = [
   {
@@ -22,7 +26,8 @@ const routes = [
 
 @NgModule({
   declarations: [
-    InvestmentPortalComponent
+    InvestmentPortalComponent,
+    AuthComponent
   ],
   imports: [
     SharedModule,
@@ -37,7 +42,10 @@ const routes = [
     InvestmentPortalComponent
   ],
   providers: [
-
+    {
+      provide: MockAuthService,
+      useFactory: () => new MockAuthService
+    }
   ]
 })
 
