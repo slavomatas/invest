@@ -17,14 +17,9 @@ import {Router} from '@angular/router';
 export class RegistrationFormComponent implements OnInit {
   registerForm: FormGroup;
   registerFormErrors: any;
-
-
-
-
   staticAlertClosed = true;
   registrationMessage: string;
   alertType: string;
-
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -63,11 +58,9 @@ export class RegistrationFormComponent implements OnInit {
       this.onRegisterFormValuesChanged();
     });
 
-
   }
 
-  onRegisterFormValuesChanged()
-  {
+  onRegisterFormValuesChanged() {
     for ( const field in this.registerFormErrors )
     {
       if ( !this.registerFormErrors.hasOwnProperty(field) )
@@ -88,8 +81,7 @@ export class RegistrationFormComponent implements OnInit {
     }
   }
 
-  public onRegister()
-  {
+  public onRegister() {
     let name = this.registerForm.value.name;
     let surname = this.registerForm.value.surname;
     let email = this.registerForm.value.email;

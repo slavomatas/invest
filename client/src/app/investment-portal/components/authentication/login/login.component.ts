@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseConfigService } from '../../../../core/services/config.service';
 import { fuseAnimations } from '../../../../core/animations';
-import {AuthenticationService } from '../../../services/authentication/authentication.service';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { AuthenticationActions } from '../../../store/actions/authentication-actions';
 import { Token, User } from '../../../types/types';
 import { Router } from '@angular/router';
