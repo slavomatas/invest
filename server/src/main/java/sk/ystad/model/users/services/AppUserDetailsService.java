@@ -74,7 +74,7 @@ public class AppUserDetailsService implements UserDetailsService {
     private void sendEmail(User user) {
         emailService.sendMail(user.getEmail(), "Registration confirmation", "Thank you for your " +
                 "registration.\nPlease confirm your email by clicking on following link:\n" +
-                "http://localhost:8085/tuBudeLink/" + user.getRegistrationToken());
+                "http://localhost/tuBudeLink/" + user.getRegistrationToken());
     }
 
     private boolean tokenExists(String registrationToken) {
