@@ -1,22 +1,9 @@
-import { TestBed, inject } from '@angular/core/testing';
-import {} from 'jasmine';
+import { TestBed } from '@angular/core/testing';
 import { IAuthenticationService } from './iauthentication.service';
 import { User } from '../../types/types';
 import { RequestStatus, Token } from '../../types/authentication-types';
 
 const RESPONSE_TIMEOUT = 500;
-
-describe('AuthenticationService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-      {
-        provide: MockAuthenticationService,
-        useFactory: () =>  new MockAuthenticationService()
-      }]
-    });
-  });
-});
 
 export class MockAuthenticationService implements IAuthenticationService {
 
