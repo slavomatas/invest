@@ -1,14 +1,12 @@
 package sk.ystad.model.users.database_objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.NotEmpty;
-import sk.ystad.common.data_structures.RandomString;
 
 import javax.persistence.*;
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -55,7 +53,7 @@ public class User {
                     referencedColumnName = "id"))
     private List<Role> roles;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Portfolio> portfolios;
 
     public User() {
@@ -73,7 +71,7 @@ public class User {
         this.surname = surname;
         this.email = email;
         this.registrationConfirmed = false;
-        this.registrationToken = new RandomString(32).nextString();
+        generateNewToken();
         this.roles = new ArrayList<>();
     }
 
@@ -158,7 +156,8 @@ public class User {
     }
 
     public void generateNewToken() {
-        this.registrationToken = new RandomString(32).nextString();
+        UUID uuid = UUID.randomUUID();
+        this.registrationToken = uuid.toString();
     }
 
     public boolean isRegistrationConfirmed() {
