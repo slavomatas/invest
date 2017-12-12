@@ -5,11 +5,10 @@ import { User} from '../../types/types';
 import { RequestStatus, Token } from '../../types/authentication-types';
 import { Md5 } from 'ts-md5/dist/md5';
 
-const DOMAIN = 'http://localhost:8085';
-const REGISTER_USER_URL = DOMAIN + '/auth/register';
-const LOGIN_USER_URL = DOMAIN + '/oauth/token';
-const GET_USER_URL = DOMAIN + '/v1/user';
-const GET_VERIFY_TOKEN_URL = '/auth/register';
+const REGISTER_USER_URL = 'api/auth/register';
+const LOGIN_USER_URL = 'api/oauth/token';
+const GET_USER_URL = 'api/v1/user';
+const GET_VERIFY_TOKEN_URL = 'api/auth/register';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -77,15 +76,12 @@ export class AuthenticationService implements IAuthenticationService {
   }
 
   public async getRegisterVerificationResult(token: string): Promise<boolean> {
-
-    let params: HttpParams = new HttpParams();
-    params = params.set('token', token);
-
+    const body = {
+      'token': token
+    };
     let result: boolean;
     await this.http
-      .get<{ result: boolean }>(GET_VERIFY_TOKEN_URL, {
-        params: params
-      }).subscribe((httpResult) => {
+      .post<{ result: boolean }>(GET_VERIFY_TOKEN_URL, body).subscribe((httpResult) => {
         result = httpResult.result;
       });
 

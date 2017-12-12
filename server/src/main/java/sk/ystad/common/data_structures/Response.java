@@ -1,5 +1,8 @@
 package sk.ystad.common.data_structures;
 
+/**
+ * Generic response for REST calls
+ */
 public class Response {
 
     private boolean success;
