@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AuthRootComponent } from '../../auth-root/auth-root.component';
 import { ActivationMsgComponent } from './activation-msg.component';
 import { MockAuthenticationService } from '../../../../services/authentication/authentication.service.spec';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 const routes = [
@@ -26,10 +27,7 @@ const routes = [
         ActivationMsgComponent
     ],
     providers: [
-      {
-        provide: MockAuthenticationService,
-        useFactory: () => new MockAuthenticationService
-      }
+      AuthenticationService
     ]
 })
 
