@@ -12,7 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import sk.ystad.common.data_structures.Response;
 import sk.ystad.common.mail.EmailService;
+import sk.ystad.model.users.database_objects.Role;
 import sk.ystad.model.users.database_objects.User;
+import sk.ystad.model.users.repositores.RoleRepository;
 import sk.ystad.model.users.repositores.UserRepository;
 
 import java.util.ArrayList;
@@ -29,13 +31,16 @@ public class AppUserDetailsService implements UserDetailsService {
 
     private final EmailService emailService;
 
+    private final RoleRepository roleRepository;
+
     static Logger log = Logger.getLogger(AppUserDetailsService.class.getName());
 
     @Autowired
-    public AppUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public AppUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -65,6 +70,7 @@ public class AppUserDetailsService implements UserDetailsService {
             user.generateNewToken();
         }
         user.setRegistrationTimestamp(new Date());
+        user.addRole(roleRepository.findByRoleName(Role.STANDARD_USER_STRING));
         hashPassword(user);
         userRepository.save(user);
         sendEmail(user);

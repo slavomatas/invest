@@ -6,6 +6,7 @@ import sk.ystad.common.data_structures.RandomString;
 
 import javax.persistence.*;
 import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -73,6 +74,7 @@ public class User {
         this.email = email;
         this.registrationConfirmed = false;
         this.registrationToken = new RandomString(32).nextString();
+        this.roles = new ArrayList<>();
     }
 
     public Long getId() {
@@ -165,6 +167,10 @@ public class User {
 
     public void setRegistrationConfirmed(boolean registrationConfirmed) {
         this.registrationConfirmed = registrationConfirmed;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }
 

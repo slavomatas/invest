@@ -5,6 +5,10 @@ import javax.persistence.*;
 @Entity
 @Table(name="app_role")
 public class Role {
+
+    @Transient
+    public static final String STANDARD_USER_STRING = "STANDARD_USER";
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +20,14 @@ public class Role {
     @Column(name="description")
     private String description;
 
+    public Role(){
+
+    }
+
+    public Role(String name, String description){
+        this.roleName = name;
+        this.description = description;
+    }
 
     public Long getId() {
         return id;

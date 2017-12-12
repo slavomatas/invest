@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import sk.ystad.model.securities.database_objects.*;
 import sk.ystad.model.securities.repositories.SecurityRepository;
+import sk.ystad.model.users.database_objects.Role;
+import sk.ystad.model.users.repositores.RoleRepository;
 import sk.ystad.model.users.services.AppUserDetailsService;
 
 import java.util.Date;
@@ -38,22 +40,14 @@ public class ServerApplication extends SpringBootServletInitializer {
 		return builder.sources(ServerApplication.class);
 	}
 
+	@Bean
+	public CommandLineRunner rolesLoader(RoleRepository roleRepository) {
+		return (args) ->{
+			Role standardUserRole = roleRepository.findByRoleName(Role.STANDARD_USER_STRING);
+			if(standardUserRole == null){
+				roleRepository.save(new Role(Role.STANDARD_USER_STRING, null));
+			}
+		};
+	}
 
-
-//	@Bean
-//	public CommandLineRunner demo(SecurityRepository securityRepository) {
-//		return (args) ->{
-//			securityRepository.save(new Option("S2", "SecondSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
-//					PayoffProfile.CALL,	null).getSecurity());
-//			securityRepository.save(new EquityOptionSecurity("S3", "ThirdSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
-//					PayoffProfile.CALL,	null).getSecurity());
-//			securityRepository.save(new EquityBarierOptionSecurity("S4", "FourthSecurity", 2., new Date(), ExcerciseStyle.AMERICAN,
-//					PayoffProfile.CALL,	null, 1., "BT", "BD", "MT", "SF").getSecurity());
-//
-//			log.info("Stored Securities:");
-//			for (Security security : securityRepository.findAll()) {
-//				log.info("{}:{} [{}]", security.getSymbol(), security.getName(), security.getSecurityData().getClass());
-//			}
-//		};
-//	}
 }
