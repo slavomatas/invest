@@ -10,6 +10,8 @@ import { FuseWidgetComponent } from '../../../core/components/widget/widget.comp
 import { LineChartComponent } from '../line-chart/line-chart.component';
 import { LineChartReturnsComponent } from '../line-chart-returns/line-chart-returns.component';
 import { LineChartLegendComponent} from '../line-chart-legend/line-chart-legend.component';
+import { CumulativeChartComponent } from './cumulative-chart/cumulative-chart.component';
+import { DashboardPortfolioListComponent } from './dashboard-portfolio-list/dashboard-portfolio-list.component';
 
 const routes = [
   {
@@ -24,7 +26,9 @@ const routes = [
     FuseWidgetComponent,
     LineChartComponent,
     LineChartReturnsComponent,
-    LineChartLegendComponent
+    LineChartLegendComponent,
+    CumulativeChartComponent,
+    DashboardPortfolioListComponent
   ],
   imports     : [
     SharedModule,
