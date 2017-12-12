@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<testsuite name="PhantomJS 2.1.1 (Windows 8 0.0.0)" package="" timestamp="2017-11-21T11:22:32" id="0" hostname="DESKTOP-GJ2QFCH" tests="2" errors="0" failures="0" time="0.301">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1"/>
+  </properties>
+  <testcase name="PortfoliosComponent should create" time="0.22" classname="PhantomJS_2_1_1_(Windows_8_0_0_0).PortfoliosComponent"/>
+  <testcase name="DashboardSummaryService should be created" time="0.081" classname="PhantomJS_2_1_1_(Windows_8_0_0_0).DashboardSummaryService"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

@@ -4,8 +4,8 @@ import { LineChartComponent } from './line-chart.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '../../../core/modules/shared.module';
-import { PortfolioService, MockPortfolioService } from '../../services/portfolio/portfolio.service';
+import { SharedModule } from '../../../../core/modules/shared.module';
+import { PortfolioService, MockPortfolioService } from '../../../services/portfolio/portfolio.service';
 
 describe('LineChartComponent', () => {
   let component: LineChartComponent;
@@ -37,9 +37,5 @@ describe('LineChartComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
 
 });

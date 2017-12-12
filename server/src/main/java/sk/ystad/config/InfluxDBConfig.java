@@ -1,4 +1,4 @@
-package sk.ystad;
+package sk.ystad.config;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -16,7 +16,7 @@ import sk.ystad.model.measures.repositores.PortfolioMeasurementRepository;
 
 @Configuration
 @EnableConfigurationProperties(InfluxDBProperties.class)
-public class InfluxDBConfiguration
+public class InfluxDBConfig
 {
     @Bean
     public InfluxDBConnectionFactory connectionFactory(final InfluxDBProperties properties)

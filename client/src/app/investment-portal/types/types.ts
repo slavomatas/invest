@@ -3,16 +3,12 @@ export interface Portfolio {
   id: string;
 }
 
-export interface CumulativeMeasurement {
+export interface User {
   name: string;
-  value: string;
-}
-
-export interface ChartModelPortfolio {
-  name: string;
-  series:
-    {
-      name: string,
-      value: number
-    }[];
+  username: string;
+  email: string;
+  role: {
+    name: string,
+    description: string
+  }
 }

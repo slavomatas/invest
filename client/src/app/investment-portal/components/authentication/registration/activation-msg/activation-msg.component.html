@@ -1,0 +1,55 @@
+<div id="mail-confirm" fxLayout="column" fusePerfectScrollbar>
+
+  <div id="mail-confirm-form-wrapper" fxLayout="column" fxLayoutAlign="center center">
+
+    <div id="mail-confirm-form" *fuseIfOnDom [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+      <!-- SUCCESS -->
+      <div *ngIf="activationResult;else failed">
+
+          <div class="logo">
+            <mat-icon class="s-96">check_circle</mat-icon>
+          </div>
+
+          <div class="title">Successful account activation!</div>
+
+          <div class="subtitle">
+            <p>
+              Your account has been successfully activated.
+            </p>
+            <p>
+              Welcome at Investment Portal. We are happy to help you with your investments. Now you can continue to log in.
+            </p>
+          </div>
+
+          <div class="message">
+            <a class="link" [routerLink]="'/auth/login'">Go back to login page</a>
+          </div>
+
+      </div>
+
+      <!-- FAILED -->
+      <ng-template #failed>
+
+          <div class="logo">
+            <mat-icon class="s-96">error</mat-icon>
+          </div>
+
+          <div class="title">Failed account activation!</div>
+
+          <div class="subtitle">
+            <p>
+              Your activation token has expired.
+            </p>
+            <p>
+              Please re-activate your account again by generating new token.
+            </p>
+          </div>
+        <button mat-raised-button class="submit-button" aria-label="GENERATE TOKEN">
+          GENERATE TOKEN
+        </button>
+
+      </ng-template>
+    </div>
+  </div>
+
+</div>

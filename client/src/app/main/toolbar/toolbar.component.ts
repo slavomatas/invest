@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { FuseConfigService } from '../../core/services/config.service';
 import { TranslateService } from '@ngx-translate/core';
+import {AppState} from '../../investment-portal/store';
+import {NgRedux} from '@angular-redux/store';
 
 @Component({
     selector   : 'fuse-toolbar',
