@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../types/types';
+import { Portfolio, CumulativeMeasurement, ChartModelPortfolio, PortfolioDetails } from '../../types/types';
 import { IPortfolioService } from './i-portfolio.service';
 import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';
@@ -12,6 +12,7 @@ const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.or
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {
+
 
   constructor(
     private http: HttpClient,
@@ -108,6 +109,10 @@ export class PortfolioService implements IPortfolioService {
         params: params
       });
   }
+
+  public getPortfolioDetails(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<PortfolioDetails[]> {
+    return undefined;
+  }
 }
 
 export class MockPortfolioService implements IPortfolioService {
@@ -150,5 +155,54 @@ export class MockPortfolioService implements IPortfolioService {
         500);
     });
 
+  }
+
+  public getPortfolioDetails(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<PortfolioDetails[]> {
+    return new Observable<PortfolioDetails[]>(observer => {
+      setTimeout(
+        () => {
+          observer.next(
+            [
+              { name: 'Mock portfolio 1',
+                id: 'id1',
+                marketValue: 525464,
+                returns:
+                  [
+                    {name: '2017-01-03', value: 0.00246191666847873},
+
+                  ],
+                positions:
+                  [
+                    {name: 'BIL', value: 20},
+                    {name: 'CEV', value: 20},
+                    {name: 'NFO', value: 20},
+                    {name: 'PSR', value: 20},
+                    {name: 'AGG', value: 20},
+                  ]
+              },
+              { name: 'Mock portfolio 2',
+                id: 'id2',
+                marketValue: 525464,
+                returns:
+                  [
+                    {name: '2017-01-03', value: 0.00246191666847873},
+
+
+
+                  ],
+                positions:
+                  [
+                    {name: 'BIL', value: 20},
+                    {name: 'JOE', value: 20},
+                    {name: 'DOE', value: 20},
+                    {name: 'P2P', value: 20},
+                    {name: 'AGG', value: 20},
+                  ]
+              },
+            ]
+          );
+        },
+        500);
+    });
   }
 }
