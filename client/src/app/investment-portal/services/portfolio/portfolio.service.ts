@@ -166,11 +166,11 @@ export class MockPortfolioService implements IPortfolioService {
               { name: 'Mock portfolio 1',
                 id: 'id1',
                 marketValue: 525464,
-                returns:
-                  [
-                    {name: '2017-01-03', value: 0.00246191666847873},
-
-                  ],
+                returns: {
+                  daily: 0.00159238920396665,
+                  weekly: 0.0146940506004236,
+                  monthly: 0.00733306344259854,
+                },
                 positions:
                   [
                     {name: 'BIL', value: 20},
@@ -183,13 +183,11 @@ export class MockPortfolioService implements IPortfolioService {
               { name: 'Mock portfolio 2',
                 id: 'id2',
                 marketValue: 525464,
-                returns:
-                  [
-                    {name: '2017-01-03', value: 0.00246191666847873},
-
-
-
-                  ],
+                returns: {
+                  daily: -0.00301981425613618,
+                  weekly: -0.00163140823711172,
+                  monthly: 0.0099937424031975,
+                },
                 positions:
                   [
                     {name: 'BIL', value: 20},

@@ -1,11 +1,13 @@
 import { Action } from 'redux';
-import {Portfolio, ChartModelPortfolio, PortfolioSummary } from './types/types';
+import {Portfolio, ChartModelPortfolio, PortfolioSummary, PortfolioDetails} from './types/types';
 import { PortfolioActions } from './store/actions/portfolio-actions';
 
 export interface AppState {
     chartPortfolios: ChartModelPortfolio[];
+    dashboardPortfolioList: PortfolioDetails[];
     isGettingPortfoliosCumulativeData: boolean;
     cumulativeFetchError: string | undefined;
+    portfoliosDetailsFetchError: string | undefined;
 
     portfolioSummary: PortfolioSummary;
     cumulativeChartSelectedPeriod: string;
@@ -14,8 +16,10 @@ export interface AppState {
 
 export const INITIAL_STATE: AppState = {
     chartPortfolios: [],
+    dashboardPortfolioList: [],
     isGettingPortfoliosCumulativeData: false,
     cumulativeFetchError: undefined,
+  portfoliosDetailsFetchError: undefined,
 
     // CumulativeChartControls
     cumulativeChartSelectedPeriod: '3M',
@@ -49,6 +53,19 @@ export function rootReducer(lastState: AppState, action: any): AppState {
                 isGettingPortfoliosCumulativeData: true,
                 cumulativeFetchError: undefined
             };
+        case PortfolioActions.GET_PORTFOLIOS_LIST_DETAILS:
+          return {
+            ...lastState,
+            dashboardPortfolioList: action.payload,
+            portfoliosDetailsFetchError: undefined
+          };
+        case PortfolioActions.FGET_PORTFOLIOS_LIST_DETAILS:
+          return {
+            ...lastState,
+            portfoliosDetailsFetchError: action.payload
+          };
+
+
         case PortfolioActions.SET_CUMULATIVE_CHART_PERIOD:
             return {
                 ...lastState,
