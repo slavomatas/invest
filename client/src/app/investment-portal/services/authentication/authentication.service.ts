@@ -9,7 +9,7 @@ const DOMAIN = 'http://localhost:8085';
 const REGISTER_USER_URL = DOMAIN + '/auth/register';
 const LOGIN_USER_URL = DOMAIN + '/oauth/token';
 const GET_USER_URL = DOMAIN + '/v1/user';
-const GET_VERIFY_TOKEN_URL = '/auth/register/{token}';
+const GET_VERIFY_TOKEN_URL = '/auth/register';
 
 const httpOptions = {
   headers: new HttpHeaders({
