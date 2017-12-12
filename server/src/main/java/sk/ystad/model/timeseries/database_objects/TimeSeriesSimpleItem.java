@@ -1,11 +1,11 @@
 package sk.ystad.model.timeseries.database_objects;
 
-public class TimeSeriesItem {
+public class TimeSeriesSimpleItem {
 
     private String name;
     private String value;
 
-    public TimeSeriesItem(String name, String value) {
+    public TimeSeriesSimpleItem(String name, String value) {
         this.name = name;
         this.value = value;
     }

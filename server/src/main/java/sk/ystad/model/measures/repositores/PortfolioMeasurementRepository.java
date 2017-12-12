@@ -1,12 +1,13 @@
 package sk.ystad.model.measures.repositores;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.stereotype.Repository;
 import sk.ystad.model.measures.database_objects.Measure;
+import sk.ystad.model.measures.database_objects.Measures;
+import sk.ystad.model.measures.database_objects.positions.Position;
 import sk.ystad.model.timeseries.database_objects.date.localdate.ImmutableLocalDateDoubleTimeSeries;
 import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeries;
 import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeriesBuilder;
@@ -15,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,6 +65,65 @@ public class PortfolioMeasurementRepository {
             return subTimeSeries;
         }
         return timeSeries;
+    }
+
+    public List<Position> getPositionsWithMarketValue(String portfolioId) {
+        List<Position> positionsWithMarketValue = new ArrayList<>();
+        List<Position> positionsWithWeights = getActualPortfolioPositionsWeights(portfolioId);
+
+        for (Position positionWithWeight : positionsWithWeights) {
+            Double actualClosePrice = getActualClosePriceForPosition(positionWithWeight.getSymbol());
+            Double actualMarketValue = actualClosePrice * positionWithWeight.getValue();
+            Position positionWithMarketValue = new Position(positionWithWeight.getSymbol(), actualMarketValue);
+            positionsWithMarketValue.add(positionWithMarketValue);
+        }
+
+        return positionsWithMarketValue;
+    }
+
+    public Double getActualClosePriceForPosition(String symbol) {
+        String queryStr = String.format("SELECT * FROM %s GROUP BY *", symbol);
+        Query query = new Query(queryStr, Measures.CLOSE_PRICE.getName());
+        QueryResult queryResult = this.influxDB.query(query);
+
+        List<QueryResult.Result> results = queryResult.getResults();
+        if (results != null && results.size() > 0) {
+            QueryResult.Result result = results.get(0);
+            List<QueryResult.Series> resultSeries = result.getSeries();
+            if (results != null && results.size() > 0) {
+                QueryResult.Series series = resultSeries.get(0);
+                List<List<Object>> values = series.getValues();
+                List<Object> lastValue = values.get(values.size() - 1);
+                return (Double)lastValue.get(1);
+            }
+        }
+
+        return 0.0;
+    }
+
+    public List<Position> getActualPortfolioPositionsWeights(String portfolioId) {
+        String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolioId);
+        Query query = new Query(queryStr, Measures.POSITION_WEIGHTS.getName());
+        QueryResult queryResult = this.influxDB.query(query);
+
+        List<Position> positions = new ArrayList<>();
+        List<QueryResult.Result> results = queryResult.getResults();
+        if (results != null && results.size() > 0) {
+            QueryResult.Result result = results.get(0);
+            List<QueryResult.Series> resultSeries = result.getSeries();
+            if (resultSeries != null && resultSeries.size() > 0) {
+                QueryResult.Series series = resultSeries.get(0);
+                List<String> columns = series.getColumns();
+                List<List<Object>> values = series.getValues();
+                List<Object> lastValue = values.get(values.size() - 1);
+                for (int i = 1; i < columns.size(); i++) {
+                    Position position = new Position(columns.get(i), (Double)lastValue.get(i));
+                    positions.add(position);
+                }
+            }
+        }
+
+        return positions;
     }
 
 }
