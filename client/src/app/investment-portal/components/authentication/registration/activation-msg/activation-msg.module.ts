@@ -8,7 +8,7 @@ import { MockAuthenticationService } from '../../../../services/authentication/a
 
 const routes = [
     {
-        path: 'auth/register/:token',
+        path: 'auth/register/confirm/:token',
         component: AuthRootComponent
     }
 ];

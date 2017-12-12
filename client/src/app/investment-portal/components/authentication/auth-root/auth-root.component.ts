@@ -4,7 +4,8 @@ import { MockAuthenticationService } from '../../../services/authentication/auth
 
 @Component({
   selector: 'fuse-invest-auth-root',
-  templateUrl: './auth-root.component.html'
+  templateUrl: './auth-root.component.html',
+  styleUrls: ['./auth-root.component.scss']
 })
 export class AuthRootComponent implements OnInit {
   private token: string;
