@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 public class PortfolioMeasurementsService {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -60,6 +60,7 @@ public class PortfolioMeasurementsService {
     }
 
     @CrossOrigin(origins = "*")
+    @ApiOperation(value = "Get positions with market value for portfolio", notes = "Array of positions with market value for given portfolio can be provided.")
     @GetMapping("/user/portfolios/{portfolioId}/positions")
     public List<Position> getPositionsWithMarketValue(@PathVariable("portfolioId") String portfolioId) {
         List<Position> positionsWithMarketValue = portfolioMeasurementRepository.getPositionsWithMarketValue(portfolioId);

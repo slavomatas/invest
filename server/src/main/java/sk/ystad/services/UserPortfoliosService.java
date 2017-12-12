@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 public class UserPortfoliosService {
 
     private final UserRepository userRepository;
