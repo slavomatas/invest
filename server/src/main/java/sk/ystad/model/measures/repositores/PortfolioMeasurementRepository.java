@@ -67,6 +67,11 @@ public class PortfolioMeasurementRepository {
         return timeSeries;
     }
 
+    /**
+     * Method returns positions of portfolio with their last market value. If portfolio does not have any positions, empty array is returned.
+     * @param portfolioId
+     * @return List of positions with their market value
+     */
     public List<Position> getPositionsWithMarketValue(String portfolioId) {
         List<Position> positionsWithMarketValue = new ArrayList<>();
         List<Position> positionsWithWeights = getActualPortfolioPositionsWeights(portfolioId);
@@ -81,6 +86,11 @@ public class PortfolioMeasurementRepository {
         return positionsWithMarketValue;
     }
 
+    /**
+     * Method returns actual close price for position with given symbol. If position with symbol is not found, method returns 0.
+     * @param symbol Position symbol
+     * @return Close price for given position.
+     */
     public Double getActualClosePriceForPosition(String symbol) {
         String queryStr = String.format("SELECT * FROM %s GROUP BY *", symbol);
         Query query = new Query(queryStr, Measures.CLOSE_PRICE.getName());
@@ -101,6 +111,11 @@ public class PortfolioMeasurementRepository {
         return 0.0;
     }
 
+    /**
+     * Method returns positions of portfolio with their last weight. If portfolio does not have any positions, empty array is returned.
+     * @param portfolioId
+     * @return List of positions with weight
+     */
     public List<Position> getActualPortfolioPositionsWeights(String portfolioId) {
         String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolioId);
         Query query = new Query(queryStr, Measures.POSITION_WEIGHTS.getName());
