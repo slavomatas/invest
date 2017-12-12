@@ -5,7 +5,6 @@ import { FuseTranslationLoaderService } from '../../../core/services/translation
 import { locale as english } from './i18n/en';
 import { locale as slovak } from './i18n/sk';
 import { fuseAnimations } from '../../../core/animations';
-import { Portfolio } from '../../types/types';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../store';

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../types/types';
+import { Portfolio } from '../../types/types';
+import { CumulativeMeasurement, ChartModelPortfolio } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
 
 const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';

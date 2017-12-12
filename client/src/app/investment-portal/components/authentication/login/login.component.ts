@@ -5,7 +5,8 @@ import { FuseConfigService } from '../../../../core/services/config.service';
 import { fuseAnimations } from '../../../../core/animations';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { AuthenticationActions } from '../../../store/actions/authentication-actions';
-import { Token, User } from '../../../types/types';
+import { User } from '../../../types/types';
+import { Token } from '../../../types/authentication-types';
 import { Router } from '@angular/router';
 
 @Component({

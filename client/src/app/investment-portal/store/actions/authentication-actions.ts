@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Action } from 'redux';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../store';
-import {Token, User} from '../../types/types';
+import { User } from '../../types/types';
+import { Token } from '../../types/authentication-types';
 
 @Injectable()
 export class AuthenticationActions {

@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
-
 import { SharedModule } from '../../../../../core/modules/shared.module';
 import { RouterModule } from '@angular/router';
 import { MaterialModule} from '../../../../../core/modules/material.module';
-
-
-import { RegistrationFormComponent} from './registration-form.component';
-import {AuthenticationService, MockAuthenticationService} from '../../../../services/authentication/authentication.service';
+import { RegistrationFormComponent } from './registration-form.component';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
 
 
 const routes = [
@@ -29,8 +26,7 @@ const routes = [
       RegistrationFormComponent
     ],
     providers   : [
-      AuthenticationService,
-      MockAuthenticationService
+      AuthenticationService
     ]
 })
 

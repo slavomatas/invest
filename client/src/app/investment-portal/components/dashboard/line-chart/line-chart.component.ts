@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../../types/types';
+import { ChartModelPortfolio } from '../../../types/dashboard-types';
 import { cloneDeep } from 'lodash';
 import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';

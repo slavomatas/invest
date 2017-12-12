@@ -3,7 +3,7 @@ import { SharedModule } from '../../../../core/modules/shared.module';
 import { RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login.component';
-import {AuthenticationService, MockAuthenticationService} from '../../../services/authentication/authentication.service';
+import {AuthenticationService } from '../../../services/authentication/authentication.service';
 
 const routes = [
     {
@@ -21,8 +21,7 @@ const routes = [
         RouterModule.forChild(routes)
     ],
     providers   : [
-      AuthenticationService,
-      MockAuthenticationService
+      AuthenticationService
     ]
 })
 

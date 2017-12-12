@@ -1,4 +1,5 @@
-import { Portfolio, CumulativeMeasurement } from '../../types/types';
+import { Portfolio } from '../../types/types';
+import { CumulativeMeasurement } from '../../types/dashboard-types';
 import { Observable } from 'rxjs/Observable';
 
 export interface IPortfolioService {

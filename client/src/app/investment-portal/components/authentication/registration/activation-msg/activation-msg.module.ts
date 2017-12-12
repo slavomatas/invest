@@ -3,7 +3,7 @@ import { SharedModule } from '../../../../../core/modules/shared.module';
 import { RouterModule } from '@angular/router';
 import { AuthRootComponent } from '../../auth-root/auth-root.component';
 import { ActivationMsgComponent } from './activation-msg.component';
-import { MockAuthenticationService } from '../../../../services/authentication/authentication.service';
+import { MockAuthenticationService } from '../../../../services/authentication/authentication.service.spec';
 
 
 const routes = [

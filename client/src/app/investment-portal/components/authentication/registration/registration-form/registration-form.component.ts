@@ -3,10 +3,10 @@ import {FuseConfigService} from '../../../../../core/services/config.service';
 import { fuseAnimations} from '../../../../../core/animations';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 
-import { passwordValidator} from './password-validation';
-import {AuthenticationService } from '../../../../services/authentication/authentication.service';
-import {RequestStatus} from '../../../../types/types';
-import {Router} from '@angular/router';
+import { passwordValidator } from './password-validation';
+import { AuthenticationService } from '../../../../services/authentication/authentication.service';
+import { RequestStatus } from '../../../../types/authentication-types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'fuse-invest-registration-form',

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { IAuthenticationService } from './iauthentication.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { RequestStatus, Token, User } from '../../types/types';
+import { User} from '../../types/types';
+import { RequestStatus, Token } from '../../types/authentication-types';
 import { Md5 } from 'ts-md5/dist/md5';
 
 const DOMAIN = 'http://localhost:8085';
 const REGISTER_USER_URL = DOMAIN + '/auth/register';
-const LOGIN_USER_URL = 'http://testjwtclientid:XY7kmzoNzl100@localhost:8085/oauth/token';
+const LOGIN_USER_URL = DOMAIN + '/oauth/token';
 const GET_USER_URL = DOMAIN + '/v1/user';
 const GET_VERIFY_TOKEN_URL = '/auth/register/{token}';
 
@@ -49,9 +50,8 @@ export class AuthenticationService implements IAuthenticationService {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa('testjwtclientid:XY7kmzoNzl100')
-    });
-    return this.http.post<Token>('http://localhost:8085/oauth/token', body, { headers }).toPromise();
+      'Authorization': 'Basic ' + btoa('testjwtclientid:XY7kmzoNzl100')});
+    return this.http.post<Token>(LOGIN_USER_URL, body, {headers}).toPromise();
   }
 
 
@@ -94,90 +94,3 @@ export class AuthenticationService implements IAuthenticationService {
 
 }
 
-export class MockAuthenticationService implements IAuthenticationService {
-
-  /**
-   *
-   * @param {string} token
-   * @returns {Promise<User>}
-   */
-  getUser(token: string): Promise<User> {
-    return new Promise<User>((resolve) => {
-      setTimeout(
-        () => {
-          resolve(
-            {
-              name: 'Slavo Baca',
-              username: 'example@email.com',
-              email: 'example@email.com',
-              role: {
-                name: 'STANDARD_USER',
-                description: 'STANDARD_USER'
-              }
-            }
-          );
-        },
-        500);
-
-    }
-    );
-  }
-
-  /**
-   *
-   * @param {string} email
-   * @param {string} password
-   * @returns {Promise<Token>}
-   */
-  login(email: string, password: string): Promise<Token> {
-    return new Promise<Token>((resolve) => {
-      setTimeout(
-        () => {
-          resolve(
-            {
-              "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwiZXhwIjoxNTExOTU4MTk5LCJ1c2VyX25hbWUiOiJhQGIuY29tIiwianRpIjoiOGY2NTA2NGMtZGRmNy00NTJjLTlhZTctYzU5NjRiNGVhZGY4IiwiY2xpZW50X2lkIjoidGVzdGp3dGNsaWVudGlkIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.Qpi_RdaweHb5t3MNLpBJuHNLhwVVsTK3pxoja3WYqFQ",
-              "token_type": "bearer",
-              "expires_in": 43199,
-              "scope": "read write",
-              "jti": "8f65064c-ddf7-452c-9ae7-c5964b4eadf8"
-            }
-          );
-        },
-        500);
-    }
-    );
-  }
-
-  /**
-   *
-   * @param {string} name
-   * @param {string} email
-   * @param {string} password
-   * @returns {Promise<RequestStatus>}
-   */
-  public register(name: string, surname: string, email: string, password: string): Promise<RequestStatus> {
-    return new Promise<RequestStatus>((resolve) => {
-      setTimeout(
-        () => {
-          resolve(
-            {
-              success: true,
-              msg: null
-            }
-          );
-        },
-        500);
-
-    }
-    );
-  }
-
-  getRegisterVerificationResult(token: string): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      return setTimeout(() => {
-        resolve(true);
-      }, 1500);
-    });
-  }
-
-}

@@ -1,5 +1,7 @@
 import { Action } from 'redux';
-import {Portfolio, ChartModelPortfolio, User, Token} from './types/types';
+import { User } from './types/types';
+import { ChartModelPortfolio } from './types/dashboard-types';
+import { Token } from './types/authentication-types';
 import { PortfolioActions } from './store/actions/portfolio-actions';
 import {AuthenticationActions} from './store/actions/authentication-actions';
 

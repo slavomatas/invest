@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MockAuthenticationService } from '../../../services/authentication/authentication.service';
+import { MockAuthenticationService } from '../../../services/authentication/authentication.service.spec';
 
 @Component({
   selector: 'fuse-invest-auth-root',
@@ -11,7 +11,7 @@ export class AuthRootComponent implements OnInit {
   private authSuccess: boolean | undefined;
   constructor(private route: ActivatedRoute, private authService: MockAuthenticationService) {
     this.route.params.subscribe((res) => {
-      this.token = res.token
+      this.token = res.token;
       this.authService.getRegisterVerificationResult(this.token).then((tokenVerified: boolean) => {
         this.authSuccess = tokenVerified;
       });
