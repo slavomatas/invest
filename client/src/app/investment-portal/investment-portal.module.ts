@@ -13,6 +13,8 @@ import {LoginModule} from './components/authentication/login/login.module';
 import {RegistrationFormModule} from './components/authentication/registration/registration-form/registration-form.module';
 import { AuthRootComponent } from './components/authentication/auth-root/auth-root.component';
 import { ActivationMsgModule } from './components/authentication/registration/activation-msg/activation-msg.module';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {AuthHttpInterceptor} from './services/auth-http-interceptor';
 
 
 const routes = [
@@ -39,6 +41,13 @@ const routes = [
   ],
   exports: [
     InvestmentPortalComponent
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true
+    }
   ]
 })
 

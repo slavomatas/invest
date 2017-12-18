@@ -10,12 +10,6 @@ const LOGIN_USER_URL = 'api/oauth/token';
 const GET_USER_URL = 'api/v1/user';
 const GET_VERIFY_TOKEN_URL = 'api/auth/register';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Access-Control-Allow-Origin': '*'
-  })
-};
-
 
 @Injectable()
 export class AuthenticationService implements IAuthenticationService {
@@ -24,17 +18,10 @@ export class AuthenticationService implements IAuthenticationService {
 
   /**
    *
-   * @param {string} token
    * @returns {Promise<User>}
    */
-  public getUser(token: string): Promise<User> {
-    console.log('GET_USER');
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Bearer ' + token
-    });
-
-    return this.http.get<User>(GET_USER_URL, { headers }).toPromise();
+  public getUser(): Promise<User> {
+    return this.http.get<User>(GET_USER_URL).toPromise();
   }
 
   /**
