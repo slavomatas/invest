@@ -46,3 +46,6 @@ Thumbs.db
 
 #Test output
 client/target
+
+#Deployment setting
+client/src/app/investment-portal/proxy.conf.json

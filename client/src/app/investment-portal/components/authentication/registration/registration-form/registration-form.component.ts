@@ -87,10 +87,7 @@ export class RegistrationFormComponent implements OnInit {
     let email = this.registerForm.value.email;
     let password = this.registerForm.value.password;
 
-    console.log(name + " " + email + " " + password);
-
     this.authenticationService.register( name, surname, email, password).then((data: RequestStatus) => {
-      console.log(data);
       this.staticAlertClosed = false;
       if (data.success) {
 
