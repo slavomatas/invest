@@ -3,10 +3,10 @@ import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders} from 
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/catch';
-import {Token} from '../types/authentication-types';
-import {AppState} from '../store';
 import {NgRedux} from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
+import {Token} from '../../types/authentication-types';
+import {AppState} from '../../store';
 
 @Injectable()
 export class AuthHttpInterceptor implements HttpInterceptor {
@@ -29,7 +29,6 @@ export class AuthHttpInterceptor implements HttpInterceptor {
    * @returns {Observable<HttpEvent<any>>}
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     if (this.accessToken != null) {
       // Create Authorization header
       let headers = new HttpHeaders({

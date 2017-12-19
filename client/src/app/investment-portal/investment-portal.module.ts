@@ -2,47 +2,58 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../core/modules/shared.module';
 import { InvestmentPortalComponent } from './investment-portal.component';
-import { DashboardModule } from './components/dashboard/dashboard.module';
-import { PortfoliosModule } from './components/portfolios/portfolios.module';
 import { rootReducer, INITIAL_STATE, AppState } from './store';
 import { applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { StoreModule } from './store/store-module';
-import { PortfolioActions } from './store/actions/portfolio-actions';
-import {LoginModule} from './components/authentication/login/login.module';
-import {RegistrationFormModule} from './components/authentication/registration/registration-form/registration-form.module';
-import { AuthRootComponent } from './components/authentication/auth-root/auth-root.component';
-import { ActivationMsgModule } from './components/authentication/registration/activation-msg/activation-msg.module';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {AuthHttpInterceptor} from './services/auth-http-interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthHttpInterceptor } from './services/authentication/auth-http-interceptor';
+import { AuthGuard } from './services/authentication/auth.guard';
+import { LoginComponent } from './components/authentication/login/login.component';
+import { PortfoliosComponent } from './components/portfolios/portfolios.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RegistrationFormComponent } from './components/authentication/registration/registration-form/registration-form.component';
+import { LineChartComponent } from './components/dashboard/line-chart/line-chart.component';
+import { FuseWidgetModule } from '../core/components/widget/widget.module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PortfolioService } from './services/portfolio/portfolio.service';
+import { AuthenticationService } from './services/authentication/authentication.service';
 
 
 const routes = [
-  {
-    path: 'investment-portal',
-    redirectTo: 'dashboard',
-    component: InvestmentPortalComponent
-  }
+  { path: 'login', component: LoginComponent },
+  { path: 'registration', component: RegistrationFormComponent },
+  { path: 'portfolios', component: PortfoliosComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: '', component: InvestmentPortalComponent, canActivate: [AuthGuard] },
+
+  // otherwise redirect to home
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
   declarations: [
-    InvestmentPortalComponent
+    InvestmentPortalComponent,
+    LoginComponent,
+    RegistrationFormComponent,
+    PortfoliosComponent,
+    DashboardComponent,
+    LineChartComponent
   ],
   imports: [
     SharedModule,
-    RouterModule,
-    DashboardModule,
-    PortfoliosModule,
-    LoginModule,
-    RegistrationFormModule,
+    RouterModule.forRoot(routes),
     StoreModule,
-    ActivationMsgModule
+    FuseWidgetModule,
+    NgxChartsModule
   ],
   exports: [
     InvestmentPortalComponent
   ],
   providers: [
+    AuthGuard,
+    AuthenticationService,
+    PortfolioService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,

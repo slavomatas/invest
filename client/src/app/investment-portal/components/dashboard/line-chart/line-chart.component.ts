@@ -9,8 +9,8 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'fuse-app-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.css']
+  templateUrl: 'line-chart.component.html',
+  styleUrls: ['line-chart.component.css']
 })
 
 export class LineChartComponent implements OnInit {
