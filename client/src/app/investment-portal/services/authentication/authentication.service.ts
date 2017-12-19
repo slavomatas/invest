@@ -63,12 +63,10 @@ export class AuthenticationService implements IAuthenticationService {
   }
 
   public async getRegisterVerificationResult(token: string): Promise<boolean> {
-    const body = {
-      'token': token
-    };
+    const body = {};
     let result: boolean;
     await this.http
-      .post<{ result: boolean }>(GET_VERIFY_TOKEN_URL, body).subscribe((httpResult) => {
+      .post<{ result: boolean }>(GET_VERIFY_TOKEN_URL + '/' + token, body).subscribe((httpResult) => {
         result = httpResult.result;
       });
 
