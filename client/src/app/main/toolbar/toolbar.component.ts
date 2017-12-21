@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {AppState} from '../../investment-portal/store';
 import {NgRedux} from '@angular-redux/store';
 import {User} from '../../investment-portal/types/types';
+import {AuthenticationActions} from '../../investment-portal/store/actions/authentication-actions';
 
 @Component({
     selector   : 'fuse-toolbar',
@@ -27,7 +28,8 @@ export class FuseToolbarComponent
         private router: Router,
         private fuseConfig: FuseConfigService,
         private translate: TranslateService,
-        private ngRedux: NgRedux<AppState>
+        private ngRedux: NgRedux<AppState>,
+        private actions: AuthenticationActions
     )
     {
         this.userStatusOptions = [
@@ -111,5 +113,11 @@ export class FuseToolbarComponent
 
         // Use the selected language for translations
         this.translate.use(lang.id);
+    }
+
+    public onLogout()
+    {
+      this.actions.logoutUser();
+      this.router.navigate(['login']);
     }
 }
