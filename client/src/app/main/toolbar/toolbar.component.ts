@@ -4,6 +4,7 @@ import { FuseConfigService } from '../../core/services/config.service';
 import { TranslateService } from '@ngx-translate/core';
 import {AppState} from '../../investment-portal/store';
 import {NgRedux} from '@angular-redux/store';
+import {User} from '../../investment-portal/types/types';
 
 @Component({
     selector   : 'fuse-toolbar',
@@ -19,10 +20,14 @@ export class FuseToolbarComponent
     showLoadingBar: boolean;
     horizontalNav: boolean;
 
+  user$ =  this.ngRedux.select(state => state.user);
+  userName;
+
     constructor(
         private router: Router,
         private fuseConfig: FuseConfigService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private ngRedux: NgRedux<AppState>
     )
     {
         this.userStatusOptions = [
@@ -83,6 +88,13 @@ export class FuseToolbarComponent
         this.fuseConfig.onSettingsChanged.subscribe((settings) => {
             this.horizontalNav = settings.layout.navigation === 'top';
         });
+
+      // subscribe on chartPortfolios from redux Store
+      this.user$.subscribe((data: User) => {
+        if (data != null) {
+          this.userName = data.name + ' ' + data.surname;
+        }
+      });
 
     }
 
