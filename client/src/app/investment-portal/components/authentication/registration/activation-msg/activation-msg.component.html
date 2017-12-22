@@ -34,19 +34,20 @@
             <mat-icon class="s-96">error</mat-icon>
           </div>
 
-          <div class="title">Failed account activation!</div>
+          <div class="title">Failed to activate account!</div>
 
           <div class="subtitle">
             <p>
-              Your activation token has expired.
+              Your account wasn't activated.
             </p>
             <p>
-              Please re-activate your account again by generating new token.
+              Please register again.
             </p>
           </div>
-        <button mat-raised-button class="submit-button" aria-label="GENERATE TOKEN">
-          GENERATE TOKEN
-        </button>
+        <div class="register" fxLayout="column" fxLayoutAlign="center center">
+          <span class="text">Don't have an account?</span>
+          <a class="link" [routerLink]="'/registration'">Create an account</a>
+        </div>
 
       </ng-template>
     </div>

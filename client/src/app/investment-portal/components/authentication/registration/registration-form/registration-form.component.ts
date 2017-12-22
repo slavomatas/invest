@@ -90,13 +90,9 @@ export class RegistrationFormComponent implements OnInit {
     this.authenticationService.register( name, surname, email, password).then((data: RequestStatus) => {
       this.staticAlertClosed = false;
       if (data.success) {
-
-        setTimeout(function () {
-          // Successful registration
-          this.alertType = 'success';
-          this.registrationMessage = ' Now you can log in.';
-        }, 5000);
-        this.router.navigate(['login']);
+        // Successful registration
+        this.alertType = 'success';
+        this.registrationMessage = ' On your email was send activation link. Please finish the registration by clicking on link.';
       }
       else {
         // Failed registration

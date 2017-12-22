@@ -62,14 +62,9 @@ export class AuthenticationService implements IAuthenticationService {
     return this.http.post<RequestStatus>(REGISTER_USER_URL, user, { params: user }).toPromise();
   }
 
-  public async getRegisterVerificationResult(token: string): Promise<boolean> {
+  public getRegisterVerificationResult(token: string): Promise<RequestStatus> {
     const body = {};
-    let result: boolean;
-    await this.http
-      .post<{ result: boolean }>(GET_VERIFY_TOKEN_URL + '/' + token, body).subscribe((httpResult) => {
-        result = httpResult.result;
-      });
-    return result;
+    return this.http.post<RequestStatus>(GET_VERIFY_TOKEN_URL + '/' + token, body).toPromise();
   }
 
 }
