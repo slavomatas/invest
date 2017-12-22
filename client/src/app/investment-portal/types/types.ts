@@ -8,8 +8,8 @@ export interface User {
   surname: string;
   username: string;
   email: string;
-  role: {
-    name: string,
+  roles: [{
+    roleName: string,
     description: string
-  }
+  }]
 }

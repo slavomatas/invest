@@ -1,9 +1,23 @@
-import { TestBed } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 import { IAuthenticationService } from './iauthentication.service';
 import { User } from '../../types/types';
 import { RequestStatus, Token } from '../../types/authentication-types';
 
 const RESPONSE_TIMEOUT = 500;
+
+describe('DashboardSummaryService', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: MockAuthenticationService,
+          useFactory: () =>  new MockAuthenticationService()
+        }
+      ]
+    });
+  });
+
+});
 
 export class MockAuthenticationService implements IAuthenticationService {
 
@@ -18,18 +32,18 @@ export class MockAuthenticationService implements IAuthenticationService {
           () => {
             resolve(
               {
-                name: 'Slavo Baca',
-                username: 'example@email.com',
-                email: 'example@email.com',
-                role: {
-                  name: 'STANDARD_USER',
-                  description: 'STANDARD_USER'
-                }
+                "name":"Martina","email":"halajovamartina@gmail.com",
+                "surname":"Halajova",
+                "username":"halajovamartina@gmail.com",
+                "roles":[
+                  {
+                    "roleName":"STANDARD_USER",
+                    "description":null
+                  }]
               }
             );
           },
           RESPONSE_TIMEOUT);
-
       }
     );
   }
@@ -82,10 +96,10 @@ export class MockAuthenticationService implements IAuthenticationService {
     );
   }
 
-  getRegisterVerificationResult(token: string): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
+  getRegisterVerificationResult(token: string): Promise<RequestStatus> {
+    return new Promise<RequestStatus>((resolve) => {
       return setTimeout(() => {
-        resolve(true);
+        resolve({ success: true, msg: null});
       }, RESPONSE_TIMEOUT*3);
     });
   }
