@@ -62,6 +62,8 @@ export function rootReducer(lastState: AppState, action: any): AppState {
               ...lastState,
               token: undefined
             };
+        case AuthenticationActions.LOG_OUT:
+          return INITIAL_STATE;
     }
 
     // if no no supported action was caught, return last known state

@@ -2,6 +2,7 @@ package sk.ystad.model.users.services;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,6 +34,15 @@ public class AppUserDetailsService implements UserDetailsService {
 
     private final RoleRepository roleRepository;
 
+    @Value("${spring.mail.registration.subject}")
+    private String emailSubject;
+
+    @Value("${spring.mail.registration.body}")
+    private String emailBody;
+
+    @Value("${server.fe.domain}")
+    private String serverDomain;
+
     static Logger log = Logger.getLogger(AppUserDetailsService.class.getName());
 
     @Autowired
@@ -57,7 +67,8 @@ public class AppUserDetailsService implements UserDetailsService {
         });
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.
-                User(user.getUsername(), user.getPassword(), authorities);
+                User(user.getUsername(), user.getPassword(), user.isRegistrationConfirmed(),
+                true, true, true, authorities);
 
         return userDetails;
     }
@@ -78,9 +89,9 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     private void sendEmail(User user) {
-        emailService.sendMail(user.getEmail(), "Registration confirmation", "Thank you for your " +
-                "registration.\nPlease confirm your email by clicking on following link:\n" +
-                "http://localhost/tuBudeLink/" + user.getRegistrationToken());
+
+        emailService.sendMail(user.getEmail(), emailSubject, emailBody +
+                serverDomain + "auth/register/confirm/" + user.getRegistrationToken());
     }
 
     private boolean tokenExists(String registrationToken) {

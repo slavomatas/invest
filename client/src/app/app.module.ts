@@ -15,6 +15,7 @@ import { FuseNavigationService } from './core/components/navigation/navigation.s
 import { InvestmentPortalModule } from './investment-portal/investment-portal.module';
 import { TranslateModule } from '@ngx-translate/core';
 
+
 const appRoutes: Routes = [
     {
         path      : '**',

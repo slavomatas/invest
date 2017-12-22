@@ -5,8 +5,8 @@ import { Portfolio } from '../../types/types';
 import { CumulativeMeasurement, ChartModelPortfolio } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
 
-const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';
-const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.org/api/getPortfolioMeasure';
+const GET_PORTFOLIOS_URL = '/api/v1/user/portfolios';
+const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = '/api/measurements/cumulative_measurement';
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {

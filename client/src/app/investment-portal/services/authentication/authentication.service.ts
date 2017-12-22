@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IAuthenticationService } from './iauthentication.service';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import { User} from '../../types/types';
 import { RequestStatus, Token } from '../../types/authentication-types';
 import { Md5 } from 'ts-md5/dist/md5';
@@ -10,12 +10,6 @@ const LOGIN_USER_URL = 'api/oauth/token';
 const GET_USER_URL = 'api/v1/user';
 const GET_VERIFY_TOKEN_URL = 'api/auth/register';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Access-Control-Allow-Origin': '*'
-  })
-};
-
 
 @Injectable()
 export class AuthenticationService implements IAuthenticationService {
@@ -24,17 +18,10 @@ export class AuthenticationService implements IAuthenticationService {
 
   /**
    *
-   * @param {string} token
    * @returns {Promise<User>}
    */
-  public getUser(token: string): Promise<User> {
-    console.log('GET_USER');
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Bearer ' + token
-    });
-
-    return this.http.get<User>(GET_USER_URL, { headers }).toPromise();
+  public getUser(): Promise<User> {
+    return this.http.get<User>(GET_USER_URL).toPromise();
   }
 
   /**
@@ -75,17 +62,9 @@ export class AuthenticationService implements IAuthenticationService {
     return this.http.post<RequestStatus>(REGISTER_USER_URL, user, { params: user }).toPromise();
   }
 
-  public async getRegisterVerificationResult(token: string): Promise<boolean> {
-    const body = {
-      'token': token
-    };
-    let result: boolean;
-    await this.http
-      .post<{ result: boolean }>(GET_VERIFY_TOKEN_URL, body).subscribe((httpResult) => {
-        result = httpResult.result;
-      });
-
-    return result;
+  public getRegisterVerificationResult(token: string): Promise<RequestStatus> {
+    const body = {};
+    return this.http.post<RequestStatus>(GET_VERIFY_TOKEN_URL + '/' + token, body).toPromise();
   }
 
 }

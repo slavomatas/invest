@@ -10,7 +10,7 @@ import sk.ystad.model.users.services.AppUserDetailsService;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthorizationController {
+public class RegistrationService {
 
     @Autowired
     AppUserDetailsService appUserDetailsService;

@@ -12,6 +12,7 @@ export class AuthenticationActions {
   static FGET_USER_FAILURE = 'FGET_USER_FAILURE';
   static GET_ACCESS_TOKEN_SUCCESS = 'GET_ACCESS_TOKEN_SUCCESS';
   static FGET_ACCESS_TOKEN_FAILURE = 'FGET_ACCESS_TOKEN_FAILURE';
+  static LOG_OUT = 'LOG_OUT';
 
 
   constructor(private ngRedux: NgRedux<AppState>) { }
@@ -28,6 +29,13 @@ export class AuthenticationActions {
     this.ngRedux.dispatch({
       type: success ? AuthenticationActions.GET_ACCESS_TOKEN_SUCCESS : AuthenticationActions.FGET_ACCESS_TOKEN_FAILURE,
       payload: data != null ? data : undefined
+    });
+  }
+
+  public logoutUser() {
+    this.ngRedux.dispatch({
+      type: AuthenticationActions.LOG_OUT,
+      payload: undefined
     });
   }
 

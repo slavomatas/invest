@@ -4,6 +4,8 @@ import { FuseConfigService } from '../../core/services/config.service';
 import { TranslateService } from '@ngx-translate/core';
 import {AppState} from '../../investment-portal/store';
 import {NgRedux} from '@angular-redux/store';
+import {User} from '../../investment-portal/types/types';
+import {AuthenticationActions} from '../../investment-portal/store/actions/authentication-actions';
 
 @Component({
     selector   : 'fuse-toolbar',
@@ -19,10 +21,15 @@ export class FuseToolbarComponent
     showLoadingBar: boolean;
     horizontalNav: boolean;
 
+  user$ =  this.ngRedux.select(state => state.user);
+  userName;
+
     constructor(
         private router: Router,
         private fuseConfig: FuseConfigService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private ngRedux: NgRedux<AppState>,
+        private actions: AuthenticationActions
     )
     {
         this.userStatusOptions = [
@@ -84,6 +91,13 @@ export class FuseToolbarComponent
             this.horizontalNav = settings.layout.navigation === 'top';
         });
 
+      // subscribe on chartPortfolios from redux Store
+      this.user$.subscribe((data: User) => {
+        if (data != null) {
+          this.userName = data.name + ' ' + data.surname;
+        }
+      });
+
     }
 
     search(value)
@@ -99,5 +113,11 @@ export class FuseToolbarComponent
 
         // Use the selected language for translations
         this.translate.use(lang.id);
+    }
+
+    public onLogout()
+    {
+      this.actions.logoutUser();
+      this.router.navigate(['login']);
     }
 }
