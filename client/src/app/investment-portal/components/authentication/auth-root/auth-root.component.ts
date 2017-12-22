@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import {FuseConfigService} from '../../../../core/services/config.service';
 
 @Component({
   selector: 'fuse-invest-auth-root',
@@ -10,10 +11,23 @@ import { AuthenticationService } from '../../../services/authentication/authenti
 export class AuthRootComponent implements OnInit {
   private token: string;
   private authSuccess: boolean | undefined;
-  constructor(private route: ActivatedRoute, private authService: AuthenticationService) {
+  constructor(private fuseConfig: FuseConfigService,
+              private route: ActivatedRoute,
+              private authService: AuthenticationService) {
+
+    this.fuseConfig.setSettings({
+      layout: {
+        navigation: 'none',
+        toolbar   : 'none',
+        footer    : 'none'
+      }
+    });
+
     this.route.params.subscribe((res) => {
+      console.log(res);
       this.token = res.token;
       this.authService.getRegisterVerificationResult(this.token).then((tokenVerified: boolean) => {
+        console.log(tokenVerified);
         this.authSuccess = tokenVerified;
       });
     });

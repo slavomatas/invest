@@ -18,17 +18,19 @@ import { FuseWidgetModule } from '../core/components/widget/widget.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PortfolioService } from './services/portfolio/portfolio.service';
 import { AuthenticationService } from './services/authentication/authentication.service';
+import {ActivationMsgComponent} from './components/authentication/registration/activation-msg/activation-msg.component';
+import {AuthRootComponent} from './components/authentication/auth-root/auth-root.component';
 
 
 const routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: RegistrationFormComponent },
+  { path: 'auth/register/confirm/:token', component: AuthRootComponent },
   { path: 'portfolios', component: PortfoliosComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: '', component: InvestmentPortalComponent, canActivate: [AuthGuard] },
 
   // otherwise redirect to home
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'dashboard' }
 ];
 
 @NgModule({
@@ -36,6 +38,8 @@ const routes = [
     InvestmentPortalComponent,
     LoginComponent,
     RegistrationFormComponent,
+    AuthRootComponent,
+    ActivationMsgComponent,
     PortfoliosComponent,
     DashboardComponent,
     LineChartComponent

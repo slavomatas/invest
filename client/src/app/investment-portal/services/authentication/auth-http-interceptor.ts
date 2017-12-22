@@ -19,6 +19,9 @@ export class AuthHttpInterceptor implements HttpInterceptor {
       if (data != null) {
         this.accessToken = cloneDeep(data.access_token);
       }
+      else {
+        this.accessToken = null;
+      }
     });
   }
 

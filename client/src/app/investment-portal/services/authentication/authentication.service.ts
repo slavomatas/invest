@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IAuthenticationService } from './iauthentication.service';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import { User} from '../../types/types';
 import { RequestStatus, Token } from '../../types/authentication-types';
 import { Md5 } from 'ts-md5/dist/md5';
@@ -69,7 +69,6 @@ export class AuthenticationService implements IAuthenticationService {
       .post<{ result: boolean }>(GET_VERIFY_TOKEN_URL + '/' + token, body).subscribe((httpResult) => {
         result = httpResult.result;
       });
-
     return result;
   }
 
