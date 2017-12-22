@@ -1,4 +1,8 @@
-<div class="h-420 mb-16" fxLayout="row" fxFlex="100" fxFill="100">
-  <div style="background-color: red" fxFlex="50"></div>
-  <div style="background-color: blue" fxFlex="50"></div>
+<div class="" fxLayout="row" fxFlex="100" fxFill="100" *ngIf="dashboardPortfolioList$">
+  <div  fxFlex="50" sytle="height: 800px; padding-top: 20px!important; padding-bottom: 20px;">
+    <invest-horizontal-bar-chart [portfolioDetailsList]="dashboardPortfolioList$ | async"></invest-horizontal-bar-chart>
+  </div>
+  <div  fxFlex="50">
+    <invest-app-portfolio-overview *ngFor="let portfolio of dashboardPortfolioList$ | async" [portfolioDetails]="portfolio" ></invest-app-portfolio-overview>
+  </div>
 </div>

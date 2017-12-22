@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../core/modules/shared.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { PortfolioService } from '../../services/portfolio/portfolio.service';
+import {MockPortfolioService, PortfolioService} from '../../services/portfolio/portfolio.service';
 import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
 
 import { DashboardComponent } from './dashboard.component';
@@ -13,6 +13,7 @@ import { LineChartLegendComponent} from '../line-chart-legend/line-chart-legend.
 import { CumulativeChartComponent } from './cumulative-chart/cumulative-chart.component';
 import { DashboardPortfolioListComponent } from './dashboard-portfolio-list/dashboard-portfolio-list.component';
 import { PortfolioOverviewComponent } from '../portfolio-overview/portfolio-overview.component';
+import {HorizontalBarChartComponent} from '../horizontal-bar-chart/horizontal-bar-chart.component';
 
 const routes = [
   {
@@ -30,7 +31,8 @@ const routes = [
     LineChartLegendComponent,
     CumulativeChartComponent,
     DashboardPortfolioListComponent,
-    PortfolioOverviewComponent
+    PortfolioOverviewComponent,
+    HorizontalBarChartComponent
   ],
   imports     : [
     SharedModule,
@@ -42,7 +44,8 @@ const routes = [
   ],
   providers   : [
     PortfolioService,
-    SharedVariableService
+    SharedVariableService,
+    MockPortfolioService
   ]
 })
 

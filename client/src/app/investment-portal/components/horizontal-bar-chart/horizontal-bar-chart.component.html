@@ -1,5 +1,7 @@
 <ngx-charts-bar-horizontal
+  *ngIf="single.length > 0"
   [scheme]="colorScheme"
+  [view]="view"
   [results]="single"
   [gradient]="gradient"
   [xAxis]="showXAxis"

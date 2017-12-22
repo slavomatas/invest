@@ -10,11 +10,11 @@
   <div *ngIf="percentage >= 0; then positive_percentage else negative_percentage"></div>
   <ng-template #positive_percentage>
       <td id="period-value-percentage" class="green percentage-component">
-      &#9650; ({{(percentage * 100).toFixed(4)}}%)
+      &#9650; ({{(percentage * 100).toFixed(2)}}%)
   </ng-template>
   <ng-template #negative_percentage>
     <td id="period-value-percentage" class="red percentage-component">
-      &#9660; ({{(percentage * 100).toFixed(4)}}%)
+      &#9660; ({{(percentage * 100).toFixed(2)}}%)
     </td>
   </ng-template>
 </div>

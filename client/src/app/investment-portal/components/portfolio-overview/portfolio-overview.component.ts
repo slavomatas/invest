@@ -19,7 +19,7 @@ export class PortfolioOverviewComponent implements OnInit {
   percentage: number;
 
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#23684A']
   };
 
   constructor() { }
@@ -38,7 +38,7 @@ export class PortfolioOverviewComponent implements OnInit {
   }
 
   private updatePercentage(oldMarketValue: number, newMarketValue: number) {
-    this.percentage = (((oldMarketValue - newMarketValue)) / newMarketValue);
+    this.percentage = (((newMarketValue - oldMarketValue) / newMarketValue));
   }
 
 }

@@ -8,6 +8,11 @@ export interface CumulativeMeasurement {
   value: string;
 }
 
+export interface PortfolioReturn {
+  name: string;
+  value: string;
+}
+
 export interface ChartModelPortfolio {
   name: string;
   id: string;
