@@ -67,7 +67,8 @@ public class AppUserDetailsService implements UserDetailsService {
         });
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.
-                User(user.getUsername(), user.getPassword(), authorities);
+                User(user.getUsername(), user.getPassword(), user.isRegistrationConfirmed(),
+                true, true, true, authorities);
 
         return userDetails;
     }
