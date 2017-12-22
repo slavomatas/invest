@@ -23,6 +23,7 @@ export interface PortfolioDetails {
   name: string;
   id: string;
   marketValue: number;
+  oldMarketValue: number;
   returns: TypeOfReturns;
   positions:
     {

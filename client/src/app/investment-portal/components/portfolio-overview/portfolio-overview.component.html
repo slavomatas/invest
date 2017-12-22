@@ -1,0 +1,21 @@
+<div *ngIf="this.chartData" class="chart-container">
+  <ngx-charts-advanced-pie-chart
+    [scheme]="this.colorScheme"
+    [results]="this.chartData"
+    [gradient]="true"
+    [label]="'Market Value'"
+    (select)="onSelect($event)">
+  </ngx-charts-advanced-pie-chart>
+
+  <div *ngIf="percentage >= 0; then positive_percentage else negative_percentage"></div>
+  <ng-template #positive_percentage>
+      <td id="period-value-percentage" class="green percentage-component">
+      &#9650; ({{(percentage * 100).toFixed(4)}}%)
+  </ng-template>
+  <ng-template #negative_percentage>
+    <td id="period-value-percentage" class="red percentage-component">
+      &#9660; ({{(percentage * 100).toFixed(4)}}%)
+    </td>
+  </ng-template>
+</div>
+

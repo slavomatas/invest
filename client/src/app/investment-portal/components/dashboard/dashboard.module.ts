@@ -12,6 +12,7 @@ import { LineChartReturnsComponent } from '../line-chart-returns/line-chart-retu
 import { LineChartLegendComponent} from '../line-chart-legend/line-chart-legend.component';
 import { CumulativeChartComponent } from './cumulative-chart/cumulative-chart.component';
 import { DashboardPortfolioListComponent } from './dashboard-portfolio-list/dashboard-portfolio-list.component';
+import { PortfolioOverviewComponent } from '../portfolio-overview/portfolio-overview.component';
 
 const routes = [
   {
@@ -28,7 +29,8 @@ const routes = [
     LineChartReturnsComponent,
     LineChartLegendComponent,
     CumulativeChartComponent,
-    DashboardPortfolioListComponent
+    DashboardPortfolioListComponent,
+    PortfolioOverviewComponent
   ],
   imports     : [
     SharedModule,
