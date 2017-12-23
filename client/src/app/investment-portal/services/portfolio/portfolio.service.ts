@@ -11,8 +11,8 @@ import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';
 import { cloneDeep } from 'lodash';
 
- const GET_PORTFOLIO_RETURN_VALUE_URL = '/api/v1/measurements/portfolios';
- const GET_PORTFOLIOS_URL = '/api/v1/user/portfolios';
+ const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
+ const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {
