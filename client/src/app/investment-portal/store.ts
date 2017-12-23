@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { Portfolio, PortfolioSummary, PortfolioDetails } from './types/types';
+import { Portfolio, PortfolioDetails } from './types/types';
 import { User } from './types/types';
 import { ChartModelPortfolio } from './types/dashboard-types';
 import { Token } from './types/authentication-types';
@@ -15,7 +15,6 @@ export interface AppState {
     cumulativeFetchError: string | undefined;
     portfoliosDetailsFetchError: string | undefined;
 
-    portfolioSummary: PortfolioSummary;
     cumulativeChartSelectedPeriod: string;
     currencySymbol: string;
 }
@@ -30,13 +29,6 @@ export const INITIAL_STATE: AppState = {
     // CumulativeChartControls
     cumulativeChartSelectedPeriod: '3M',
     currencySymbol: '$',
-    portfolioSummary: {
-        marketValue: 0,
-        periodMarketValue: 0,
-        periodMarketValuePercentage: 0,
-        percentage: 0
-    },
-
     user: undefined,
     token: undefined
 };
@@ -85,11 +77,6 @@ export function rootReducer(lastState: AppState, action: any): AppState {
             chartPortfolios: action.payload,
           };
 
-        case PortfolioActions.SET_PORTFOLIO_SUMMARY:
-          return {
-            ...lastState,
-            portfolioSummary: action.payload,
-          };
         case AuthenticationActions.GET_USER_SUCCESS:
             return <AppState> {
               ...lastState,

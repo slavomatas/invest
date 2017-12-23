@@ -21,14 +21,14 @@
             {{currencySymbol}}{{portfolioSummaryObject.periodMarketValue}}
           </td>
 
-          <div *ngIf="portfolioSummaryObject.percentage >= 0; then positive_percentage else negative_percentage"></div>
+          <div *ngIf="portfolioSummaryObject.periodMarketValuePercentage >= 0; then positive_percentage else negative_percentage"></div>
           <ng-template #positive_percentage>
             <td id="period-value-percentage" class="green">
-              &#9650; ({{portfolioSummaryObject.periodMarketValuePercentage}}%)
+              &#9650; ({{(portfolioSummaryObject.periodMarketValuePercentage * 100).toFixed(2)}}%)
           </ng-template>
           <ng-template #negative_percentage>
             <td id="period-value-percentage" class="red">
-              &#9660; ({{portfolioSummaryObject.periodMarketValuePercentage}}%)
+              &#9660; ({{(portfolioSummaryObject.periodMarketValuePercentage * 100).toFixed(2)}}%)
             </td>
           </ng-template>
         </tr>

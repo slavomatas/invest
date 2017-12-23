@@ -19,13 +19,6 @@ export interface User {
   }]
 }
 
-export interface PortfolioSummary {
-  marketValue: number;
-  periodMarketValue: number;
-  periodMarketValuePercentage: number;
-  percentage: number;
-}
-
 export interface PortfolioDetails {
   name: string;
   id: string;

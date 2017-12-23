@@ -14,9 +14,6 @@ import { cloneDeep } from 'lodash';
  const GET_PORTFOLIO_RETURN_VALUE_URL = '/api/v1/measurements/portfolios';
  const GET_PORTFOLIOS_URL = '/api/v1/user/portfolios';
 
-// const GET_PORTFOLIO_RETURN_VALUE_URL = 'http://localhost:8085/api/v1/measurements/portfolios';
-// const GET_PORTFOLIOS_URL = 'http://localhost:8085/api/v1/user/portfolios';
-
 @Injectable()
 export class PortfolioService implements IPortfolioService {
 
@@ -78,6 +75,8 @@ export class PortfolioService implements IPortfolioService {
     const portfolioChart: ChartModelPortfolio = {
       name: portfolio.name,
       id: portfolio.id,
+      marketValue: null,
+      oldMarketValue: null,
       selected: selectedState.length > 0 ? selectedState[0].selected : true,
       series: []
     };
@@ -91,6 +90,21 @@ export class PortfolioService implements IPortfolioService {
           value: Number.parseFloat(measurement.value)
         });
       });
+    });
+
+    // get market value of a portfolio and update it
+    await this.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: PortfolioReturn[]) => {
+
+      let length = measurements.length;
+
+      if(length > 0){
+        portfolioChart.marketValue = Number.parseFloat(measurements[length - 1].value);
+        portfolioChart.oldMarketValue = Number.parseFloat(measurements[0].value);
+      } else {
+        portfolioChart.marketValue = 0;
+        portfolioChart.oldMarketValue = 0;
+      }
+
     });
 
     return portfolioChart;
@@ -131,6 +145,31 @@ export class PortfolioService implements IPortfolioService {
       });
   }
 
+  /**
+   * @description Fetches Market value for given portfolio id on specific day
+   *
+   * @param {string} portfolioId Id of portfolio to fetch Cumulative Measurements for
+   * @param {Date} [dateFrom] Date from which measurements should be returned
+   * @param {Date} [dateTo] Date to which measurements should be returned
+   * @returns {Observable<CumulativeMeasurement[]>}
+   * @memberof IDashboardSummaryService
+   */
+  public getPortfolioMarketValues(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]> {
+    let params: HttpParams = new HttpParams();
+
+    if (dateFrom != null) {
+      params = params.set('dateFrom', dateFrom.toISOString());
+    }
+
+    if (dateTo != null) {
+      params = params.set('dateTo', dateTo.toISOString());
+    }
+
+    return this.http
+      .get<PortfolioReturn[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_MARKET_VALUE', {
+        params: params
+      });
+  }
 
   /**
    * Fetches cumulative data for all portfolios
