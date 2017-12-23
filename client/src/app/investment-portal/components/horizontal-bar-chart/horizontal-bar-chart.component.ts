@@ -37,7 +37,7 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.portfolioDetailsList);
+    // console.log(this.portfolioDetailsList);
     for (const portfolio of this.portfolioDetailsList) {
       this.single.push(
         {
@@ -45,7 +45,7 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
           'value': portfolio.returns.weekly
         }
       );
-      console.log(portfolio.name);
+      // console.log(portfolio.name);
     }
 
   }

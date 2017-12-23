@@ -24,6 +24,13 @@ export interface ChartModelPortfolio {
     }[];
 }
 
+export interface PortfolioSummary {
+  marketValue: number;
+  periodMarketValue: number;
+  periodMarketValuePercentage: number;
+  percentage: number;
+}
+
 export interface PortfolioDetails {
   name: string;
   id: string;
@@ -44,15 +51,6 @@ export interface TypeOfReturns {
   quarterly?: number;
   yearly?: number;
   cumulative?: number;
-}
-
-
-export interface PortfolioSummary {
-  marketValue: number;
-  periodReturn: number;
-  periodReturnPercentage: number;
-  // determines if the period return percentage is positive or negative(less than 0)
-  percentage: number;
 }
 
 export enum TypeOfPortfolioReturn {

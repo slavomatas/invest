@@ -8,7 +8,7 @@ import { AppState } from '../../store';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-line-chart-returns',
+  selector: 'fuse-invest-line-chart-returns',
   templateUrl: 'line-chart-returns.component.html',
   styleUrls: ['line-chart-returns.component.scss']
 })
@@ -36,7 +36,6 @@ export class LineChartReturnsComponent implements OnInit {
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
 
-    // subscribe on portfolioSummary from redux Store
     this.portfolioSummary$.subscribe((data: PortfolioSummary) => {
       if (data != null) {
         this.portfolioSummaryObject = cloneDeep(data);
@@ -58,8 +57,8 @@ export class LineChartReturnsComponent implements OnInit {
 
   ngOnInit() {
     this.portfolioSummaryObject.marketValue = this.numberWithCommas(Number(this.portfolioSummaryObject.marketValue));
-    this.portfolioSummaryObject.periodReturn = this.numberWithCommas(Number(this.portfolioSummaryObject.periodReturn));
-    this.portfolioSummaryObject.periodReturnPercentage = this.numberWithCommas(Number(this.portfolioSummaryObject.periodReturnPercentage));
+    this.portfolioSummaryObject.periodMarketValue = this.numberWithCommas(Number(this.portfolioSummaryObject.periodMarketValue));
+    this.portfolioSummaryObject.periodMarketValuePercentage = this.numberWithCommas(Number(this.portfolioSummaryObject.periodMarketValuePercentage));
   }
 
   private numberWithCommas(x) {

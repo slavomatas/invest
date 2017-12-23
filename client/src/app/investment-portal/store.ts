@@ -19,15 +19,15 @@ export const INITIAL_STATE: AppState = {
     dashboardPortfolioList: [],
     isGettingPortfoliosCumulativeData: false,
     cumulativeFetchError: undefined,
-  portfoliosDetailsFetchError: undefined,
+    portfoliosDetailsFetchError: undefined,
 
     // CumulativeChartControls
     cumulativeChartSelectedPeriod: '3M',
     currencySymbol: '$',
     portfolioSummary: {
         marketValue: 0,
-        periodReturn: 0,
-        periodReturnPercentage: 0,
+        periodMarketValue: 0,
+        periodMarketValuePercentage: 0,
         percentage: 0
     },
 };
@@ -65,7 +65,6 @@ export function rootReducer(lastState: AppState, action: any): AppState {
             portfoliosDetailsFetchError: action.payload
           };
 
-
         case PortfolioActions.SET_CUMULATIVE_CHART_PERIOD:
             return {
                 ...lastState,
@@ -75,6 +74,12 @@ export function rootReducer(lastState: AppState, action: any): AppState {
           return {
             ...lastState,
             chartPortfolios: action.payload,
+          };
+
+        case PortfolioActions.SET_PORTFOLIO_SUMMARY:
+          return {
+            ...lastState,
+            portfolioSummary: action.payload,
           };
 
     }

@@ -21,7 +21,6 @@ public class UserPortfoliosService {
         this.userRepository = userRepository;
     }
 
-
     @CrossOrigin(origins = "*")
     @GetMapping("/user/portfolios")
     @ApiOperation(value = "Get all user's portfolios details", notes = "UserID is retrieved from session")

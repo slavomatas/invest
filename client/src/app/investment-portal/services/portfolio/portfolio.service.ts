@@ -10,34 +10,41 @@ import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';
 import { cloneDeep } from 'lodash';
 
-const GET_PORTFOLIOS_URL = 'https://www.invest.strazprirody.org/api/getPortfolios';
-const GET_PORTFOLIO_CUMULATIVE_MEASURE_URL = 'https://www.invest.strazprirody.org/api/getPortfolioMeasure';
-const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/measurements/portfolios';
+const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
+const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {
-  // getPortfoliosListDetails(portfolioReturnType: TypeOfPortfolioReturn): Observable<PortfolioDetails[]> {
-  //   return undefined;
-  // }
 
-
+  private mockPortfolioService: MockPortfolioService = new MockPortfolioService();
 
   constructor(
     private http: HttpClient,
-    private ngRedux: NgRedux<AppState>) {
+    private ngRedux: NgRedux<AppState>)
+  {
 
   }
 
   /**
    * Fetches cumulative data for all portfolios
    */
-  public async getPortfoliosCumulativeData(): Promise<ChartModelPortfolio[]> {
+  public async getPortfoliosCumulativeData(dateFrom?: Date, dateTo?: Date): Promise<ChartModelPortfolio[]> {
 
     let promises: Promise<ChartModelPortfolio>[];
 
-    await this.getPortfolios().toPromise().then(async (portfolios: Portfolio[]) => {
+    if(dateTo == null){
+      dateTo = new Date();
+    }
+
+    // await this.getPortfolios().toPromise().then(async (portfolios: Portfolio[]) => {
+    //   promises = portfolios.map(async (portfolio: Portfolio) => {
+    //     return await this.getPortfolioDetailsData(portfolio, portfolioReturnType);
+    //   });
+    // });
+
+    await this.mockPortfolioService.getPortfolios().then(async (portfolios: Portfolio[]) => {
       promises = portfolios.map(async (portfolio: Portfolio) => {
-        return await this.getCumulativeDataForPortfolio(portfolio);
+        return await this.getCumulativeDataForPortfolio(portfolio, dateFrom, dateTo);
       });
     });
 
@@ -53,7 +60,7 @@ export class PortfolioService implements IPortfolioService {
    * Fetches cumulative data for given portfolio
    * @param portfolio portfolio to get cumulative data for
    */
-  public async getCumulativeDataForPortfolio(portfolio: Portfolio): Promise<ChartModelPortfolio> {
+  public async getCumulativeDataForPortfolio(portfolio: Portfolio, dateFrom: Date, dateTo: Date): Promise<ChartModelPortfolio> {
 
     // check wether I don't have data already, to let selected one selected
     const portfoliosChart: ChartModelPortfolio[] = this.ngRedux.getState().chartPortfolios;
@@ -72,7 +79,7 @@ export class PortfolioService implements IPortfolioService {
     };
 
     // get portfolio measurements and push them into series
-    await this.getCumulativeMeasurements(portfolio.id).toPromise().then((measurements: CumulativeMeasurement[]) => {
+    await this.getCumulativeMeasurements(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: CumulativeMeasurement[]) => {
 
        measurements.map((measurement: CumulativeMeasurement) => {
         portfolioChart.series.push({
@@ -87,11 +94,11 @@ export class PortfolioService implements IPortfolioService {
 
   /**
    * @description Gets all portfolios for user.
-   * @returns {Observable<Portfolio[]>}
+   * @returns {Promise<Portfolio[]>}
    */
-  public getPortfolios(): Observable<Portfolio[]> {
+  public getPortfolios(): Promise<Portfolio[]> {
     return this.http
-      .get<Portfolio[]>(GET_PORTFOLIOS_URL);
+      .get<Portfolio[]>(GET_PORTFOLIOS_URL).toPromise();
   }
 
   /**
@@ -105,7 +112,6 @@ export class PortfolioService implements IPortfolioService {
   */
   public getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]> {
     let params: HttpParams = new HttpParams();
-    params = params.set('portfolioId', portfolioId);
 
     if (dateFrom != null) {
       params = params.set('dateFrom', dateFrom.toISOString());
@@ -116,7 +122,7 @@ export class PortfolioService implements IPortfolioService {
     }
 
     return this.http
-      .get<CumulativeMeasurement[]>(GET_PORTFOLIO_CUMULATIVE_MEASURE_URL, {
+      .get<CumulativeMeasurement[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_CUMULATIVE_RETURN', {
         params: params
       });
   }
@@ -129,7 +135,7 @@ export class PortfolioService implements IPortfolioService {
 
     let promises: Promise<PortfolioDetails>[];
 
-    await this.getPortfolios().toPromise().then(async (portfolios: Portfolio[]) => {
+    await this.getPortfolios().then(async (portfolios: Portfolio[]) => {
       promises = portfolios.map(async (portfolio: Portfolio) => {
         return await this.getPortfolioDetailsData(portfolio, portfolioReturnType);
       });
@@ -162,7 +168,6 @@ export class PortfolioService implements IPortfolioService {
     // one will return returns and other one positions.
     // call them for portfolio and put it all together to one object here.
     await this.getPortfolioReturn(portfolio.id, portfolioReturnType).toPromise().then((returns: PortfolioReturn[]) => {
-
       returns.map((returnValue: PortfolioReturn) => {
         portfolioDetails.returns.daily = Number.parseFloat(returnValue.value);
       });
@@ -174,13 +179,8 @@ export class PortfolioService implements IPortfolioService {
     // });
 
       await this.getPortfolioMarketValue(portfolio.id).toPromise().then((value: number) => {
-
-
           portfolioDetails.oldMarketValue = value;
       });
-
-
-
 
     return null;
   }
@@ -236,30 +236,25 @@ export class PortfolioService implements IPortfolioService {
         today.setDate(today.getDate() - 1);
         return today;
 
-        case TypeOfPortfolioReturn.monthly:
-          today.setMonth(today.getMonth() - 1);
-          return today;
+      case TypeOfPortfolioReturn.monthly:
+        today.setMonth(today.getMonth() - 1);
+        return today;
 
-        case TypeOfPortfolioReturn.quaterly:
-          today.setMonth(today.getMonth() - 3);
-          return today;
-        case TypeOfPortfolioReturn.yearly:
-          today.setMonth(today.getMonth() - 12);
-          return today;
+      case TypeOfPortfolioReturn.quaterly:
+        today.setMonth(today.getMonth() - 3);
+        return today;
 
-        default:
-          return today;
-        }
+      case TypeOfPortfolioReturn.yearly:
+        today.setMonth(today.getMonth() - 12);
+        return today;
+
+      default:
+        return today;
+      }
     }
   }
 
-
-
-
-
-
-
-  export class MockPortfolioService implements IPortfolioService {
+export class MockPortfolioService implements IPortfolioService {
 
   getPortfoliosListDetails(portfolioReturnType: TypeOfPortfolioReturn): Promise<PortfolioDetails[]> {
     return new Promise((resolve) =>  {
@@ -268,7 +263,7 @@ export class PortfolioService implements IPortfolioService {
           resolve(
             [
               { name: 'Mock portfolio 1',
-                id: 'id1',
+                id: 'PID5a03486d2298316ac85459bf',
                 marketValue: 107,
                 oldMarketValue: 115,
                 returns: {
@@ -286,7 +281,7 @@ export class PortfolioService implements IPortfolioService {
                   ]
               },
               { name: 'Mock portfolio 2',
-                id: 'id2',
+                id: 'PID5a03486e2298316ac85459c0',
                 marketValue: 200,
                 oldMarketValue: 150,
                 returns: {
@@ -304,7 +299,7 @@ export class PortfolioService implements IPortfolioService {
                   ]
               },
               { name: 'Mock portfolio 3',
-                id: 'id1',
+                id: 'PID5a03486f2298316ac85459c1',
                 marketValue: 90,
                 oldMarketValue: 65,
                 returns: {
@@ -326,22 +321,18 @@ export class PortfolioService implements IPortfolioService {
         },
         500);
     });
-
-
   }
 
+  public getPortfolios(): Promise<Portfolio[]> {
 
-  public getPortfolios(): Observable<Portfolio[]> {
-
-    return new Observable<Portfolio[]>(observer => {
+    return new Promise((resolve) =>  {
       setTimeout(
         () => {
-          observer.next(
+          resolve(
             [
-              { name: 'Mock portfolio 1', id: 'i1' },
-              { name: 'Mock portfolio 1', id: 'i2' },
-              { name: 'Mock portfolio 1', id: 'i3' },
-              { name: 'Mock portfolio 1', id: 'i14' }
+              { name: 'Mock portfolio 1', id: 'PID5a03486d2298316ac85459bf' },
+              { name: 'Mock portfolio 2', id: 'PID5a03486e2298316ac85459c0' },
+              { name: 'Mock portfolio 3', id: 'PID5a03486f2298316ac85459c1' }
             ]
           );
         },
@@ -350,7 +341,6 @@ export class PortfolioService implements IPortfolioService {
   }
 
   public getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]> {
-
 
     return new Observable<CumulativeMeasurement[]>(observer => {
       setTimeout(

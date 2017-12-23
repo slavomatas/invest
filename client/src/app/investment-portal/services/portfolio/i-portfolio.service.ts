@@ -5,7 +5,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 export interface IPortfolioService {
-  getPortfolios(): Observable<Portfolio[]>;
+  getPortfolios(): Promise<Portfolio[]>;
   getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]>;
   getPortfolioReturn(portfolioId: string, portfolioReturnType: TypeOfPortfolioReturn, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]>;
   getPortfolioMarketValue(portfolioId: string, date?: Date): Observable<number>;

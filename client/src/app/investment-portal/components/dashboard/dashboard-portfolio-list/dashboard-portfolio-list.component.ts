@@ -6,6 +6,7 @@ import {AppState} from '../../../store';
 import {PortfolioDetails, TypeOfPortfolioReturn} from '../../../types/types';
 
 
+
 @Component({
   selector: 'fuse-app-dashboard-portfolio-list',
   templateUrl: './dashboard-portfolio-list.component.html',
@@ -21,7 +22,7 @@ export class DashboardPortfolioListComponent implements OnInit {
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
     this.dashboardPortfolioList$.subscribe((data: PortfolioDetails[]) => {
-      console.log(data);
+      // console.log(data);
     });
 
   }

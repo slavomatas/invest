@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Portfolio, CumulativeMeasurement, ChartModelPortfolio } from '../../types/types';
+import { ChartModelPortfolio } from '../../types/types';
 import { cloneDeep } from 'lodash';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
@@ -25,7 +25,6 @@ export class LineChartComponent implements OnInit {
   selectedChartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios.filter(portfolio => portfolio.selected)) ;
 
   chartData: ChartModelPortfolio[] = [];
-
 
   // view: any[] = [900, 400];
 
@@ -67,8 +66,6 @@ export class LineChartComponent implements OnInit {
 
 
   ngOnInit() {
-    this.portfolioService.getPortfoliosCumulativeData().then((data: ChartModelPortfolio[]) => {
-      this.actions.getPortfoliosComulativeDataFullfiled(true, data);
-    });
+
   }
 }

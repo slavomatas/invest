@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from 'redux';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../store';
-import {ChartModelPortfolio, PortfolioDetails} from '../../types/types';
+import {ChartModelPortfolio, PortfolioDetails, PortfolioSummary} from '../../types/types';
 
 @Injectable()
 export class PortfolioActions {
@@ -15,6 +15,7 @@ export class PortfolioActions {
 
     static SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED = 'SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED';
     static SET_CUMULATIVE_CHART_PERIOD = 'SET_CUMULATIVE_CHART_PERIOD';
+    static SET_PORTFOLIO_SUMMARY = 'SET_PORTFOLIO_SUMMARY';
 
     constructor(private ngRedux: NgRedux<AppState>) { }
 
@@ -41,6 +42,13 @@ export class PortfolioActions {
       this.ngRedux.dispatch({
         type: PortfolioActions.SET_CUMULATIVE_CHART_PERIOD,
         payload: period
+      });
+    }
+
+    public setPortfolioSummary(summary: PortfolioSummary){
+      this.ngRedux.dispatch({
+        type: PortfolioActions.SET_PORTFOLIO_SUMMARY,
+        payload: summary
       });
     }
 
