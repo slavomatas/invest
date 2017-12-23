@@ -19,7 +19,4 @@ describe('PortfolioOverviewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });

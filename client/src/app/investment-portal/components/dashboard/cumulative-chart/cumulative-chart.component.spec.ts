@@ -19,5 +19,4 @@ describe('CumulativeChartComponent', () => {
     fixture.detectChanges();
   });
 
-
 });

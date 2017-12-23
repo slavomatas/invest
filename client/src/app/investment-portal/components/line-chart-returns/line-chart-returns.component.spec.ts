@@ -19,5 +19,4 @@ describe('LineChartReturnsComponent', () => {
     fixture.detectChanges();
   });
 
-
 });

@@ -19,5 +19,4 @@ describe('DashboardPortfolioListComponent', () => {
     fixture.detectChanges();
   });
 
-
 });
