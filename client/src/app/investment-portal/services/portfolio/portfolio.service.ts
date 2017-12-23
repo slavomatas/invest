@@ -2,16 +2,20 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
-  Portfolio, CumulativeMeasurement, ChartModelPortfolio, PortfolioDetails,
-  TypeOfReturns, PortfolioReturn, TypeOfPortfolioReturn
+  Portfolio, PortfolioDetails, CumulativeMeasurement,
+  TypeOfReturns, TypeOfPortfolioReturn
 } from '../../types/types';
+import { PortfolioReturn, ChartModelPortfolio } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
 import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';
 import { cloneDeep } from 'lodash';
 
-const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
-const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';
+ const GET_PORTFOLIO_RETURN_VALUE_URL = '/api/v1/measurements/portfolios';
+ const GET_PORTFOLIOS_URL = '/api/v1/user/portfolios';
+
+// const GET_PORTFOLIO_RETURN_VALUE_URL = 'http://localhost:8085/api/v1/measurements/portfolios';
+// const GET_PORTFOLIOS_URL = 'http://localhost:8085/api/v1/user/portfolios';
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {

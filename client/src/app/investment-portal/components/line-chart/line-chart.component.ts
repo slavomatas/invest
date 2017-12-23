@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartModelPortfolio } from '../../types/types';
+import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
+import { ChartModelPortfolio } from '../../types/dashboard-types';
 import { cloneDeep } from 'lodash';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
-import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
 import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';

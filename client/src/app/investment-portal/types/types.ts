@@ -8,20 +8,15 @@ export interface CumulativeMeasurement {
   value: string;
 }
 
-export interface PortfolioReturn {
+export interface User {
   name: string;
-  value: string;
-}
-
-export interface ChartModelPortfolio {
-  name: string;
-  id: string;
-  selected: boolean;
-  series:
-    {
-      name: string,
-      value: number
-    }[];
+  surname: string;
+  username: string;
+  email: string;
+  roles: [{
+    roleName: string,
+    description: string
+  }]
 }
 
 export interface PortfolioSummary {

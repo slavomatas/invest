@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Action } from 'redux';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../store';
-import {ChartModelPortfolio, PortfolioDetails, PortfolioSummary} from '../../types/types';
+import { PortfolioDetails, PortfolioSummary } from '../../types/types';
+import { ChartModelPortfolio } from '../../types/dashboard-types';
 
 @Injectable()
 export class PortfolioActions {

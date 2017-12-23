@@ -1,5 +1,6 @@
 import { Component, OnInit, NgModule} from '@angular/core';
-import { ChartModelPortfolio, PortfolioSummary } from '../../types/types';
+import { PortfolioSummary } from '../../types/types';
+import { ChartModelPortfolio } from '../../types/dashboard-types';
 import { cloneDeep } from 'lodash';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../store/actions/portfolio-actions';

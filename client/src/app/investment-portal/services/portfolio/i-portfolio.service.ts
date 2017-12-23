@@ -1,7 +1,8 @@
 import {
-  Portfolio, CumulativeMeasurement, PortfolioDetails, TypeOfReturns, PortfolioReturn,
+  Portfolio, PortfolioDetails, TypeOfReturns, CumulativeMeasurement,
   TypeOfPortfolioReturn
 } from '../../types/types';
+import { PortfolioReturn } from '../../types/dashboard-types';
 import { Observable } from 'rxjs/Observable';
 
 export interface IPortfolioService {

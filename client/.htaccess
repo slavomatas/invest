@@ -1,0 +1,14 @@
+  Options Indexes FollowSymLinks
+  RewriteEngine On
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_URI} !^/?(/api)/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /portal/index.html [L]
+
+
+
+
+
+
+

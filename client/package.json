@@ -4,11 +4,11 @@
   "license": "",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config src/app/investment-portal/proxy.conf.json",
     "start-hmr": "ng serve --hmr -e=hmr -sm=false",
     "start-hmr-sourcemaps": "ng serve --hmr -e=hmr",
-    "build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev",
-    "build-prod": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod",
+    "build": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --dev --base-href /portal/",
+    "build-prod": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng build --prod --base-href /portal/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -29,6 +29,7 @@
     "@angular/platform-browser": "5.0.1",
     "@angular/platform-browser-dynamic": "5.0.1",
     "@angular/router": "5.0.1",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.5",
     "@ngx-translate/core": "8.0.0",
     "@swimlane/ngx-charts": "7.0.0",
     "@swimlane/ngx-datatable": "11.0.3",
@@ -48,7 +49,8 @@
     "redux-observable": "^0.17.0",
     "rxjs": "5.5.2",
     "web-animations-js": "2.3.1",
-    "zone.js": "0.8.18"
+    "zone.js": "0.8.18",
+    "ts-md5": "^1.2.2"
   },
   "devDependencies": {
     "@angular/cli": "1.5.0",

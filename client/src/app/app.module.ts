@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
 import { SharedModule } from './core/modules/shared.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,7 @@ import { FuseConfigService } from './core/services/config.service';
 import { FuseNavigationService } from './core/components/navigation/navigation.service';
 import { InvestmentPortalModule } from './investment-portal/investment-portal.module';
 import { TranslateModule } from '@ngx-translate/core';
+
 
 const appRoutes: Routes = [
     {
@@ -31,6 +33,7 @@ const appRoutes: Routes = [
         HttpClientModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes),
+        NgbModule.forRoot(),
         SharedModule,
         TranslateModule.forRoot(),
         FuseMainModule,

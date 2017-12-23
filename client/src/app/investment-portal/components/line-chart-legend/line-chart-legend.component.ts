@@ -4,7 +4,7 @@ import { SharedVariableService} from '../../services/shared-variable-service/sha
 import { PortfolioActions} from '../../store/actions/portfolio-actions';
 import { NgRedux} from '@angular-redux/store';
 import { AppState } from '../../store';
-import {ChartModelPortfolio} from '../../types/types';
+import { ChartModelPortfolio } from '../../types/dashboard-types';
 
 @Component({
   selector: 'fuse-invest-line-chart-legend',

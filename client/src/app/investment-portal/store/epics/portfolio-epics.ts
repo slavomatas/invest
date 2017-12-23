@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActionsObservable, combineEpics } from 'redux-observable';
 import { PortfolioActions } from '../actions/portfolio-actions';
-import { Portfolio, ChartModelPortfolio } from '../../types/types';
+import { ChartModelPortfolio } from '../../types/dashboard-types';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';

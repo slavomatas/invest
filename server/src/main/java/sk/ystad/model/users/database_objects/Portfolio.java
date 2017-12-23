@@ -52,7 +52,7 @@ public class Portfolio {
     }
 
     @ManyToOne(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId" ,referencedColumnName="id")
     public User getUser() {
         return user;
     }

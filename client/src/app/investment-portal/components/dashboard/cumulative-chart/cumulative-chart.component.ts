@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartModelPortfolio } from "../../../types/types";
+import { ChartModelPortfolio } from "../../../types/dashboard-types";
 import { PortfolioService } from "../../../services/portfolio/portfolio.service";
 import { PortfolioActions } from "../../../store/actions/portfolio-actions";
 
@@ -61,8 +61,6 @@ export class CumulativeChartComponent implements OnInit {
         this.portfolioService.getPortfoliosCumulativeData(dateFrom, dateTo).then((data: ChartModelPortfolio[]) => {
           this.actions.getPortfoliosComulativeDataFullfiled(true, data);
         });
-
-        //
       }
     });
 
