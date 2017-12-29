@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,20 +60,20 @@ public class PortfolioMeasurementsServiceTest {
         builder.put(LocalDate.parse("2017-01-07", formatter), 3.0);
         LocalDateDoubleTimeSeries timeSeries = builder.build();
 
-        String portfolioId = "Portfolio1";
+        Long portfolioId = 1L;
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of("PORTFOLIO_CUMULATIVE_RETURN");
         String dateFrom = "2017-01-01T21:03:59.526Z";
         LocalDate localDateFrom = LocalDate.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME);
         String dateTo = "2017-01-07T21:03:59.526Z";
         LocalDate localDateTo = LocalDate.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME);
-        Mockito.when(portfolioMeasurementRepository.findMeasure(portfolioId, immutableMeasure, localDateFrom, localDateTo))
+        Mockito.when(portfolioMeasurementRepository.findMeasure("PID5a03486d2298316ac85459bf", immutableMeasure, localDateFrom, localDateTo))
                 .thenReturn(timeSeries);
 
-        mvc.perform(get("/measurements/cumulative_measurement")
+        mvc.perform(get("/v1/measurements/portfolios/1/PORTFOLIO_CUMULATIVE_RETURN")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("portfolioId", portfolioId)
                 .param("dateFrom", dateFrom)
                 .param("dateTo", dateTo))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(timeSeries.getTimeAtIndex(0).toString()))
                 .andExpect(jsonPath("$[0].value").value(timeSeries.getValueAtIndex(0)))

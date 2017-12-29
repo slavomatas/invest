@@ -42,10 +42,10 @@ export interface TypeOfReturns {
 }
 
 export enum TypeOfPortfolioReturn {
-  daily = 'PORTFOLIO_DAILY_RETURN',
-  weekly = 'PORTFOLIO_WEEKLY_RETURN',
-  monthly = 'PORTFOLIO_MONTHLY_RETURN',
-  quaterly = 'PORTFOLIO_QUARTERLY_RETURN',
-  yearly = 'PORTFOLIO_YEARLY_RETURN',
-  cumulative = 'PORTFOLIO_CUMULATIVE_RETURN'
+  daily = 'PORTFOLIO_DAILY_RETURNS',
+  weekly = 'PORTFOLIO_WEEKLY_RETURNS',
+  monthly = 'PORTFOLIO_MONTHLY_RETURNS',
+  quaterly = 'PORTFOLIO_QUARTERLY_RETURNS',
+  yearly = 'PORTFOLIO_YEARLY_RETURNS',
+  cumulative = 'PORTFOLIO_CUMULATIVE_RETURNS'
 }

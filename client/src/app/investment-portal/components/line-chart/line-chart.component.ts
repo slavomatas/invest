@@ -37,7 +37,7 @@ export class LineChartComponent implements OnInit {
   showXAxisLabel = true;
   xAxisLabel = 'Date';
   showYAxisLabel = true;
-  yAxisLabel = 'Population';
+  yAxisLabel = 'Cumulative Returns';
 
   colorScheme = {
     domain: this.sharedVariableService.getColors()

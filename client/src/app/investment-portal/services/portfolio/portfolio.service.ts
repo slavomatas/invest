@@ -26,6 +26,7 @@ export class PortfolioService implements IPortfolioService {
 
   }
 
+
   /**
    * Fetches cumulative data for all portfolios
    */
@@ -37,13 +38,13 @@ export class PortfolioService implements IPortfolioService {
       dateTo = new Date();
     }
 
-    // await this.getPortfolios().toPromise().then(async (portfolios: Portfolio[]) => {
-    //   promises = portfolios.map(async (portfolio: Portfolio) => {
-    //     return await this.getPortfolioDetailsData(portfolio, portfolioReturnType);
-    //   });
-    // });
+/*    await this.getPortfolios().then(async (portfolios: Portfolio[]) => {
+      promises = portfolios.map(async (portfolio: Portfolio) => {
+        return await this.getPortfolioDetailsData(portfolio, TypeOfPortfolioReturn["cumulative"]);
+      });
+    });*/
 
-    await this.mockPortfolioService.getPortfolios().then(async (portfolios: Portfolio[]) => {
+    await this.getPortfolios().then(async (portfolios: Portfolio[]) => {
       promises = portfolios.map(async (portfolio: Portfolio) => {
         return await this.getCumulativeDataForPortfolio(portfolio, dateFrom, dateTo);
       });
@@ -140,7 +141,8 @@ export class PortfolioService implements IPortfolioService {
     }
 
     return this.http
-      .get<CumulativeMeasurement[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_CUMULATIVE_RETURN', {
+      .get<CumulativeMeasurement[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/' + TypeOfPortfolioReturn["cumulative"],
+        {
         params: params
       });
   }
