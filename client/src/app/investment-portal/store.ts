@@ -27,7 +27,7 @@ export const INITIAL_STATE: AppState = {
     portfoliosDetailsFetchError: undefined,
 
     // CumulativeChartControls
-    cumulativeChartSelectedPeriod: '3M',
+    cumulativeChartSelectedPeriod: 'ALL',
     currencySymbol: '$',
     user: undefined,
     token: undefined

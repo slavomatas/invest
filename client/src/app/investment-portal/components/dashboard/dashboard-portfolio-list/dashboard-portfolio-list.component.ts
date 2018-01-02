@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MockPortfolioService, PortfolioService} from '../../../services/portfolio/portfolio.service';
+import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 import {PortfolioActions} from '../../../store/actions/portfolio-actions';
 import {NgRedux} from '@angular-redux/store';
 import {AppState} from '../../../store';
@@ -18,7 +18,7 @@ export class DashboardPortfolioListComponent implements OnInit {
   dashboardPortfolioList: PortfolioDetails[] = [];
 
   constructor(
-    private portfolioService: MockPortfolioService,
+    private portfolioService: PortfolioService,
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
     this.dashboardPortfolioList$.subscribe((data: PortfolioDetails[]) => {

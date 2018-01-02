@@ -3,9 +3,9 @@ package sk.ystad.model.timeseries.database_objects;
 public class TimeSeriesSimpleItem {
 
     private String name;
-    private String value;
+    private Double value;
 
-    public TimeSeriesSimpleItem(String name, String value) {
+    public TimeSeriesSimpleItem(String name, Double value) {
         this.name = name;
         this.value = value;
     }
@@ -18,11 +18,11 @@ public class TimeSeriesSimpleItem {
         this.name = name;
     }
 
-    public String getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 }

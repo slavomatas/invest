@@ -16,12 +16,12 @@ import org.springframework.web.context.WebApplicationContext;
 import sk.ystad.ServerApplication;
 import sk.ystad.model.measures.database_objects.ImmutableMeasure;
 import sk.ystad.model.measures.repositores.PortfolioMeasurementRepository;
-import sk.ystad.model.timeseries.database_objects.date.localdate.ImmutableLocalDateDoubleTimeSeries;
-import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeries;
-import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeriesBuilder;
+import sk.ystad.model.timeseries.database_objects.TimeSeriesSimpleItem;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,8 +41,6 @@ public class PortfolioMeasurementsServiceTest {
     @MockBean
     private PortfolioMeasurementRepository portfolioMeasurementRepository;
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
     @Before
     public void setup() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
@@ -50,17 +48,15 @@ public class PortfolioMeasurementsServiceTest {
 
     @Test
     public void returnCumulativeMeasurementsForGivenPortfolio() throws Exception {
-        LocalDateDoubleTimeSeriesBuilder builder = ImmutableLocalDateDoubleTimeSeries.builder();
-        builder.put(LocalDate.parse("2017-01-01", formatter), 1.5);
-        builder.put(LocalDate.parse("2017-01-02", formatter), 2.5);
-        builder.put(LocalDate.parse("2017-01-03", formatter), 3.5);
-        builder.put(LocalDate.parse("2017-01-04", formatter), 1.7);
-        builder.put(LocalDate.parse("2017-01-05", formatter), 1.4);
-        builder.put(LocalDate.parse("2017-01-06", formatter), 0.2);
-        builder.put(LocalDate.parse("2017-01-07", formatter), 3.0);
-        LocalDateDoubleTimeSeries timeSeries = builder.build();
+        List<TimeSeriesSimpleItem> timeSeries = new ArrayList<>();
+        timeSeries.add(new TimeSeriesSimpleItem("2017-01-01T21:03:59.526Z", 1.02));
+        timeSeries.add(new TimeSeriesSimpleItem("2017-01-02T21:03:59.526Z", 1.02));
+        timeSeries.add(new TimeSeriesSimpleItem("2017-01-03T21:03:59.526Z", 2.023));
+        timeSeries.add(new TimeSeriesSimpleItem("2017-01-04T21:03:59.526Z", 2.03));
+        timeSeries.add(new TimeSeriesSimpleItem("2017-01-05T21:03:59.526Z", 3.05));
+        timeSeries.add(new TimeSeriesSimpleItem("2017-01-06T21:03:59.526Z", 4.045));
+        timeSeries.add(new TimeSeriesSimpleItem("2017-01-07T21:03:59.526Z", 6.06));
 
-        Long portfolioId = 1L;
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of("PORTFOLIO_CUMULATIVE_RETURN");
         String dateFrom = "2017-01-01T21:03:59.526Z";
         LocalDate localDateFrom = LocalDate.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME);
@@ -75,20 +71,20 @@ public class PortfolioMeasurementsServiceTest {
                 .param("dateTo", dateTo))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value(timeSeries.getTimeAtIndex(0).toString()))
-                .andExpect(jsonPath("$[0].value").value(timeSeries.getValueAtIndex(0)))
-                .andExpect(jsonPath("$[1].name").value(timeSeries.getTimeAtIndex(1).toString()))
-                .andExpect(jsonPath("$[1].value").value(timeSeries.getValueAtIndex(1)))
-                .andExpect(jsonPath("$[2].name").value(timeSeries.getTimeAtIndex(2).toString()))
-                .andExpect(jsonPath("$[2].value").value(timeSeries.getValueAtIndex(2)))
-                .andExpect(jsonPath("$[3].name").value(timeSeries.getTimeAtIndex(3).toString()))
-                .andExpect(jsonPath("$[3].value").value(timeSeries.getValueAtIndex(3)))
-                .andExpect(jsonPath("$[4].name").value(timeSeries.getTimeAtIndex(4).toString()))
-                .andExpect(jsonPath("$[4].value").value(timeSeries.getValueAtIndex(4)))
-                .andExpect(jsonPath("$[5].name").value(timeSeries.getTimeAtIndex(5).toString()))
-                .andExpect(jsonPath("$[5].value").value(timeSeries.getValueAtIndex(5)))
-                .andExpect(jsonPath("$[6].name").value(timeSeries.getTimeAtIndex(6).toString()))
-                .andExpect(jsonPath("$[6].value").value(timeSeries.getValueAtIndex(6)));
+                .andExpect(jsonPath("$[0].name").value(timeSeries.get(0).getName()))
+                .andExpect(jsonPath("$[0].value").value(timeSeries.get(0).getValue()))
+                .andExpect(jsonPath("$[1].name").value(timeSeries.get(1).getName()))
+                .andExpect(jsonPath("$[1].value").value(timeSeries.get(1).getValue()))
+                .andExpect(jsonPath("$[2].name").value(timeSeries.get(2).getName()))
+                .andExpect(jsonPath("$[2].value").value(timeSeries.get(2).getValue()))
+                .andExpect(jsonPath("$[3].name").value(timeSeries.get(3).getName()))
+                .andExpect(jsonPath("$[3].value").value(timeSeries.get(3).getValue()))
+                .andExpect(jsonPath("$[4].name").value(timeSeries.get(4).getName()))
+                .andExpect(jsonPath("$[4].value").value(timeSeries.get(4).getValue()))
+                .andExpect(jsonPath("$[5].name").value(timeSeries.get(5).getName()))
+                .andExpect(jsonPath("$[5].value").value(timeSeries.get(5).getValue()))
+                .andExpect(jsonPath("$[6].name").value(timeSeries.get(6).getName()))
+                .andExpect(jsonPath("$[6].value").value(timeSeries.get(6).getValue()));
     }
 
 }

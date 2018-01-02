@@ -8,16 +8,10 @@ import org.springframework.stereotype.Repository;
 import sk.ystad.model.measures.database_objects.Measure;
 import sk.ystad.model.measures.database_objects.Measures;
 import sk.ystad.model.measures.database_objects.positions.Position;
-import sk.ystad.model.timeseries.database_objects.date.localdate.ImmutableLocalDateDoubleTimeSeries;
-import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeries;
-import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeriesBuilder;
+import sk.ystad.model.timeseries.database_objects.TimeSeriesSimpleItem;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -26,16 +20,20 @@ public class PortfolioMeasurementRepository {
     static Logger LOG = Logger.getLogger(PortfolioMeasurementRepository.class.getName());
 
     private InfluxDB influxDB;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public PortfolioMeasurementRepository(final InfluxDB influxDB) {
         this.influxDB = influxDB;
     }
 
-    public LocalDateDoubleTimeSeries findMeasure(String portfolioId, Measure measure, LocalDate dateFrom, LocalDate dateTo) {
-        LocalDateDoubleTimeSeriesBuilder builder = ImmutableLocalDateDoubleTimeSeries.builder();
+    public List<TimeSeriesSimpleItem> findMeasure(String portfolioId, Measure measure, LocalDate dateFrom, LocalDate dateTo) {
 
-        String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolioId);
+        List<TimeSeriesSimpleItem> portfolioCumulativeReturns = new ArrayList<>();
+        String queryStr;
+        if (dateFrom == null || dateTo == null) {
+            queryStr = String.format("SELECT * FROM %s ORDER BY time ASC", portfolioId);
+        } else {
+            queryStr = String.format("SELECT * FROM %s WHERE time > '%s' AND time < '%s' ORDER BY time ASC", portfolioId, dateFrom, dateTo);
+        }
         Query query = new Query(queryStr, measure.getName());
         QueryResult queryResult = this.influxDB.query(query);
 
@@ -48,23 +46,18 @@ public class PortfolioMeasurementRepository {
                 List<List<Object>> values = series.getValues();
                 for (List<Object> rowValues : values) {
                     try {
-                        Date date = simpleDateFormat.parse((String) rowValues.get(0));
-                        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        Double value = (Double) rowValues.get(1);
-                        builder.put(localDate, value);
-                    } catch (ParseException e) {
-                        LOG.error(e.getMessage());
+                        portfolioCumulativeReturns.add(new TimeSeriesSimpleItem(rowValues.get(0).toString(),
+                                (Double) rowValues.get(1)));
+                    } catch (Exception e) {
+                        LOG.info("Time: " + rowValues.get(0));
+                        LOG.info("Value: " + rowValues.get(1));
+                        LOG.error(e);
                     }
                 }
             }
         }
 
-        LocalDateDoubleTimeSeries timeSeries = builder.build();
-        if (dateFrom != null && dateTo != null) {
-            LocalDateDoubleTimeSeries subTimeSeries = timeSeries.subSeries(dateFrom, dateTo);
-            return subTimeSeries;
-        }
-        return timeSeries;
+        return portfolioCumulativeReturns;
     }
 
     /**

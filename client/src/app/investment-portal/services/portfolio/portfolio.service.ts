@@ -17,7 +17,7 @@ import { cloneDeep } from 'lodash';
 @Injectable()
 export class PortfolioService implements IPortfolioService {
 
-  private mockPortfolioService: MockPortfolioService = new MockPortfolioService();
+  //private mockPortfolioService: MockPortfolioService = new MockPortfolioService();
 
   constructor(
     private http: HttpClient,
@@ -37,12 +37,6 @@ export class PortfolioService implements IPortfolioService {
     if(dateTo == null){
       dateTo = new Date();
     }
-
-/*    await this.getPortfolios().then(async (portfolios: Portfolio[]) => {
-      promises = portfolios.map(async (portfolio: Portfolio) => {
-        return await this.getPortfolioDetailsData(portfolio, TypeOfPortfolioReturn["cumulative"]);
-      });
-    });*/
 
     await this.getPortfolios().then(async (portfolios: Portfolio[]) => {
       promises = portfolios.map(async (portfolio: Portfolio) => {
@@ -87,7 +81,7 @@ export class PortfolioService implements IPortfolioService {
 
        measurements.map((measurement: CumulativeMeasurement) => {
         portfolioChart.series.push({
-          name: measurement.name,
+          name: new Date(measurement.name).toDateString(),
           value: Number.parseFloat(measurement.value)
         });
       });
@@ -264,6 +258,7 @@ export class PortfolioService implements IPortfolioService {
         params: params
       });
   }
+
   getPortfolioPositions(portfolioId: string): Observable<number> {
     throw new Error('Method not implemented.');
   }

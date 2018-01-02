@@ -18,7 +18,7 @@ import { FuseWidgetModule } from '../core/components/widget/widget.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AuthenticationService } from './services/authentication/authentication.service';
 import { ActivationMsgComponent } from './components/authentication/registration/activation-msg/activation-msg.component';
-import { MockPortfolioService, PortfolioService } from './services/portfolio/portfolio.service';
+import { PortfolioService } from './services/portfolio/portfolio.service';
 import { SharedVariableService } from './services/shared-variable-service/shared-variable.service';
 import { LineChartReturnsComponent } from './components/line-chart-returns/line-chart-returns.component';
 import { LineChartLegendComponent} from './components/line-chart-legend/line-chart-legend.component';
@@ -71,7 +71,6 @@ const routes = [
     AuthGuard,
     AuthenticationService,
     PortfolioService,
-    MockPortfolioService,
     SharedVariableService,
     {
       provide: HTTP_INTERCEPTORS,

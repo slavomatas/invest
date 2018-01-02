@@ -8,7 +8,6 @@ import sk.ystad.model.measures.database_objects.ImmutableMeasure;
 import sk.ystad.model.measures.database_objects.positions.Position;
 import sk.ystad.model.measures.repositores.PortfolioMeasurementRepository;
 import sk.ystad.model.timeseries.database_objects.TimeSeriesSimpleItem;
-import sk.ystad.model.timeseries.database_objects.date.localdate.LocalDateDoubleTimeSeries;
 import sk.ystad.model.users.repositores.PortfolioRepository;
 
 import java.time.LocalDate;
@@ -36,9 +35,9 @@ public class PortfolioMeasurementsService {
     @ApiOperation(value = "Get cumulative measurements for portfolio", notes = "Array of cumulative measurements of given measurement type for given portfolio can be provided.")
     @GetMapping("/measurements/portfolios/{portfolioId}/{measurementType}")
     public List<TimeSeriesSimpleItem> getMeasurement(@PathVariable("portfolioId") Long portfolioId,
-                                                     @PathVariable("measurementType") String measurementType,
-                                                     @RequestParam(value="dateFrom", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
-                                                     @RequestParam(value="dateTo", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo) throws Exception {
+                                                 @PathVariable("measurementType") String measurementType,
+                                                 @RequestParam(value="dateFrom", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
+                                                 @RequestParam(value="dateTo", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo) throws Exception {
 
 
         List<TimeSeriesSimpleItem> timeSeriesItems = new ArrayList<>();
@@ -54,16 +53,8 @@ public class PortfolioMeasurementsService {
 
         String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of(measurementType);
-        LocalDateDoubleTimeSeries timeSeries = portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo);
+        return portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo);
 
-        for (int i = 0; i < timeSeries.size(); i++) {
-            LocalDate name = timeSeries.times().get(i);
-            Double value = timeSeries.values().get(i);
-            TimeSeriesSimpleItem item = new TimeSeriesSimpleItem(name.toString(), value.toString());
-            timeSeriesItems.add(item);
-        }
-
-        return timeSeriesItems;
 
     }
 
