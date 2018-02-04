@@ -62,10 +62,10 @@ public class PortfolioMeasurementsServiceTest {
         LocalDate localDateFrom = LocalDate.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME);
         String dateTo = "2017-01-07T21:03:59.526Z";
         LocalDate localDateTo = LocalDate.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME);
-        Mockito.when(portfolioMeasurementRepository.findMeasure("PID5a03486d2298316ac85459bf", immutableMeasure, localDateFrom, localDateTo))
+        Mockito.when(portfolioMeasurementRepository.findMeasure("PID5a6f4f4aaf69115d83a41e28", immutableMeasure, localDateFrom, localDateTo))
                 .thenReturn(timeSeries);
 
-        mvc.perform(get("/v1/measurements/portfolios/1/PORTFOLIO_CUMULATIVE_RETURN")
+        mvc.perform(get("/v1/measurements/portfolios/5/PORTFOLIO_CUMULATIVE_RETURN")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("dateFrom", dateFrom)
                 .param("dateTo", dateTo))
