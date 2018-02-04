@@ -17,8 +17,6 @@ import { cloneDeep } from 'lodash';
 @Injectable()
 export class PortfolioService implements IPortfolioService {
 
-  //private mockPortfolioService: MockPortfolioService = new MockPortfolioService();
-
   constructor(
     private http: HttpClient,
     private ngRedux: NgRedux<AppState>)
@@ -63,7 +61,7 @@ export class PortfolioService implements IPortfolioService {
 
     let selectedState: ChartModelPortfolio[];
     if (portfoliosChart !== undefined) {
-      selectedState = portfoliosChart.filter(x => x.id === portfolio.id); // check wether was the portfolio selected or not.
+      selectedState = portfoliosChart.filter(x => x.id == portfolio.id); // check wether was the portfolio selected or not.
     }
 
     // map the portfolio name, id, selected
@@ -123,7 +121,7 @@ export class PortfolioService implements IPortfolioService {
   * @returns {Observable<CumulativeMeasurement[]>}
   * @memberof IDashboardSummaryService
   */
-  public getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]> {
+  public getCumulativeMeasurements(portfolioId: number, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]> {
     let params: HttpParams = new HttpParams();
 
     if (dateFrom != null) {
@@ -150,7 +148,7 @@ export class PortfolioService implements IPortfolioService {
    * @returns {Observable<CumulativeMeasurement[]>}
    * @memberof IDashboardSummaryService
    */
-  public getPortfolioMarketValues(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]> {
+  public getPortfolioMarketValues(portfolioId: number, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]> {
     let params: HttpParams = new HttpParams();
 
     if (dateFrom != null) {
@@ -191,42 +189,17 @@ export class PortfolioService implements IPortfolioService {
   /**
    * Fetches cumulative data for given portfolio
    * @param portfolio portfolio to get cumulative data for
+   * @param portfolioReturnType
    */
   public async getPortfolioDetailsData(portfolio: Portfolio, portfolioReturnType: TypeOfPortfolioReturn): Promise<PortfolioDetails> {
+    return this.http
+      .get<PortfolioDetails>(GET_PORTFOLIOS_URL + '/' + portfolio.id + '/details').toPromise();
 
-    const portfolioDetails: PortfolioDetails = {
-      name: portfolio.name,
-      id: portfolio.id,
-      marketValue: null,
-      oldMarketValue: null,
-      returns: null,
-      positions: []
-    };
-
-    // what shall I do here???? next steps: create another method so
-    // one will return returns and other one positions.
-    // call them for portfolio and put it all together to one object here.
-    await this.getPortfolioReturn(portfolio.id, portfolioReturnType).toPromise().then((returns: PortfolioReturn[]) => {
-      returns.map((returnValue: PortfolioReturn) => {
-        portfolioDetails.returns.daily = Number.parseFloat(returnValue.value);
-      });
-    });
-
-    // await this.getPortfolioMarketValue(portfolio.id).toPromise().then((value: number) => {
-    //
-    //     portfolioDetails.marketValue = value;
-    // });
-
-      await this.getPortfolioMarketValue(portfolio.id).toPromise().then((value: number) => {
-          portfolioDetails.oldMarketValue = value;
-      });
-
-    return null;
   }
 
 
 
-  public getPortfolioReturn(portfolioId: string, portfolioReturnType: TypeOfPortfolioReturn, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]> {
+  public getPortfolioReturn(portfolioId: number, portfolioReturnType: TypeOfPortfolioReturn, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]> {
     let params: HttpParams = new HttpParams();
 
     if (dateFrom != null) {
@@ -245,7 +218,7 @@ export class PortfolioService implements IPortfolioService {
       });
   }
 
-  getPortfolioMarketValue(portfolioId: string, date?: Date): Observable<number> {
+  getPortfolioMarketValue(portfolioId: number, date?: Date): Observable<number> {
     let params: HttpParams = new HttpParams();
 
     if (date != null) {
@@ -254,13 +227,14 @@ export class PortfolioService implements IPortfolioService {
     }
 
     return this.http
-      .get<number>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId , {
+      .get<number>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_MARKET_VALUE', {
         params: params
       });
   }
 
-  getPortfolioPositions(portfolioId: string): Observable<number> {
-    throw new Error('Method not implemented.');
+  getPortfolioPositions(portfolioId: number): Promise<{name: string;value: number;}[]> {
+    return this.http
+      .get<{name: string;value: number;}[]>(GET_PORTFOLIOS_URL + '/' + portfolioId + '/positions' ).toPromise();
   }
 
 
@@ -294,16 +268,18 @@ export class PortfolioService implements IPortfolioService {
     }
   }
 
-export class MockPortfolioService implements IPortfolioService {
+
+export class MockPortfolioService {
 
   getPortfoliosListDetails(portfolioReturnType: TypeOfPortfolioReturn): Promise<PortfolioDetails[]> {
+
     return new Promise((resolve) =>  {
       setTimeout(
         () => {
           resolve(
             [
               { name: 'Mock portfolio 1',
-                id: 'PID5a03486d2298316ac85459bf',
+                id: 1,
                 marketValue: 107,
                 oldMarketValue: 115,
                 returns: {
@@ -313,15 +289,15 @@ export class MockPortfolioService implements IPortfolioService {
                 },
                 positions:
                   [
-                    {name: 'BIL', value: 40.632},
-                    {name: 'CEV', value: 49.737},
-                    {name: 'NFO', value: 36.745},
-                    {name: 'PSR', value: 40.632},
-                    {name: 'AGG', value: 36.240},
+                    {symbol: 'BIL', value: 40.632},
+                    {symbol: 'CEV', value: 49.737},
+                    {symbol: 'NFO', value: 36.745},
+                    {symbol: 'PSR', value: 40.632},
+                    {symbol: 'AGG', value: 36.240},
                   ]
               },
               { name: 'Mock portfolio 2',
-                id: 'PID5a03486e2298316ac85459c0',
+                id: 2,
                 marketValue: 200,
                 oldMarketValue: 150,
                 returns: {
@@ -331,15 +307,15 @@ export class MockPortfolioService implements IPortfolioService {
                 },
                 positions:
                   [
-                    {name: 'B&T', value: 103.7},
-                    {name: 'JOE', value: 29.356},
-                    {name: 'DOE', value: 30.126},
-                    {name: 'P2P', value: 47},
-                    {name: 'AGG', value: 73},
+                    {symbol: 'B&T', value: 103.7},
+                    {symbol: 'JOE', value: 29.356},
+                    {symbol: 'DOE', value: 30.126},
+                    {symbol: 'P2P', value: 47},
+                    {symbol: 'AGG', value: 73},
                   ]
               },
               { name: 'Mock portfolio 3',
-                id: 'PID5a03486f2298316ac85459c1',
+                id: 2,
                 marketValue: 90,
                 oldMarketValue: 65,
                 returns: {
@@ -349,10 +325,10 @@ export class MockPortfolioService implements IPortfolioService {
                 },
                 positions:
                   [
-                    {name: 'BIL', value: 17},
-                    {name: 'CEV', value: 13.4},
-                    {name: 'NFO', value: 22.65},
-                    {name: 'PSR', value: 19.735},
+                    {symbol: 'BIL', value: 17},
+                    {symbol: 'CEV', value: 13.4},
+                    {symbol: 'NFO', value: 22.65},
+                    {symbol: 'PSR', value: 19.735},
                   ]
               },
 
@@ -370,9 +346,9 @@ export class MockPortfolioService implements IPortfolioService {
         () => {
           resolve(
             [
-              { name: 'Mock portfolio 1', id: 'PID5a03486d2298316ac85459bf' },
-              { name: 'Mock portfolio 2', id: 'PID5a03486e2298316ac85459c0' },
-              { name: 'Mock portfolio 3', id: 'PID5a03486f2298316ac85459c1' }
+              { name: 'Mock portfolio 1', id: 1 },
+              { name: 'Mock portfolio 2', id: 2 },
+              { name: 'Mock portfolio 3', id: 3 }
             ]
           );
         },
@@ -401,62 +377,5 @@ export class MockPortfolioService implements IPortfolioService {
 
   }
 
-  public getPortfolioReturn(portfolioId: string, portfolioReturnType: TypeOfPortfolioReturn, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]> {
-      return new Observable<PortfolioReturn[]>(observer => {
-
-      });
-    // return new Observable<PortfolioDetails[]>(observer => {
-    //   setTimeout(
-    //     () => {
-    //       observer.next(
-    //         [
-    //           { name: 'Mock portfolio 1',
-    //             id: 'id1',
-    //             marketValue: 525464,
-    //             oldMarketValue: 525400,
-    //             returns: {
-    //               daily: 0.00159238920396665,
-    //               weekly: 0.0146940506004236,
-    //               monthly: 0.00733306344259854,
-    //             },
-    //             positions:
-    //               [
-    //                 {name: 'BIL', value: 20},
-    //                 {name: 'CEV', value: 20},
-    //                 {name: 'NFO', value: 20},
-    //                 {name: 'PSR', value: 20},
-    //                 {name: 'AGG', value: 20},
-    //               ]
-    //           },
-    //           { name: 'Mock portfolio 2',
-    //             id: 'id2',
-    //             marketValue: 675464,
-    //             oldMarketValue: 525401,
-    //             returns: {
-    //               daily: -0.00301981425613618,
-    //               weekly: -0.00163140823711172,
-    //               monthly: 0.0099937424031975,
-    //             },
-    //             positions:
-    //               [
-    //                 {name: 'BIL', value: 20},
-    //                 {name: 'JOE', value: 20},
-    //                 {name: 'DOE', value: 20},
-    //                 {name: 'P2P', value: 20},
-    //                 {name: 'AGG', value: 20},
-    //               ]
-    //           },
-    //         ]
-    //       );
-    //     },
-    //     500);
-    // });
-  }
-
-  getPortfolioMarketValue(portfolioId: string): Observable<number> {
-    throw new Error('Method not implemented.');
-  }
-  getPortfolioPositions(portfolioId: string): Observable<number> {
-    throw new Error('Method not implemented.');
-  }
 }
+

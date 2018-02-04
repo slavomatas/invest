@@ -11,7 +11,7 @@ export interface PortfolioSummary {
 
 export interface ChartModelPortfolio {
   name: string;
-  id: string;
+  id: number;
   selected: boolean;
   marketValue: number;
   oldMarketValue: number;

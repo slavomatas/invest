@@ -1,6 +1,6 @@
 export interface Portfolio {
   name: string;
-  id: string;
+  id: number;
 }
 
 export interface CumulativeMeasurement {
@@ -21,13 +21,13 @@ export interface User {
 
 export interface PortfolioDetails {
   name: string;
-  id: string;
+  id: number;
   marketValue: number;
   oldMarketValue: number;
   returns: TypeOfReturns;
   positions:
     {
-      name: string;
+      symbol: string;
       value: number;
     }[];
 }

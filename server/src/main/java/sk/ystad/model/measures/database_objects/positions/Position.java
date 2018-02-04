@@ -11,7 +11,19 @@ public class Position {
     }
 
     public String getSymbol() {
-        return symbol;
+        // Parse the symbol string
+        String s = symbol;
+        try {
+            s = s.substring(s.indexOf("[") + 1);
+            s = s.substring(0, s.indexOf("]"));
+        }
+        catch ( StringIndexOutOfBoundsException e) {
+            return symbol;
+        }
+
+
+        return s;
+
     }
 
     public void setSymbol(String symbol) {

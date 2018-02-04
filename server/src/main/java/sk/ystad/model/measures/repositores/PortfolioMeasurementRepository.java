@@ -9,6 +9,8 @@ import sk.ystad.model.measures.database_objects.Measure;
 import sk.ystad.model.measures.database_objects.Measures;
 import sk.ystad.model.measures.database_objects.positions.Position;
 import sk.ystad.model.timeseries.database_objects.TimeSeriesSimpleItem;
+import sk.ystad.model.users.database_objects.PortfolioDetails;
+import sk.ystad.model.users.database_objects.PortfolioSummary;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -70,8 +72,16 @@ public class PortfolioMeasurementRepository {
         List<Position> positionsWithWeights = getActualPortfolioPositionsWeights(portfolioId);
 
         for (Position positionWithWeight : positionsWithWeights) {
-            Double actualClosePrice = getActualClosePriceForPosition(positionWithWeight.getSymbol());
-            Double actualMarketValue = actualClosePrice * positionWithWeight.getValue();
+            Double actualClosePrice = 0.0;
+            Double actualMarketValue = 0.0;
+            if (positionWithWeight.getSymbol().equals("cash")) {
+                actualMarketValue = getPortfolioSummary(portfolioId).getCash();
+            }
+            else {
+                actualClosePrice = getActualClosePriceForPosition(positionWithWeight.getSymbol());
+                actualMarketValue = actualClosePrice * positionWithWeight.getValue();
+            }
+
             Position positionWithMarketValue = new Position(positionWithWeight.getSymbol(), actualMarketValue);
             positionsWithMarketValue.add(positionWithMarketValue);
         }
@@ -93,7 +103,7 @@ public class PortfolioMeasurementRepository {
         if (results != null && results.size() > 0) {
             QueryResult.Result result = results.get(0);
             List<QueryResult.Series> resultSeries = result.getSeries();
-            if (results != null && results.size() > 0) {
+            if (resultSeries != null && results.size() > 0) {
                 QueryResult.Series series = resultSeries.get(0);
                 List<List<Object>> values = series.getValues();
                 List<Object> lastValue = values.get(values.size() - 1);
@@ -132,6 +142,28 @@ public class PortfolioMeasurementRepository {
         }
 
         return positions;
+    }
+
+    public PortfolioSummary getPortfolioSummary(String portfolioId) {
+        String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolioId);
+        Query query = new Query(queryStr, Measures.PORTFOLIO_SUMMARY.getName());
+        QueryResult queryResult = this.influxDB.query(query);
+
+        List<QueryResult.Result> results = queryResult.getResults();
+
+        if (results != null && results.size() > 0) {
+            List summaryValues = results.get(0).getSeries().get(0).getValues().get(0);
+            return new PortfolioSummary((Double) summaryValues.get(1),
+                                        (Double) summaryValues.get(2),
+                                        (Double) summaryValues.get(3),
+                                        (Double) summaryValues.get(4),
+                                        (Double) summaryValues.get(5),
+                                        (Double) summaryValues.get(6),
+                                        (Double) summaryValues.get(7),
+                                        (Double) summaryValues.get(8));
+
+        }
+        return null;
     }
 
 }

@@ -32,12 +32,14 @@ export class LineChartComponent implements OnInit {
   animations = true;
   showXAxis = true;
   showYAxis = true;
+  showGridLines= false;
+  timeline = true;
   gradient = false;
   showLegend = false;
   showXAxisLabel = true;
-  xAxisLabel = 'Date';
+  xAxisLabel = '';
   showYAxisLabel = true;
-  yAxisLabel = 'Cumulative Returns';
+  yAxisLabel = '%';
 
   colorScheme = {
     domain: this.sharedVariableService.getColors()
