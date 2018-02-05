@@ -1,48 +1,35 @@
 package sk.ystad.services;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 import sk.ystad.model.measurements.ImmutableMeasure;
 import sk.ystad.model.measurements.Measures;
 import sk.ystad.model.measurements.positions.Position;
-import sk.ystad.repositories.measurements.PortfolioMeasurementRepository;
 import sk.ystad.model.timeseries.TimeSeriesSimpleItem;
 import sk.ystad.model.users.portfolios.PortfolioDetails;
 import sk.ystad.model.users.portfolios.Returns;
+import sk.ystad.repositories.measurements.PortfolioMeasurementRepository;
 import sk.ystad.repositories.users.PortfolioRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@RequestMapping("/v1")
+@Service
 public class PortfolioMeasurementsService {
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final PortfolioMeasurementRepository portfolioMeasurementRepository;
     private final PortfolioRepository portfolioRepository;
 
     @Autowired
-    PortfolioMeasurementsService(PortfolioMeasurementRepository portfolioMeasurementRepository,
-                                 PortfolioRepository portfolioRepository) {
+    public PortfolioMeasurementsService(PortfolioMeasurementRepository portfolioMeasurementRepository, PortfolioRepository portfolioRepository) {
         this.portfolioMeasurementRepository = portfolioMeasurementRepository;
         this.portfolioRepository = portfolioRepository;
     }
 
-    @CrossOrigin(origins = "*")
-    @ApiOperation(value = "Get cumulative measurements for portfolio", notes = "Array of cumulative measurements of given measurement type for given portfolio can be provided.")
-    @GetMapping("/measurements/portfolios/{portfolioId}/{measurementType}")
-    public List<TimeSeriesSimpleItem> getMeasurement(@PathVariable("portfolioId") Long portfolioId,
-                                                 @PathVariable("measurementType") String measurementType,
-                                                 @RequestParam(value="dateFrom", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
-                                                 @RequestParam(value="dateTo", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo) throws Exception {
 
-
+    public List<TimeSeriesSimpleItem> getMeasurement(Long portfolioId, String measurementType, LocalDateTime dateFrom, LocalDateTime dateTo) {
         List<TimeSeriesSimpleItem> timeSeriesItems = new ArrayList<>();
 
         LocalDate localDateFrom = null;
@@ -57,18 +44,9 @@ public class PortfolioMeasurementsService {
         String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of(measurementType);
         return portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo);
-
-
     }
 
-    @CrossOrigin(origins = "*")
-    @ApiOperation(value = "Get cumulative measurements for portfolio", notes = "Array of cumulative measurements of given measurement type for given portfolio can be provided.")
-    @GetMapping("/measurements/portfolios/{portfolioId}/PORTFOLIO_MARKET_VALUE")
-    public List<TimeSeriesSimpleItem> getMeasurementMarket(@PathVariable("portfolioId") Long portfolioId,
-                                                     @RequestParam(value="dateFrom", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
-                                                     @RequestParam(value="dateTo", required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo) throws Exception {
-
-
+    public List<TimeSeriesSimpleItem> getMeasurementMarket(Long portfolioId, LocalDateTime dateFrom, LocalDateTime dateTo) {
         List<TimeSeriesSimpleItem> timeSeriesItems = new ArrayList<>();
 
         LocalDate localDateFrom = null;
@@ -84,21 +62,14 @@ public class PortfolioMeasurementsService {
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of("PORTFOLIO_MARKET_VALUE");
         return portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo);
 
-
     }
 
-    @CrossOrigin(origins = "*")
-    @ApiOperation(value = "Get details for portfolio", notes = "Array of positions with market value for given portfolio can be provided.")
-    @GetMapping("/user/portfolios/{portfolioId}/positions")
-    public List<Position> getPositionsWithMarketValue(@PathVariable("portfolioId") Long portfolioId) {
+    public List<Position> getPositionsWithMarketValue(Long portfolioId) {
         String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
         return portfolioMeasurementRepository.getPositionsWithMarketValue(influxId);
     }
 
-    @CrossOrigin(origins = "*")
-    @ApiOperation(value = "Get positions with market value for portfolio", notes = "Array of positions with market value for given portfolio can be provided.")
-    @GetMapping("/user/portfolios/{portfolioId}/details")
-    public PortfolioDetails getPortfolioDetails(@PathVariable("portfolioId") Long portfolioId) {
+    public PortfolioDetails getPortfolioDetails(Long portfolioId) {
         String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
         //Get position values of portfolio
         List<Position> positions =  portfolioMeasurementRepository.getPositionsWithMarketValue(influxId);
@@ -130,5 +101,4 @@ public class PortfolioMeasurementsService {
                 returns,
                 positions);
     }
-
 }
