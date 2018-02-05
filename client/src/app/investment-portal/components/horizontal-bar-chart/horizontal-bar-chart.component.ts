@@ -26,7 +26,7 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
   showYAxisLabel = true;
   yAxisLabel = '';
   barPadding = 155;
-  view = [700, 230*this.portfoliosNum];
+  view = [700, 230 * this.portfoliosNum];
 
   colorScheme = {
     domain: this.sharedVariableService.getColors()
@@ -50,7 +50,7 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
       );
     }
     this.portfoliosNum = this.portfolioDetailsList.length;
-    this.view = [700, 250*this.portfoliosNum];
+    this.view = [700, 250 * this.portfoliosNum];
   }
   ngOnInit() {
 

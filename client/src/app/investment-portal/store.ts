@@ -7,8 +7,8 @@ import { PortfolioActions } from './store/actions/portfolio-actions';
 import { AuthenticationActions } from './store/actions/authentication-actions';
 
 export interface AppState {
-    user: User,
-    token: Token,
+    user: User;
+    token: Token;
     chartPortfolios: ChartModelPortfolio[];
     dashboardPortfolioList: PortfolioDetails[];
     isGettingPortfoliosCumulativeData: boolean;

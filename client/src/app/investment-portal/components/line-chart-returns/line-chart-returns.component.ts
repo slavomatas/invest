@@ -27,9 +27,9 @@ export class LineChartReturnsComponent implements OnInit {
     marketValue: 0,
     periodMarketValue: 0,
     periodMarketValuePercentage: 0
-  }
+  };
 
-  private  definedPeriods:Map<string, string> = new Map([
+  private  definedPeriods: Map<string, string> = new Map([
     ['1M', 'last month'],
     ['3M', 'last 3 months'],
     ['6M', 'last 6 months'],
@@ -54,7 +54,7 @@ export class LineChartReturnsComponent implements OnInit {
       let totalMarketValue = 0;
       let totalOldMarketValue = 0;
 
-      for (let portfolio of data) {
+      for (const portfolio of data) {
         totalMarketValue += portfolio.marketValue;
         totalOldMarketValue += portfolio.oldMarketValue;
       }
@@ -75,8 +75,8 @@ export class LineChartReturnsComponent implements OnInit {
   }
 
   private numberWithCommas(x) {
-    x = (Math.round(x * 100)/100).toFixed(2);
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    x = (Math.round(x * 100) / 100).toFixed(2);
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   periodEvent(event) {

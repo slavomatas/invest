@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartModelPortfolio } from "../../../types/dashboard-types";
-import { PortfolioService } from "../../../services/portfolio/portfolio.service";
-import { PortfolioActions } from "../../../store/actions/portfolio-actions";
+import { ChartModelPortfolio } from '../../../types/dashboard-types';
+import { PortfolioService } from '../../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../../store/actions/portfolio-actions';
 
 import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../../store';
@@ -32,7 +32,7 @@ export class CumulativeChartComponent implements OnInit {
         let dateFrom: Date = new Date();
         const dateTo: Date = new Date();
 
-        switch(this.selectedPeriod) {
+        switch (this.selectedPeriod) {
           case '1M': {
             dateFrom.setMonth(dateTo.getMonth() - 1);
             break;

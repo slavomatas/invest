@@ -16,7 +16,7 @@ export interface User {
   roles: [{
     roleName: string,
     description: string
-  }]
+  }];
 }
 
 export interface PortfolioDetails {

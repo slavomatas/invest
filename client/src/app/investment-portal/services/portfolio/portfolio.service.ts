@@ -32,7 +32,7 @@ export class PortfolioService implements IPortfolioService {
 
     let promises: Promise<ChartModelPortfolio>[];
 
-    if(dateTo == null){
+    if (dateTo == null){
       dateTo = new Date();
     }
 
@@ -61,7 +61,7 @@ export class PortfolioService implements IPortfolioService {
 
     let selectedState: ChartModelPortfolio[];
     if (portfoliosChart !== undefined) {
-      selectedState = portfoliosChart.filter(x => x.id == portfolio.id); // check wether was the portfolio selected or not.
+      selectedState = portfoliosChart.filter(x => x.id === portfolio.id); // check wether was the portfolio selected or not.
     }
 
     // map the portfolio name, id, selected
@@ -88,9 +88,9 @@ export class PortfolioService implements IPortfolioService {
     // get market value of a portfolio and update it
     await this.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: PortfolioReturn[]) => {
 
-      let length = measurements.length;
+      const length = measurements.length;
 
-      if(length > 0){
+      if (length > 0){
         portfolioChart.marketValue = Number.parseFloat(measurements[length - 1].value);
         portfolioChart.oldMarketValue = Number.parseFloat(measurements[0].value);
       } else {
@@ -133,7 +133,7 @@ export class PortfolioService implements IPortfolioService {
     }
 
     return this.http
-      .get<CumulativeMeasurement[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/' + TypeOfPortfolioReturn["cumulative"],
+      .get<CumulativeMeasurement[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/' + TypeOfPortfolioReturn['cumulative'],
         {
         params: params
       });
@@ -232,9 +232,9 @@ export class PortfolioService implements IPortfolioService {
       });
   }
 
-  getPortfolioPositions(portfolioId: number): Promise<{name: string;value: number;}[]> {
+  getPortfolioPositions(portfolioId: number): Promise<{name: string; value: number; }[]> {
     return this.http
-      .get<{name: string;value: number;}[]>(GET_PORTFOLIOS_URL + '/' + portfolioId + '/positions' ).toPromise();
+      .get<{name: string; value: number; }[]>(GET_PORTFOLIOS_URL + '/' + portfolioId + '/positions' ).toPromise();
   }
 
 
