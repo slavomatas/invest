@@ -14,8 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import sk.ystad.ServerApplication;
-import sk.ystad.model.users.database_objects.Portfolio;
-import sk.ystad.model.users.database_objects.User;
+import sk.ystad.controllers.PortfolioController;
+import sk.ystad.model.users.portfolios.Portfolio;
+import sk.ystad.model.users.User;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class UserPortfoliosServiceTest {
     private MockMvc mvc;
 
     @MockBean
-    private UserPortfoliosService userPortfoliosService;
+    private PortfolioController userPortfoliosService;
 
     @Autowired
     private WebApplicationContext wac;

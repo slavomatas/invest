@@ -1,33 +1,39 @@
 package sk.ystad.services;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import sk.ystad.model.users.database_objects.User;
-import sk.ystad.model.users.repositores.UserRepository;
+import org.springframework.stereotype.Service;
+import sk.ystad.common.data_structures.Response;
+import sk.ystad.model.users.User;
+import sk.ystad.repositories.users.UserRepository;
 
 import java.security.Principal;
 
-
-@RestController
-@RequestMapping("/v1")
+@Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/user", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    @ApiOperation(value = "Get user", notes = "Returns user details based on submitted token")
-    public User getUser(Principal principal){
+    @Autowired
+    public UserService(UserRepository userRepository, AppUserDetailsService appUserDetailsService) {
+        this.userRepository = userRepository;
+        this.appUserDetailsService = appUserDetailsService;
+    }
+
+
+    final
+    AppUserDetailsService appUserDetailsService;
+
+    public User getByUsername(Principal principal) {
         return userRepository.findByUsername(principal.getName());
+    }
+
+    public Response registerUser(String username, String password,
+                                 String name, String surname,String email) {
+        User user = new User(username, password, name, surname, email);
+        return appUserDetailsService.registerUser(user);
+    }
+
+    public Response verifyRegistrationToken(String token) {
+        return appUserDetailsService.checkUser(token);
     }
 }

@@ -16,12 +16,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import sk.ystad.ServerApplication;
 import sk.ystad.common.data_structures.Response;
-import sk.ystad.model.users.database_objects.User;
-import sk.ystad.model.users.services.AppUserDetailsService;
+import sk.ystad.model.users.User;
 
-import java.security.Principal;
-
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
