@@ -25,7 +25,7 @@ const appRoutes: Routes = [
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports     : [
         BrowserModule,
@@ -37,7 +37,7 @@ const appRoutes: Routes = [
         SharedModule,
         TranslateModule.forRoot(),
         FuseMainModule,
-        InvestmentPortalModule
+        InvestmentPortalModule,
     ],
     providers   : [
         FuseSplashScreenService,

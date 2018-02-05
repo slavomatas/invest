@@ -1,30 +1,25 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
     <div fxLayout="column">
-      <!-- WIDGET 5 -->
 
-      <h2>{{'DASHBOARD.CUMULATIVE_CHART' | translate}}</h2>
-      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
 
+
+      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget mat-white-bg" fxLayout="column" fxFlex="100" fxFlex.gt-xs="100" fxFlex.gt-md="50">
+        <div class="padding-top padding-bottom fuse-widget-front mat-elevation-z2">
+        <h2 class="mx-auto">{{'DASHBOARD.CUMULATIVE_CHART' | translate}}</h2>
+        <!-- Cumulative Returns Graph -->
+        <fuse-app-cumulative-chart ></fuse-app-cumulative-chart>
+        <!-- / Cumulative Returns Graph -->
+        </div>
+      </fuse-widget>
+
+      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100" fxFlex.gt-xs="100" fxFlex.gt-md="50">
         <!-- Front -->
-
-        <div fxLayout="row" fxLayoutAlign="start end" fxFlex="100" fxFill="100" fxLayoutWrap>
-          <div class="h-420 mb-16" fxLayout="row" fxFlex="100" fxFill="100">
-            <fuse-app-line-chart fxFill="100"></fuse-app-line-chart>
-          </div>
-
+        <div class=" padding-top padding-bottom fuse-widget-front mat-elevation-z2">
+          <fuse-app-dashboard-portfolio-list></fuse-app-dashboard-portfolio-list>
         </div>
         <!-- / Front -->
-
       </fuse-widget>
-
-      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
-
-        <!-- Front -->
-       
-        <!-- / Front -->
-      </fuse-widget>
-
     </div>
 
 

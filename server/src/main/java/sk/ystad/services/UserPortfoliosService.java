@@ -22,7 +22,6 @@ public class UserPortfoliosService {
         this.userRepository = userRepository;
     }
 
-
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")

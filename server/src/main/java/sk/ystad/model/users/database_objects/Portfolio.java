@@ -16,6 +16,10 @@ public class Portfolio {
     @JsonIgnore
     private User user;
 
+    @JsonIgnore
+    @Column(name = "id_influx")
+    private String idInflux;
+
     public  Portfolio(){
 
     }
@@ -31,6 +35,12 @@ public class Portfolio {
         this.user = user;
     }
 
+    public Portfolio(Long id, String name, User user, String idInflux) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+        this.idInflux = idInflux;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,5 +69,13 @@ public class Portfolio {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getIdInflux() {
+        return idInflux;
+    }
+
+    public void setIdInflux(String idInflux) {
+        this.idInflux = idInflux;
     }
 }

@@ -1,8 +1,15 @@
-import { Portfolio } from '../../types/types';
-import { CumulativeMeasurement } from '../../types/dashboard-types';
+import {
+  Portfolio, PortfolioDetails, TypeOfReturns, CumulativeMeasurement,
+  TypeOfPortfolioReturn
+} from '../../types/types';
+import { PortfolioReturn } from '../../types/dashboard-types';
 import { Observable } from 'rxjs/Observable';
 
 export interface IPortfolioService {
-  getPortfolios(): Observable<Portfolio[]>;
-  getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]>;
+  getPortfolios(): Promise<Portfolio[]>;
+  getCumulativeMeasurements(portfolioId: number, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]>;
+  getPortfolioReturn(portfolioId: number, portfolioReturnType: TypeOfPortfolioReturn, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]>;
+  getPortfolioMarketValue(portfolioId: number, date?: Date): Observable<number>;
+  getPortfolioPositions(portfolioId: number): Promise<{name: string;value: number;}[]>;
+  getPortfoliosListDetails(portfolioReturnType: TypeOfPortfolioReturn): Promise<PortfolioDetails[]>;
 }

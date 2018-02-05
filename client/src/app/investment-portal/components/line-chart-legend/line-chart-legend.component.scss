@@ -1,0 +1,80 @@
+div#values {
+  display: inline-block;
+  width: 100%;
+}
+
+div#market-value-parent {
+  width: 50%;
+  float: left;
+}
+div#market-value {
+  float: right;
+  padding-right: 10px;
+  /*background-color: #DD1144;*/
+}
+
+div#period-value-parent {
+  width: 50%;
+  float: left;
+}
+
+div#period-value {
+  overflow: hidden;
+  float: left;
+  padding-left: 10px;
+  /*background-color: #0086B3;*/
+}
+
+div#period-selector {
+  padding-top: 0.5em;
+  display: block;
+  align-content: center;
+}
+
+div.legend-box {
+  display: inline-block;
+  margin-left: 0.4em;
+  margin-right: 0.4em;
+  /*background-color: #4CAF50;*/
+  color: #9b9b9b;
+  font-size: large;
+
+  cursor: pointer;
+}
+
+div.legend-box.selected  {
+  color: black;
+  border-bottom: solid;
+
+}
+
+div.legend-box:hover {
+  color: black;
+}
+
+td#period-value-percentage {
+  padding-left: 0.2em;
+  font-size: large;
+}
+
+.center {
+  text-align: center;
+}
+
+td.value {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+p {
+  margin: 0;
+}
+
+.red {
+  color: #f20000;
+}
+
+.green {
+  color: #478c00;
+
+}

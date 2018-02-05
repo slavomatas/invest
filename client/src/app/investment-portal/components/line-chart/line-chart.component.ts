@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Portfolio } from '../../types/types';
-import { CumulativeMeasurement, ChartModelPortfolio } from '../../types/dashboard-types';
+import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
+import { ChartModelPortfolio } from '../../types/dashboard-types';
 import { cloneDeep } from 'lodash';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
 import { AppState } from '../../store';
 import { Observable } from 'rxjs/Observable';
+// import {port} from '_debugger';
 
 @Component({
   selector: 'fuse-app-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.css']
+  templateUrl: 'line-chart.component.html',
+  styleUrls: ['line-chart.component.css']
 })
 
 export class LineChartComponent implements OnInit {
@@ -20,7 +21,8 @@ export class LineChartComponent implements OnInit {
   // @select() readonly chartPortfolios$: Observable<ChartModelPortfolio[]>;
   // @select('chartPortfolios') chartPortfolios$: Observable<ChartModelPortfolio[]>;
 
-  chartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
+  // select chart portfolios and filter just the one with selected === true
+  selectedChartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios.filter(portfolio => portfolio.selected)) ;
 
   chartData: ChartModelPortfolio[] = [];
 
@@ -30,26 +32,29 @@ export class LineChartComponent implements OnInit {
   animations = true;
   showXAxis = true;
   showYAxis = true;
+  showGridLines= false;
+  timeline = true;
   gradient = false;
-  showLegend = true;
+  showLegend = false;
   showXAxisLabel = true;
-  xAxisLabel = 'Date';
+  xAxisLabel = '';
   showYAxisLabel = true;
-  yAxisLabel = 'Population';
+  yAxisLabel = '%';
 
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: this.sharedVariableService.getColors()
   };
   // line, area
   autoScale = true;
 
   constructor(
     private portfolioService: PortfolioService,
+    private sharedVariableService: SharedVariableService,
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
 
     // subscribe on chartPortfolios from redux Store
-    this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
+    this.selectedChartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
       if (data != null && data.length > 0) {
         this.chartData = cloneDeep(data);
       }
@@ -61,9 +66,8 @@ export class LineChartComponent implements OnInit {
     console.log(event);
   }
 
+
   ngOnInit() {
-    this.portfolioService.getPortfoliosCumulativeData().then((data: ChartModelPortfolio[]) => {
-      this.actions.getPortfoliosComulativeDataFullfiled(true, data);
-    });
+
   }
 }

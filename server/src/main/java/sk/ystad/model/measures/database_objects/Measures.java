@@ -2,7 +2,7 @@ package sk.ystad.model.measures.database_objects;
 
 public class Measures {
     //Price Measures
-    public static final Measure CLOSE_PRICE = ImmutableMeasure.of("CLOSE_PRICE");
+    public static final Measure CLOSE_PRICE = ImmutableMeasure.of("TIINGO_PRICES");
     public static final Measure CLOSE_LOG_PRICE = ImmutableMeasure.of("CLOSE_LOG_PRICE");
 
     //Time Series Measures
@@ -19,13 +19,14 @@ public class Measures {
     //Portfolio Measures
     public static final Measure POSITION_WEIGHTS = ImmutableMeasure.of("POSITION_WEIGHTS");
     public static final Measure PORTFOLIO_MARKET_VALUE = ImmutableMeasure.of("PORTFOLIO_MARKET_VALUE");
-    public static final Measure PORTFOLIO_DAILY_RETURN = ImmutableMeasure.of("PORTFOLIO_DAILY_RETURN");
-    public static final Measure PORTFOLIO_WEEKLY_RETURN = ImmutableMeasure.of("PORTFOLIO_WEEKLY_RETURN");
-    public static final Measure PORTFOLIO_MONTHLY_RETURN = ImmutableMeasure.of("PORTFOLIO_MONTHLY_RETURN");
-    public static final Measure PORTFOLIO_QUARTERLY_RETURN = ImmutableMeasure.of("PORTFOLIO_QUARTERLY_RETURN");
-    public static final Measure PORTFOLIO_YEARLY_RETURN = ImmutableMeasure.of("PORTFOLIO_YEARLY_RETURN");
-    public static final Measure PORTFOLIO_CUMULATIVE_RETURN = ImmutableMeasure.of("PORTFOLIO_CUMULATIVE_RETURN");
+    public static final Measure PORTFOLIO_DAILY_RETURN = ImmutableMeasure.of("PORTFOLIO_RETURNS");
+    public static final Measure PORTFOLIO_WEEKLY_RETURN = ImmutableMeasure.of("PORTFOLIO_WEEKLY_RETURNS");
+    public static final Measure PORTFOLIO_MONTHLY_RETURN = ImmutableMeasure.of("PORTFOLIO_MONTHLY_RETURNS");
+    public static final Measure PORTFOLIO_QUARTERLY_RETURN = ImmutableMeasure.of("PORTFOLIO_QUARTERLY_RETURNS");
+    public static final Measure PORTFOLIO_YEARLY_RETURN = ImmutableMeasure.of("PORTFOLIO_YEARLY_RETURNS");
+    public static final Measure PORTFOLIO_CUMULATIVE_RETURN = ImmutableMeasure.of("PORTFOLIO_CUMULATIVE_RETURNS");
     public static final Measure PORTFOLIO_DRAWDOWNS = ImmutableMeasure.of("PORTFOLIO_DRAWDOWNS");
+    public static final Measure PORTFOLIO_SUMMARY = ImmutableMeasure.of("PORTFOLIO_SUMMARY");
 
     public static final Measure PORTFOLIO_PERF_STATS = ImmutableMeasure.of("PORTFOLIO_PERF_STATS");
     public static final Measure PORTFOLIO_COMPONENT_PERF_STATS = ImmutableMeasure.of("PORTFOLIO_COMPONENT_PERF_STATS");

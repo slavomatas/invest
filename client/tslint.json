@@ -111,7 +111,7 @@
         "component-selector": [
             true,
             "element",
-            "fuse",
+            ["fuse", "invest"],
             "kebab-case"
         ],
         "use-input-property-decorator": true,

@@ -19,6 +19,8 @@ import { PortfolioService } from '../../services/portfolio/portfolio.service';
   animations: fuseAnimations
 })
 export class DashboardComponent {
+  public static colors: string[] = ['#b71c1c', '#311b92', '#1b5e20', '#ff6f00', '#bf360c',  '#212121'];
+
   constructor(
     private portfolioService: PortfolioService,
     private translationLoader: FuseTranslationLoaderService,
@@ -29,5 +31,4 @@ export class DashboardComponent {
     this.translationLoader.loadTranslations(english, slovak);
 
   }
-
 }

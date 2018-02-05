@@ -1,0 +1,17 @@
+<h2 class="mx-auto">Last Daily Gain/Loss %</h2>
+<ngx-charts-bar-horizontal class=""
+  *ngIf="single.length > 0"
+  [scheme]="colorScheme"
+  [results]="single"
+  [gradient]="gradient"
+  [view]="view"
+  [xScaleMax]="xScaleMax"
+  [xAxis]="showXAxis"
+  [yAxis]="showYAxis"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
+  [barPadding]="barPadding"
+  (select)="onSelect($event)">
+</ngx-charts-bar-horizontal>

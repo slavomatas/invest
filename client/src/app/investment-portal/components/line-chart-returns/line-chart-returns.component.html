@@ -1,0 +1,71 @@
+<div id="wrapper">
+  <div id="values">
+    <div id="market-value-parent">
+      <div id="market-value" class="center">
+        <tr>
+          <td class="value">
+            {{currencySymbol}}{{portfolioSummaryObject.marketValue}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            market value
+          </td>
+        </tr>
+      </div>
+    </div>
+    <div id="period-value-parent">
+      <div id="period-value" class="center">
+        <tr>
+          <td class="value">
+            {{currencySymbol}}{{portfolioSummaryObject.periodMarketValue}}
+          </td>
+
+          <div *ngIf="portfolioSummaryObject.periodMarketValuePercentage >= 0; then positive_percentage else negative_percentage"></div>
+          <ng-template #positive_percentage>
+            <td id="period-value-percentage" class="green">
+              &#9650; ({{(portfolioSummaryObject.periodMarketValuePercentage * 100).toFixed(2)}}%)
+          </ng-template>
+          <ng-template #negative_percentage>
+            <td id="period-value-percentage" class="red">
+              &#9660; ({{(portfolioSummaryObject.periodMarketValuePercentage * 100).toFixed(2)}}%)
+            </td>
+          </ng-template>
+        </tr>
+        <tr>
+          <td>
+            {{definedPeriods.get(selectedPeriod)}}
+          </td>
+        </tr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="period-selector" class="center">
+  <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='1M'; else selected1M">1M</div>
+  <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='3M'; else selected3M">3M</div>
+  <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='6M'; else selected6M">6M</div>
+  <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='9M'; else selected9M">9M</div>
+  <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='12M'; else selected12M">12M</div>
+  <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='ALL'; else selectedALL">ALL</div>
+</div>
+
+<ng-template #selected1M>
+  <div class="period-box selected" (click)="periodEvent($event)">1M</div>
+</ng-template>
+<ng-template #selected3M>
+  <div class="period-box selected" (click)="periodEvent($event)">3M</div>
+</ng-template>
+<ng-template #selected6M>
+  <div class="period-box selected" (click)="periodEvent($event)">6M</div>
+</ng-template>
+<ng-template #selected9M>
+  <div class="period-box selected" (click)="periodEvent($event)">9M</div>
+</ng-template>
+<ng-template #selected12M>
+  <div class="period-box selected" (click)="periodEvent($event)">12M</div>
+</ng-template>
+<ng-template #selectedALL>
+  <div class="period-box selected" (click)="periodEvent($event)">ALL</div>
+</ng-template>

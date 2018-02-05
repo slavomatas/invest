@@ -1,22 +1,34 @@
 import { Action } from 'redux';
+import { Portfolio, PortfolioDetails } from './types/types';
 import { User } from './types/types';
 import { ChartModelPortfolio } from './types/dashboard-types';
 import { Token } from './types/authentication-types';
 import { PortfolioActions } from './store/actions/portfolio-actions';
-import {AuthenticationActions} from './store/actions/authentication-actions';
+import { AuthenticationActions } from './store/actions/authentication-actions';
 
 export interface AppState {
     user: User,
     token: Token,
     chartPortfolios: ChartModelPortfolio[];
+    dashboardPortfolioList: PortfolioDetails[];
     isGettingPortfoliosCumulativeData: boolean;
     cumulativeFetchError: string | undefined;
+    portfoliosDetailsFetchError: string | undefined;
+
+    cumulativeChartSelectedPeriod: string;
+    currencySymbol: string;
 }
 
 export const INITIAL_STATE: AppState = {
     chartPortfolios: [],
+    dashboardPortfolioList: [],
     isGettingPortfoliosCumulativeData: false,
     cumulativeFetchError: undefined,
+    portfoliosDetailsFetchError: undefined,
+
+    // CumulativeChartControls
+    cumulativeChartSelectedPeriod: 'ALL',
+    currencySymbol: '$',
     user: undefined,
     token: undefined
 };
@@ -42,6 +54,29 @@ export function rootReducer(lastState: AppState, action: any): AppState {
               isGettingPortfoliosCumulativeData: true,
               cumulativeFetchError: undefined
             };
+        case PortfolioActions.GET_PORTFOLIOS_LIST_DETAILS:
+          return {
+            ...lastState,
+            dashboardPortfolioList: action.payload,
+            portfoliosDetailsFetchError: undefined
+          };
+        case PortfolioActions.FGET_PORTFOLIOS_LIST_DETAILS:
+          return {
+            ...lastState,
+            portfoliosDetailsFetchError: action.payload
+          };
+
+        case PortfolioActions.SET_CUMULATIVE_CHART_PERIOD:
+            return {
+                ...lastState,
+                cumulativeChartSelectedPeriod: action.payload
+            };
+        case PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED:
+          return {
+            ...lastState,
+            chartPortfolios: action.payload,
+          };
+
         case AuthenticationActions.GET_USER_SUCCESS:
             return <AppState> {
               ...lastState,
