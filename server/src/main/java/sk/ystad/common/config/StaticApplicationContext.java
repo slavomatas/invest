@@ -1,4 +1,4 @@
-package sk.ystad.server_context;
+package sk.ystad.common.config;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
