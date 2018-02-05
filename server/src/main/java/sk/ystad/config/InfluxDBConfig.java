@@ -3,6 +3,7 @@ package sk.ystad.config;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,13 +12,20 @@ import org.springframework.data.influxdb.InfluxDBConnectionFactory;
 import org.springframework.data.influxdb.InfluxDBProperties;
 import org.springframework.data.influxdb.InfluxDBTemplate;
 import org.springframework.data.influxdb.converter.PointConverter;
-import sk.ystad.common.properties.PropertiesLoader;
 import sk.ystad.model.measures.repositores.PortfolioMeasurementRepository;
 
 @Configuration
 @EnableConfigurationProperties(InfluxDBProperties.class)
 public class InfluxDBConfig
 {
+    @Value("${spring.influxdb.url}")
+    private String influxUrl;
+    @Value("${spring.influxdb.username}")
+    private String influxUser;
+    @Value("${spring.influxdb.password}")
+    private String influxPassword;
+
+
     @Bean
     public InfluxDBConnectionFactory connectionFactory(final InfluxDBProperties properties)
     {
@@ -46,8 +54,7 @@ public class InfluxDBConfig
 
     @Bean
     public InfluxDB influxDb() {
-        PropertiesLoader propertiesLoader = PropertiesLoader.getInstance();
-        return InfluxDBFactory.connect(propertiesLoader.getInfluxUrl(), propertiesLoader.getInfluxUser(), propertiesLoader.getInfluxPassword());
+        return InfluxDBFactory.connect(influxUrl, influxUser, influxPassword);
     }
 
     @Bean
