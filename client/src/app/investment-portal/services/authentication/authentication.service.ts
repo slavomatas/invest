@@ -31,7 +31,7 @@ export class AuthenticationService implements IAuthenticationService {
    * @returns {Promise<Token>}
    */
   public login(email: string, password: string): Promise<Token> {
-    let hash = Md5.hashStr(password).toLocaleString();
+    const hash = Md5.hashStr(password).toLocaleString();
     const body = `username=${encodeURIComponent(email)}&password=${encodeURIComponent(hash)}&grant_type=password`;
 
     const headers = new HttpHeaders({
@@ -50,9 +50,9 @@ export class AuthenticationService implements IAuthenticationService {
    * @returns {Promise<RequestStatus>}
    */
   public register(name: string, surname: string, email: string, password: string): Promise<RequestStatus> {
-    let params: HttpParams = new HttpParams();
+    const params: HttpParams = new HttpParams();
 
-    let hash = Md5.hashStr(password).toLocaleString();
+    const hash = Md5.hashStr(password).toLocaleString();
     const user = {
       'password': hash,
       'surname': surname,

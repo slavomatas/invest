@@ -32,13 +32,13 @@ export class MockAuthenticationService implements IAuthenticationService {
           () => {
             resolve(
               {
-                "name":"Martina","email":"halajovamartina@gmail.com",
-                "surname":"Halajova",
-                "username":"halajovamartina@gmail.com",
-                "roles":[
+                'name': 'Martina', 'email': 'halajovamartina@gmail.com',
+                'surname': 'Halajova',
+                'username': 'halajovamartina@gmail.com',
+                'roles': [
                   {
-                    "roleName":"STANDARD_USER",
-                    "description":null
+                    'roleName': 'STANDARD_USER',
+                    'description': null
                   }]
               }
             );
@@ -59,11 +59,11 @@ export class MockAuthenticationService implements IAuthenticationService {
         setTimeout(
           () => {
             resolve(
-              { "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwiZXhwIjoxNTExOTU4MTk5LCJ1c2VyX25hbWUiOiJhQGIuY29tIiwianRpIjoiOGY2NTA2NGMtZGRmNy00NTJjLTlhZTctYzU5NjRiNGVhZGY4IiwiY2xpZW50X2lkIjoidGVzdGp3dGNsaWVudGlkIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.Qpi_RdaweHb5t3MNLpBJuHNLhwVVsTK3pxoja3WYqFQ",
-                "token_type":"bearer",
-                "expires_in":43199,
-                "scope":"read write",
-                "jti":"8f65064c-ddf7-452c-9ae7-c5964b4eadf8"
+              { 'access_token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwiZXhwIjoxNTExOTU4MTk5LCJ1c2VyX25hbWUiOiJhQGIuY29tIiwianRpIjoiOGY2NTA2NGMtZGRmNy00NTJjLTlhZTctYzU5NjRiNGVhZGY4IiwiY2xpZW50X2lkIjoidGVzdGp3dGNsaWVudGlkIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.Qpi_RdaweHb5t3MNLpBJuHNLhwVVsTK3pxoja3WYqFQ',
+                'token_type' : 'bearer',
+                'expires_in' : 43199,
+                'scope' : 'read write',
+                'jti' : '8f65064c-ddf7-452c-9ae7-c5964b4eadf8'
               }
             );
           },
@@ -100,7 +100,7 @@ export class MockAuthenticationService implements IAuthenticationService {
     return new Promise<RequestStatus>((resolve) => {
       return setTimeout(() => {
         resolve({ success: true, msg: null});
-      }, RESPONSE_TIMEOUT*3);
+      }, RESPONSE_TIMEOUT * 3);
     });
   }
 

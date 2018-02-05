@@ -43,11 +43,11 @@ export class PortfolioOverviewComponent implements OnInit {
   }
 
   private setChartData(newData: Position[]) {
-    for( let position of newData) {
+    for (const position of newData) {
       this.chartData.push(
         {
-          "name": position.symbol,
-          "value": position.value
+          'name': position.symbol,
+          'value': position.value
         }
       );
     }

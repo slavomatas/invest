@@ -78,8 +78,8 @@ export class LoginComponent implements OnInit
 
     public onLogin()
     {
-      let password = this.loginForm.value.password;
-      let email = this.loginForm.value.email;
+      const password = this.loginForm.value.password;
+      const email = this.loginForm.value.email;
 
       // Get access token
       this.authenticationService.login( email, password).then( (data: Token) => {

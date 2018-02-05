@@ -82,10 +82,10 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   public onRegister() {
-    let name = this.registerForm.value.name;
-    let surname = this.registerForm.value.surname;
-    let email = this.registerForm.value.email;
-    let password = this.registerForm.value.password;
+    const name = this.registerForm.value.name;
+    const surname = this.registerForm.value.surname;
+    const email = this.registerForm.value.email;
+    const password = this.registerForm.value.password;
 
     this.authenticationService.register( name, surname, email, password).then((data: RequestStatus) => {
       this.staticAlertClosed = false;
