@@ -27,7 +27,6 @@ export class PortfolioService implements IPortfolioService {
 
   }
 
-
   /**
    * Fetches cumulative data for all portfolios
    */
