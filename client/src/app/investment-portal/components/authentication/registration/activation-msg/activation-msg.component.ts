@@ -8,7 +8,7 @@ import {ActivatedRoute} from '@angular/router';
 import {AuthenticationService} from '../../../../services/authentication/authentication.service';
 
 @Component({
-  selector: 'fuse-invest-activation-msg',
+  selector: 'invest-activation-msg',
   templateUrl: './activation-msg.component.html',
   styleUrls: ['./activation-msg.component.scss'],
   animations: fuseAnimations

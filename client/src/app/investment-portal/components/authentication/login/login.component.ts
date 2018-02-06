@@ -9,7 +9,7 @@ import { Token } from '../../../types/authentication-types';
 import { Router } from '@angular/router';
 
 @Component({
-    selector   : 'fuse-login',
+    selector   : 'invest-login',
     templateUrl: './login.component.html',
     styleUrls  : ['./login.component.scss'],
     animations : fuseAnimations

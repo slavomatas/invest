@@ -13,7 +13,7 @@ import { AppState } from '../../store/store';
 
 
 @Component({
-  selector: 'fuse-invest-dashboard',
+  selector: 'invest-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   animations: fuseAnimations

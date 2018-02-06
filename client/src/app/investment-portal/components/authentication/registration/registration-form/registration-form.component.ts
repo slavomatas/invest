@@ -9,7 +9,7 @@ import { RequestStatus } from '../../../../types/authentication-types';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'fuse-invest-registration-form',
+  selector: 'invest-registration-form',
   templateUrl: './registration-form.component.html',
   styleUrls: ['./registration-form.component.scss'],
   animations: fuseAnimations,

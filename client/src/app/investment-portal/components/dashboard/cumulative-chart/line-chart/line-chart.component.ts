@@ -10,7 +10,7 @@ import { PortfolioService } from '../../../../services/portfolio/portfolio.servi
 import { AppState } from '../../../../store/store';
 
 @Component({
-  selector: 'fuse-app-line-chart',
+  selector: 'invest-line-chart',
   templateUrl: 'line-chart.component.html',
   styleUrls: ['line-chart.component.css']
 })
