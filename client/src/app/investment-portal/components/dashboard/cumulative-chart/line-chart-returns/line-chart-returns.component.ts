@@ -1,11 +1,11 @@
 import { Component, OnInit, NgModule} from '@angular/core';
-import { ChartModelPortfolio, PortfolioSummary } from '../../types/dashboard-types';
 import { cloneDeep } from 'lodash';
-import { PortfolioService } from '../../services/portfolio/portfolio.service';
-import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
-import { AppState } from '../../store/store';
+import { ChartModelPortfolio, PortfolioSummary } from '../../../../types/dashboard-types';
+import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
+import { AppState } from '../../../../store/store';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 
 @Component({
   selector: 'fuse-invest-line-chart-returns',

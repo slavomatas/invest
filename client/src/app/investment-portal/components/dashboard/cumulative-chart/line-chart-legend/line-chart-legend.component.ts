@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { PortfolioService} from '../../services/portfolio/portfolio.service';
-import { PortfolioActions} from '../../store/actions/portfolio-actions';
 import { NgRedux} from '@angular-redux/store';
-import { ChartModelPortfolio } from '../../types/dashboard-types';
-import { colorScheme } from '../../constants/constants';
-import { AppState } from '../../store/store';
+import { ChartModelPortfolio } from '../../../../types/dashboard-types';
+import { colorScheme } from '../../../../constants/constants';
+import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+import { AppState } from '../../../../store/store';
 
 @Component({
   selector: 'fuse-invest-line-chart-legend',

@@ -1,11 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux } from '@angular-redux/store';
-import { PortfolioDetails } from '../../types/types';
 import { forEach } from '@angular/router/src/utils/collection';
-import { colorScheme } from '../../constants/constants';
-import { AppState } from '../../store/store';
-
+import { PortfolioDetails } from '../../../../types/types';
+import { colorScheme } from '../../../../constants/constants';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+import { AppState } from '../../../../store/store';
 @Component({
   selector: 'invest-horizontal-bar-chart',
   templateUrl: 'horizontal-bar-chart.component.html',

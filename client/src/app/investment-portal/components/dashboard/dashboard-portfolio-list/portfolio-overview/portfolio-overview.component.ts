@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { PortfolioDetails } from '../../types/types';
 import {forEach} from '@angular/router/src/utils/collection';
-import { colorScheme } from '../../constants/constants';
+import { PortfolioDetails } from '../../../../types/types';
+import { colorScheme } from '../../../../constants/constants';
 
 interface ChartData {
   name: string;

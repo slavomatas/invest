@@ -12,18 +12,19 @@ import { LoginComponent } from './components/authentication/login/login.componen
 import { PortfoliosComponent } from './components/portfolios/portfolios.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RegistrationFormComponent } from './components/authentication/registration/registration-form/registration-form.component';
-import { LineChartComponent } from './components/line-chart/line-chart.component';
 import { FuseWidgetModule } from '../core/components/widget/widget.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AuthenticationService } from './services/authentication/authentication.service';
 import { ActivationMsgComponent } from './components/authentication/registration/activation-msg/activation-msg.component';
 import { PortfolioService } from './services/portfolio/portfolio.service';
-import { LineChartReturnsComponent } from './components/line-chart-returns/line-chart-returns.component';
-import { LineChartLegendComponent} from './components/line-chart-legend/line-chart-legend.component';
 import { CumulativeChartComponent } from './components/dashboard/cumulative-chart/cumulative-chart.component';
 import { DashboardPortfolioListComponent } from './components/dashboard/dashboard-portfolio-list/dashboard-portfolio-list.component';
-import { PortfolioOverviewComponent } from './components/portfolio-overview/portfolio-overview.component';
-import { HorizontalBarChartComponent } from './components/horizontal-bar-chart/horizontal-bar-chart.component';
+import { LineChartComponent } from './components/dashboard/cumulative-chart/line-chart/line-chart.component';
+import { LineChartReturnsComponent } from './components/dashboard/cumulative-chart/line-chart-returns/line-chart-returns.component';
+import { LineChartLegendComponent } from './components/dashboard/cumulative-chart/line-chart-legend/line-chart-legend.component';
+import { PortfolioOverviewComponent } from './components/dashboard/dashboard-portfolio-list/portfolio-overview/portfolio-overview.component';
+import { HorizontalBarChartComponent } from './components/dashboard/dashboard-portfolio-list/horizontal-bar-chart/horizontal-bar-chart.component';
+
 
 const routes = [
   { path: 'login', component: LoginComponent },
