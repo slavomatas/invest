@@ -1,10 +1,10 @@
 import { Action } from 'redux';
-import { Portfolio, PortfolioDetails } from './types/types';
-import { User } from './types/types';
-import { ChartModelPortfolio } from './types/dashboard-types';
-import { Token } from './types/authentication-types';
-import { PortfolioActions } from './store/actions/portfolio-actions';
-import { AuthenticationActions } from './store/actions/authentication-actions';
+import { User, PortfolioDetails } from '../types/types';
+import { Token } from '../types/authentication-types';
+import { ChartModelPortfolio } from '../types/dashboard-types';
+import { PortfolioActions } from './actions/portfolio-actions';
+import { AuthenticationActions } from './actions/authentication-actions';
+
 
 export interface AppState {
     user: User;
