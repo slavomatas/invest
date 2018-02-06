@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux } from '@angular-redux/store';
-import { AppState } from '../../store';
 import { PortfolioDetails } from '../../types/types';
 import { forEach } from '@angular/router/src/utils/collection';
 import {SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
+import { AppState } from '../../store/store';
 
 @Component({
   selector: 'invest-horizontal-bar-chart',

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/catch';
 import {NgRedux} from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
 import {Token} from '../../types/authentication-types';
-import {AppState} from '../../store';
+import { AppState } from '../../store/store';
 
 @Injectable()
 export class AuthHttpInterceptor implements HttpInterceptor {

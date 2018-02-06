@@ -7,9 +7,9 @@ import { locale as slovak } from './i18n/sk';
 import { fuseAnimations } from '../../../core/animations';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
-import { AppState } from '../../store';
 import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
+import { AppState } from '../../store/store';
 
 
 @Component({

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../core/modules/shared.module';
 import { InvestmentPortalComponent } from './investment-portal.component';
-import { rootReducer, INITIAL_STATE, AppState } from './store';
 import { applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { StoreModule } from './store/store-module';

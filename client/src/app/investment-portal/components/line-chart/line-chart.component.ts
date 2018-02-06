@@ -5,9 +5,9 @@ import { cloneDeep } from 'lodash';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
-import { AppState } from '../../store';
 import { Observable } from 'rxjs/Observable';
 // import {port} from '_debugger';
+import { AppState } from '../../store/store';
 
 @Component({
   selector: 'fuse-app-line-chart',

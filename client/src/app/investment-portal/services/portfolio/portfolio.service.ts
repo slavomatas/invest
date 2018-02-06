@@ -8,8 +8,8 @@ import {
 import { PortfolioReturn, ChartModelPortfolio } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
 import { NgRedux, select } from '@angular-redux/store';
-import { AppState } from '../../store';
 import { cloneDeep } from 'lodash';
+import { AppState } from '../../store/store';
 
  const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
  const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';

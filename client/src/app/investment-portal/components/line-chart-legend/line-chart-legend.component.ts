@@ -3,8 +3,8 @@ import { PortfolioService} from '../../services/portfolio/portfolio.service';
 import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
 import { PortfolioActions} from '../../store/actions/portfolio-actions';
 import { NgRedux} from '@angular-redux/store';
-import { AppState } from '../../store';
 import { ChartModelPortfolio } from '../../types/dashboard-types';
+import { AppState } from '../../store/store';
 
 @Component({
   selector: 'fuse-invest-line-chart-legend',
