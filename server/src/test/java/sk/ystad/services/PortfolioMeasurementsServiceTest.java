@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import sk.ystad.ServerApplication;
-import sk.ystad.model.measures.database_objects.ImmutableMeasure;
-import sk.ystad.model.measures.repositores.PortfolioMeasurementRepository;
-import sk.ystad.model.timeseries.database_objects.TimeSeriesSimpleItem;
+import sk.ystad.model.measurements.ImmutableMeasure;
+import sk.ystad.repositories.measurements.PortfolioMeasurementRepository;
+import sk.ystad.model.timeseries.TimeSeriesSimpleItem;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

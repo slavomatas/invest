@@ -16,12 +16,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import sk.ystad.ServerApplication;
 import sk.ystad.common.data_structures.Response;
-import sk.ystad.model.users.database_objects.User;
-import sk.ystad.model.users.services.AppUserDetailsService;
+import sk.ystad.model.users.User;
 
-import java.security.Principal;
-
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,7 +39,7 @@ public class AuthorizationControllerTest {
     private WebApplicationContext wac;
 
     @MockBean
-    AppUserDetailsService appUserDetailsService;
+    UserService userService;
 
     @Before
     public void setup() {
@@ -60,7 +56,7 @@ public class AuthorizationControllerTest {
         String surname ="test";
         String password ="test";
 
-        Mockito.when(appUserDetailsService.registerUser(any(User.class))).thenReturn(response);
+        Mockito.when(userService.registerUser(any(User.class))).thenReturn(response);
 
         mvc.perform(post("/auth/register")
                 .param("name", name)
@@ -80,7 +76,7 @@ public class AuthorizationControllerTest {
         Response response = new Response(true, null);
         String token = "stkvhVq4XwKvVCE6jiJqbqP8Y3mxKyfO";
 
-        Mockito.when(appUserDetailsService.checkUser(token)).thenReturn(response);
+        Mockito.when(userService.checkUser(token)).thenReturn(response);
 
         mvc.perform(post("/auth/register/" + token)
                 .contentType(MediaType.APPLICATION_JSON))
