@@ -5,20 +5,6 @@ import { RequestStatus, Token } from '../../types/authentication-types';
 
 const RESPONSE_TIMEOUT = 500;
 
-describe('DashboardSummaryService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: MockAuthenticationService,
-          useFactory: () =>  new MockAuthenticationService()
-        }
-      ]
-    });
-  });
-
-});
-
 export class MockAuthenticationService implements IAuthenticationService {
 
   /**
@@ -59,7 +45,8 @@ export class MockAuthenticationService implements IAuthenticationService {
         setTimeout(
           () => {
             resolve(
-              { 'access_token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwiZXhwIjoxNTExOTU4MTk5LCJ1c2VyX25hbWUiOiJhQGIuY29tIiwianRpIjoiOGY2NTA2NGMtZGRmNy00NTJjLTlhZTctYzU5NjRiNGVhZGY4IiwiY2xpZW50X2lkIjoidGVzdGp3dGNsaWVudGlkIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.Qpi_RdaweHb5t3MNLpBJuHNLhwVVsTK3pxoja3WYqFQ',
+              { 'access_token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwiZXhwIjoxNTExOTU4MTk5LCJ1c2VyX25hbWUiOiJhQGIuY29tIiwianRpIjoiOGY2NTA2'
+              + 'NGMtZGRmNy00NTJjLTlhZTctYzU5NjRiNGVhZGY4IiwiY2xpZW50X2lkIjoidGVzdGp3dGNsaWVudGlkIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.Qpi_RdaweHb5t3MNLpBJuHNLhwVVsTK3pxoja3WYqFQ',
                 'token_type' : 'bearer',
                 'expires_in' : 43199,
                 'scope' : 'read write',
@@ -105,4 +92,18 @@ export class MockAuthenticationService implements IAuthenticationService {
   }
 
 }
+
+describe('DashboardSummaryService', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: MockAuthenticationService,
+          useFactory: () =>  new MockAuthenticationService()
+        }
+      ]
+    });
+  });
+
+});
 

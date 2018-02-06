@@ -13,7 +13,7 @@ import {SharedVariableService} from '../../services/shared-variable-service/shar
 })
 export class HorizontalBarChartComponent implements OnInit, OnChanges {
   @Input() portfolioDetailsList: PortfolioDetails[];
-  portfoliosNum: number = 1;
+  portfoliosNum = 1;
   single: any = [];
 
   // Options of chart

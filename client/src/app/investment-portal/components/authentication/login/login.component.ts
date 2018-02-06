@@ -82,11 +82,11 @@ export class LoginComponent implements OnInit
       const email = this.loginForm.value.email;
 
       // Get access token
-      this.authenticationService.login( email, password).then( (data: Token) => {
-          this.actions.getAccessTokenFullfiled(true, data);
+      this.authenticationService.login( email, password).then( (loginData: Token) => {
+          this.actions.getAccessTokenFullfiled(true, loginData);
           // Get user details
-          this.authenticationService.getUser().then((data: User) => {
-            this.actions.getUserDataFullfiled(true, data);
+          this.authenticationService.getUser().then((userData: User) => {
+            this.actions.getUserDataFullfiled(true, userData);
             // Forward to dashboard page
             this.router.navigate(['dashboard']);
           });

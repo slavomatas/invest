@@ -24,10 +24,10 @@ export class CumulativeChartComponent implements OnInit {
     private ngRedux: NgRedux<AppState>
   ) {
 
-    this.cumulativeChartSelectedPeriod$.subscribe((data: string) => {
-      console.log(data);
-      if (data != null) {
-        this.selectedPeriod = data;
+    this.cumulativeChartSelectedPeriod$.subscribe((chartData: string) => {
+      console.log(chartData);
+      if (chartData != null) {
+        this.selectedPeriod = chartData;
 
         let dateFrom: Date = new Date();
         const dateTo: Date = new Date();
@@ -58,8 +58,8 @@ export class CumulativeChartComponent implements OnInit {
             break;
           }
         }
-        this.portfolioService.getPortfoliosCumulativeData(dateFrom, dateTo).then((data: ChartModelPortfolio[]) => {
-          this.actions.getPortfoliosComulativeDataFullfiled(true, data);
+        this.portfolioService.getPortfoliosCumulativeData(dateFrom, dateTo).then((cumulativeData: ChartModelPortfolio[]) => {
+          this.actions.getPortfoliosComulativeDataFullfiled(true, cumulativeData);
         });
       }
     });

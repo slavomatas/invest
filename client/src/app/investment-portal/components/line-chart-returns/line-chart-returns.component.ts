@@ -61,7 +61,7 @@ export class LineChartReturnsComponent implements OnInit {
 
       this.portfolioSummaryObject.marketValue = this.numberWithCommas(totalMarketValue);
       this.portfolioSummaryObject.periodMarketValue = this.numberWithCommas(totalOldMarketValue);
-      this.portfolioSummaryObject.periodMarketValuePercentage = (totalMarketValue == 0) ? 0 : ((totalMarketValue - totalOldMarketValue) / totalMarketValue);
+      this.portfolioSummaryObject.periodMarketValuePercentage = (totalMarketValue === 0) ? 0 : ((totalMarketValue - totalOldMarketValue) / totalMarketValue);
     });
 
     this.currencySymbol$.subscribe((data: string) => {
