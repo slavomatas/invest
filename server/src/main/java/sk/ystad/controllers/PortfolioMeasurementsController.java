@@ -60,7 +60,8 @@ public class PortfolioMeasurementsController {
     @ApiOperation(value = "Get details for portfolio", notes = "Array of positions with market value for given portfolio can be provided.")
     @GetMapping("/user/portfolios/{portfolioId}/positions")
     public List<Position> getPositionsWithMarketValue(@PathVariable("portfolioId") Long portfolioId) {
-        return portfolioService.getPositionsWithMarketValue(portfolioId);
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        return portfolioService.getPositionsWithMarketValue(portfolio);
     }
 
     @CrossOrigin(origins = "*")

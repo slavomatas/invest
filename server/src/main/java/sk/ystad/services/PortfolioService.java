@@ -17,6 +17,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 public class PortfolioService {
 
@@ -39,7 +40,7 @@ public class PortfolioService {
         //Get influx data for each portfolio
         for (Portfolio p: portfolios) {
             getPortfolioDetails(p);
-            p.setPositions(getPositionsWithMarketValue(p.getId()));
+            p.setPositions(getPositionsWithMarketValue(p));
         }
         return portfolios;
     }
@@ -52,7 +53,7 @@ public class PortfolioService {
         List<QueryResult.Result> results = queryResult.getResults();
 
         if (results != null && results.size() > 0) {
-            List summaryValues = results.get(0).getSeries().get(0).getValues().get(0);
+            List<Object> summaryValues = results.get(0).getSeries().get(0).getValues().get(0);
             if (!summaryValues.isEmpty()) {
                 Returns returns = new Returns();
                 returns.setMonthly((double) summaryValues.get(1));
@@ -77,21 +78,21 @@ public class PortfolioService {
      */
     public List<Position> getPositionsWithMarketValue(Portfolio portfolio) {
         List<Position> positionsWithMarketValue = new ArrayList<>();
-        List<Position> positionsWithWeights = getActualPortfolioPositionsWeights(portfolio.getIdInflux());
+        String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolio.getIdInflux());
+        Query query = new Query(queryStr, Measures.PORTFOLIO_POSITIONS.getName());
+        QueryResult queryResult = this.influxDB.query(query);
 
-        for (Position positionWithWeight : positionsWithWeights) {
-            Double actualClosePrice = 0.0;
-            Double actualMarketValue = 0.0;
-            if (positionWithWeight.getSymbol().equals("cash")) {
-                actualMarketValue = getPortfolioDetails(portfolio).getCash();
-            }
-            else {
-                actualClosePrice = getActualClosePriceForPosition(positionWithWeight.getSymbol());
-                actualMarketValue = actualClosePrice * positionWithWeight.getValue();
-            }
+        List<QueryResult.Result> results = queryResult.getResults();
 
-            Position positionWithMarketValue = new Position(positionWithWeight.getSymbol(), actualMarketValue);
-            positionsWithMarketValue.add(positionWithMarketValue);
+        if (results != null && results.size() > 0) {
+            List<String> positionNames = results.get(0).getSeries().get(0).getColumns();
+            List<List<Object>> marketValues = results.get(0).getSeries().get(0).getValues();
+            List<Object> actualmarketValues = marketValues.get(marketValues.size() - 1);
+            if (!positionNames.isEmpty() && !actualmarketValues.isEmpty()) {
+                for (int i = 1; i < positionNames.size(); i++) {
+                    positionsWithMarketValue.add(new Position(positionNames.get(i), (Double) actualmarketValues.get(i)));
+                }
+            }
         }
 
         return positionsWithMarketValue;
@@ -150,10 +151,5 @@ public class PortfolioService {
         }
 
         return positions;
-    }
-
-    public List<Position> getPositionsWithMarketValue(Long portfolioId) {
-        Portfolio portfolio = this.portfolioRepository.findOne(portfolioId);
-        return getPositionsWithMarketValue(portfolio);
     }
 }
