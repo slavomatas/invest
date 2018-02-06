@@ -1,6 +1,5 @@
 package sk.ystad.services;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,7 +43,6 @@ public class UserService implements UserDetailsService {
     @Value("${server.fe.domain}")
     private String serverDomain;
 
-    static Logger log = Logger.getLogger(UserService.class.getName());
 
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, RoleRepository roleRepository) {
@@ -174,7 +172,7 @@ public class UserService implements UserDetailsService {
             // If token is expired, delete the user
             if (registrationExpired(user.getRegistrationTimestamp())) {
                 userRepository.delete(user);
-                log.info("Deleted unactived user " + user.getUsername() + " : token expired");
+                //log.info("Deleted unactived user " + user.getUsername() + " : token expired");
             }
             ;
         }

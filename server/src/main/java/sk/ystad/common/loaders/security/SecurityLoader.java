@@ -3,8 +3,6 @@ package sk.ystad.common.loaders.security;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import sk.ystad.ServerApplication;
 import sk.ystad.common.loaders.LoaderResult;
 import sk.ystad.model.securities.Etf;
@@ -20,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SecurityLoader {
-
-    private static final Logger log = LoggerFactory.getLogger(ServerApplication.class);
 
     /**
      *  Loads ETFs from file "../data/US_ETF.csv"
@@ -57,23 +53,23 @@ public class SecurityLoader {
                     succesfullCount++;
                 } catch (ParseException e) {
                     failedCount++;
-                    log.error("Unable to parse etf csv file - problem with date format, at line " + (succesfullCount + 1) + ", " + e.getMessage());
+                    //log.error("Unable to parse etf csv file - problem with date format, at line " + (succesfullCount + 1) + ", " + e.getMessage());
                 } catch (NumberFormatException e) {
                     failedCount++;
-                    log.error("Unable to parse etf csv file - problem with number format, at line " + (succesfullCount + 1) + ", " + e.getMessage());
+                    //log.error("Unable to parse etf csv file - problem with number format, at line " + (succesfullCount + 1) + ", " + e.getMessage());
                 }
             }
         } catch (IOException e) {
             // if file wasn't found
-            log.error("Unable to parse etf csv file - problem with file " + e.getMessage());
+            //log.error("Unable to parse etf csv file - problem with file " + e.getMessage());
             resultMessage = "Unable to parse etf csv file - problem with file " + e.getMessage();
         }
         if (securityRepository != null) {
             securityRepository.save(etfs);
-            log.info("ETF securities saved succesfully, number of inserted etfs " + etfs.size());
+            //log.info("ETF securities saved succesfully, number of inserted etfs " + etfs.size());
         } else {
             resultMessage = "Unable to save etf - security repository is null";
-            log.error(resultMessage);
+            //log.error(resultMessage);
         }
         return new LoaderResult(resultMessage, succesfullCount, failedCount);
     }

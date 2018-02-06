@@ -1,6 +1,5 @@
 package sk.ystad.influxdb;
 
-import org.apache.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
@@ -24,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ConnectionTest {
 
-    static Logger LOG = Logger.getLogger(ConnectionTest.class.getName());
+   // static Logger LOG = Logger.getLogger(ConnectionTest.class.getName());
 
     @Autowired
     public InfluxDBTemplate<Point> influxDBTemplate;
@@ -53,7 +52,7 @@ public class ConnectionTest {
         // ... and query the latest data
         final Query q = new Query("SELECT * FROM cpu GROUP BY tenant", influxDBTemplate.getDatabase());
         QueryResult queryResult = influxDBTemplate.getConnection().query(q);
-        LOG.info(queryResult);
+        //LOG.info(queryResult);
         influxDBTemplate.getConnection().deleteDatabase(dbName);
 
         assertEquals((Double) 1.0, queryResult.getResults().get(0).getSeries().get(0).getValues().get(0).get(2));

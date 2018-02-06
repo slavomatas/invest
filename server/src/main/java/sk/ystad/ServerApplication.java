@@ -2,8 +2,9 @@ package sk.ystad;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +12,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import sk.ystad.controllers.ServerStatusController;
 import sk.ystad.model.auth.Role;
 import sk.ystad.repositories.users.RoleRepository;
 
@@ -19,6 +21,9 @@ import sk.ystad.repositories.users.RoleRepository;
 public class ServerApplication extends SpringBootServletInitializer {
 	@PersistenceContext
 	private EntityManager em;
+	//private static final Logger logger = Logger.getLogger(ServerApplication.class);
+	private static final Logger logger = LogManager
+			.getLogger(ServerApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
