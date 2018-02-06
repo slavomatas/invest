@@ -8,13 +8,13 @@ import sk.ystad.repositories.securities.SecurityRepository;
 import java.util.List;
 
 @Service
-public class FinancialSecurityService {
+public class SecurityService {
 
     final
     SecurityRepository securityRepository;
 
     @Autowired
-    public FinancialSecurityService(SecurityRepository securityRepository) {
+    public SecurityService(SecurityRepository securityRepository) {
         this.securityRepository = securityRepository;
     }
 

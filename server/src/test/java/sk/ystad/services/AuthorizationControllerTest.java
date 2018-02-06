@@ -39,7 +39,7 @@ public class AuthorizationControllerTest {
     private WebApplicationContext wac;
 
     @MockBean
-    AppUserDetailsService appUserDetailsService;
+    UserService userService;
 
     @Before
     public void setup() {
@@ -56,7 +56,7 @@ public class AuthorizationControllerTest {
         String surname ="test";
         String password ="test";
 
-        Mockito.when(appUserDetailsService.registerUser(any(User.class))).thenReturn(response);
+        Mockito.when(userService.registerUser(any(User.class))).thenReturn(response);
 
         mvc.perform(post("/auth/register")
                 .param("name", name)
@@ -76,7 +76,7 @@ public class AuthorizationControllerTest {
         Response response = new Response(true, null);
         String token = "stkvhVq4XwKvVCE6jiJqbqP8Y3mxKyfO";
 
-        Mockito.when(appUserDetailsService.checkUser(token)).thenReturn(response);
+        Mockito.when(userService.checkUser(token)).thenReturn(response);
 
         mvc.perform(post("/auth/register/" + token)
                 .contentType(MediaType.APPLICATION_JSON))
