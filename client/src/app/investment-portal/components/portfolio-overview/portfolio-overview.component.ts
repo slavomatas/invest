@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { PortfolioDetails } from '../../types/types';
 import {forEach} from '@angular/router/src/utils/collection';
-import {SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
+import { colorScheme } from '../../constants/constants';
 
 interface ChartData {
   name: string;
@@ -26,12 +26,10 @@ export class PortfolioOverviewComponent implements OnInit {
   percentage: number;
 
   colorScheme = {
-    domain: this.sharedVariableService.getColors()
+    domain: colorScheme
   };
 
-  constructor(
-    private sharedVariableService: SharedVariableService,
-  ) { }
+  constructor( ) { }
 
   ngOnInit() {
     this.updatePercentage(this.portfolioDetails.oldMarketValue, this.portfolioDetails.marketValue);

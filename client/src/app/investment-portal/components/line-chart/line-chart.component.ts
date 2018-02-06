@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
 import { ChartModelPortfolio } from '../../types/dashboard-types';
 import { cloneDeep } from 'lodash';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
@@ -8,6 +7,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 // import {port} from '_debugger';
 import { AppState } from '../../store/store';
+import { colorScheme } from '../../constants/constants';
 
 @Component({
   selector: 'fuse-app-line-chart',
@@ -42,14 +42,13 @@ export class LineChartComponent implements OnInit {
   yAxisLabel = '%';
 
   colorScheme = {
-    domain: this.sharedVariableService.getColors()
+    domain: colorScheme
   };
   // line, area
   autoScale = true;
 
   constructor(
     private portfolioService: PortfolioService,
-    private sharedVariableService: SharedVariableService,
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
 

@@ -3,7 +3,7 @@ import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux } from '@angular-redux/store';
 import { PortfolioDetails } from '../../types/types';
 import { forEach } from '@angular/router/src/utils/collection';
-import {SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
+import { colorScheme } from '../../constants/constants';
 import { AppState } from '../../store/store';
 
 @Component({
@@ -29,12 +29,11 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
   view = [700, 230 * this.portfoliosNum];
 
   colorScheme = {
-    domain: this.sharedVariableService.getColors()
+    domain: colorScheme
   };
 
   constructor(
     private actions: PortfolioActions,
-    private sharedVariableService: SharedVariableService,
     private ngRedux: NgRedux<AppState>
   ) {
 
