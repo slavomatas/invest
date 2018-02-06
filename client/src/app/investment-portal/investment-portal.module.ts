@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../core/modules/shared.module';
-import { InvestmentPortalComponent } from './investment-portal.component';
 import { applyMiddleware } from 'redux';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { StoreModule } from './store/store-module';
@@ -39,7 +38,6 @@ const routes = [
 
 @NgModule({
   declarations: [
-    InvestmentPortalComponent,
     LoginComponent,
     RegistrationFormComponent,
     ActivationMsgComponent,
@@ -62,9 +60,6 @@ const routes = [
     StoreModule,
     FuseWidgetModule,
     NgxChartsModule
-  ],
-  exports: [
-    InvestmentPortalComponent
   ],
   providers: [
     AuthGuard,
