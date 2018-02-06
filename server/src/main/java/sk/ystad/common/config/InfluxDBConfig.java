@@ -12,7 +12,6 @@ import org.springframework.data.influxdb.InfluxDBConnectionFactory;
 import org.springframework.data.influxdb.InfluxDBProperties;
 import org.springframework.data.influxdb.InfluxDBTemplate;
 import org.springframework.data.influxdb.converter.PointConverter;
-import sk.ystad.repositories.measurements.PortfolioMeasurementRepository;
 
 @Configuration
 @EnableConfigurationProperties(InfluxDBProperties.class)
@@ -57,8 +56,8 @@ public class InfluxDBConfig
         return InfluxDBFactory.connect(influxUrl, influxUser, influxPassword);
     }
 
-    @Bean
+/*    @Bean
     PortfolioMeasurementRepository portfolioMeasurementRepository(final InfluxDB influxDB) {
         return new PortfolioMeasurementRepository(influxDB);
-    }
+    }*/
 }

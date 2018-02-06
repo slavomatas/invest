@@ -1,8 +1,10 @@
 package sk.ystad.model.users.portfolios;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.users.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Portfolio {
@@ -12,6 +14,26 @@ public class Portfolio {
     @Column(name = "name")
     private String name;
 
+    @Column(name= "description")
+    private String description;
+
+    @Transient
+    private double marketValue;
+
+    @Transient
+    private double lastChangeAbs;
+
+    @Transient
+    private double lastChangePct;
+
+    @Transient
+    private Returns returns;
+
+    @Transient
+    private double cash;
+
+    @Transient
+    private List<Position> positions;
 
     @JsonIgnore
     private User user;
@@ -93,5 +115,59 @@ public class Portfolio {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Transient
+    public double getMarketValue() {
+        return marketValue;
+    }
+
+    public void setMarketValue(double marketValue) {
+        this.marketValue = marketValue;
+    }
+
+    @Transient
+    public double getLastChangeAbs() {
+        return lastChangeAbs;
+    }
+
+    public void setLastChangeAbs(double lastChangeAbs) {
+        this.lastChangeAbs = lastChangeAbs;
+    }
+
+    @Transient
+    public double getLastChangePct() {
+        return lastChangePct;
+    }
+
+    public void setLastChangePct(double lastChangePct) {
+        this.lastChangePct = lastChangePct;
+    }
+
+    @Transient
+    public Returns getReturns() {
+        return returns;
+    }
+
+    public void setReturns(Returns returns) {
+        this.returns = returns;
+    }
+
+    @Transient
+    public double getCash() {
+        return cash;
+    }
+
+    public void setCash(double cash) {
+        this.cash = cash;
+    }
+
+    @Transient
+    public List<Position> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
     }
 }
