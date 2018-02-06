@@ -7,9 +7,9 @@ import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { AppState } from '../../../../store/store';
 
 @Component({
-  selector: 'fuse-invest-line-chart-legend',
-  templateUrl: './line-chart-legend.component.html',
-  styleUrls: ['./line-chart-legend.component.scss']
+  selector: 'invest-cumulative-line-chart-legend',
+  templateUrl: './cumulative-line-chart-legend.component.html',
+  styleUrls: ['./cumulative-line-chart-legend.component.scss']
 })
 export class LineChartLegendComponent implements OnInit {
 

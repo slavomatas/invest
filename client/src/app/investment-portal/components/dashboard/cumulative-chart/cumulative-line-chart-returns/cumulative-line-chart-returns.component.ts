@@ -8,9 +8,9 @@ import { AppState } from '../../../../store/store';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 
 @Component({
-  selector: 'fuse-invest-line-chart-returns',
-  templateUrl: 'line-chart-returns.component.html',
-  styleUrls: ['line-chart-returns.component.scss']
+  selector: 'invest-cumulative-line-chart-returns',
+  templateUrl: 'cumulative-line-chart-returns.component.html',
+  styleUrls: ['cumulative-line-chart-returns.component.scss']
 })
 export class LineChartReturnsComponent implements OnInit {
 

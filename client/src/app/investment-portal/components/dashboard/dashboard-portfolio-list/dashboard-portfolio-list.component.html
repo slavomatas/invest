@@ -3,6 +3,6 @@
       <invest-horizontal-bar-chart [portfolioDetailsList]="dashboardPortfolioList$ | async"></invest-horizontal-bar-chart>
     </div>
     <div class="col-xs-6 col-md-6 col-sm-6 col-lg-6" fxFlex="50">
-      <invest-app-portfolio-overview *ngFor="let portfolio of dashboardPortfolioList$ | async" [portfolioDetails]="portfolio" ></invest-app-portfolio-overview>
+      <invest-portfolio-overview *ngFor="let portfolio of dashboardPortfolioList$ | async" [portfolioDetails]="portfolio" ></invest-portfolio-overview>
     </div>
 </div>

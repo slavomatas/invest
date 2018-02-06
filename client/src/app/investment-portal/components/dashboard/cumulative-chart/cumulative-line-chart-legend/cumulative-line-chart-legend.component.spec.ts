@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LineChartLegendComponent } from './line-chart-legend.component';
+import { LineChartLegendComponent } from './cumulative-line-chart-legend.component';
 
 describe('LineChartLegendComponent', () => {
   let component: LineChartLegendComponent;

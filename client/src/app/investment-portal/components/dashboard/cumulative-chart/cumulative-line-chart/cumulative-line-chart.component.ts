@@ -10,9 +10,9 @@ import { PortfolioService } from '../../../../services/portfolio/portfolio.servi
 import { AppState } from '../../../../store/store';
 
 @Component({
-  selector: 'invest-line-chart',
-  templateUrl: 'line-chart.component.html',
-  styleUrls: ['line-chart.component.css']
+  selector: 'invest-cumulative-line-chart',
+  templateUrl: 'cumulative-line-chart.component.html',
+  styleUrls: ['cumulative-line-chart.component.css']
 })
 
 export class LineChartComponent implements OnInit {

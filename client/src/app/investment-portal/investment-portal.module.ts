@@ -18,9 +18,9 @@ import { ActivationMsgComponent } from './components/authentication/registration
 import { PortfolioService } from './services/portfolio/portfolio.service';
 import { CumulativeChartComponent } from './components/dashboard/cumulative-chart/cumulative-chart.component';
 import { DashboardPortfolioListComponent } from './components/dashboard/dashboard-portfolio-list/dashboard-portfolio-list.component';
-import { LineChartComponent } from './components/dashboard/cumulative-chart/line-chart/line-chart.component';
-import { LineChartReturnsComponent } from './components/dashboard/cumulative-chart/line-chart-returns/line-chart-returns.component';
-import { LineChartLegendComponent } from './components/dashboard/cumulative-chart/line-chart-legend/line-chart-legend.component';
+import { LineChartComponent } from './components/dashboard/cumulative-chart/cumulative-line-chart/cumulative-line-chart.component';
+import { LineChartReturnsComponent } from './components/dashboard/cumulative-chart/cumulative-line-chart-returns/cumulative-line-chart-returns.component';
+import { LineChartLegendComponent } from './components/dashboard/cumulative-chart/cumulative-line-chart-legend/cumulative-line-chart-legend.component';
 import { PortfolioOverviewComponent } from './components/dashboard/dashboard-portfolio-list/portfolio-overview/portfolio-overview.component';
 import { HorizontalBarChartComponent } from './components/dashboard/dashboard-portfolio-list/horizontal-bar-chart/horizontal-bar-chart.component';
 
