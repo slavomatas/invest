@@ -20,8 +20,6 @@ public class ServerApplication extends SpringBootServletInitializer {
 	@PersistenceContext
 	private EntityManager em;
 
-	private static final Logger log = LoggerFactory.getLogger(ServerApplication.class);
-
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
 	}
