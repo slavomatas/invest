@@ -4,8 +4,7 @@ import { LineChartComponent } from './cumulative-line-chart.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '../../../core/modules/shared.module';
-import { PortfolioService, MockPortfolioService } from '../../services/portfolio/portfolio.service';
+import { MockPortfolioService, PortfolioService } from '../../../../services/portfolio/portfolio.service';
 
 
 describe('LineChartComponent', () => {
@@ -20,7 +19,7 @@ describe('LineChartComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NgxChartsModule, RouterModule.forRoot(routes), BrowserAnimationsModule, SharedModule],
+      imports: [NgxChartsModule, RouterModule.forRoot(routes), BrowserAnimationsModule],
       declarations: [ LineChartComponent ],
       providers: [
         {
