@@ -10,6 +10,6 @@ export interface IPortfolioService {
   getCumulativeMeasurements(portfolioId: number, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]>;
   getPortfolioReturn(portfolioId: number, portfolioReturnType: TypeOfPortfolioReturn, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]>;
   getPortfolioMarketValue(portfolioId: number, date?: Date): Observable<number>;
-  getPortfolioPositions(portfolioId: number): Promise<{name: string;value: number;}[]>;
+  getPortfolioPositions(portfolioId: number): Promise<{name: string; value: number; }[]>;
   getPortfoliosListDetails(portfolioReturnType: TypeOfPortfolioReturn): Promise<PortfolioDetails[]>;
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'fuse-invest-portfolios',
+  selector: 'invest-portfolios',
   templateUrl: './portfolios.component.html',
   styleUrls: ['./portfolios.component.scss']
 })

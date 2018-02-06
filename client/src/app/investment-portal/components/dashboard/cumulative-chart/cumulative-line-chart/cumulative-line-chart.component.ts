@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
-import { ChartModelPortfolio } from '../../types/dashboard-types';
 import { cloneDeep } from 'lodash';
-import { PortfolioService } from '../../services/portfolio/portfolio.service';
-import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
-import { AppState } from '../../store';
 import { Observable } from 'rxjs/Observable';
 // import {port} from '_debugger';
+import { ChartModelPortfolio } from '../../../../types/dashboard-types';
+import { colorScheme } from '../../../../constants/constants';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
+import { AppState } from '../../../../store/store';
 
 @Component({
-  selector: 'fuse-app-line-chart',
-  templateUrl: 'line-chart.component.html',
-  styleUrls: ['line-chart.component.css']
+  selector: 'invest-cumulative-line-chart',
+  templateUrl: 'cumulative-line-chart.component.html',
+  styleUrls: ['cumulative-line-chart.component.css']
 })
 
 export class LineChartComponent implements OnInit {
@@ -42,14 +42,13 @@ export class LineChartComponent implements OnInit {
   yAxisLabel = '%';
 
   colorScheme = {
-    domain: this.sharedVariableService.getColors()
+    domain: colorScheme
   };
   // line, area
   autoScale = true;
 
   constructor(
     private portfolioService: PortfolioService,
-    private sharedVariableService: SharedVariableService,
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
 

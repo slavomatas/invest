@@ -1,11 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux } from '@angular-redux/store';
-import { AppState } from '../../store';
-import { PortfolioDetails } from '../../types/types';
 import { forEach } from '@angular/router/src/utils/collection';
-import {SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
-
+import { PortfolioDetails } from '../../../../types/types';
+import { colorScheme } from '../../../../constants/constants';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+import { AppState } from '../../../../store/store';
 @Component({
   selector: 'invest-horizontal-bar-chart',
   templateUrl: 'horizontal-bar-chart.component.html',
@@ -13,7 +12,7 @@ import {SharedVariableService} from '../../services/shared-variable-service/shar
 })
 export class HorizontalBarChartComponent implements OnInit, OnChanges {
   @Input() portfolioDetailsList: PortfolioDetails[];
-  portfoliosNum: number = 1;
+  portfoliosNum = 1;
   single: any = [];
 
   // Options of chart
@@ -26,15 +25,14 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
   showYAxisLabel = true;
   yAxisLabel = '';
   barPadding = 155;
-  view = [700, 230*this.portfoliosNum];
+  view = [700, 230 * this.portfoliosNum];
 
   colorScheme = {
-    domain: this.sharedVariableService.getColors()
+    domain: colorScheme
   };
 
   constructor(
     private actions: PortfolioActions,
-    private sharedVariableService: SharedVariableService,
     private ngRedux: NgRedux<AppState>
   ) {
 
@@ -50,7 +48,7 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
       );
     }
     this.portfoliosNum = this.portfolioDetailsList.length;
-    this.view = [700, 250*this.portfoliosNum];
+    this.view = [700, 250 * this.portfoliosNum];
   }
   ngOnInit() {
 

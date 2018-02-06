@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { NgRedux } from '@angular-redux/store';
-import { AppState } from '../../store';
 import { User } from '../../types/types';
 import { cloneDeep } from 'lodash';
+import { AppState } from '../../store/store';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

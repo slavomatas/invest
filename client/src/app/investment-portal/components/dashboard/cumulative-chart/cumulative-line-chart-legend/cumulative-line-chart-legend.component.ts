@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { PortfolioService} from '../../services/portfolio/portfolio.service';
-import { SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
-import { PortfolioActions} from '../../store/actions/portfolio-actions';
 import { NgRedux} from '@angular-redux/store';
-import { AppState } from '../../store';
-import { ChartModelPortfolio } from '../../types/dashboard-types';
+import { ChartModelPortfolio } from '../../../../types/dashboard-types';
+import { colorScheme } from '../../../../constants/constants';
+import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+import { AppState } from '../../../../store/store';
 
 @Component({
-  selector: 'fuse-invest-line-chart-legend',
-  templateUrl: './line-chart-legend.component.html',
-  styleUrls: ['./line-chart-legend.component.scss']
+  selector: 'invest-cumulative-line-chart-legend',
+  templateUrl: './cumulative-line-chart-legend.component.html',
+  styleUrls: ['./cumulative-line-chart-legend.component.scss']
 })
 export class LineChartLegendComponent implements OnInit {
 
@@ -17,10 +17,9 @@ export class LineChartLegendComponent implements OnInit {
   // chartActivePortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
 
   portfolios: ChartModelPortfolio[] = [];
-  colors = this.sharedVariableService.getColors();
+  colors = colorScheme;
 
   constructor(private portfolioService: PortfolioService,
-              private sharedVariableService: SharedVariableService,
               private actions: PortfolioActions,
               private ngRedux: NgRedux<AppState>) {
     this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {

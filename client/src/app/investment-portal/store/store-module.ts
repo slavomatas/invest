@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { NgRedux, DevToolsExtension, NgReduxModule } from '@angular-redux/store';
-import { AppState, rootReducer, INITIAL_STATE } from '../store';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import { PortfolioEpics } from './epics/portfolio-epics';
 import { PortfolioActions } from './actions/portfolio-actions';
 import { AuthenticationActions } from './actions/authentication-actions';
+import { AppState, rootReducer, INITIAL_STATE } from './store';
 
 @NgModule({
   imports: [

@@ -8,8 +8,9 @@ import {
 import { PortfolioReturn, ChartModelPortfolio } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
 import { NgRedux, select } from '@angular-redux/store';
-import { AppState } from '../../store';
 import { cloneDeep } from 'lodash';
+import { AppState } from '../../store/store';
+import { LoggingService } from '../logging/logging.service';
 
  const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
  const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';
@@ -19,11 +20,12 @@ export class PortfolioService implements IPortfolioService {
 
   constructor(
     private http: HttpClient,
-    private ngRedux: NgRedux<AppState>)
+    private ngRedux: NgRedux<AppState>,
+    private loggingService: LoggingService
+  )
   {
 
   }
-
 
   /**
    * Fetches cumulative data for all portfolios
@@ -32,7 +34,7 @@ export class PortfolioService implements IPortfolioService {
 
     let promises: Promise<ChartModelPortfolio>[];
 
-    if(dateTo == null){
+    if (dateTo == null){
       dateTo = new Date();
     }
 
@@ -61,7 +63,7 @@ export class PortfolioService implements IPortfolioService {
 
     let selectedState: ChartModelPortfolio[];
     if (portfoliosChart !== undefined) {
-      selectedState = portfoliosChart.filter(x => x.id == portfolio.id); // check wether was the portfolio selected or not.
+      selectedState = portfoliosChart.filter(x => x.id === portfolio.id); // check wether was the portfolio selected or not.
     }
 
     // map the portfolio name, id, selected
@@ -88,9 +90,9 @@ export class PortfolioService implements IPortfolioService {
     // get market value of a portfolio and update it
     await this.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: PortfolioReturn[]) => {
 
-      let length = measurements.length;
+      const length = measurements.length;
 
-      if(length > 0){
+      if (length > 0){
         portfolioChart.marketValue = Number.parseFloat(measurements[length - 1].value);
         portfolioChart.oldMarketValue = Number.parseFloat(measurements[0].value);
       } else {
@@ -132,8 +134,10 @@ export class PortfolioService implements IPortfolioService {
       params = params.set('dateTo', dateTo.toISOString());
     }
 
+    const requestUrl = GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/' + TypeOfPortfolioReturn['cumulative'];
+    this.loggingService.captureRequestWithParams(requestUrl, JSON.stringify(params));
     return this.http
-      .get<CumulativeMeasurement[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/' + TypeOfPortfolioReturn["cumulative"],
+      .get<CumulativeMeasurement[]>(requestUrl,
         {
         params: params
       });
@@ -159,8 +163,10 @@ export class PortfolioService implements IPortfolioService {
       params = params.set('dateTo', dateTo.toISOString());
     }
 
+    const requestUrl = GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_MARKET_VALUE';
+    this.loggingService.captureRequestWithParams(requestUrl, JSON.stringify(params));
     return this.http
-      .get<PortfolioReturn[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_MARKET_VALUE', {
+      .get<PortfolioReturn[]>(requestUrl, {
         params: params
       });
   }
@@ -212,8 +218,10 @@ export class PortfolioService implements IPortfolioService {
       params = params.set('dateTo', dateTo.toISOString());
     }
 
+    const requestUrl = GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/' + portfolioReturnType;
+    this.loggingService.captureRequestWithParams(requestUrl, JSON.stringify(params));
     return this.http
-      .get<CumulativeMeasurement[]>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/' + portfolioReturnType , {
+      .get<CumulativeMeasurement[]>(requestUrl , {
         params: params
       });
   }
@@ -226,15 +234,18 @@ export class PortfolioService implements IPortfolioService {
       params = params.set('date', date.toISOString());
     }
 
+    const requestUrl = GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_MARKET_VALUE';
+    this.loggingService.captureRequestWithParams(requestUrl, JSON.stringify(params));
     return this.http
-      .get<number>(GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_MARKET_VALUE', {
+      .get<number>(requestUrl, {
         params: params
       });
   }
 
-  getPortfolioPositions(portfolioId: number): Promise<{name: string;value: number;}[]> {
+  getPortfolioPositions(portfolioId: number): Promise<{name: string; value: number; }[]> {
+    const requestUrl = GET_PORTFOLIOS_URL + '/' + portfolioId + '/positions';
     return this.http
-      .get<{name: string;value: number;}[]>(GET_PORTFOLIOS_URL + '/' + portfolioId + '/positions' ).toPromise();
+      .get<{name: string; value: number; }[]>(requestUrl).toPromise();
   }
 
 

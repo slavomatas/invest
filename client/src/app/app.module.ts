@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import * as Raven from 'raven-js';
+import {ErrorHandler, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -14,7 +15,17 @@ import { FuseConfigService } from './core/services/config.service';
 import { FuseNavigationService } from './core/components/navigation/navigation.service';
 import { InvestmentPortalModule } from './investment-portal/investment-portal.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { LoggingService } from './investment-portal/services/logging/logging.service';
 
+Raven
+  .config('https://7ece5aae6fdd496fad129dc5793641f2@sentry.io/283250')
+  .install();
+
+export class RavenErrorHandler implements ErrorHandler {
+  handleError(err: any): void {
+    Raven.captureException(err);
+  }
+}
 
 const appRoutes: Routes = [
     {
@@ -42,7 +53,9 @@ const appRoutes: Routes = [
     providers   : [
         FuseSplashScreenService,
         FuseConfigService,
-        FuseNavigationService
+        FuseNavigationService,
+        { provide: ErrorHandler, useClass: RavenErrorHandler },
+        LoggingService
     ],
     bootstrap   : [
         AppComponent

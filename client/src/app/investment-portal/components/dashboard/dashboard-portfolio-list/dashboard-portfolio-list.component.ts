@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {PortfolioService} from '../../../services/portfolio/portfolio.service';
 import {PortfolioActions} from '../../../store/actions/portfolio-actions';
 import {NgRedux} from '@angular-redux/store';
-import {AppState} from '../../../store';
 import {PortfolioDetails, TypeOfPortfolioReturn} from '../../../types/types';
 import { cloneDeep } from 'lodash';
+import { AppState } from '../../../store/store';
 
 
 @Component({

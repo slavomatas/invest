@@ -9,7 +9,7 @@ import { Token } from '../../../types/authentication-types';
 import { Router } from '@angular/router';
 
 @Component({
-    selector   : 'fuse-login',
+    selector   : 'invest-login',
     templateUrl: './login.component.html',
     styleUrls  : ['./login.component.scss'],
     animations : fuseAnimations
@@ -78,15 +78,15 @@ export class LoginComponent implements OnInit
 
     public onLogin()
     {
-      let password = this.loginForm.value.password;
-      let email = this.loginForm.value.email;
+      const password = this.loginForm.value.password;
+      const email = this.loginForm.value.email;
 
       // Get access token
-      this.authenticationService.login( email, password).then( (data: Token) => {
-          this.actions.getAccessTokenFullfiled(true, data);
+      this.authenticationService.login( email, password).then( (loginData: Token) => {
+          this.actions.getAccessTokenFullfiled(true, loginData);
           // Get user details
-          this.authenticationService.getUser().then((data: User) => {
-            this.actions.getUserDataFullfiled(true, data);
+          this.authenticationService.getUser().then((userData: User) => {
+            this.actions.getUserDataFullfiled(true, userData);
             // Forward to dashboard page
             this.router.navigate(['dashboard']);
           });

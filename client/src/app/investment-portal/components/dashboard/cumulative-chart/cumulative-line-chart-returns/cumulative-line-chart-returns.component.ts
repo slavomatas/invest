@@ -1,16 +1,16 @@
 import { Component, OnInit, NgModule} from '@angular/core';
-import { ChartModelPortfolio, PortfolioSummary } from '../../types/dashboard-types';
 import { cloneDeep } from 'lodash';
-import { PortfolioService } from '../../services/portfolio/portfolio.service';
-import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux, select } from '@angular-redux/store';
-import { AppState } from '../../store';
 import { Observable } from 'rxjs/Observable';
+import { ChartModelPortfolio, PortfolioSummary } from '../../../../types/dashboard-types';
+import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
+import { AppState } from '../../../../store/store';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 
 @Component({
-  selector: 'fuse-invest-line-chart-returns',
-  templateUrl: 'line-chart-returns.component.html',
-  styleUrls: ['line-chart-returns.component.scss']
+  selector: 'invest-cumulative-line-chart-returns',
+  templateUrl: 'cumulative-line-chart-returns.component.html',
+  styleUrls: ['cumulative-line-chart-returns.component.scss']
 })
 export class LineChartReturnsComponent implements OnInit {
 
@@ -27,9 +27,9 @@ export class LineChartReturnsComponent implements OnInit {
     marketValue: 0,
     periodMarketValue: 0,
     periodMarketValuePercentage: 0
-  }
+  };
 
-  private  definedPeriods:Map<string, string> = new Map([
+  private  definedPeriods: Map<string, string> = new Map([
     ['1M', 'last month'],
     ['3M', 'last 3 months'],
     ['6M', 'last 6 months'],
@@ -54,14 +54,14 @@ export class LineChartReturnsComponent implements OnInit {
       let totalMarketValue = 0;
       let totalOldMarketValue = 0;
 
-      for (let portfolio of data) {
+      for (const portfolio of data) {
         totalMarketValue += portfolio.marketValue;
         totalOldMarketValue += portfolio.oldMarketValue;
       }
 
       this.portfolioSummaryObject.marketValue = this.numberWithCommas(totalMarketValue);
       this.portfolioSummaryObject.periodMarketValue = this.numberWithCommas(totalOldMarketValue);
-      this.portfolioSummaryObject.periodMarketValuePercentage = (totalMarketValue == 0) ? 0 : ((totalMarketValue - totalOldMarketValue) / totalMarketValue);
+      this.portfolioSummaryObject.periodMarketValuePercentage = (totalMarketValue === 0) ? 0 : ((totalMarketValue - totalOldMarketValue) / totalMarketValue);
     });
 
     this.currencySymbol$.subscribe((data: string) => {
@@ -75,8 +75,8 @@ export class LineChartReturnsComponent implements OnInit {
   }
 
   private numberWithCommas(x) {
-    x = (Math.round(x * 100)/100).toFixed(2);
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    x = (Math.round(x * 100) / 100).toFixed(2);
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   periodEvent(event) {

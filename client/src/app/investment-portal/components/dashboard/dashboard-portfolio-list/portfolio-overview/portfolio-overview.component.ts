@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { PortfolioDetails } from '../../types/types';
 import {forEach} from '@angular/router/src/utils/collection';
-import {SharedVariableService} from '../../services/shared-variable-service/shared-variable.service';
+import { PortfolioDetails } from '../../../../types/types';
+import { colorScheme } from '../../../../constants/constants';
 
 interface ChartData {
   name: string;
@@ -15,7 +15,7 @@ interface Position {
 }
 
 @Component({
-  selector: 'invest-app-portfolio-overview',
+  selector: 'invest-portfolio-overview',
   templateUrl: './portfolio-overview.component.html',
   styleUrls: ['./portfolio-overview.component.scss']
 })
@@ -26,12 +26,10 @@ export class PortfolioOverviewComponent implements OnInit {
   percentage: number;
 
   colorScheme = {
-    domain: this.sharedVariableService.getColors()
+    domain: colorScheme
   };
 
-  constructor(
-    private sharedVariableService: SharedVariableService,
-  ) { }
+  constructor( ) { }
 
   ngOnInit() {
     this.updatePercentage(this.portfolioDetails.oldMarketValue, this.portfolioDetails.marketValue);
@@ -43,11 +41,11 @@ export class PortfolioOverviewComponent implements OnInit {
   }
 
   private setChartData(newData: Position[]) {
-    for( let position of newData) {
+    for (const position of newData) {
       this.chartData.push(
         {
-          "name": position.symbol,
-          "value": position.value
+          'name': position.symbol,
+          'value': position.value
         }
       );
     }
