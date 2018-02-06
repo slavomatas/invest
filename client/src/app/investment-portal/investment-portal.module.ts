@@ -27,6 +27,8 @@ import { CreatePortfolioComponent } from './components/create-portfolio/create-p
 import { ClickableWidgetComponent } from './components/create-portfolio/clickable-widget/clickable-widget.component';
 import { ClickableWidgetListComponent } from './components/create-portfolio/clickable-widget-list/clickable-widget-list.component';
 import { CreateManualPortfolioDialogComponent } from './components/create-portfolio/create-manual-portfolio-dialog/create-manual-portfolio-dialog.component';
+import {PortfolioListRowComponent } from './components/portfolios/portfolio-list-row/portfolio-list-row.component';
+
 
 const routes = [
   { path: 'login', component: LoginComponent },
@@ -59,7 +61,8 @@ const routes = [
     CreatePortfolioComponent,
     ClickableWidgetComponent,
     ClickableWidgetListComponent,
-    CreateManualPortfolioDialogComponent
+    CreateManualPortfolioDialogComponent,
+    PortfolioListRowComponent
   ],
   imports: [
     SharedModule,

@@ -1,0 +1,38 @@
+.manage-position {
+  & {
+    min-width: 480px
+  }
+  .manage-positions-group {
+
+  }
+  .manage-position-item {
+    & {
+
+    }
+    &:first-child {
+
+    }
+    form {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    md-autocomplete[md-floating-label] md-input-container {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  md-dialog-content {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  md-dialog-actions {
+    position: relative;
+    overflow-y: hidden;
+    overflow-x: auto;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}

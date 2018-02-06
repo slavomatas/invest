@@ -1,0 +1,56 @@
+<md-whiteframe ng-repeat="portfolio in vm.portfolios" class="portfolio-item md-whiteframe-1dp mb-10 p-8" layout="row" layout-wrap>
+  <div layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
+    <div layout="row" layout-align-gt-sm="end center" flex="100" flex-gt-sm="40" flex-gt-md="25">
+      <div layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
+        <div class="md-title" flex><a ng-href="/portfolio/{{portfolio.id}}/overview">{{portfolio.name}}</a></div>
+        <div class="" layout="row" layout-align="start center">
+          <span class="h4 secondary-text text-truncate">{{portfolio.marketValue}} ({{portfolio.cash}})</span>
+          <span class="h4 ml-8">
+                {{portfolio.lastChange}}&nbsp;
+                <i class="icon icon-trending-down s16"></i>
+                <i class="icon icon-trending-up s16"></i>
+                &nbsp;{{portfolio.lastChangePct}}%
+              </span>
+          <!--//change to dynamic -->
+        </div>
+      </div>
+      <div layout="column" flex="100" flex-gt-xs="50" flex-gt-md="20">
+        <div flex><strong>Strategy:&nbsp;</strong>{{portfolioPg.strategy}}</div>
+        <div flex><strong>Use It As:&nbsp;</strong>{{portfolioPg.useAs}}</div>
+      </div>
+      <div flex="100" flex-gt-sm="60" flex-gt-md="30">
+        <!--nvd3 options="vm.chartBar" data="portfolio.positionWeights"></nvd3-->
+        <!-- Change this to line chart -->
+      </div>
+      <div layout="row" layout-align-gt-sm="end center" flex="100" flex-gt-sm="40" flex-gt-md="25">
+        <md-button class="md-icon-button" aria-label="View" ng-href="/portfolio/{{portfolio.id}}/overview">
+          <md-icon md-font-icon="icon-eye"></md-icon>
+          <md-tooltip><span>View</span></md-tooltip>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="Edit" ng-click="managePortfolioUpdateOperation(portfolio.id, $index)">
+          <md-icon md-font-icon="icon-pencil"></md-icon>
+          <md-tooltip><span>Edit</span></md-tooltip>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="Copy" ng-click="managePortfolioCloneOperation(portfolio.id, $index)">
+          <md-icon md-font-icon="icon-content-copy"></md-icon>
+          <md-tooltip><span>Copy</span></md-tooltip>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="Remove" ng-click="managePortfolioRemoveOperation(portfolio.id)">
+          <md-icon md-font-icon="icon-delete"></md-icon>
+          <md-tooltip><span>Delete</span></md-tooltip>
+        </md-button>
+      </div>
+    </div>
+    <div ng-init="limit = 150; moreShown = false" layout="row" layout-align-gt-sm="end center" flex="100" flex-gt-sm="40" flex-gt-md="25">
+      {{portfolioPg.description | limitTo: limit}}{{text.length > limit ? '...' : ''}}
+      <a ng-show="text.length > limit"
+         href ng-click="limit=text.length; moreShown = true">
+        &nbsp;More
+      </a>
+      <a ng-show="moreShown"
+         href ng-click="limit = 150; moreShown = false">
+        &nbsp;Less
+      </a>
+    </div>
+  </div>
+</md-whiteframe>
