@@ -21,6 +21,8 @@
                 <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
             </Policies>
         </RollingFile>
+
+        <Sentry name="Sentry" />
     </Appenders>
     <Loggers>
         <Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
@@ -30,6 +32,7 @@
         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
+            <appender-ref ref="Sentry" level="error" />
         </Root>
     </Loggers>
 </Configuration>
