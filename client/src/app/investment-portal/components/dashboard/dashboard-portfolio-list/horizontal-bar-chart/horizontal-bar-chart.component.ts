@@ -23,9 +23,9 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
   xAxisLabel = 'Gain/Loss %';
   xScaleMax = 0.001;
   showYAxisLabel = true;
-  yAxisLabel = '';
+  yAxisLabel = '';  
   barPadding = 155;
-  view = [700, 230 * this.portfoliosNum];
+  view = [, 250 * this.portfoliosNum];
 
   colorScheme = {
     domain: colorScheme
@@ -48,7 +48,7 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
       );
     }
     this.portfoliosNum = this.portfolioDetailsList.length;
-    this.view = [700, 250 * this.portfoliosNum];
+    this.view = [, 250 * this.portfoliosNum];
   }
   ngOnInit() {
 
