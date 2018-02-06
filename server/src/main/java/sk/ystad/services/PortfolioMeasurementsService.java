@@ -100,5 +100,4 @@ public class PortfolioMeasurementsService {
         return portfolioCumulativeReturns;
     }
 
-
 }

@@ -38,7 +38,6 @@ public class Portfolio {
     @Transient
     private List<Position> positions;
 
-
     private List<UserPosition> usersPositions;
 
     @JsonIgnore
