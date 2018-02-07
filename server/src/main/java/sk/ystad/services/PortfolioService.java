@@ -5,20 +5,25 @@ import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sk.ystad.ServerApplication;
 import sk.ystad.model.measurements.Measures;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.securities.Security;
 import sk.ystad.model.users.User;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.users.portfolios.Returns;
+import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.repositories.securities.SecurityRepository;
 import sk.ystad.repositories.users.PortfolioRepository;
 import sk.ystad.repositories.users.PositionRepository;
+import sk.ystad.repositories.users.TradeRepository;
 import sk.ystad.repositories.users.UserRepository;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,16 +35,19 @@ public class PortfolioService {
     private final UserRepository userRepository;
     private final PortfolioRepository portfolioRepository;
     private final PositionRepository positionRepository;
-
+    private final TradeRepository tradeRepository;
     private final SecurityRepository securityRepository;
 
+    //private static final Logger log = LoggerFactory.getLogger(PortfolioService.class);
+
     @Autowired
-    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository) {
+    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository, TradeRepository tradeRepository) {
         this.influxDB = influxDB;
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
         this.positionRepository = positionRepository;
         this.securityRepository = securityRepository;
+        this.tradeRepository = tradeRepository;
     }
 
     public List<Portfolio> getByUserId(Principal principal) {
@@ -165,13 +173,24 @@ public class PortfolioService {
         return positions;
     }
 
-    public void addPosition(long portfolioId, String symbol) {
+    public UserPosition addPosition(long portfolioId, String symbol) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         Security security = securityRepository.findBySymbol(symbol);
         if (portfolio != null && security != null) {
             UserPosition position = new UserPosition(portfolio, security);
-            positionRepository.save(position);
+            return positionRepository.save(position);
         }
+        return null;
+    }
 
+    public Trade addTrade(long positionId, Date timestamp, Double price, int amount) {
+        UserPosition userPosition  = positionRepository.findOne(positionId);
+
+        //Position exists
+        if (userPosition != null) {
+            Trade trade = new Trade(userPosition, price, amount, timestamp);
+            return tradeRepository.save(trade);
+        }
+        return null;
     }
 }

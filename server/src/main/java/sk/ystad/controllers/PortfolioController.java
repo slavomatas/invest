@@ -10,6 +10,9 @@ import sk.ystad.services.PortfolioService;
 import sk.ystad.services.UserService;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -43,6 +46,15 @@ public class PortfolioController {
         portfolioService.addPosition(portfolioId, symbol);
     }
 
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="/user/portfolios/positions/{positionId}", method = RequestMethod.POST)
+//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+//    @ApiOperation(value = "Create trade", notes = "UserID is retrieved from session")
+    public void addTrade(@PathVariable(value="positionId") long positionId, @RequestParam("timestamp") Date timestamp,
+            @RequestParam("price") Double price, @RequestParam("amount") int amount,
+                         Principal principal){
+        //TODO add service call
+    }
 
 
 

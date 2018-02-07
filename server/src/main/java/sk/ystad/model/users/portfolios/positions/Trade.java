@@ -23,12 +23,50 @@ public class Trade {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 
-//
-//    public Long getTradeId() {
-//        return tradeId;
-//    }
-//
-//    public Position getPosition() {
-//        return position;
-//    }
+    public Trade(UserPosition position, double price, int amount, Date dateTime) {
+        this.position = position;
+        this.price = price;
+        this.amount = amount;
+        this.dateTime = dateTime;
+    }
+
+    public Long getTradeId() {
+        return tradeId;
+    }
+
+    public void setTradeId(Long tradeId) {
+        this.tradeId = tradeId;
+    }
+
+    public UserPosition getPosition() {
+        return position;
+    }
+
+    public void setPosition(UserPosition position) {
+        this.position = position;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
 }
