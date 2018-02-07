@@ -15,10 +15,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import sk.ystad.ServerApplication;
 import sk.ystad.model.measurements.ImmutableMeasure;
-import sk.ystad.repositories.measurements.PortfolioMeasurementRepository;
 import sk.ystad.model.timeseries.TimeSeriesSimpleItem;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class PortfolioMeasurementsServiceTest {
     private WebApplicationContext wac;
 
     @MockBean
-    private PortfolioMeasurementRepository portfolioMeasurementRepository;
+    private PortfolioMeasurementsService portfolioMeasurementsService;
 
     @Before
     public void setup() {
@@ -57,12 +57,11 @@ public class PortfolioMeasurementsServiceTest {
         timeSeries.add(new TimeSeriesSimpleItem("2017-01-06T21:03:59.526Z", 4.045));
         timeSeries.add(new TimeSeriesSimpleItem("2017-01-07T21:03:59.526Z", 6.06));
 
-        ImmutableMeasure immutableMeasure = ImmutableMeasure.of("PORTFOLIO_CUMULATIVE_RETURN");
         String dateFrom = "2017-01-01T21:03:59.526Z";
-        LocalDate localDateFrom = LocalDate.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME);
+        LocalDateTime localDateFrom = LocalDateTime.parse(dateFrom, DateTimeFormatter.ISO_DATE_TIME);
         String dateTo = "2017-01-07T21:03:59.526Z";
-        LocalDate localDateTo = LocalDate.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME);
-        Mockito.when(portfolioMeasurementRepository.findMeasure("PID5a6f4f4aaf69115d83a41e28", immutableMeasure, localDateFrom, localDateTo))
+        LocalDateTime localDateTo = LocalDateTime.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME);
+        Mockito.when(portfolioMeasurementsService.getMeasurement(5L, "PORTFOLIO_CUMULATIVE_RETURN", localDateFrom, localDateTo))
                 .thenReturn(timeSeries);
 
         mvc.perform(get("/v1/measurements/portfolios/5/PORTFOLIO_CUMULATIVE_RETURN")
