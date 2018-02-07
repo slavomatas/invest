@@ -1,1 +1,8 @@
-<invest-portfolio-list-row descriptionLimit="5"></invest-portfolio-list-row>
+<div >
+    <invest-portfolio-list-row *ngFor="let portfolio of portfolios" [portfolioData]="portfolio" descriptionLimit="5" style="display: block">
+    </invest-portfolio-list-row>
+</div>
+
+
+
+

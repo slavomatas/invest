@@ -1,6 +1,7 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, SimpleChange} from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { colorScheme } from '../../../constants/constants';
+import { PortfolioDetails } from "../../../types/types";
 
 @Component({
   selector: 'invest-portfolio-list-row',
@@ -10,24 +11,12 @@ import { colorScheme } from '../../../constants/constants';
 export class PortfolioListRowComponent implements OnInit {
 
   @Input() descriptionLimit: Number;
+  @Input() portfolioData: PortfolioDetails;
+
+  chartData: {name: string, value: number}[] = [];
 
   colorScheme = {
     domain: colorScheme
-  };
-
-  portfolio: Object = {
-    id: "id",
-    name: "Portfolio001 Name",
-    marketValue: "6.6K",
-    cash: 0,
-    lastChange: "54.412",
-    lastChangePct: "7.21"
-  };
-
-  portfolioPg: Object = {
-    strategy: "strategy",
-    useAs: "useAs",
-    description: "description"
   };
 
   limit: Number;
@@ -37,7 +26,20 @@ export class PortfolioListRowComponent implements OnInit {
 
   }
 
+  ngOnChanges(changes: SimpleChange) {
+    if (changes['portfolioData']){
+      this.chartData = [];
+      this.portfolioData.positions.forEach((position) => {
+        this.chartData.push({
+          name: position.symbol,
+          value: position.value
+        });
+      })
+    }
+  }
+
   ngOnInit() {
+    console.log(this.portfolioData);
     this.limit = this.descriptionLimit;
   }
 
@@ -62,20 +64,5 @@ export class PortfolioListRowComponent implements OnInit {
     this.limit = 2500;
     this.descMoreShown = true;
   }
-
-  single = [
-    {
-      "name": "Germany",
-      "value": 8940000
-    },
-    {
-      "name": "USA",
-      "value": 5000000
-    },
-    {
-      "name": "France",
-      "value": 7200000
-    }
-  ];
 
 }

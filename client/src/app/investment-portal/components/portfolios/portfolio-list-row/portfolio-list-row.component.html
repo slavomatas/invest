@@ -14,30 +14,29 @@
            fxLayoutGap.xs="0">
         <div class="item item-1" fxFlex>
           <div class="mat-accent" id="portfolio-name">
-            {{portfolio.name}}
+            {{portfolioData.name}}
           </div> <!--a ng-href="/portfolio/{{portfolio.id}}/overview">{{portfolio.name}}</a-->
           <div>
-            <span class="secondary-text">{{portfolio.marketValue}}
-              (<div *ngIf="portfolio.cash != 0; else no_cash">{{portfolio.cash}}</div>)</span>
+            <span class="secondary-text">{{portfolioData.marketValue}}
+              (<div *ngIf="portfolioData.cash != 0; else no_cash">{{portfolioData.cash}}</div>)</span>
                 <span style="align-items: center">
-              {{portfolio.lastChange}}&nbsp;
-              <i *ngIf="portfolio.lastChangePct > 0" class="material-icons md-18">trending_up</i>
-              <i *ngIf="portfolio.lastChangePct < 0" class="material-icons md-18">trending_down</i>&nbsp;{{portfolio.lastChangePct}}%
+              {{portfolioData.lastChangeAbs}}&nbsp;
+              <i *ngIf="portfolioData.lastChangePct > 0" class="material-icons md-18">trending_up</i>
+              <i *ngIf="portfolioData.lastChangePct < 0" class="material-icons md-18">trending_down</i>&nbsp;{{portfolioData.lastChangePct}}%
             </span>
-            <!--//change to dynamic -->
           </div>
         </div>
         <div class="item item-2" fxFlex>
           <div>
-            <div><strong>Strategy:&nbsp;</strong>{{portfolioPg.strategy}}</div>
-            <div><strong>Use It As:&nbsp;</strong>{{portfolioPg.useAs}}</div>
+            <div><strong>Strategy:&nbsp;</strong>Backhand flash</div> <!-- not supported by backend yet -->
+            <div><strong>Use It As:&nbsp;</strong>Better to not use</div> <!-- not supported by backend yet -->
           </div>
         </div>
-        <div class="item item-3" fxFlex>
+        <div *ngIf="portfolioData.positions != null" class="item item-3" fxFlex>
           <ngx-charts-bar-vertical
             [view]=""
             [scheme]="colorScheme"
-            [results]="single"
+            [results]="chartData"
             [gradient]="gradient"
             [xAxis]="false"
             [yAxis]="false"
@@ -50,17 +49,17 @@
           </ngx-charts-bar-vertical>
         </div>
       </div>
-      <div class="container"
+      <div *ngIf="portfolioData.description != null" class="container"
            fxLayout
            fxLayout.xs="column"
            fxLayoutAlign="center"
            fxLayoutGap="10px"
            fxLayoutGap.xs="0">
         <div class="item item-5" fxFlex>
-          <div style="display: inline-block">{{portfolioPg.description | slice:0:limit}}</div>
-          <div style="display: inline-block" *ngIf="portfolioPg.description.length > descriptionLimit">
+          <div style="display: inline-block">{{portfolioData.description | slice:0:limit}}</div>
+          <div style="display: inline-block" *ngIf="portfolioData.description.length > descriptionLimit">
             ...
-            <a [hidden]="portfolioPg.description.length < limit"
+            <a [hidden]="portfolioData.description.length < limit"
                (click)="descShowMore()"> More
             </a>
             <a [hidden]="!descMoreShown"
@@ -78,17 +77,17 @@
             <mat-icon><i class="material-icons">visibility</i></mat-icon>
           </span>
         </button>
-        <button (click)="managePortfolioUpdateOperation(portfolio.id)">
+        <button (click)="managePortfolioUpdateOperation(portfolioData.id)">
           <span matTooltip="Edit" matTooltipPosition="above">
             <mat-icon><i class="material-icons">mode_edit</i></mat-icon>
           </span>
         </button>
-        <button (click)="managePortfolioCloneOperation(portfolio.id)">
+        <button (click)="managePortfolioCloneOperation(portfolioData.id)">
           <span matTooltip="Copy" matTooltipPosition="above">
             <mat-icon><i class="material-icons">content_copy</i></mat-icon>
           </span>
         </button>
-        <button (click)="managePortfolioRemoveOperation(portfolio.id)">
+        <button (click)="managePortfolioRemoveOperation(portfolioData.id)">
           <span matTooltip="Remove" matTooltipPosition="above">
             <mat-icon><i class="material-icons">delete</i></mat-icon>
           </span>
