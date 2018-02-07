@@ -33,12 +33,17 @@ public class PortfolioController {
         return portfolioService.getByUserId(principal);
     }
 
+
     @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/user/portfolios", method = RequestMethod.POST, produces ="application/json")
-    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    @ApiOperation(value = "Create new portfolio", notes = "UserID is retrieved from session")
-    public Portfolio createPortfolio(Principal principal, @RequestBody Portfolio portfolio) {
-        return portfolioService.createPortfolio(principal, portfolio);
+    @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
+//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+//    @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
+    public void addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
+                            Principal principal){
+        portfolioService.addPosition(portfolioId, symbol);
     }
+
+
+
 
 }

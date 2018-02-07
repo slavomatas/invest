@@ -1,5 +1,7 @@
 package sk.ystad.repositories.users;
 
 import org.springframework.data.repository.CrudRepository;
-public interface PositionRepository extends CrudRepository<Position, Long> {
+import sk.ystad.model.users.portfolios.positions.UserPosition;
+
+public interface PositionRepository extends CrudRepository<UserPosition, Long> {
 }

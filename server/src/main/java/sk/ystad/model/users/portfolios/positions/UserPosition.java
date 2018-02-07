@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "positions")
 public class UserPosition {
 
     @Id
@@ -17,16 +18,19 @@ public class UserPosition {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "security_id", nullable = false)
+    @JoinColumn(name = "securityId", referencedColumnName = "securityId")
     private Security security;
 
-    @OneToMany(mappedBy = "position")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "position")
     private List<Trade> trades;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "portfolioId", referencedColumnName = "id")
     private Portfolio portfolio;
 
-    public UserPosition(Portfolio portfolio) {
-
+    public UserPosition(Portfolio portfolio, Security security) {
+        this.portfolio = portfolio;
+        this.security = security;
     }
 
     public Long getPositionId() {
@@ -37,14 +41,15 @@ public class UserPosition {
         return security;
     }
 
-    public List<Trade> getTrades() {
-        return trades;
+    public void setSecurity(Security security) {
+        this.security = security;
     }
 
+//    public List<Trade> getTrades() {
+//        return trades;
+//    }
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id")
+
     public Portfolio getPortfolio() {
         return portfolio;
     }
@@ -53,15 +58,16 @@ public class UserPosition {
         this.positionId = positionId;
     }
 
-    public void setSecurity(Security security) {
-        this.security = security;
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
+
+    public List<Trade> getTrades() {
+        return trades;
     }
 
     public void setTrades(List<Trade> trades) {
         this.trades = trades;
-    }
-
-    public void setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
     }
 }

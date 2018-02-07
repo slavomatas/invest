@@ -1,12 +1,15 @@
 package sk.ystad.model.users.portfolios;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.users.User;
+import sk.ystad.model.users.portfolios.positions.UserPosition;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "portfolios")
 public class Portfolio {
 
     private Long id;
@@ -14,7 +17,7 @@ public class Portfolio {
     @Column(name = "name")
     private String name;
 
-    @Column(name= "description")
+    @Column(name = "description")
     private String description;
 
     @Transient
@@ -35,6 +38,9 @@ public class Portfolio {
     @Transient
     private List<Position> positions;
 
+
+    private List<UserPosition> usersPositions;
+
     @JsonIgnore
     private User user;
 
@@ -42,10 +48,8 @@ public class Portfolio {
     @Column(name = "id_influx")
     private String idInflux;
 
-    @Column
-    private String description;
 
-    public  Portfolio(){
+    public Portfolio() {
 
     }
 
@@ -91,8 +95,8 @@ public class Portfolio {
         this.name = name;
     }
 
-    @ManyToOne(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "userId" ,referencedColumnName="id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     public User getUser() {
         return user;
     }
@@ -169,5 +173,14 @@ public class Portfolio {
 
     public void setPositions(List<Position> positions) {
         this.positions = positions;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "portfolio")
+    public List<UserPosition> getUsersPositions() {
+        return usersPositions;
+    }
+
+    public void setUsersPositions(List<UserPosition> usersPositions) {
+        this.usersPositions = usersPositions;
     }
 }

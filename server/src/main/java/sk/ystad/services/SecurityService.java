@@ -18,7 +18,7 @@ public class SecurityService {
         this.securityRepository = securityRepository;
     }
 
-    public List<Security> getSecurityBySymbol(String symbol) {
+    public Security getSecurityBySymbol(String symbol) {
         return securityRepository.findBySymbol(symbol);
     }
 }

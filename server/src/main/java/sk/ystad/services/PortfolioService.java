@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sk.ystad.model.measurements.Measures;
 import sk.ystad.model.measurements.positions.Position;
+import sk.ystad.model.securities.Security;
 import sk.ystad.model.users.User;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.users.portfolios.Returns;
+import sk.ystad.model.users.portfolios.positions.UserPosition;
+import sk.ystad.repositories.securities.SecurityRepository;
 import sk.ystad.repositories.users.PortfolioRepository;
+import sk.ystad.repositories.users.PositionRepository;
 import sk.ystad.repositories.users.UserRepository;
 
 import java.security.Principal;
@@ -25,12 +29,17 @@ public class PortfolioService {
 
     private final UserRepository userRepository;
     private final PortfolioRepository portfolioRepository;
+    private final PositionRepository positionRepository;
+
+    private final SecurityRepository securityRepository;
 
     @Autowired
-    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository) {
+    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository) {
         this.influxDB = influxDB;
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
+        this.positionRepository = positionRepository;
+        this.securityRepository = securityRepository;
     }
 
     public List<Portfolio> getByUserId(Principal principal) {
@@ -38,7 +47,7 @@ public class PortfolioService {
         List<Portfolio> portfolios = user.getPortfolios();
 
         //Get influx data for each portfolio
-        for (Portfolio p: portfolios) {
+        for (Portfolio p : portfolios) {
             getPortfolioDetails(p);
             p.setPositions(getPositionsWithMarketValue(p));
         }
@@ -73,6 +82,7 @@ public class PortfolioService {
 
     /**
      * Method returns positions of portfolio with their last market value. If portfolio does not have any positions, empty array is returned.
+     *
      * @param portfolio Portfolio
      * @return List of positions with their market value
      */
@@ -100,6 +110,7 @@ public class PortfolioService {
 
     /**
      * Method returns actual close price for position with given symbol. If position with symbol is not found, method returns 0.
+     *
      * @param symbol Position symbol
      * @return Close price for given position.
      */
@@ -116,7 +127,7 @@ public class PortfolioService {
                 QueryResult.Series series = resultSeries.get(0);
                 List<List<Object>> values = series.getValues();
                 List<Object> lastValue = values.get(values.size() - 1);
-                return (Double)lastValue.get(1);
+                return (Double) lastValue.get(1);
             }
         }
 
@@ -125,6 +136,7 @@ public class PortfolioService {
 
     /**
      * Method returns positions of portfolio with their last weight. If portfolio does not have any positions, empty array is returned.
+     *
      * @param portfolioId
      * @return List of positions with weight
      */
@@ -144,12 +156,22 @@ public class PortfolioService {
                 List<List<Object>> values = series.getValues();
                 List<Object> lastValue = values.get(values.size() - 1);
                 for (int i = 1; i < columns.size(); i++) {
-                    Position position = new Position(columns.get(i), (Double)lastValue.get(i));
+                    Position position = new Position(columns.get(i), (Double) lastValue.get(i));
                     positions.add(position);
                 }
             }
         }
 
         return positions;
+    }
+
+    public void addPosition(long portfolioId, String symbol) {
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        Security security = securityRepository.findBySymbol(symbol);
+        if (portfolio != null && security != null) {
+            UserPosition position = new UserPosition(portfolio, security);
+            positionRepository.save(position);
+        }
+
     }
 }

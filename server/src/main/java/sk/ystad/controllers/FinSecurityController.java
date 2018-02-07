@@ -25,7 +25,7 @@ public class FinSecurityController {
     }
 
     @RequestMapping(value = "/{symbol}/securities", method = RequestMethod.GET)
-    public List<Security> getSecurityBySymbol(@PathVariable String symbol){
+    public Security getSecurityBySymbol(@PathVariable String symbol){
         return securityService.getSecurityBySymbol(symbol);
     }
 
