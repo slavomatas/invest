@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from 'redux';
 import { NgRedux } from '@angular-redux/store';
 import { PortfolioDetails } from '../../types/types';
-import { ChartModelPortfolio } from '../../types/dashboard-types';
+import { PortfolioTimeSeries } from '../../types/dashboard-types';
 import { AppState } from '../store';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class PortfolioActions {
         this.ngRedux.dispatch({ type: PortfolioActions.GET_PORTFOLIOS_CUMULATIVE_DATA });
     }
 
-    public getPortfoliosComulativeDataFullfiled(success: boolean, data?: ChartModelPortfolio[]) {
+    public getPortfoliosComulativeDataFullfiled(success: boolean, data?: PortfolioTimeSeries[]) {
         this.ngRedux.dispatch({
             type: success ? PortfolioActions.GET_CUMULATIVE_FULFILLED_SUCCESS : PortfolioActions.FGET_CUMULATIVE_FULFILLED_FAILURE,
             payload: data != null ? data : undefined
@@ -48,7 +48,7 @@ export class PortfolioActions {
       });
     }
 
-    public setPortfolioCumulativeChartSelected(data: ChartModelPortfolio[]){
+    public setPortfolioCumulativeChartSelected(data: PortfolioTimeSeries[]){
       this.ngRedux.dispatch({
         type: PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED,
         payload: data

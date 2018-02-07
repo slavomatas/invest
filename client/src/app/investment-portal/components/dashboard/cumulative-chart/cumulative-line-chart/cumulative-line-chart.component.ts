@@ -3,11 +3,11 @@ import { cloneDeep } from 'lodash';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 // import {port} from '_debugger';
-import { ChartModelPortfolio } from '../../../../types/dashboard-types';
 import { colorScheme } from '../../../../constants/constants';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { AppState } from '../../../../store/store';
+import { PortfolioTimeSeries } from '../../../../types/types';
 
 @Component({
   selector: 'invest-cumulative-line-chart',
@@ -22,9 +22,9 @@ export class LineChartComponent implements OnInit {
   // @select('chartPortfolios') chartPortfolios$: Observable<ChartModelPortfolio[]>;
 
   // select chart portfolios and filter just the one with selected === true
-  selectedChartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios.filter(portfolio => portfolio.selected)) ;
+  selectedPortfolioTimeSeries$ =  this.ngRedux.select(state => state.portfolioTimeSeries.filter(portfolio => portfolio.selected)) ;
 
-  chartData: ChartModelPortfolio[] = [];
+  chartData: PortfolioTimeSeries[] = [];
 
   // view: any[] = [900, 400];
 
@@ -53,7 +53,7 @@ export class LineChartComponent implements OnInit {
     private ngRedux: NgRedux<AppState>) {
 
     // subscribe on chartPortfolios from redux Store
-    this.selectedChartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
+    this.selectedPortfolioTimeSeries$.subscribe((data: PortfolioTimeSeries[]) => {
       if (data != null && data.length > 0) {
         this.chartData = cloneDeep(data);
       }

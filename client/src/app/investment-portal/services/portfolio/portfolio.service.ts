@@ -5,7 +5,7 @@ import {
   Portfolio, PortfolioDetails, CumulativeMeasurement,
   TypeOfReturns, TypeOfPortfolioReturn
 } from '../../types/types';
-import { PortfolioReturn, ChartModelPortfolio } from '../../types/dashboard-types';
+import { PortfolioReturn, PortfolioTimeSeries } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
 import { NgRedux, select } from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
@@ -31,22 +31,26 @@ export class PortfolioService implements IPortfolioService {
   /**
    * Fetches cumulative data for all portfolios
    */
-  public async getPortfoliosCumulativeData(dateFrom?: Date, dateTo?: Date): Promise<ChartModelPortfolio[]> {
+  public async getPortfoliosCumulativeData(portfolioList: PortfolioDetails[], dateFrom?: Date, dateTo?: Date): Promise<PortfolioTimeSeries[]> {
 
-    let promises: Promise<ChartModelPortfolio>[];
+    let promises: Promise<PortfolioTimeSeries>[];
 
     if (dateTo == null) {
       dateTo = new Date();
     }
 
-    await this.getPortfolios().then(async (portfolios: Portfolio[]) => {
-      promises = portfolios.map(async (portfolio: Portfolio) => {
-        return await this.getCumulativeDataForPortfolio(portfolio, dateFrom, dateTo);
-      });
-    });
+    for (const portfolio of portfolioList) {
+      this.getCumulativeDataForPortfolio(portfolio, dateFrom, dateTo);
+    }
+
+    // await this.getPortfolios().then(async (portfolios: Portfolio[]) => {
+    //   promises = portfolios.map(async (portfolio: Portfolio) => {
+    //     return await this.getCumulativeDataForPortfolio(portfolio, dateFrom, dateTo);
+    //   });
+    // });
 
     let res;
-    await Promise.all(promises).then((cumulativeData: ChartModelPortfolio[]) => {
+    await Promise.all(promises).then((cumulativeData: PortfolioTimeSeries[]) => {
       res = cumulativeData;
     });
 
@@ -70,18 +74,18 @@ export class PortfolioService implements IPortfolioService {
    * Fetches cumulative data for given portfolio
    * @param portfolio portfolio to get cumulative data for
    */
-  public async getCumulativeDataForPortfolio(portfolio: Portfolio, dateFrom: Date, dateTo: Date): Promise<ChartModelPortfolio> {
+  public async getCumulativeDataForPortfolio(portfolio: Portfolio, dateFrom: Date, dateTo: Date): Promise<PortfolioTimeSeries> {
 
     // check wether I don't have data already, to let selected one selected
-    const portfoliosChart: ChartModelPortfolio[] = this.ngRedux.getState().chartPortfolios;
+    const portfoliosChart: PortfolioTimeSeries[] = this.ngRedux.getState().portfolioTimeSeries;
 
-    let selectedState: ChartModelPortfolio[];
+    let selectedState: PortfolioTimeSeries[];
     if (portfoliosChart !== undefined) {
       selectedState = portfoliosChart.filter(x => x.id === portfolio.id); // check wether was the portfolio selected or not.
     }
 
     // map the portfolio name, id, selected
-    const portfolioChart: ChartModelPortfolio = {
+    const portfolioChart: PortfolioTimeSeries = {
       name: portfolio.name,
       id: portfolio.id,
       marketValue: null,

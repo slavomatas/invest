@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActionsObservable, combineEpics } from 'redux-observable';
 import { PortfolioActions } from '../actions/portfolio-actions';
-import { ChartModelPortfolio } from '../../types/dashboard-types';
+import { PortfolioTimeSeries } from '../../types/dashboard-types';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
@@ -17,14 +17,14 @@ export class PortfolioEpics {
     public getPortfoliosCumulativeDataEpic = (action$: ActionsObservable<any>) => {
 
         let cumulativeData;
-        this.portfolioService.getPortfoliosCumulativeData().then((data: ChartModelPortfolio[]) => {
+        this.portfolioService.getPortfoliosCumulativeData().then((data: PortfolioTimeSeries[]) => {
             cumulativeData = data;
         });
 
         return action$.ofType(PortfolioActions.GET_PORTFOLIOS_CUMULATIVE_DATA)
             .mergeMap((cData) => {
 
-                return cData.map((portfolios: ChartModelPortfolio) => ({
+                return cData.map((portfolios: PortfolioTimeSeries) => ({
                     type: PortfolioActions.GET_CUMULATIVE_FULFILLED_SUCCESS,
                     payload: portfolios
                 }));

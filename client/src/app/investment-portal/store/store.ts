@@ -1,7 +1,6 @@
 import { Action } from 'redux';
-import { User, PortfolioDetails } from '../types/types';
+import { User, PortfolioDetails, PortfolioTimeSeries } from '../types/types';
 import { Token } from '../types/authentication-types';
-import { ChartModelPortfolio } from '../types/dashboard-types';
 import { PortfolioActions } from './actions/portfolio-actions';
 import { AuthenticationActions } from './actions/authentication-actions';
 
@@ -9,7 +8,7 @@ import { AuthenticationActions } from './actions/authentication-actions';
 export interface AppState {
     user: User;
     token: Token;
-    chartPortfolios: ChartModelPortfolio[];
+    portfolioTimeSeries: PortfolioTimeSeries[];
     dashboardPortfolioList: PortfolioDetails[];
     isGettingPortfoliosCumulativeData: boolean;
     cumulativeFetchError: string | undefined;
@@ -20,7 +19,7 @@ export interface AppState {
 }
 
 export const INITIAL_STATE: AppState = {
-    chartPortfolios: [],
+    portfolioTimeSeries: [],
     dashboardPortfolioList: [],
     isGettingPortfoliosCumulativeData: false,
     cumulativeFetchError: undefined,
@@ -39,7 +38,7 @@ export function rootReducer(lastState: AppState, action: any): AppState {
             return <AppState>{
               ...lastState,
               isGettingPortfoliosCumulativeData: false,
-              chartPortfolios: action.payload,
+              portfolioTimeSeries: action.payload,
               cumulativeFetchError: undefined
             };
         case PortfolioActions.FGET_CUMULATIVE_FULFILLED_FAILURE:
@@ -74,7 +73,7 @@ export function rootReducer(lastState: AppState, action: any): AppState {
         case PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED:
           return {
             ...lastState,
-            chartPortfolios: action.payload,
+            portfolioTimeSeries: action.payload,
           };
         case PortfolioActions.PUT_PORTFOLIO:
           return <AppState> {

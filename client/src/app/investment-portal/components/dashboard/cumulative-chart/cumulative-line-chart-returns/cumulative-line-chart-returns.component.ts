@@ -2,7 +2,7 @@ import { Component, OnInit, NgModule} from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
-import { ChartModelPortfolio, PortfolioSummary } from '../../../../types/dashboard-types';
+import { PortfolioTimeSeries, PortfolioSummary } from '../../../../types/dashboard-types';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { AppState } from '../../../../store/store';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
@@ -14,13 +14,14 @@ import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 })
 export class LineChartReturnsComponent implements OnInit {
 
-  selectedChartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios.filter(portfolio => portfolio.selected)) ;
+  // selectedPortfolioTimeSeries$ =  this.ngRedux.select(state => state.portfolioTimeSeries.filter(portfolio => portfolio.selected)) ;
+  selectedPortfolioTimeSeries$ =  this.ngRedux.select(state => state.portfolioTimeSeries) ;
   cumulativeChartSelectedPeriod$ = this.ngRedux.select(state => state.cumulativeChartSelectedPeriod);
   currencySymbol$ = this.ngRedux.select(state => state.currencySymbol);
 
 
 
-  chartData: ChartModelPortfolio[] = [];
+  chartData: PortfolioTimeSeries[] = [];
   currencySymbol: string;
   selectedPeriod: string;
   portfolioSummaryObject: PortfolioSummary = {
@@ -49,7 +50,7 @@ export class LineChartReturnsComponent implements OnInit {
       }
     });
 
-    this.selectedChartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
+    this.selectedPortfolioTimeSeries$.subscribe((data: PortfolioTimeSeries[]) => {
 
       let totalMarketValue = 0;
       let totalOldMarketValue = 0;

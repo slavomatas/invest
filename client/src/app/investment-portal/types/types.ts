@@ -25,14 +25,32 @@ export interface PortfolioDetails {
   name: string;
   description: string;
   marketValue: number;
+  oldMarketValue: number;   // oldMarketValue - cumulative chart market value at the beginning of the preiod
   lastChangeAbs: number;
   lastChangePct: number;
   returns: TypeOfReturns;
   cash: number;
+  isClosed: boolean;
+  isDisplayed: boolean;
   positions:
     {
       symbol: string;
       value: number;
+    }[];
+  series:                 // series - time series of the portfolio
+    {
+      name: string,
+      value: number
+    }[];  
+}
+
+export interface PortfolioTimeSeries {
+  id: number;
+
+  series:
+    {
+      name: string,
+      value: number
     }[];
 }
 
