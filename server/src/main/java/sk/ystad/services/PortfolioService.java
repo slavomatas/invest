@@ -186,10 +186,7 @@ public class PortfolioService {
         User user = userRepository.findByUsername(principal.getName());
         if (user != null) {
             portfolio.setUser(user);
-            Portfolio resultPortfolio = portfolioRepository.save(portfolio);
-            if (resultPortfolio != null) {
-                return resultPortfolio;
-            }
+            return portfolioRepository.save(portfolio);
         }
         return null;
     }
@@ -205,10 +202,10 @@ public class PortfolioService {
     }
 
     public Trade addTrade(long positionId, String timestamp, Double price, int amount) {
-        UserPosition userPosition  = positionRepository.findOne(positionId);
+        UserPosition userPosition = positionRepository.findOne(positionId);
         Date formatedTimestamp = null;
         try {
-            formatedTimestamp = FormatingUtil.formatStringToDate(timestamp,"yyyy-MM-dd HH:mm:ss");
+            formatedTimestamp = FormatingUtil.formatStringToDate(timestamp, "yyyy-MM-dd HH:mm:ss");
         } catch (ParseException e) {
             e.printStackTrace();
         }
