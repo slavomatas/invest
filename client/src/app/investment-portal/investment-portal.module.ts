@@ -23,6 +23,9 @@ import { LineChartReturnsComponent } from './components/dashboard/cumulative-cha
 import { LineChartLegendComponent } from './components/dashboard/cumulative-chart/cumulative-line-chart-legend/cumulative-line-chart-legend.component';
 import { PortfolioOverviewComponent } from './components/dashboard/dashboard-portfolio-list/portfolio-overview/portfolio-overview.component';
 import { HorizontalBarChartComponent } from './components/dashboard/dashboard-portfolio-list/horizontal-bar-chart/horizontal-bar-chart.component';
+import { CreatePortfolioComponent } from './components/create-portfolio/create-portfolio.component';
+import { ClickableWidgetComponent } from './components/create-portfolio/clickable-widget/clickable-widget.component';
+import { ClickableWidgetListComponent } from './components/create-portfolio/clickable-widget-list/clickable-widget-list.component';
 
 
 const routes = [
@@ -31,6 +34,7 @@ const routes = [
   { path: 'auth/register/confirm/:token', component: ActivationMsgComponent },
   { path: 'portfolios', component: PortfoliosComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'portfolios/create', component: CreatePortfolioComponent, canActivate: [AuthGuard] },
 
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
@@ -51,7 +55,10 @@ const routes = [
     CumulativeChartComponent,
     DashboardPortfolioListComponent,
     PortfolioOverviewComponent,
-    HorizontalBarChartComponent
+    HorizontalBarChartComponent,
+    CreatePortfolioComponent,
+    ClickableWidgetComponent,
+    ClickableWidgetListComponent
 
   ],
   imports: [
