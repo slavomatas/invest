@@ -21,13 +21,11 @@ import sk.ystad.repositories.users.RoleRepository;
 public class ServerApplication extends SpringBootServletInitializer {
 	@PersistenceContext
 	private EntityManager em;
-	//private static final Logger logger = Logger.getLogger(ServerApplication.class);
 	private static final Logger logger = LogManager
 			.getLogger(ServerApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
-		logger.error("Sentry test");
 	}
 
 	@Override
