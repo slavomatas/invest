@@ -12,7 +12,9 @@ import sk.ystad.services.ServerStatusService;
 @RequestMapping("/status")
 public class ServerStatusController {
 
-    final
+    //private static final Logger logger = Logger.getLogger(ServerStatusController.class);
+
+    private final
     ServerStatusService serverStatusService;
 
     @Autowired
@@ -23,6 +25,12 @@ public class ServerStatusController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Get server status", notes = "Determines if the server is running or not")
     public ServerStatus getServerStatus() {
+     //   Sentry.init("https://7ece5aae6fdd496fad129dc5793641f2:e29d71fc05e24971aa73f7f5ccd913e6@sentry.io/283250");
+//        Sentry.capture("halo pliiiis");
+//        Sentry.
+/*        logger.error("Error was handled");
+        logger.warn("Error was handled");
+        logger.info("Error was handled");*/
         return serverStatusService.getServerStatus();
     }
 

@@ -1,6 +1,5 @@
 package sk.ystad.repositories.measurements;
 
-import org.apache.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -17,8 +16,6 @@ import java.util.List;
 
 @Repository
 public class PortfolioMeasurementRepository {
-
-    static Logger LOG = Logger.getLogger(PortfolioMeasurementRepository.class.getName());
 
     private InfluxDB influxDB;
 
@@ -50,9 +47,10 @@ public class PortfolioMeasurementRepository {
                         portfolioCumulativeReturns.add(new TimeSeriesSimpleItem(rowValues.get(0).toString(),
                                 (Double) rowValues.get(1)));
                     } catch (Exception e) {
+                        /*
                         LOG.info("Time: " + rowValues.get(0));
                         LOG.info("Value: " + rowValues.get(1));
-                        LOG.error(e);
+                        LOG.error(e);*/
                     }
                 }
             }

@@ -49,3 +49,4 @@ client/target
 
 #Deployment setting
 client/src/app/investment-portal/proxy.conf.json
+*.log
