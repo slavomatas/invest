@@ -38,8 +38,6 @@ public class PortfolioService {
             if(portfolioaaads != null){
                 return portfolioaaads;
             }
-//            user.getPortfolios().add(portfolioaaads);
-//            userRepository.save(user);
         }
         return null;
     }
