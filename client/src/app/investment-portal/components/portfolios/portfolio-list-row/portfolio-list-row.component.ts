@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, SimpleChange, OnChanges} from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { colorScheme } from '../../../constants/constants';
 import { PortfolioDetails } from '../../../types/types';
@@ -26,7 +26,7 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
 
   }
 
-  ngOnChanges(changes: SimpleChange) {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes['portfolioData']){
       this.chartData = [];
       this.portfolioData.positions.forEach((position) => {

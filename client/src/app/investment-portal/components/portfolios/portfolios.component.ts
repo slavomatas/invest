@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PortfolioDetails } from '../../types/types';
+import { NgRedux } from '@angular-redux/store';
+import { AppState } from '../../store/store';
 
 
 @Component({
@@ -8,6 +10,8 @@ import { PortfolioDetails } from '../../types/types';
   styleUrls: ['./portfolios.component.scss']
 })
 export class PortfoliosComponent implements OnInit {
+
+  portfolioList$ = this.ngRedux.select(state => state.dashboardPortfolioList);
 
   portfolios: PortfolioDetails[] = [
     {
@@ -312,7 +316,7 @@ export class PortfoliosComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private ngRedux: NgRedux<AppState>) { }
 
   ngOnInit() {
   }

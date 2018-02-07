@@ -1,1 +1,12 @@
+.portfolio-list-parent {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: scroll;
+}
 
+.portfolio-list-item {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-bottom: 10px;
+}
