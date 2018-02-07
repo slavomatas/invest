@@ -20,6 +20,9 @@ public class Portfolio {
     @Column(name = "id_influx")
     private String idInflux;
 
+    @Column
+    private String description;
+
     public  Portfolio(){
 
     }
@@ -40,6 +43,11 @@ public class Portfolio {
         this.name = name;
         this.user = user;
         this.idInflux = idInflux;
+    }
+
+    public Portfolio(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     @Id
@@ -77,5 +85,13 @@ public class Portfolio {
 
     public void setIdInflux(String idInflux) {
         this.idInflux = idInflux;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
