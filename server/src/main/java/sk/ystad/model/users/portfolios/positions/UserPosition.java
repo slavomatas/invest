@@ -26,6 +26,7 @@ public class UserPosition {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "portfolioId", referencedColumnName = "id")
+    @JsonIgnore
     private Portfolio portfolio;
 
     public UserPosition() {

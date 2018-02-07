@@ -1,5 +1,7 @@
 package sk.ystad.model.users.portfolios.positions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ public class Trade {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "positionId", referencedColumnName = "positionId")
+    @JsonIgnore
     private UserPosition position;
 
     private double price;
