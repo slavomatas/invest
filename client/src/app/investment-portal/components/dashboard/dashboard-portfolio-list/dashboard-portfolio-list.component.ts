@@ -8,7 +8,7 @@ import { AppState } from '../../../store/store';
 
 
 @Component({
-  selector: 'fuse-app-dashboard-portfolio-list',
+  selector: 'invest-dashboard-portfolio-list',
   templateUrl: './dashboard-portfolio-list.component.html',
   styleUrls: ['./dashboard-portfolio-list.component.scss']
 })

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../../store/store';
 
 @Component({
-  selector: 'fuse-app-cumulative-chart',
+  selector: 'invest-cumulative-chart',
   templateUrl: './cumulative-chart.component.html',
   styleUrls: ['./cumulative-chart.component.scss']
 })
