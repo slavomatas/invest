@@ -48,8 +48,10 @@ public class Portfolio {
     @Column(name = "id_influx")
     private String idInflux;
 
+    @Column(name = "is_closed")
+    private boolean isClosed;
 
-    public Portfolio() {
+    public  Portfolio(){
 
     }
 
@@ -182,5 +184,13 @@ public class Portfolio {
 
     public void setUsersPositions(List<UserPosition> usersPositions) {
         this.usersPositions = usersPositions;
+    }
+
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 }

@@ -175,6 +175,25 @@ public class PortfolioService {
         return positions;
     }
 
+    /**
+     * Update portfolio
+     *
+     * @param principal
+     * @param portfolio
+     * @return updated portfolio
+     */
+    public Portfolio updatePortfolio(Principal principal, Portfolio portfolio) {
+        User user = userRepository.findByUsername(principal.getName());
+        if (user != null) {
+            portfolio.setUser(user);
+            Portfolio resultPortfolio = portfolioRepository.save(portfolio);
+            if (resultPortfolio != null) {
+                return resultPortfolio;
+            }
+        }
+        return null;
+    }
+
     public UserPosition addPosition(long portfolioId, String symbol) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         Security security = securityRepository.findBySymbol(symbol);

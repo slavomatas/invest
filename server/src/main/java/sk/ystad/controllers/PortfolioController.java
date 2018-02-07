@@ -39,6 +39,14 @@ public class PortfolioController {
         return portfolioService.getByUserId(principal);
     }
 
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="/user/portfolios", method = RequestMethod.PUT)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Update portfolio", notes = "UserID is retrieved from session")
+    public Portfolio updatePortfolio(Principal principal, @RequestBody Portfolio portfolio){
+        return portfolioService.updatePortfolio(principal, portfolio);
+    }
+
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
