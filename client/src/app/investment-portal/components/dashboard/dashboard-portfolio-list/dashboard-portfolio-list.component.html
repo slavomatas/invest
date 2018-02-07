@@ -1,8 +1,8 @@
-<div class="row" fxLayout="row" fxFlex="100" fxFill="100" *ngIf="dashboardPortfolioList$">
+<div class="row" fxLayout="row" fxFlex="100" fxFill="100" *ngIf="dashboardPortfolioList">
     <div  class="col-xs-6 col-md-6 col-sm-6 col-lg-6" fxFlex="50" fxFill sytle="padding-top: 20px!important; padding-bottom: 20px;" id="horizontal-bar-mobile-hide">
-      <invest-horizontal-bar-chart [portfolioDetailsList]="dashboardPortfolioList$ | async"></invest-horizontal-bar-chart>
+      <invest-horizontal-bar-chart [portfolioDetailsList]="dashboardPortfolioList"></invest-horizontal-bar-chart>
     </div>
     <div class="col-xs-6 col-md-6 col-sm-6 col-lg-6" fxFlex="50" fxFill fxFlexOffset="50px" fxLayoutGap="100px" id="overview-mobile-view">
-      <invest-portfolio-overview *ngFor="let portfolio of dashboardPortfolioList$ | async" [portfolioDetails]="portfolio" ></invest-portfolio-overview>
+      <invest-portfolio-overview *ngFor="let portfolio of dashboardPortfolioList" [portfolioDetails]="portfolio" ></invest-portfolio-overview>
     </div>
 </div>

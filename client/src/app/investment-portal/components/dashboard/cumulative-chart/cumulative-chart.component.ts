@@ -24,10 +24,10 @@ export class CumulativeChartComponent implements OnInit {
     private ngRedux: NgRedux<AppState>
   ) {
 
-    this.cumulativeChartSelectedPeriod$.subscribe((chartData: string) => {
-      console.log(chartData);
-      if (chartData != null) {
-        this.selectedPeriod = chartData;
+    this.cumulativeChartSelectedPeriod$.subscribe((selectedPeriod: string) => {
+      console.log(selectedPeriod);
+      if (selectedPeriod != null) {
+        this.selectedPeriod = selectedPeriod;
 
         let dateFrom: Date = new Date();
         const dateTo: Date = new Date();

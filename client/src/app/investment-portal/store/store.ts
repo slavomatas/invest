@@ -54,13 +54,13 @@ export function rootReducer(lastState: AppState, action: any): AppState {
               isGettingPortfoliosCumulativeData: true,
               cumulativeFetchError: undefined
             };
-        case PortfolioActions.GET_PORTFOLIOS_LIST_DETAILS:
+        case PortfolioActions.GET_PORTFOLIOS:
           return {
             ...lastState,
             dashboardPortfolioList: action.payload,
             portfoliosDetailsFetchError: undefined
           };
-        case PortfolioActions.FGET_PORTFOLIOS_LIST_DETAILS:
+        case PortfolioActions.FGET_PORTFOLIOS:
           return {
             ...lastState,
             portfoliosDetailsFetchError: action.payload
