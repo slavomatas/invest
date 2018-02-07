@@ -34,9 +34,9 @@ public class PortfolioService {
         User user = userService.getByUsername(principal);
         if (user != null) {
             portfolio.setUser(user);
-            Portfolio portfolioaaads = portfolioRepository.save(portfolio);
-            if(portfolioaaads != null){
-                return portfolioaaads;
+            Portfolio resultPortfolio = portfolioRepository.save(portfolio);
+            if(resultPortfolio != null){
+                return resultPortfolio;
             }
         }
         return null;
