@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'invest-portfolios',
   templateUrl: './portfolios.component.html',

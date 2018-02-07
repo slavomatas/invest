@@ -1,56 +1,101 @@
-<md-whiteframe ng-repeat="portfolio in vm.portfolios" class="portfolio-item md-whiteframe-1dp mb-10 p-8" layout="row" layout-wrap>
-  <div layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
-    <div layout="row" layout-align-gt-sm="end center" flex="100" flex-gt-sm="40" flex-gt-md="25">
-      <div layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
-        <div class="md-title" flex><a ng-href="/portfolio/{{portfolio.id}}/overview">{{portfolio.name}}</a></div>
-        <div class="" layout="row" layout-align="start center">
-          <span class="h4 secondary-text text-truncate">{{portfolio.marketValue}} ({{portfolio.cash}})</span>
-          <span class="h4 ml-8">
-                {{portfolio.lastChange}}&nbsp;
-                <i class="icon icon-trending-down s16"></i>
-                <i class="icon icon-trending-up s16"></i>
-                &nbsp;{{portfolio.lastChangePct}}%
-              </span>
-          <!--//change to dynamic -->
+<mat-card class="invest-card">
+  <div class="container"
+       fxLayout
+       fxLayout.xs="column"
+       fxLayoutAlign="center"
+       fxLayoutGap="10px"
+       fxLayoutGap.xs="0">
+    <div class="item item-main" fxFlex>
+      <div class="container"
+           fxLayout
+           fxLayout.xs="column"
+           fxLayoutAlign="center"
+           fxLayoutGap="10px"
+           fxLayoutGap.xs="0">
+        <div class="item item-1" fxFlex>
+          <div class="mat-accent" id="portfolio-name">
+            {{portfolio.name}}
+          </div> <!--a ng-href="/portfolio/{{portfolio.id}}/overview">{{portfolio.name}}</a-->
+          <div>
+            <span class="secondary-text">{{portfolio.marketValue}}
+              (<div *ngIf="portfolio.cash != 0; else no_cash">{{portfolio.cash}}</div>)</span>
+                <span style="align-items: center">
+              {{portfolio.lastChange}}&nbsp;
+              <i *ngIf="portfolio.lastChangePct > 0" class="material-icons md-18">trending_up</i>
+              <i *ngIf="portfolio.lastChangePct < 0" class="material-icons md-18">trending_down</i>&nbsp;{{portfolio.lastChangePct}}%
+            </span>
+            <!--//change to dynamic -->
+          </div>
+        </div>
+        <div class="item item-2" fxFlex>
+          <div>
+            <div><strong>Strategy:&nbsp;</strong>{{portfolioPg.strategy}}</div>
+            <div><strong>Use It As:&nbsp;</strong>{{portfolioPg.useAs}}</div>
+          </div>
+        </div>
+        <div class="item item-3" fxFlex>
+          <ngx-charts-bar-vertical
+            [view]=""
+            [scheme]="colorScheme"
+            [results]="single"
+            [gradient]="gradient"
+            [xAxis]="false"
+            [yAxis]="false"
+            [legend]="false"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]=""
+            [yAxisLabel]=""
+            (select)="onSelect($event)">
+          </ngx-charts-bar-vertical>
         </div>
       </div>
-      <div layout="column" flex="100" flex-gt-xs="50" flex-gt-md="20">
-        <div flex><strong>Strategy:&nbsp;</strong>{{portfolioPg.strategy}}</div>
-        <div flex><strong>Use It As:&nbsp;</strong>{{portfolioPg.useAs}}</div>
-      </div>
-      <div flex="100" flex-gt-sm="60" flex-gt-md="30">
-        <!--nvd3 options="vm.chartBar" data="portfolio.positionWeights"></nvd3-->
-        <!-- Change this to line chart -->
-      </div>
-      <div layout="row" layout-align-gt-sm="end center" flex="100" flex-gt-sm="40" flex-gt-md="25">
-        <md-button class="md-icon-button" aria-label="View" ng-href="/portfolio/{{portfolio.id}}/overview">
-          <md-icon md-font-icon="icon-eye"></md-icon>
-          <md-tooltip><span>View</span></md-tooltip>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Edit" ng-click="managePortfolioUpdateOperation(portfolio.id, $index)">
-          <md-icon md-font-icon="icon-pencil"></md-icon>
-          <md-tooltip><span>Edit</span></md-tooltip>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Copy" ng-click="managePortfolioCloneOperation(portfolio.id, $index)">
-          <md-icon md-font-icon="icon-content-copy"></md-icon>
-          <md-tooltip><span>Copy</span></md-tooltip>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="Remove" ng-click="managePortfolioRemoveOperation(portfolio.id)">
-          <md-icon md-font-icon="icon-delete"></md-icon>
-          <md-tooltip><span>Delete</span></md-tooltip>
-        </md-button>
+      <div class="container"
+           fxLayout
+           fxLayout.xs="column"
+           fxLayoutAlign="center"
+           fxLayoutGap="10px"
+           fxLayoutGap.xs="0">
+        <div class="item item-5" fxFlex>
+          <div style="display: inline-block">{{portfolioPg.description | slice:0:limit}}</div>
+          <div style="display: inline-block" *ngIf="portfolioPg.description.length > descriptionLimit">
+            ...
+            <a [hidden]="portfolioPg.description.length < limit"
+               (click)="descShowMore()"> More
+            </a>
+            <a [hidden]="!descMoreShown"
+               (click)="descShowLess()"> Less
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-    <div ng-init="limit = 150; moreShown = false" layout="row" layout-align-gt-sm="end center" flex="100" flex-gt-sm="40" flex-gt-md="25">
-      {{portfolioPg.description | limitTo: limit}}{{text.length > limit ? '...' : ''}}
-      <a ng-show="text.length > limit"
-         href ng-click="limit=text.length; moreShown = true">
-        &nbsp;More
-      </a>
-      <a ng-show="moreShown"
-         href ng-click="limit = 150; moreShown = false">
-        &nbsp;Less
-      </a>
+    <div class="item item-edit" fxFlex>
+      <div>
+        <button>
+          <!--a href="/portfolio/{{portfolio.id}}/overview" /-->
+          <span matTooltip="View" matTooltipPosition="above">
+            <mat-icon><i class="material-icons">visibility</i></mat-icon>
+          </span>
+        </button>
+        <button (click)="managePortfolioUpdateOperation(portfolio.id)">
+          <span matTooltip="Edit" matTooltipPosition="above">
+            <mat-icon><i class="material-icons">mode_edit</i></mat-icon>
+          </span>
+        </button>
+        <button (click)="managePortfolioCloneOperation(portfolio.id)">
+          <span matTooltip="Copy" matTooltipPosition="above">
+            <mat-icon><i class="material-icons">content_copy</i></mat-icon>
+          </span>
+        </button>
+        <button (click)="managePortfolioRemoveOperation(portfolio.id)">
+          <span matTooltip="Remove" matTooltipPosition="above">
+            <mat-icon><i class="material-icons">delete</i></mat-icon>
+          </span>
+        </button>
+      </div>
     </div>
   </div>
-</md-whiteframe>
+</mat-card>
+
+<ng-template #no_cash>NO CASH</ng-template>
