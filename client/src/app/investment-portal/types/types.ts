@@ -21,11 +21,14 @@ export interface User {
 }
 
 export interface PortfolioDetails {
-  name: string;
   id: number;
+  name: string;
+  description: string;
   marketValue: number;
-  oldMarketValue: number;
+  lastChangeAbs: number;
+  lastChangePct: number;
   returns: TypeOfReturns;
+  cash: number;
   positions:
     {
       symbol: string;
@@ -40,6 +43,7 @@ export interface TypeOfReturns {
   quarterly?: number;
   yearly?: number;
   cumulative?: number;
+  all?: number;
 }
 
 export enum TypeOfPortfolioReturn {
