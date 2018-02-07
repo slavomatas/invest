@@ -1,14 +1,14 @@
-import {Component, OnInit, Input, SimpleChange} from '@angular/core';
+import {Component, OnInit, Input, SimpleChange, OnChanges} from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { colorScheme } from '../../../constants/constants';
-import { PortfolioDetails } from "../../../types/types";
+import { PortfolioDetails } from '../../../types/types';
 
 @Component({
   selector: 'invest-portfolio-list-row',
   templateUrl: './portfolio-list-row.component.html',
   styleUrls: ['./portfolio-list-row.component.scss']
 })
-export class PortfolioListRowComponent implements OnInit {
+export class PortfolioListRowComponent implements OnInit, OnChanges {
 
   @Input() descriptionLimit: Number;
   @Input() portfolioData: PortfolioDetails;
@@ -34,7 +34,7 @@ export class PortfolioListRowComponent implements OnInit {
           name: position.symbol,
           value: position.value
         });
-      })
+      });
     }
   }
 
@@ -44,15 +44,15 @@ export class PortfolioListRowComponent implements OnInit {
   }
 
   managePortfolioUpdateOperation(portfolioId: String) {
-    console.log("managePortfolioUpdateOperation");
+    console.log('managePortfolioUpdateOperation');
   }
 
   managePortfolioCloneOperation(portfolioId: String) {
-    console.log("managePortfolioCloneOperation");
+    console.log('managePortfolioCloneOperation');
   }
 
   managePortfolioRemoveOperation(portfolioId: String) {
-    console.log("managePortfolioRemoveOperation");
+    console.log('managePortfolioRemoveOperation');
   }
 
   descShowLess(){
