@@ -82,7 +82,7 @@ public class LogRequestFilter extends OncePerRequestFilter implements Ordered {
         Object path = trace.get("path");
         Object statusCode = trace.get("statusCode");
 
-        logger.debug(String.format("%s %s produced an status code '%s'. Trace: '%s'", method, path, statusCode,
+        logger.info(String.format("%s %s produced an status code '%s'. Trace: '%s'", method, path, statusCode,
                 trace));
 
     }

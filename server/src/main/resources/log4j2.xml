@@ -32,7 +32,7 @@
         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
-            <appender-ref ref="Sentry" level="error" />
+            <appender-ref ref="Sentry" level="warn" />
         </Root>
     </Loggers>
 </Configuration>
