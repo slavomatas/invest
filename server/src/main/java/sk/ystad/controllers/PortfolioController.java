@@ -38,8 +38,7 @@ public class PortfolioController {
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create new portfolio", notes = "UserID is retrieved from session")
     public Portfolio createPortfolio(Principal principal, @RequestBody Portfolio portfolio) {
-        User user = userService.getByUsername(principal);
-        return portfolioService.createPortfolio(user, portfolio);
+        return portfolioService.createPortfolio(principal, portfolio);
     }
 
 }
