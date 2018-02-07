@@ -6,6 +6,7 @@ import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sk.ystad.ServerApplication;
+import sk.ystad.common.utils.FormatingUtil;
 import sk.ystad.model.measurements.Measures;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.securities.Security;
@@ -21,6 +22,7 @@ import sk.ystad.repositories.users.TradeRepository;
 import sk.ystad.repositories.users.UserRepository;
 
 import java.security.Principal;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -183,12 +185,18 @@ public class PortfolioService {
         return null;
     }
 
-    public Trade addTrade(long positionId, Date timestamp, Double price, int amount) {
+    public Trade addTrade(long positionId, String timestamp, Double price, int amount) {
         UserPosition userPosition  = positionRepository.findOne(positionId);
+        Date formatedTimestamp = null;
+        try {
+            formatedTimestamp = FormatingUtil.formatStringToDate(timestamp,"yyyy-MM-dd HH:mm:ss");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         //Position exists
         if (userPosition != null) {
-            Trade trade = new Trade(userPosition, price, amount, timestamp);
+            Trade trade = new Trade(userPosition, price, amount, formatedTimestamp);
             return tradeRepository.save(trade);
         }
         return null;

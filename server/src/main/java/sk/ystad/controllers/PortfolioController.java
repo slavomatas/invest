@@ -6,6 +6,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.users.User;
+import sk.ystad.model.users.portfolios.positions.Trade;
+import sk.ystad.model.users.portfolios.positions.UserPosition;
+import sk.ystad.repositories.users.UserRepository;
 import sk.ystad.services.PortfolioService;
 import sk.ystad.services.UserService;
 
@@ -41,19 +44,19 @@ public class PortfolioController {
     @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
 //    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
 //    @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
-    public void addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
-                            Principal principal){
-        portfolioService.addPosition(portfolioId, symbol);
+    public UserPosition addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
+                                    Principal principal){
+        return portfolioService.addPosition(portfolioId, symbol);
     }
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios/positions/{positionId}", method = RequestMethod.POST)
 //    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-//    @ApiOperation(value = "Create trade", notes = "UserID is retrieved from session")
-    public void addTrade(@PathVariable(value="positionId") long positionId, @RequestParam("timestamp") Date timestamp,
-            @RequestParam("price") Double price, @RequestParam("amount") int amount,
-                         Principal principal){
-        //TODO add service call
+//    @ApiOperation(value = "Create trade")
+    public Trade addTrade(@PathVariable(value="positionId") long positionId, @RequestParam("timestamp") String timestamp,
+                          @RequestParam("price") Double price, @RequestParam("amount") int amount,
+                          Principal principal){
+        return portfolioService.addTrade(positionId, timestamp, price, amount);
     }
 
 

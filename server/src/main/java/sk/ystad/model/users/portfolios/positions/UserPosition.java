@@ -28,6 +28,15 @@ public class UserPosition {
     @JoinColumn(name = "portfolioId", referencedColumnName = "id")
     private Portfolio portfolio;
 
+    public UserPosition() {
+    }
+
+    public UserPosition(Security security, List<Trade> trades, Portfolio portfolio) {
+        this.security = security;
+        this.trades = trades;
+        this.portfolio = portfolio;
+    }
+
     public UserPosition(Portfolio portfolio, Security security) {
         this.portfolio = portfolio;
         this.security = security;

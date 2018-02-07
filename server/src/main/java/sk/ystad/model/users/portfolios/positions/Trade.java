@@ -23,6 +23,9 @@ public class Trade {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 
+    public Trade() {
+    }
+
     public Trade(UserPosition position, double price, int amount, Date dateTime) {
         this.position = position;
         this.price = price;
