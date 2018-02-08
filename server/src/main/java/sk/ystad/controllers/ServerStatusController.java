@@ -2,6 +2,8 @@ package sk.ystad.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,14 +26,8 @@ public class ServerStatusController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Get server status", notes = "Determines if the server is running or not")
-    public ServerStatus getServerStatus() {
-     //   Sentry.init("https://7ece5aae6fdd496fad129dc5793641f2:e29d71fc05e24971aa73f7f5ccd913e6@sentry.io/283250");
-//        Sentry.capture("halo pliiiis");
-//        Sentry.
-/*        logger.error("Error was handled");
-        logger.warn("Error was handled");
-        logger.info("Error was handled");*/
-        return serverStatusService.getServerStatus();
+    public ResponseEntity<ServerStatus> getServerStatus() {
+        return new ResponseEntity<>(serverStatusService.getServerStatus(), HttpStatus.OK);
     }
 
 }

@@ -3,6 +3,8 @@ package sk.ystad.controllers;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.timeseries.TimeSeriesSimpleItem;
@@ -70,6 +72,8 @@ public class PortfolioMeasurementsController {
     public Portfolio getPortfolioDetails(@PathVariable("portfolioId") Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         return portfolioService.getPortfolioDetails(portfolio);
+
     }
+
 
 }
