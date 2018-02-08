@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -55,7 +57,7 @@ public class UserServiceTest {
         user.setRegistrationConfirmed(true);
         user.setEmail("test@test.com");
 
-        Mockito.when(userService.getUser(any(Principal.class))).thenReturn(user);
+        Mockito.when(userService.getUser(any(Principal.class))).thenReturn(new ResponseEntity<>(user, HttpStatus.OK));
 
         mvc.perform(get("/v1/user")
                 .contentType(MediaType.APPLICATION_JSON))
