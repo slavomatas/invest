@@ -3,10 +3,8 @@ package sk.ystad.controllers;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.services.PositionService;
 
@@ -31,4 +29,26 @@ public class PositionController {
         return positionService.getPosition(positionId);
     }
 
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
+//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
+    public UserPosition addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
+                                    Principal principal){
+        return positionService.addPosition(portfolioId, symbol);
+    }
+
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="/user/portfolios/{portfolioId}/position/{symbol}/trade", method = RequestMethod.POST)
+//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Create a trade")
+    public Trade addTrade(@PathVariable(value="portfolioId") long portfolioId,
+                          @PathVariable(value="symbol") String symbol,
+                          @RequestParam("timestamp") String timestamp,
+                          @RequestParam("price") Double price,
+                          @RequestParam("amount") int amount,
+                          Principal principal){
+        return positionService.addTrade(portfolioId, symbol, timestamp, price, amount);
+    }
 }

@@ -34,27 +34,18 @@ import java.util.List;
 public class PortfolioService {
 
     private InfluxDB influxDB;
-
     private final UserRepository userRepository;
     private final PortfolioRepository portfolioRepository;
-    private final PositionRepository positionRepository;
-    private final TradeRepository tradeRepository;
-    private final SecurityRepository securityRepository;
-    private final UserPositionRepository userPositionRepository;
 
     private static final Logger logger = LogManager
             .getLogger(ServerApplication.class);
 
     @Autowired
-    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository, TradeRepository tradeRepository, UserPositionRepository userPositionRepository) {
-        this.influxDB = influxDB;
+    public PortfolioService(UserRepository userRepository, PortfolioRepository portfolioRepository) {
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
-        this.positionRepository = positionRepository;
-        this.securityRepository = securityRepository;
-        this.tradeRepository = tradeRepository;
-        this.userPositionRepository = userPositionRepository;
     }
+
 
     public List<Portfolio> getByUserId(Principal principal) {
         User user = userRepository.findByUsername(principal.getName());
@@ -201,50 +192,4 @@ public class PortfolioService {
         return null;
     }
 
-    public UserPosition addPosition(long portfolioId, String symbol) {
-        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-        Security security = securityRepository.findBySymbol(symbol);
-        if (portfolio != null && security != null) {
-            UserPosition position = new UserPosition(portfolio, security);
-            positionRepository.save(position);
-            logger.info("Created position: " + position );
-            return position;
-        }
-        return null;
-    }
-
-    /**
-     * Adds trade to database, automatically adds position (if needed)
-     * @param portfolioId
-     * @param symbol
-     * @param timestamp
-     * @param price
-     * @param amount
-     * @return
-     */
-    public Trade addTrade(long portfolioId, String symbol,  String timestamp, Double price, int amount) {
-        //Load user portfolio
-        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-        UserPosition userPosition = positionRepository.findBySecuritySymbol(symbol);
-
-        //Try to format date
-        Date formatedTimestamp = null;
-        try {
-            formatedTimestamp = FormatingUtil.formatStringToDate(timestamp, "yyyy-MM-dd HH:mm:ss");
-        } catch (ParseException e) {
-            logger.error("Failed to format timestamp: " + e);
-        }
-
-        //Position doesn't exist, create it
-        if (userPosition == null) {
-            Security security = securityRepository.findBySymbol(symbol);
-            userPosition = new UserPosition(security, null, portfolio);
-            userPositionRepository.save(userPosition);
-            logger.info("Created position: " + userPosition);
-        }
-        Trade trade = new Trade(userPosition, price, amount, formatedTimestamp);
-        tradeRepository.save(trade);
-        logger.info("Added trade to repository  " + trade);
-        return trade;
-    }
 }

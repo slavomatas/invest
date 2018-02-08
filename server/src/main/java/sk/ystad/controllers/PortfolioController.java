@@ -46,27 +46,4 @@ public class PortfolioController {
     public Portfolio updatePortfolio(Principal principal, @RequestBody Portfolio portfolio){
         return portfolioService.updatePortfolio(principal, portfolio);
     }
-
-
-    @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
-//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
-    public UserPosition addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
-                                    Principal principal){
-        return portfolioService.addPosition(portfolioId, symbol);
-    }
-
-    @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/user/portfolios/{portfolioId}/position/{symbol}/trade", method = RequestMethod.POST)
-//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    @ApiOperation(value = "Create a trade")
-    public Trade addTrade(@PathVariable(value="portfolioId") long portfolioId,
-                          @PathVariable(value="symbol") String symbol,
-                          @RequestParam("timestamp") String timestamp,
-                          @RequestParam("price") Double price,
-                          @RequestParam("amount") int amount,
-                          Principal principal){
-        return portfolioService.addTrade(portfolioId, symbol, timestamp, price, amount);
-    }
 }
