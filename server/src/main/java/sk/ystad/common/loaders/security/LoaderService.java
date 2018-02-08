@@ -39,11 +39,16 @@ public class LoaderService {
         user.setRegistrationTimestamp(new Date());
         user.addRole(roleRepository.findByRoleName(Role.STANDARD_USER_STRING));
         userRepository.save(user);
-        for (int i = 0; i < 6; i++) {
-            Portfolio portfolio = new Portfolio();
+        Portfolio portfolio = new Portfolio();
+        portfolio.setName("Portfolio1");
+        portfolio.setUser(user);
+        portfolio.setIdInflux("PID5a6f4f49af69115d83a41e24");
+        portfolioRepository.save(portfolio);
+        for (int i = 1; i < 6; i++) {
+            portfolio = new Portfolio();
             portfolio.setName("Portfolio" + i);
             portfolio.setUser(user);
-            portfolio.setIdInflux("PID5a6f4f49af69115d83a41e" + (i + 24));
+            portfolio.setIdInflux("PID5a6f4f4aaf69115d83a41e" + (i + 24));
             portfolioRepository.save(portfolio);
         }
 
