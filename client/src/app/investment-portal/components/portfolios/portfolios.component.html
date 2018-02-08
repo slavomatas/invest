@@ -1,6 +1,9 @@
 <div class="portfolio-list-parent">
-    <invest-portfolio-list-row class="portfolio-list-item" *ngFor="let portfolio of portfolios" [portfolioData]="portfolio" descriptionLimit="5">
-        <!-- portfolioList$ | async -->
+    <invest-portfolio-list-row
+      *ngFor="let portfolio of portfolioList$ | async"
+      class="portfolio-list-item"
+      [portfolioData]="portfolio"
+      descriptionLimit="5">
     </invest-portfolio-list-row>
 </div>
 

@@ -58,7 +58,7 @@ export class PortfolioActions {
     public putPortfolio(data: PortfolioDetails){
 
       const portfolioList: PortfolioDetails[] = this.ngRedux.getState().dashboardPortfolioList;
-      const newPortfolioList: PortfolioDetails[];
+      const newPortfolioList: PortfolioDetails[] = [];
 
       portfolioList.forEach((portfolio) => {
         if (data.id === portfolio.id){
