@@ -1,5 +1,6 @@
 package sk.ystad.controllers;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class PositionController {
 
     @RequestMapping(value = "/user/positions/{positionId}",
             method = RequestMethod.GET)
+    @ApiOperation(value = "Get position with details", notes = "Provides position object with all asociated trades")
     public UserPosition getPosition(@PathVariable(value = "positionId") long positionId, Principal principal) {
         return positionService.getPosition(positionId);
     }

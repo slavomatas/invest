@@ -51,7 +51,7 @@ public class PortfolioController {
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
 //    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-//    @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
+    @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
     public UserPosition addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
                                     Principal principal){
         return portfolioService.addPosition(portfolioId, symbol);
