@@ -6,6 +6,8 @@ import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sk.ystad.ServerApplication;
 import sk.ystad.model.measurements.ImmutableMeasure;
@@ -36,8 +38,7 @@ public class PortfolioMeasurementsService {
     }
 
 
-    public List<TimeSeriesSimpleItem> getMeasurement(Long portfolioId, String measurementType, LocalDateTime dateFrom, LocalDateTime dateTo) {
-        List<TimeSeriesSimpleItem> timeSeriesItems = new ArrayList<>();
+    public ResponseEntity getMeasurement(Long portfolioId, String measurementType, LocalDateTime dateFrom, LocalDateTime dateTo) {
 
         LocalDate localDateFrom = null;
         LocalDate localDateTo = null;
@@ -50,11 +51,10 @@ public class PortfolioMeasurementsService {
 
         String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of(measurementType);
-        return findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo);
+        return new ResponseEntity<>(findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo), HttpStatus.OK);
     }
 
-    public List<TimeSeriesSimpleItem> getMeasurementMarket(Long portfolioId, LocalDateTime dateFrom, LocalDateTime dateTo) {
-        List<TimeSeriesSimpleItem> timeSeriesItems = new ArrayList<>();
+    public ResponseEntity getMeasurementMarket(Long portfolioId, LocalDateTime dateFrom, LocalDateTime dateTo) {
 
         LocalDate localDateFrom = null;
         LocalDate localDateTo = null;
@@ -67,7 +67,7 @@ public class PortfolioMeasurementsService {
 
         String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of("PORTFOLIO_MARKET_VALUE");
-        return findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo);
+        return new ResponseEntity<>(findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo), HttpStatus.OK);
 
     }
 
@@ -93,14 +93,12 @@ public class PortfolioMeasurementsService {
                 portfolioCumulativeReturns.add(new TimeSeriesSimpleItem(rowValues.get(0).toString(),
                         (Double) rowValues.get(1)));
             }
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             logger.error("InfluxDB Parser Error: " + e);
         }
 
         return portfolioCumulativeReturns;
     }
-
 
 
 }
