@@ -12,7 +12,7 @@ import java.util.List;
 public class UserPosition {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "positionId")
     private Long positionId;
 

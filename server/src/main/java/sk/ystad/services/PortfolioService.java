@@ -1,9 +1,12 @@
 package sk.ystad.services;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import sk.ystad.ServerApplication;
 import sk.ystad.common.utils.FormatingUtil;
@@ -16,11 +19,9 @@ import sk.ystad.model.users.portfolios.Returns;
 import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.repositories.securities.SecurityRepository;
-import sk.ystad.repositories.users.PortfolioRepository;
-import sk.ystad.repositories.users.PositionRepository;
-import sk.ystad.repositories.users.TradeRepository;
-import sk.ystad.repositories.users.UserRepository;
+import sk.ystad.repositories.users.*;
 
+import javax.sound.sampled.Port;
 import java.security.Principal;
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -39,17 +40,20 @@ public class PortfolioService {
     private final PositionRepository positionRepository;
     private final TradeRepository tradeRepository;
     private final SecurityRepository securityRepository;
+    private final UserPositionRepository userPositionRepository;
 
-    //private static final Logger log = LoggerFactory.getLogger(PortfolioService.class);
+    private static final Logger logger = LogManager
+            .getLogger(ServerApplication.class);
 
     @Autowired
-    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository, TradeRepository tradeRepository) {
+    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository, TradeRepository tradeRepository, UserPositionRepository userPositionRepository) {
         this.influxDB = influxDB;
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
         this.positionRepository = positionRepository;
         this.securityRepository = securityRepository;
         this.tradeRepository = tradeRepository;
+        this.userPositionRepository = userPositionRepository;
     }
 
     public List<Portfolio> getByUserId(Principal principal) {
@@ -196,25 +200,45 @@ public class PortfolioService {
         Security security = securityRepository.findBySymbol(symbol);
         if (portfolio != null && security != null) {
             UserPosition position = new UserPosition(portfolio, security);
-            return positionRepository.save(position);
+            positionRepository.save(position);
+            logger.info("Created position: " + position );
+            return position;
         }
         return null;
     }
 
-    public Trade addTrade(long positionId, String timestamp, Double price, int amount) {
-        UserPosition userPosition = positionRepository.findOne(positionId);
+    /**
+     * Adds trade to database, automatically adds position (if needed)
+     * @param portfolioId
+     * @param symbol
+     * @param timestamp
+     * @param price
+     * @param amount
+     * @return
+     */
+    public Trade addTrade(long portfolioId, String symbol,  String timestamp, Double price, int amount) {
+        //Load user portfolio
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        UserPosition userPosition = positionRepository.findBySecuritySymbol(symbol);
+
+        //Try to format date
         Date formatedTimestamp = null;
         try {
             formatedTimestamp = FormatingUtil.formatStringToDate(timestamp, "yyyy-MM-dd HH:mm:ss");
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("Failed to format timestamp: " + e);
         }
 
-        //Position exists
-        if (userPosition != null) {
-            Trade trade = new Trade(userPosition, price, amount, formatedTimestamp);
-            return tradeRepository.save(trade);
+        //Position doesn't exist, create it
+        if (userPosition == null) {
+            Security security = securityRepository.findBySymbol(symbol);
+            userPosition = new UserPosition(security, null, portfolio);
+            userPositionRepository.save(userPosition);
+            logger.info("Created position: " + userPosition);
         }
-        return null;
+        Trade trade = new Trade(userPosition, price, amount, formatedTimestamp);
+        tradeRepository.save(trade);
+        logger.info("Added trade to repository  " + trade);
+        return trade;
     }
 }

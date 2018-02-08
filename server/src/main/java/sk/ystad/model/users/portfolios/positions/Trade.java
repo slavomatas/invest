@@ -10,7 +10,7 @@ import java.util.Date;
 public class Trade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tradeId")
     private Long tradeId;
 
