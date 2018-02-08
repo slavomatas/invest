@@ -4,7 +4,8 @@ import { colorScheme } from '../../../../constants/constants';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { AppState } from '../../../../store/store';
-import { PortfolioTimeSeries } from '../../../../types/types';
+import { PortfolioDetails } from '../../../../types/types';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'invest-cumulative-line-chart-legend',
@@ -13,16 +14,15 @@ import { PortfolioTimeSeries } from '../../../../types/types';
 })
 export class LineChartLegendComponent implements OnInit {
 
-  portfolioTimeSeries$ =  this.ngRedux.select(state => state.portfolioTimeSeries);
-  // chartActivePortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
+  dashboardPortfolioList$ =  this.ngRedux.select(state => state.portfolioList);
 
-  portfolios: PortfolioTimeSeries[] = [];
+  portfolios: PortfolioDetails[] = [];
   colors = colorScheme;
 
   constructor(private portfolioService: PortfolioService,
               private actions: PortfolioActions,
               private ngRedux: NgRedux<AppState>) {
-    this.portfolioTimeSeries$.subscribe((data: PortfolioTimeSeries[]) => {
+    this.dashboardPortfolioList$.subscribe((data: PortfolioDetails[]) => {
       if (data != null && data.length > 0 ) {
         this.portfolios = data;
       }
@@ -33,10 +33,10 @@ export class LineChartLegendComponent implements OnInit {
   }
 
   legendEvent(event, index) {
-    console.log(index);
-    this.portfolios[index].selected = !this.portfolios[index].selected;
+    console.log('legend clicket index', index);
+    this.portfolios[index].isDisplayed = !this.portfolios[index].isDisplayed;
 
-    // change redux state
-    this.actions.setPortfolioCumulativeChartSelected(this.portfolios);
+    this.actions.getPortfolios(true, cloneDeep(this.portfolios));
+
   }
 }

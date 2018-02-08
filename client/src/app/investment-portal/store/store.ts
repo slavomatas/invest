@@ -9,7 +9,8 @@ export interface AppState {
     user: User;
     token: Token;
     portfolioTimeSeries: PortfolioTimeSeries[];
-    dashboardPortfolioList: PortfolioDetails[];
+    portfolioList: PortfolioDetails[];
+    displayedPortfolios: PortfolioDetails[];
     isGettingPortfoliosCumulativeData: boolean;
     cumulativeFetchError: string | undefined;
     portfoliosDetailsFetchError: string | undefined;
@@ -20,7 +21,8 @@ export interface AppState {
 
 export const INITIAL_STATE: AppState = {
     portfolioTimeSeries: [],
-    dashboardPortfolioList: [],
+    portfolioList: [],
+    displayedPortfolios: [],
     isGettingPortfoliosCumulativeData: false,
     cumulativeFetchError: undefined,
     portfoliosDetailsFetchError: undefined,
@@ -56,7 +58,7 @@ export function rootReducer(lastState: AppState, action: any): AppState {
         case PortfolioActions.GET_PORTFOLIOS:
           return {
             ...lastState,
-            dashboardPortfolioList: action.payload,
+            portfolioList: action.payload,
             portfoliosDetailsFetchError: undefined
           };
         case PortfolioActions.FGET_PORTFOLIOS:
@@ -73,7 +75,7 @@ export function rootReducer(lastState: AppState, action: any): AppState {
         case PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED:
           return {
             ...lastState,
-            portfolioTimeSeries: action.payload,
+            displayedPortfolios: action.payload,
           };
         case PortfolioActions.PUT_PORTFOLIO:
           return <AppState> {

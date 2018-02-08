@@ -2,10 +2,12 @@ import { Component, OnInit, NgModule} from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
-import { PortfolioTimeSeries, PortfolioSummary } from '../../../../types/dashboard-types';
+import { PortfolioSummary, PortfolioReturn } from '../../../../types/dashboard-types';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { AppState } from '../../../../store/store';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+import { PortfolioDetails, TypeOfOldMarketValue } from '../../../../types/types';
+import { getOldMarketValue, getDateFrom, setOldMarketValue, getDisplayedPortfolios } from '../../../../utils/portfolio-utils';
 
 @Component({
   selector: 'invest-cumulative-line-chart-returns',
@@ -15,13 +17,13 @@ import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 export class LineChartReturnsComponent implements OnInit {
 
   // selectedPortfolioTimeSeries$ =  this.ngRedux.select(state => state.portfolioTimeSeries.filter(portfolio => portfolio.selected)) ;
-  selectedPortfolioTimeSeries$ =  this.ngRedux.select(state => state.portfolioTimeSeries) ;
+  portfolioList$ =  this.ngRedux.select(state => state.portfolioList) ;
   cumulativeChartSelectedPeriod$ = this.ngRedux.select(state => state.cumulativeChartSelectedPeriod);
   currencySymbol$ = this.ngRedux.select(state => state.currencySymbol);
 
+  portfolioList: PortfolioDetails[] = [];
 
-
-  chartData: PortfolioTimeSeries[] = [];
+  chartData: PortfolioDetails[] = [];
   currencySymbol: string;
   selectedPeriod: string;
   portfolioSummaryObject: PortfolioSummary = {
@@ -50,19 +52,10 @@ export class LineChartReturnsComponent implements OnInit {
       }
     });
 
-    this.selectedPortfolioTimeSeries$.subscribe((data: PortfolioTimeSeries[]) => {
+    this.portfolioList$.subscribe((data: PortfolioDetails[]) => {
+      this.portfolioList = data;
+      this.refreshReturns();
 
-      let totalMarketValue = 0;
-      let totalOldMarketValue = 0;
-
-      for (const portfolio of data) {
-        totalMarketValue += portfolio.marketValue;
-        totalOldMarketValue += portfolio.oldMarketValue;
-      }
-
-      this.portfolioSummaryObject.marketValue = this.numberWithCommas(totalMarketValue);
-      this.portfolioSummaryObject.periodMarketValue = this.numberWithCommas(totalOldMarketValue);
-      this.portfolioSummaryObject.periodMarketValuePercentage = (totalMarketValue === 0) ? 0 : ((totalMarketValue - totalOldMarketValue) / totalMarketValue);
     });
 
     this.currencySymbol$.subscribe((data: string) => {
@@ -81,6 +74,58 @@ export class LineChartReturnsComponent implements OnInit {
   }
 
   periodEvent(event) {
-    this.actions.setCumulativeChartPeriod(event.srcElement.innerText);
+    const periodString = event.srcElement.innerText;
+
+    let newPortfolioPromises: Promise<PortfolioDetails>[] = [];
+
+    newPortfolioPromises = this.portfolioList.map(async (portfolio: PortfolioDetails) => {
+      if (getOldMarketValue(periodString, portfolio.oldMarketValues) == null) {
+        const today = new Date();
+        const pastDay = getDateFrom(today, periodString);
+        const dateFrom = new Date();
+        dateFrom.setDate(pastDay.getDate() - 1);
+
+        await this.portfolioService.getPortfolioMarketValues(portfolio.id, dateFrom, pastDay).toPromise()
+          .then((returns: PortfolioReturn[]) => {
+            const length = returns.length;
+            let oldMarketValue;
+
+            if (length > 0){
+              oldMarketValue = Number.parseFloat(returns[0].value);
+            } else {
+              oldMarketValue = 0;
+            }
+            
+            setOldMarketValue(periodString, portfolio.oldMarketValues, 5000.00);
+          });
+      } else {
+        this.refreshReturns();
+      }
+      return portfolio;
+    });
+
+    Promise.all(newPortfolioPromises).then((newPortfolios) => {
+    
+      this.actions.setCumulativeChartPeriod(event.srcElement.innerText);
+      this.actions.getPortfolios(true, newPortfolios);
+    });
+
+  }  
+
+  private refreshReturns() {
+
+    let totalMarketValue = 0;
+    let totalOldMarketValue = 0;
+    const displayedPortfolios = getDisplayedPortfolios(this.portfolioList);
+
+    for (const portfolio of displayedPortfolios) {
+      totalMarketValue += portfolio.marketValue;
+      totalOldMarketValue += getOldMarketValue(this.selectedPeriod, portfolio.oldMarketValues);
+    }
+
+    this.portfolioSummaryObject.marketValue = this.numberWithCommas(totalMarketValue);
+    this.portfolioSummaryObject.periodMarketValue = this.numberWithCommas(totalOldMarketValue);
+    this.portfolioSummaryObject.periodMarketValuePercentage = (totalMarketValue === 0) ? 0 : ((totalMarketValue - totalOldMarketValue) / totalMarketValue);
   }
+
 }

@@ -25,7 +25,7 @@ export interface PortfolioDetails {
   name: string;
   description: string;
   marketValue: number;
-  oldMarketValue: number;   // oldMarketValue - cumulative chart market value at the beginning of the preiod
+  oldMarketValues: TypeOfOldMarketValue;   // oldMarketValue - cumulative chart market value at the beginning of the preiod
   lastChangeAbs: number;
   lastChangePct: number;
   returns: TypeOfReturns;
@@ -61,6 +61,15 @@ export interface TypeOfReturns {
   quarterly?: number;
   yearly?: number;
   cumulative?: number;
+  all?: number;
+}
+
+export interface TypeOfOldMarketValue {
+  oneM?: number;
+  threeM?: number;
+  sixM?: number;
+  nineM?: number;
+  twelveM?: number;
   all?: number;
 }
 

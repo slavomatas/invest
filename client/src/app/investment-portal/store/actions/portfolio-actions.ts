@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from 'redux';
 import { NgRedux } from '@angular-redux/store';
-import { PortfolioDetails } from '../../types/types';
-import { PortfolioTimeSeries } from '../../types/dashboard-types';
+import { PortfolioDetails, PortfolioTimeSeries } from '../../types/types';
 import { AppState } from '../store';
 
 @Injectable()
@@ -48,7 +47,7 @@ export class PortfolioActions {
       });
     }
 
-    public setPortfolioCumulativeChartSelected(data: PortfolioTimeSeries[]){
+    public setPortfolioCumulativeChartSelected(data: PortfolioDetails[]){
       this.ngRedux.dispatch({
         type: PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED,
         payload: data

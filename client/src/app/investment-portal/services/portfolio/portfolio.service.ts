@@ -5,14 +5,13 @@ import {
   Portfolio, PortfolioDetails, CumulativeMeasurement,
   TypeOfReturns, TypeOfPortfolioReturn
 } from '../../types/types';
-import { PortfolioReturn, PortfolioTimeSeries } from '../../types/dashboard-types';
+import { PortfolioReturn } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
 import { NgRedux, select } from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
 import { AppState } from '../../store/store';
 import { LoggingService } from '../logging/logging.service';
-import { RequestOptions } from '@angular/http';
-import { RequestStatus } from '../../types/authentication-types';
+import { setOldMarketValue, getDateFrom } from '../../utils/portfolio-utils';
 
  const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
  const PORTFOLIOS_URL = 'api/v1/user/portfolios';
@@ -28,33 +27,25 @@ export class PortfolioService implements IPortfolioService {
 
   }
 
+
   /**
    * Fetches cumulative data for all portfolios
    */
-  public async getPortfoliosCumulativeData(portfolioList: PortfolioDetails[], dateFrom?: Date, dateTo?: Date): Promise<PortfolioTimeSeries[]> {
+  public async getPortfoliosCumulativeData(period: string): Promise<PortfolioDetails[]> {
 
-    let promises: Promise<PortfolioTimeSeries>[];
+    let promises: Promise<PortfolioDetails>[] = [];
 
-    if (dateTo == null) {
-      dateTo = new Date();
-    }
-
-    for (const portfolio of portfolioList) {
-      this.getCumulativeDataForPortfolio(portfolio, dateFrom, dateTo);
-    }
-
-    // await this.getPortfolios().then(async (portfolios: Portfolio[]) => {
-    //   promises = portfolios.map(async (portfolio: Portfolio) => {
-    //     return await this.getCumulativeDataForPortfolio(portfolio, dateFrom, dateTo);
-    //   });
-    // });
-
-    let res;
-    await Promise.all(promises).then((cumulativeData: PortfolioTimeSeries[]) => {
-      res = cumulativeData;
+    await this.getPortfolios().then(async (portfolios: PortfolioDetails[]) => {
+      promises = portfolios.map(async (portfolio: PortfolioDetails) => {
+        portfolio.oldMarketValues = {};
+        return await this.getCumulativeDataForPortfolio(portfolio, period);
+      });
     });
 
-    return res;
+    return await Promise.all(promises).then((cumulativeData: PortfolioDetails[]) => {
+      return cumulativeData;
+    });
+
   }
 
   /**
@@ -74,31 +65,17 @@ export class PortfolioService implements IPortfolioService {
    * Fetches cumulative data for given portfolio
    * @param portfolio portfolio to get cumulative data for
    */
-  public async getCumulativeDataForPortfolio(portfolio: Portfolio, dateFrom: Date, dateTo: Date): Promise<PortfolioTimeSeries> {
+  public async getCumulativeDataForPortfolio(portfolio: PortfolioDetails, period: string): Promise<PortfolioDetails> {
 
-    // check wether I don't have data already, to let selected one selected
-    const portfoliosChart: PortfolioTimeSeries[] = this.ngRedux.getState().portfolioTimeSeries;
+    portfolio.series = [];
+    const dateTo = new Date();
+    const dateFrom = getDateFrom(dateTo, period);
 
-    let selectedState: PortfolioTimeSeries[];
-    if (portfoliosChart !== undefined) {
-      selectedState = portfoliosChart.filter(x => x.id === portfolio.id); // check wether was the portfolio selected or not.
-    }
 
-    // map the portfolio name, id, selected
-    const portfolioChart: PortfolioTimeSeries = {
-      name: portfolio.name,
-      id: portfolio.id,
-      marketValue: null,
-      oldMarketValue: null,
-      selected: selectedState.length > 0 ? selectedState[0].selected : true,
-      series: []
-    };
-
-    // get portfolio measurements and push them into series
+    // get portfolio measurements (time series) and push them into portfolioChart.series
     await this.getCumulativeMeasurements(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: CumulativeMeasurement[]) => {
-
-      measurements.map((measurement: CumulativeMeasurement) => {
-        portfolioChart.series.push({
+       measurements.map((measurement: CumulativeMeasurement) => {
+        portfolio.series.push({
           name: new Date(measurement.name).toDateString(),
           value: Number.parseFloat(measurement.value)
         });
@@ -107,20 +84,20 @@ export class PortfolioService implements IPortfolioService {
 
     // get market value of a portfolio and update it
     await this.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: PortfolioReturn[]) => {
-
       const length = measurements.length;
 
-      if (length > 0) {
-        portfolioChart.marketValue = Number.parseFloat(measurements[length - 1].value);
-        portfolioChart.oldMarketValue = Number.parseFloat(measurements[0].value);
+      if (length > 0){
+        portfolio.marketValue = Number.parseFloat(measurements[length - 1].value);
+        setOldMarketValue(period, portfolio.oldMarketValues, Number.parseFloat(measurements[0].value));
+        // portfolio.oldMarketValues = Number.parseFloat(measurements[0].value);
       } else {
-        portfolioChart.marketValue = 0;
-        portfolioChart.oldMarketValue = 0;
+        portfolio.marketValue = 0;
+        setOldMarketValue(period, portfolio.oldMarketValues, 0);
+        // portfolio.oldMarketValues = 0;
       }
-
     });
 
-    return portfolioChart;
+    return portfolio;
   }
 
   /**
@@ -221,22 +198,6 @@ export class PortfolioService implements IPortfolioService {
       });
   }
 
-  getPortfolioMarketValue(portfolioId: number, date?: Date): Observable<number> {
-    let params: HttpParams = new HttpParams();
-
-    if (date != null) {
-      date = new Date();
-      params = params.set('date', date.toISOString());
-    }
-
-    const requestUrl = GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/PORTFOLIO_MARKET_VALUE';
-    this.loggingService.captureRequestWithParams(requestUrl, JSON.stringify(params));
-    return this.http
-      .get<number>(requestUrl, {
-        params: params
-      });
-  }
-
   getPortfolioPositions(portfolioId: number): Promise<{name: string; value: number; }[]> {
     const requestUrl = PORTFOLIOS_URL + '/' + portfolioId + '/positions';
     return this.http
@@ -275,204 +236,211 @@ export class PortfolioService implements IPortfolioService {
 }
 
 
-export class MockPortfolioService {
+// export class MockPortfolioService {
 
-  getPortfoliosListDetails(portfolioReturnType: TypeOfPortfolioReturn): Promise<PortfolioDetails[]> {
+//   getPortfoliosListDetails(portfolioReturnType: TypeOfPortfolioReturn): Promise<PortfolioDetails[]> {
 
-    return new Promise((resolve) => {
-      setTimeout(
-        () => {
-          resolve(
-            [
-              {
-                'id': 5,
-                'name': 'Portfolio5',
-                'description': null,
-                'marketValue': 8565.300000000001,
-                'lastChangeAbs': -8.55999999999949,
-                'lastChangePct': -0.0012309072764449258,
-                'returns': {
-                  'daily': 0.0,
-                  'weekly': -0.013691531747311081,
-                  'monthly': 0.04483802223298383,
-                  'quarterly': 0.0,
-                  'yearly': 0.04483802223298383,
-                  'cumulative': 0.0,
-                  'all': 0.23166940361392152
-                },
-                'cash': 4.547473508864641E-13,
-                'positions': [
-                  {
-                    'symbol': 'RFG',
-                    'value': 30.98258484816644
-                  },
-                  {
-                    'symbol': 'RPG',
-                    'value': 30.284193198136666
-                  },
-                  {
-                    'symbol': 'RZG',
-                    'value': 16.58022439377488
-                  },
-                  {
-                    'symbol': 'DNL',
-                    'value': 8.989865293684984
-                  },
-                  {
-                    'symbol': 'ELD',
-                    'value': 3.701523589366397
-                  },
-                  {
-                    'symbol': 'EMCB',
-                    'value': 12.51317219478594
-                  },
-                  {
-                    'symbol': 'cash',
-                    'value': 4.547473508864641E-13
-                  }
-                ]
-              },
-              {
-                'id': 6,
-                'name': 'Portfolio6',
-                'description': null,
-                'marketValue': 6831.6,
-                'lastChangeAbs': 13.960000000000036,
-                'lastChangePct': 0.0021377664934199014,
-                'returns': {
-                  'daily': 0.0,
-                  'weekly': -0.0074878616445401835,
-                  'monthly': 0.003967904064897665,
-                  'quarterly': 0.0,
-                  'yearly': 0.003967904064897665,
-                  'cumulative': 0.0,
-                  'all': 0.0461579925821336
-                },
-                'cash': 0.0,
-                'positions': [
-                  {
-                    'symbol': 'IDV',
-                    'value': 3.661419286843492
-                  },
-                  {
-                    'symbol': 'KXI',
-                    'value': 34.064682943966275
-                  },
-                  {
-                    'symbol': 'AGG',
-                    'value': 34.245274898998765
-                  },
-                  {
-                    'symbol': 'XLU',
-                    'value': 7.634034779553837
-                  },
-                  {
-                    'symbol': 'DBP',
-                    'value': 4.609468938462439
-                  },
-                  {
-                    'symbol': 'cash',
-                    'value': 0.0
-                  }
-                ]
-              },
-              {
-                'id': 2,
-                'name': 'Portfolio2',
-                'description': null,
-                'marketValue': 9498.18,
-                'lastChangeAbs': -2.6200000000008004,
-                'lastChangePct': -2.8607304689631796E-4,
-                'returns': {
-                  'daily': 0.0,
-                  'weekly': -0.014425351761922722,
-                  'monthly': 0.0629950869025111,
-                  'quarterly': 0.0,
-                  'yearly': 0.0629950869025111,
-                  'cumulative': 0.0,
-                  'all': 0.03708904296555127
-                },
-                'cash': 0.0,
-                'positions': [
-                  {
-                    'symbol': 'PSCT',
-                    'value': 12.981194923659059
-                  },
-                  {
-                    'symbol': 'SKYY',
-                    'value': 2.5478990922471465
-                  },
-                  {
-                    'symbol': 'SSG',
-                    'value': 0.1692858884544197
-                  },
-                  {
-                    'symbol': 'VGT',
-                    'value': 66.2145870050894
-                  },
-                  {
-                    'symbol': 'XLK',
-                    'value': 9.881029312984172
-                  },
-                  {
-                    'symbol': 'FDN',
-                    'value': 15.717820256091166
-                  },
-                  {
-                    'symbol': 'IBB',
-                    'value': 14.070560886401394
-                  },
-                  {
-                    'symbol': 'cash',
-                    'value': 0.0
-                  }
-                ]
-              }
+//     return new Promise((resolve) =>  {
+//       setTimeout(
+//         () => {
+//           resolve(
+//             [
+//               {
+//                 'id': 5,
+//                 'name': 'Portfolio5',
+//                 'description': null,
+//                 'marketValue': 8565.300000000001,
+//                 'lastChangeAbs': -8.55999999999949,
+//                 'lastChangePct': -0.0012309072764449258,
+//                 'oldMarketValue': 8250.454,
+//                 'returns': {
+//                   'daily': 0.0,
+//                   'weekly': -0.013691531747311081,
+//                   'monthly': 0.04483802223298383,
+//                   'quarterly': 0.0,
+//                   'yearly': 0.04483802223298383,
+//                   'cumulative': 0.0,
+//                   'all': 0.23166940361392152
+//                 },
+//                 'cash': 4.547473508864641E-13,
+//                 'positions': [
+//                   {
+//                     'symbol': 'RFG',
+//                     'value': 30.98258484816644
+//                   },
+//                   {
+//                     'symbol': 'RPG',
+//                     'value': 30.284193198136666
+//                   },
+//                   {
+//                     'symbol': 'RZG',
+//                     'value': 16.58022439377488
+//                   },
+//                   {
+//                     'symbol': 'DNL',
+//                     'value': 8.989865293684984
+//                   },
+//                   {
+//                     'symbol': 'ELD',
+//                     'value': 3.701523589366397
+//                   },
+//                   {
+//                     'symbol': 'EMCB',
+//                     'value': 12.51317219478594
+//                   },
+//                   {
+//                     'symbol': 'cash',
+//                     'value': 4.547473508864641E-13
+//                   }
+//                 ],
+//                 series: [
+//                   {
+//                     'name': 'string',
+//                     'value': 1200.04
+//                   }
+//                 ]
+//               },
+//             //   {
+//             //     'id': 6,
+//             //     'name': 'Portfolio6',
+//             //     'description': null,
+//             //     'marketValue': 6831.6,
+//             //     'lastChangeAbs': 13.960000000000036,
+//             //     'lastChangePct': 0.0021377664934199014,
+//             //     'returns': {
+//             //       'daily': 0.0,
+//             //       'weekly': -0.0074878616445401835,
+//             //       'monthly': 0.003967904064897665,
+//             //       'quarterly': 0.0,
+//             //       'yearly': 0.003967904064897665,
+//             //       'cumulative': 0.0,
+//             //       'all': 0.0461579925821336
+//             //     },
+//             //     'cash': 0.0,
+//             //     'positions': [
+//             //       {
+//             //         'symbol': 'IDV',
+//             //         'value': 3.661419286843492
+//             //       },
+//             //       {
+//             //         'symbol': 'KXI',
+//             //         'value': 34.064682943966275
+//             //       },
+//             //       {
+//             //         'symbol': 'AGG',
+//             //         'value': 34.245274898998765
+//             //       },
+//             //       {
+//             //         'symbol': 'XLU',
+//             //         'value': 7.634034779553837
+//             //       },
+//             //       {
+//             //         'symbol': 'DBP',
+//             //         'value': 4.609468938462439
+//             //       },
+//             //       {
+//             //         'symbol': 'cash',
+//             //         'value': 0.0
+//             //       }
+//             //     ]
+//             //   },
+//             //   {
+//             //     'id': 2,
+//             //     'name': 'Portfolio2',
+//             //     'description': null,
+//             //     'marketValue': 9498.18,
+//             //     'lastChangeAbs': -2.6200000000008004,
+//             //     'lastChangePct': -2.8607304689631796E-4,
+//             //     'returns': {
+//             //       'daily': 0.0,
+//             //       'weekly': -0.014425351761922722,
+//             //       'monthly': 0.0629950869025111,
+//             //       'quarterly': 0.0,
+//             //       'yearly': 0.0629950869025111,
+//             //       'cumulative': 0.0,
+//             //       'all': 0.03708904296555127
+//             //     },
+//             //     'cash': 0.0,
+//             //     'positions': [
+//             //       {
+//             //         'symbol': 'PSCT',
+//             //         'value': 12.981194923659059
+//             //       },
+//             //       {
+//             //         'symbol': 'SKYY',
+//             //         'value': 2.5478990922471465
+//             //       },
+//             //       {
+//             //         'symbol': 'SSG',
+//             //         'value': 0.1692858884544197
+//             //       },
+//             //       {
+//             //         'symbol': 'VGT',
+//             //         'value': 66.2145870050894
+//             //       },
+//             //       {
+//             //         'symbol': 'XLK',
+//             //         'value': 9.881029312984172
+//             //       },
+//             //       {
+//             //         'symbol': 'FDN',
+//             //         'value': 15.717820256091166
+//             //       },
+//             //       {
+//             //         'symbol': 'IBB',
+//             //         'value': 14.070560886401394
+//             //       },
+//             //       {
+//             //         'symbol': 'cash',
+//             //         'value': 0.0
+//             //       }
+//             //     ]
+//             //   }
 
-            ]
-          );
-        },
-        500);
-    });
-  }
+//             ]
+//           );
+//         },
+//         500);
+//     });
+//   }
 
-  public getPortfolios(): Promise<Portfolio[]> {
+//   public getPortfolios(): Promise<Portfolio[]> {
 
-    return new Promise((resolve) => {
-      setTimeout(
-        () => {
-          resolve(
-            [
-              { name: 'Mock portfolio 1', id: 1, description: 'Mock portfolio 1 Description' },
-              { name: 'Mock portfolio 2', id: 2, description: 'Mock portfolio 2 Description' },
-              { name: 'Mock portfolio 3', id: 3, description: 'Mock portfolio 3 Description' }
-            ]
-          );
-        },
-        500);
-    });
-  }
+//     return new Promise((resolve) =>  {
+//       setTimeout(
+//         () => {
+//           resolve(
+//             [
+//               { name: 'Mock portfolio 1', id: 1 },
+//               { name: 'Mock portfolio 2', id: 2 },
+//               { name: 'Mock portfolio 3', id: 3 }
+//             ]
+//           );
+//         },
+//         500);
+//     });
+//   }
 
-  public getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]> {
+//   public getCumulativeMeasurements(portfolioId: string, dateFrom?: Date, dateTo?: Date): Observable<CumulativeMeasurement[]> {
 
-    return new Observable<CumulativeMeasurement[]>(observer => {
-      setTimeout(
-        () => {
-          observer.next(
-            [
-              { name: 'name1', value: 'val1' },
-              { name: 'name2', value: 'val2' },
-              { name: 'name3', value: 'val3' },
-              { name: 'name4', value: 'val4' },
-              { name: 'name5', value: 'val5' },
-              { name: 'name6', value: 'val6' }
-            ]
-          );
-        },
-        500);
-    });
+//     return new Observable<CumulativeMeasurement[]>(observer => {
+//       setTimeout(
+//         () => {
+//           observer.next(
+//             [
+//               { name: 'name1', value: 'val1' },
+//               { name: 'name2', value: 'val2' },
+//               { name: 'name3', value: 'val3' },
+//               { name: 'name4', value: 'val4' },
+//               { name: 'name5', value: 'val5' },
+//               { name: 'name6', value: 'val6' }
+//             ]
+//           );
+//         },
+//         500);
+//     });
 
-  }
+//   }
 
-}
+// }
 
