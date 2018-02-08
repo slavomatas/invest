@@ -1,9 +1,11 @@
-package sk.ystad.common.loaders.security;
+package sk.ystad.common.loaders.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sk.ystad.common.loaders.LoaderResult;
+import sk.ystad.common.loaders.security.SecurityLoader;
+import sk.ystad.common.loaders.services.LoaderService;
 import sk.ystad.model.securities.Security;
 import sk.ystad.repositories.securities.SecurityRepository;
 

@@ -51,12 +51,9 @@ public class SecurityLoader {
                     etfs.add(tmpEtf.getSecurity());
 
                     succesfullCount++;
-                } catch (ParseException e) {
+                } catch (ParseException | NumberFormatException e) {
                     failedCount++;
                     //log.error("Unable to parse etf csv file - problem with date format, at line " + (succesfullCount + 1) + ", " + e.getMessage());
-                } catch (NumberFormatException e) {
-                    failedCount++;
-                    //log.error("Unable to parse etf csv file - problem with number format, at line " + (succesfullCount + 1) + ", " + e.getMessage());
                 }
             }
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package sk.ystad.common.loaders.security;
+package sk.ystad.common.loaders.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class LoaderService {
         portfolioRepository.save(portfolio);
         for (int i = 1; i < 6; i++) {
             portfolio = new Portfolio();
-            portfolio.setName("Portfolio" + i);
+            portfolio.setName("Portfolio" + (i + 1));
             portfolio.setUser(user);
             portfolio.setIdInflux("PID5a6f4f4aaf69115d83a41e" + (i + 24));
             portfolioRepository.save(portfolio);
