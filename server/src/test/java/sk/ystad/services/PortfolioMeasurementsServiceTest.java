@@ -7,7 +7,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -62,7 +64,7 @@ public class PortfolioMeasurementsServiceTest {
         String dateTo = "2017-01-07T21:03:59.526Z";
         LocalDateTime localDateTo = LocalDateTime.parse(dateTo, DateTimeFormatter.ISO_DATE_TIME);
         Mockito.when(portfolioMeasurementsService.getMeasurement(5L, "PORTFOLIO_CUMULATIVE_RETURN", localDateFrom, localDateTo))
-                .thenReturn(timeSeries);
+                .thenReturn(new ResponseEntity<>(timeSeries, HttpStatus.OK));
 
         mvc.perform(get("/v1/measurements/portfolios/5/PORTFOLIO_CUMULATIVE_RETURN")
                 .contentType(MediaType.APPLICATION_JSON)
