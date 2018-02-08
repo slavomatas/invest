@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-clickable-widget',
+  selector: 'invest-app-clickable-widget',
   templateUrl: './clickable-widget.component.html',
   styleUrls: ['./clickable-widget.component.scss']
 })

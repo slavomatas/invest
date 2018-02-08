@@ -370,9 +370,9 @@ export class MockPortfolioService {
         () => {
           resolve(
             [
-              { name: 'Mock portfolio 1', id: 1, description: "Mock portfolio 1 Description" },
-              { name: 'Mock portfolio 2', id: 2, description: "Mock portfolio 2 Description" },
-              { name: 'Mock portfolio 3', id: 3, description: "Mock portfolio 3 Description" }
+              { name: 'Mock portfolio 1', id: 1, description: 'Mock portfolio 1 Description' },
+              { name: 'Mock portfolio 2', id: 2, description: 'Mock portfolio 2 Description' },
+              { name: 'Mock portfolio 3', id: 3, description: 'Mock portfolio 3 Description' }
             ]
           );
         },

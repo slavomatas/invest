@@ -2,18 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { ClickableWidgetModel } from './clickable-widget/clickable-widget.component';
 import { MatDialog } from '@angular/material';
 import { CreateManualPortfolioDialogComponent } from './create-manual-portfolio-dialog/create-manual-portfolio-dialog.component';
+import { fuseAnimations } from '../../../core/animations';
+import { AppState } from '../../store/store';
+import { PortfolioActions } from '../../store/actions/portfolio-actions';
+import { NgRedux } from '@angular-redux/store';
+import { PortfolioService } from '../../services/portfolio/portfolio.service';
+import { FuseTranslationLoaderService } from '../../../core/services/translation-loader.service';
 
 @Component({
-  selector: 'app-create-portfolio',
+  selector: 'invest-app-create-portfolio',
   templateUrl: './create-portfolio.component.html',
-  styleUrls: ['./create-portfolio.component.scss']
+  styleUrls: ['./create-portfolio.component.scss'],
+  animations: fuseAnimations
 })
 export class CreatePortfolioComponent implements OnInit {
 
   widgets: ClickableWidgetModel[] = [
     {
       title: 'Create manual portfolio',
-      icon: "add_circle",
+      icon: 'add_circle',
       buttonClick: () => {
         this.createManualPortfolio();
       }
@@ -28,13 +35,7 @@ export class CreatePortfolioComponent implements OnInit {
   }
 
   private createManualPortfolio() {
-    console.log("CREATING MANUAL PORTFOLIO");
-    
     const dialogRef = this.dialog.open(CreateManualPortfolioDialogComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
   }
 
 }
