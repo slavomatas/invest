@@ -1,7 +1,10 @@
 package sk.ystad.services;
 
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -146,18 +149,18 @@ public class UserService implements UserDetailsService {
         return (new Date().getTime() - registrationTimestamp.getTime()) > REGISTRATION_TIME_OUT;
     }
 
-    public AuthResponse verifyRegistrationToken(String token) {
-        return this.checkUser(token);
+    public ResponseEntity verifyRegistrationToken(String token) {
+        return new ResponseEntity<>(this.checkUser(token), HttpStatus.OK);
     }
 
-    public User getByUsername(Principal principal) {
-        return userRepository.findByUsername(principal.getName());
+    public ResponseEntity getByUsername(Principal principal) {
+        return new ResponseEntity<>(userRepository.findByUsername(principal.getName()), HttpStatus.OK);
     }
 
-    public AuthResponse registerUser(String username, String password,
-                                     String name, String surname, String email) {
+    public ResponseEntity registerUser(String username, String password,
+                                       String name, String surname, String email) {
         User user = new User(username, password, name, surname, email);
-        return this.registerUser(user);
+        return new ResponseEntity<>(this.registerUser(user), HttpStatus.OK);
     }
 
 

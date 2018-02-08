@@ -3,6 +3,8 @@ package sk.ystad.services;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sk.ystad.ServerApplication;
 import sk.ystad.common.utils.FormatingUtil;
@@ -42,28 +44,30 @@ public class PositionService {
 
     /**
      * Return position by it's id
+     *
      * @param positionId
      * @return
      */
-    public UserPosition getPosition(long positionId) {
-        return positionRepository.findOne(positionId);
+    public ResponseEntity getPosition(long positionId) {
+        return new ResponseEntity<>(positionRepository.findOne(positionId), HttpStatus.OK);
     }
 
 
-    public UserPosition addPosition(long portfolioId, String symbol) {
+    public ResponseEntity addPosition(long portfolioId, String symbol) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         Security security = securityRepository.findBySymbol(symbol);
         if (portfolio != null && security != null) {
             UserPosition position = new UserPosition(portfolio, security);
             positionRepository.save(position);
-            logger.info("Created position: " + position );
-            return position;
+            logger.info("Created position: " + position);
+            return new ResponseEntity<>(position, HttpStatus.OK);
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
      * Adds trade to database, automatically adds position (if needed)
+     *
      * @param portfolioId
      * @param symbol
      * @param timestamp
@@ -71,7 +75,7 @@ public class PositionService {
      * @param amount
      * @return
      */
-    public Trade addTrade(long portfolioId, String symbol, String timestamp, Double price, int amount) {
+    public ResponseEntity addTrade(long portfolioId, String symbol, String timestamp, Double price, int amount) {
         //Load user portfolio
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         UserPosition userPosition = positionRepository.findBySecuritySymbol(symbol);
@@ -82,6 +86,7 @@ public class PositionService {
             formatedTimestamp = FormatingUtil.formatStringToDate(timestamp, "yyyy-MM-dd HH:mm:ss");
         } catch (ParseException e) {
             logger.error("Failed to format timestamp: " + e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         //Position doesn't exist, create it
@@ -94,6 +99,6 @@ public class PositionService {
         Trade trade = new Trade(userPosition, price, amount, formatedTimestamp);
         tradeRepository.save(trade);
         logger.info("Added trade to repository  " + trade);
-        return trade;
+        return new ResponseEntity<>(trade, HttpStatus.OK);
     }
 }

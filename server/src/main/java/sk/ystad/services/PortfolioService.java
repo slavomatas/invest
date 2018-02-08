@@ -34,18 +34,27 @@ import java.util.List;
 public class PortfolioService {
 
     private InfluxDB influxDB;
+
     private final UserRepository userRepository;
     private final PortfolioRepository portfolioRepository;
+    private final PositionRepository positionRepository;
+    private final TradeRepository tradeRepository;
+    private final SecurityRepository securityRepository;
+    private final UserPositionRepository userPositionRepository;
 
     private static final Logger logger = LogManager
             .getLogger(ServerApplication.class);
 
     @Autowired
-    public PortfolioService(UserRepository userRepository, PortfolioRepository portfolioRepository) {
+    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository, TradeRepository tradeRepository, UserPositionRepository userPositionRepository) {
+        this.influxDB = influxDB;
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
+        this.positionRepository = positionRepository;
+        this.securityRepository = securityRepository;
+        this.tradeRepository = tradeRepository;
+        this.userPositionRepository = userPositionRepository;
     }
-
 
     public List<Portfolio> getByUserId(Principal principal) {
         User user = userRepository.findByUsername(principal.getName());
@@ -66,24 +75,22 @@ public class PortfolioService {
 
         List<QueryResult.Result> results = queryResult.getResults();
 
-        try {
+        if (results != null && results.size() > 0) {
             List<Object> summaryValues = results.get(0).getSeries().get(0).getValues().get(0);
-            Returns returns = new Returns();
-            returns.setMonthly((double) summaryValues.get(1));
-            returns.setWeekly((double) summaryValues.get(2));
-            returns.setYearly((double) summaryValues.get(3));
-            returns.setAll((double) summaryValues.get(4));
-            portfolio.setReturns(returns);
-            portfolio.setCash((double) summaryValues.get(5));
-            portfolio.setLastChangeAbs((double) summaryValues.get(6));
-            portfolio.setLastChangePct((double) summaryValues.get(7));
-            portfolio.setMarketValue((double) summaryValues.get(8));
-        }
-        catch (NullPointerException e) {
-            logger.error("InfluxDB Parser Error: " + e);
-        }
+            if (!summaryValues.isEmpty()) {
+                Returns returns = new Returns();
+                returns.setMonthly((double) summaryValues.get(1));
+                returns.setWeekly((double) summaryValues.get(2));
+                returns.setYearly((double) summaryValues.get(3));
+                returns.setAll((double) summaryValues.get(4));
 
-
+                portfolio.setReturns(returns);
+                portfolio.setCash((double) summaryValues.get(5));
+                portfolio.setLastChangeAbs((double) summaryValues.get(6));
+                portfolio.setLastChangePct((double) summaryValues.get(7));
+                portfolio.setMarketValue((double) summaryValues.get(8));
+            }
+        }
         return portfolio;
     }
 
@@ -101,17 +108,15 @@ public class PortfolioService {
 
         List<QueryResult.Result> results = queryResult.getResults();
 
-        try {
+        if (results != null && results.size() > 0) {
             List<String> positionNames = results.get(0).getSeries().get(0).getColumns();
             List<List<Object>> marketValues = results.get(0).getSeries().get(0).getValues();
             List<Object> actualmarketValues = marketValues.get(marketValues.size() - 1);
-            for (int i = 1; i < positionNames.size(); i++) {
-                positionsWithMarketValue.add(new Position(positionNames.get(i),
-                        (Double) actualmarketValues.get(i)));
+            if (!positionNames.isEmpty() && !actualmarketValues.isEmpty()) {
+                for (int i = 1; i < positionNames.size(); i++) {
+                    positionsWithMarketValue.add(new Position(positionNames.get(i), (Double) actualmarketValues.get(i)));
+                }
             }
-        }
-        catch (NullPointerException e) {
-            logger.error("InfluxDB Parser Error: " + e);
         }
 
         return positionsWithMarketValue;
@@ -129,16 +134,15 @@ public class PortfolioService {
         QueryResult queryResult = this.influxDB.query(query);
 
         List<QueryResult.Result> results = queryResult.getResults();
-        try {
+        if (results != null && results.size() > 0) {
             QueryResult.Result result = results.get(0);
             List<QueryResult.Series> resultSeries = result.getSeries();
-            QueryResult.Series series = resultSeries.get(0);
-            List<List<Object>> values = series.getValues();
-            List<Object> lastValue = values.get(values.size() - 1);
-            return (Double) lastValue.get(1);
-        }
-        catch (NullPointerException e) {
-            logger.error("InfluxDB Parser Error: " + e);
+            if (resultSeries != null && results.size() > 0) {
+                QueryResult.Series series = resultSeries.get(0);
+                List<List<Object>> values = series.getValues();
+                List<Object> lastValue = values.get(values.size() - 1);
+                return (Double) lastValue.get(1);
+            }
         }
 
         return 0.0;
@@ -157,20 +161,19 @@ public class PortfolioService {
 
         List<Position> positions = new ArrayList<>();
         List<QueryResult.Result> results = queryResult.getResults();
-        try {
+        if (results != null && results.size() > 0) {
             QueryResult.Result result = results.get(0);
             List<QueryResult.Series> resultSeries = result.getSeries();
-            QueryResult.Series series = resultSeries.get(0);
-            List<String> columns = series.getColumns();
-            List<List<Object>> values = series.getValues();
-            List<Object> lastValue = values.get(values.size() - 1);
-            for (int i = 1; i < columns.size(); i++) {
-                Position position = new Position(columns.get(i), (Double) lastValue.get(i));
-                positions.add(position);
+            if (resultSeries != null && resultSeries.size() > 0) {
+                QueryResult.Series series = resultSeries.get(0);
+                List<String> columns = series.getColumns();
+                List<List<Object>> values = series.getValues();
+                List<Object> lastValue = values.get(values.size() - 1);
+                for (int i = 1; i < columns.size(); i++) {
+                    Position position = new Position(columns.get(i), (Double) lastValue.get(i));
+                    positions.add(position);
+                }
             }
-        }
-        catch (NullPointerException e) {
-           logger.error("InfluxDB Parser Error: " + e);
         }
 
         return positions;
@@ -192,4 +195,50 @@ public class PortfolioService {
         return null;
     }
 
+    public UserPosition addPosition(long portfolioId, String symbol) {
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        Security security = securityRepository.findBySymbol(symbol);
+        if (portfolio != null && security != null) {
+            UserPosition position = new UserPosition(portfolio, security);
+            positionRepository.save(position);
+            logger.info("Created position: " + position );
+            return position;
+        }
+        return null;
+    }
+
+    /**
+     * Adds trade to database, automatically adds position (if needed)
+     * @param portfolioId
+     * @param symbol
+     * @param timestamp
+     * @param price
+     * @param amount
+     * @return
+     */
+    public Trade addTrade(long portfolioId, String symbol,  String timestamp, Double price, int amount) {
+        //Load user portfolio
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        UserPosition userPosition = positionRepository.findBySecuritySymbol(symbol);
+
+        //Try to format date
+        Date formatedTimestamp = null;
+        try {
+            formatedTimestamp = FormatingUtil.formatStringToDate(timestamp, "yyyy-MM-dd HH:mm:ss");
+        } catch (ParseException e) {
+            logger.error("Failed to format timestamp: " + e);
+        }
+
+        //Position doesn't exist, create it
+        if (userPosition == null) {
+            Security security = securityRepository.findBySymbol(symbol);
+            userPosition = new UserPosition(security, null, portfolio);
+            userPositionRepository.save(userPosition);
+            logger.info("Created position: " + userPosition);
+        }
+        Trade trade = new Trade(userPosition, price, amount, formatedTimestamp);
+        tradeRepository.save(trade);
+        logger.info("Added trade to repository  " + trade);
+        return trade;
+    }
 }

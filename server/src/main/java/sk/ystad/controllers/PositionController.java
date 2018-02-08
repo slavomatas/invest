@@ -2,6 +2,7 @@ package sk.ystad.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sk.ystad.model.users.portfolios.positions.Trade;
@@ -25,7 +26,7 @@ public class PositionController {
     @RequestMapping(value = "/user/positions/{positionId}",
             method = RequestMethod.GET)
     @ApiOperation(value = "Get position with details", notes = "Provides position object with all asociated trades")
-    public UserPosition getPosition(@PathVariable(value = "positionId") long positionId, Principal principal) {
+    public ResponseEntity getPosition(@PathVariable(value = "positionId") long positionId, Principal principal) {
         return positionService.getPosition(positionId);
     }
 
@@ -33,7 +34,7 @@ public class PositionController {
     @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
 //    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
-    public UserPosition addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
+    public ResponseEntity addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
                                     Principal principal){
         return positionService.addPosition(portfolioId, symbol);
     }
@@ -43,7 +44,7 @@ public class PositionController {
     @RequestMapping(value ="/user/portfolios/{portfolioId}/position/{symbol}/trade", method = RequestMethod.POST)
 //    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create a trade")
-    public Trade addTrade(@PathVariable(value="portfolioId") long portfolioId,
+    public ResponseEntity addTrade(@PathVariable(value="portfolioId") long portfolioId,
                           @PathVariable(value="symbol") String symbol,
                           @RequestParam("timestamp") String timestamp,
                           @RequestParam("price") Double price,
