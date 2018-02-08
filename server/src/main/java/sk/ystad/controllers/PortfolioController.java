@@ -60,7 +60,7 @@ public class PortfolioController {
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios/{portfolioId}/position/{symbol}/trade", method = RequestMethod.POST)
 //    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-//    @ApiOperation(value = "Create trade")
+    @ApiOperation(value = "Create a trade")
     public Trade addTrade(@PathVariable(value="portfolioId") long portfolioId,
                           @PathVariable(value="symbol") String symbol,
                           @RequestParam("timestamp") String timestamp,
@@ -69,7 +69,4 @@ public class PortfolioController {
                           Principal principal){
         return portfolioService.addTrade(portfolioId, symbol, timestamp, price, amount);
     }
-
-
-
 }
