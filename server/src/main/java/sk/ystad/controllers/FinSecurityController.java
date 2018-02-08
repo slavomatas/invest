@@ -2,13 +2,12 @@ package sk.ystad.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.securities.Security;
 import sk.ystad.services.SecurityService;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -29,6 +28,10 @@ public class FinSecurityController {
         return securityService.getSecurityBySymbol(symbol);
     }
 
+    @RequestMapping(value = "/security/{symbol}", method = RequestMethod.GET)
+    public Position getSecurityPrice(@PathVariable String symbol, @RequestParam String date) {
+        return securityService.getSecurityPrice(symbol, date);
+    }
 
 }
 

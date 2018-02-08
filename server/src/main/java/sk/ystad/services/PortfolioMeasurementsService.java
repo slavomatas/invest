@@ -73,7 +73,7 @@ public class PortfolioMeasurementsService {
         if (dateFrom == null || dateTo == null) {
             queryStr = String.format("SELECT * FROM %s ORDER BY time ASC", portfolioId);
         } else {
-            queryStr = String.format("SELECT * FROM %s WHERE time > '%s' AND time < '%s' ORDER BY time ASC", portfolioId, dateFrom, dateTo);
+            queryStr = String.format("SELECT * FROM %s WHERE time >= '%s' AND time < '%s' ORDER BY time ASC", portfolioId, dateFrom, dateTo);
         }
         Query query = new Query(queryStr, measure.getName());
         QueryResult queryResult = this.influxDB.query(query);
