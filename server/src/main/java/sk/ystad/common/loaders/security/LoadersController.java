@@ -11,13 +11,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/loaders")
-public class SecurityController {
+public class LoadersController {
 
     private final SecurityRepository securityRepository;
+    private final LoaderService loaderService;
 
     @Autowired
-    public SecurityController(SecurityRepository securityRepository) {
+    public LoadersController(SecurityRepository securityRepository, LoaderService loaderService) {
         this.securityRepository = securityRepository;
+        this.loaderService = loaderService;
     }
 
     @RequestMapping("/load_etfs")
@@ -25,9 +27,9 @@ public class SecurityController {
         return new SecurityLoader().loadEtfs(securityRepository);
     }
 
-    private void saveSecurities(List<Security> securities) {
-        if (securities != null) {
-            securityRepository.save(securities);
-        }
+    @RequestMapping("/testing_data")
+    public String loadData() {
+        loaderService.loadData();
+        return "ok";
     }
 }

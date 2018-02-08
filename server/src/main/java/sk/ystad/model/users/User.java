@@ -59,7 +59,7 @@ public class User {
     private List<Portfolio> portfolios;
 
     public User() {
-
+        roles = new ArrayList<>();
     }
 
     public User(long id) {

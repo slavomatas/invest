@@ -19,28 +19,29 @@ import sk.ystad.repositories.users.RoleRepository;
 @SpringBootApplication
 @EnableScheduling
 public class ServerApplication extends SpringBootServletInitializer {
-	@PersistenceContext
-	private EntityManager em;
-	private static final Logger logger = LogManager
-			.getLogger(ServerApplication.class);
+    @PersistenceContext
+    private EntityManager em;
+    private static final Logger logger = LogManager
+            .getLogger(ServerApplication.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(ServerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ServerApplication.class, args);
+    }
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(ServerApplication.class);
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 
-	@Bean
-	public CommandLineRunner rolesLoader(RoleRepository roleRepository) {
-		return (args) ->{
-			Role standardUserRole = roleRepository.findByRoleName(Role.STANDARD_USER_STRING);
-			if(standardUserRole == null){
-				roleRepository.save(new Role(Role.STANDARD_USER_STRING, null));
-			}
-		};
-	}
+        return builder.sources(ServerApplication.class);
+    }
+
+    @Bean
+    public CommandLineRunner rolesLoader(RoleRepository roleRepository) {
+        return (args) -> {
+            Role standardUserRole = roleRepository.findByRoleName(Role.STANDARD_USER_STRING);
+            if (standardUserRole == null) {
+                roleRepository.save(new Role(Role.STANDARD_USER_STRING, null));
+            }
+        };
+    }
 
 }
