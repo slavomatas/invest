@@ -17,7 +17,7 @@ export class PortfoliosComponent implements OnInit {
     {
       id: 5,
       name: 'Portfolio5',
-      description: null,
+      description: 'Long description of item, just to seee how it works. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
       marketValue: 8565.300000000001,
       lastChangeAbs: -8.55999999999949,
       lastChangePct: -0.0012309072764449258,
@@ -65,7 +65,7 @@ export class PortfoliosComponent implements OnInit {
     {
       id: 6,
       name: 'Portfolio6',
-      description: null,
+      description: 'Short',
       marketValue: 6831.6,
       lastChangeAbs: 13.960000000000036,
       lastChangePct: 0.0021377664934199014,
@@ -109,7 +109,7 @@ export class PortfoliosComponent implements OnInit {
     {
       id: 2,
       name: 'Portfolio2',
-      description: null,
+      description: 'Bits and pieces of text.',
       marketValue: 9498.18,
       lastChangeAbs: -2.6200000000008004,
       lastChangePct: -2.8607304689631796E-4,

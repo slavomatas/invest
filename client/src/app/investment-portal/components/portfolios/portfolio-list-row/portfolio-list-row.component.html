@@ -1,23 +1,12 @@
-<mat-card class="invest-card">
-  <div class="container"
-       fxLayout
-       fxLayout.xs="column"
-       fxLayoutAlign="center"
-       fxLayoutGap="10px"
-       fxLayoutGap.xs="0">
-    <div class="item item-main" fxFlex>
-      <div class="container"
-           fxLayout
-           fxLayout.xs="column"
-           fxLayoutAlign="center"
-           fxLayoutGap="10px"
-           fxLayoutGap.xs="0">
-        <div class="item item-1" fxFlex>
+  <mat-card class="container invest-card" fxLayout="row">
+    <div class="item item-main">
+      <div class="container invest-data" fxLayout fxFlexFill>
+        <div class="item item-1" fxWrap>
           <div class="mat-accent" id="portfolio-name">
             {{portfolioData.name}}
           </div> <!--a ng-href="/portfolio/{{portfolio.id}}/overview">{{portfolio.name}}</a-->
           <div>
-            <span class="secondary-text">{{portfolioData.marketValue}}
+            <span class="secondary-text" class="nowrap">{{portfolioData.marketValue}}
               (<div *ngIf="portfolioData.cash != 0; else no_cash">{{portfolioData.cash}}</div>)</span>
                 <span style="align-items: center">
               {{portfolioData.lastChangeAbs}}&nbsp;
@@ -26,13 +15,13 @@
             </span>
           </div>
         </div>
-        <div class="item item-2" fxFlex>
+        <div class="item item-2" fxWrap>
           <div>
-            <div><strong>Strategy:&nbsp;</strong>Backhand flash</div> <!-- not supported by backend yet -->
-            <div><strong>Use It As:&nbsp;</strong>Better to not use</div> <!-- not supported by backend yet -->
+            <div class="nowrap"><strong>Strategy:&nbsp;</strong>Backhand flash</div> <!-- not supported by backend yet -->
+            <div class="nowrap"><strong>Use It As:&nbsp;</strong>Better to not use</div> <!-- not supported by backend yet -->
           </div>
         </div>
-        <div *ngIf="portfolioData.positions != null" class="item item-3" fxFlex>
+        <div *ngIf="portfolioData.positions != null" class="item item-chart" fxHide.sm >
           <ngx-charts-bar-vertical
             [view]=""
             [scheme]="colorScheme"
@@ -49,52 +38,52 @@
           </ngx-charts-bar-vertical>
         </div>
       </div>
-      <div *ngIf="portfolioData.description != null" class="container"
-           fxLayout
-           fxLayout.xs="column"
-           fxLayoutAlign="center"
-           fxLayoutGap="10px"
-           fxLayoutGap.xs="0">
-        <div class="item item-5" fxFlex>
-          <div style="display: inline-block">{{portfolioData.description | slice:0:limit}}</div>
-          <div style="display: inline-block" *ngIf="portfolioData.description.length > descriptionLimit">
-            ...
-            <a [hidden]="portfolioData.description.length < limit"
-               (click)="descShowMore()"> More
-            </a>
+      <!--div *ngIf="portfolioData.description != null" class="invest-description" >
+
+          <p class="portfolio-description">{{portfolioData.description | slice:0:limit}}</p>
+          <div *ngIf="portfolioData.description.length > descriptionLimit">
+            <div [hidden]="portfolioData.description.length < limit">
+              ...
+              <a (click)="descShowMore()"> More</a>
+            </div>
             <a [hidden]="!descMoreShown"
                (click)="descShowLess()"> Less
             </a>
           </div>
-        </div>
-      </div>
+      </div-->
     </div>
-    <div class="item item-edit" fxFlex>
-      <div>
-        <button>
+    <div class="item-edit" fxFlex="15%">
+      <div class="item item-edit">
+        <button class="invest-inline">
           <!--a href="/portfolio/{{portfolio.id}}/overview" /-->
           <span matTooltip="View" matTooltipPosition="above">
             <mat-icon><i class="material-icons">visibility</i></mat-icon>
           </span>
         </button>
-        <button (click)="managePortfolioUpdateOperation(portfolioData.id)">
+      </div>
+      <div class="item item-edit">
+        <button class="invest-inline" (click)="managePortfolioUpdateOperation(portfolioData.id)">
           <span matTooltip="Edit" matTooltipPosition="above">
             <mat-icon><i class="material-icons">mode_edit</i></mat-icon>
           </span>
         </button>
-        <button (click)="managePortfolioCloneOperation(portfolioData.id)">
+      </div>
+      <div class="item item-edit">
+        <button class="invest-inline" (click)="managePortfolioCloneOperation(portfolioData.id)">
           <span matTooltip="Copy" matTooltipPosition="above">
             <mat-icon><i class="material-icons">content_copy</i></mat-icon>
           </span>
         </button>
-        <button (click)="managePortfolioRemoveOperation(portfolioData.id)">
+      </div>
+      <div class="item item-edit">
+        <button class="invest-inline" (click)="managePortfolioRemoveOperation(portfolioData.id)">
           <span matTooltip="Remove" matTooltipPosition="above">
             <mat-icon><i class="material-icons">delete</i></mat-icon>
           </span>
         </button>
       </div>
     </div>
-  </div>
-</mat-card>
+
+  </mat-card>
 
 <ng-template #no_cash>NO CASH</ng-template>

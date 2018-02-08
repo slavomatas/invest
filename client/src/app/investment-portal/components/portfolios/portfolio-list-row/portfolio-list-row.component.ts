@@ -1,3 +1,4 @@
+
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { colorScheme } from '../../../constants/constants';
@@ -35,6 +36,10 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
           value: position.value
         });
       });
+      this.portfolioData.marketValue = parseFloat(this.portfolioData.marketValue.toFixed(2));
+      this.portfolioData.cash = parseFloat(this.portfolioData.cash.toFixed(4));
+      this.portfolioData.lastChangeAbs = parseFloat(this.portfolioData.lastChangeAbs.toFixed(4));
+      this.portfolioData.lastChangePct = parseFloat(this.portfolioData.lastChangePct.toFixed(4));
     }
   }
 
