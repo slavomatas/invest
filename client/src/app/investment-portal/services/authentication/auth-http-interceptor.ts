@@ -35,7 +35,6 @@ export class AuthHttpInterceptor implements HttpInterceptor {
     if (this.accessToken != null) {
       // Create Authorization header
       const headers = new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bearer ' + this.accessToken
       });
 

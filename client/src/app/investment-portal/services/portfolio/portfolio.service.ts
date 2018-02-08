@@ -12,6 +12,7 @@ import { cloneDeep } from 'lodash';
 import { AppState } from '../../store/store';
 import { LoggingService } from '../logging/logging.service';
 import { RequestOptions } from '@angular/http';
+import { RequestStatus } from '../../types/authentication-types';
 
 const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
 const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';
@@ -105,24 +106,15 @@ export class PortfolioService implements IPortfolioService {
     return portfolioChart;
   }
 
+  /**
+   * @description Creates new portfolio
+   *
+   * @param {Portfolio} [portfolio] Portfolio to be saved
+   * @returns {Promise<Portfolio>}
+   */
   public createPortfolio(portfolio: Portfolio): Promise<Portfolio> {
-    const headers = new Headers({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-
-    return this.http.post<Portfolio>(
-      GET_PORTFOLIOS_URL, JSON.stringify(portfolio), {
-        headers: headers
-      }).toPromise();
-
-    /*
-    return this.http.post<Portfolio>(
-      GET_PORTFOLIOS_URL,
-      JSON.stringify(portfolio),
-      { headers: headers }
-    ).toPromise();
-    */
+    return this.http
+      .post<Portfolio>(GET_PORTFOLIOS_URL, portfolio).toPromise();
   }
 
   /**
