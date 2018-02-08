@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import sk.ystad.ServerApplication;
-import sk.ystad.common.data_structures.Response;
+import sk.ystad.common.data_structures.AuthResponse;
 import sk.ystad.model.users.User;
 
 import static org.mockito.Matchers.any;
@@ -49,14 +49,14 @@ public class AuthorizationControllerTest {
 
     @Test
     public void register() throws Exception {
-        Response response = new Response(true, null);
+        AuthResponse authResponse = new AuthResponse(true, null);
 
         String email = "test@fiit.stuba.sk";
         String name ="test";
         String surname ="test";
         String password ="test";
 
-        Mockito.when(userService.registerUser(any(User.class))).thenReturn(response);
+        Mockito.when(userService.registerUser(any(User.class))).thenReturn(authResponse);
 
         mvc.perform(post("/auth/register")
                 .param("name", name)
@@ -73,10 +73,10 @@ public class AuthorizationControllerTest {
 
     @Test
     public void verifyToken() throws Exception {
-        Response response = new Response(true, null);
+        AuthResponse authResponse = new AuthResponse(true, null);
         String token = "stkvhVq4XwKvVCE6jiJqbqP8Y3mxKyfO";
 
-        Mockito.when(userService.checkUser(token)).thenReturn(response);
+        Mockito.when(userService.checkUser(token)).thenReturn(authResponse);
 
         mvc.perform(post("/auth/register/" + token)
                 .contentType(MediaType.APPLICATION_JSON))

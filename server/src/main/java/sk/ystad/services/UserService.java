@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import sk.ystad.common.data_structures.Response;
+import sk.ystad.common.data_structures.AuthResponse;
 import sk.ystad.common.services.EmailService;
 import sk.ystad.model.auth.Role;
 import sk.ystad.model.users.User;
@@ -72,9 +72,9 @@ public class UserService implements UserDetailsService {
         return userDetails;
     }
 
-    public Response registerUser(User user) {
+    public AuthResponse registerUser(User user) {
         if (emailExist(user.getEmail()) || usernameExist(user.getUsername())) {
-            return new Response(false, "User already exists");
+            return new AuthResponse(false, "User already exists");
         }
         while (tokenExists(user.getRegistrationToken())) {
             user.generateNewToken();
@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService {
         hashPassword(user);
         userRepository.save(user);
         sendEmail(user);
-        return new Response(true, null);
+        return new AuthResponse(true, null);
     }
 
     private void sendEmail(User user) {
@@ -122,21 +122,21 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public Response checkUser(String token) {
+    public AuthResponse checkUser(String token) {
         User user = userRepository.findByRegistrationToken(token);
         if (user == null) {
-            return new Response(false, null);
+            return new AuthResponse(false, null);
         } else {
             if (user.isRegistrationConfirmed()) {
-                return new Response(true, null);
+                return new AuthResponse(true, null);
             } else {
                 if (registrationExpired(user.getRegistrationTimestamp())) {
                     userRepository.delete(user);
-                    return new Response(false, null);
+                    return new AuthResponse(false, null);
                 } else {
                     user.setRegistrationConfirmed(true);
                     userRepository.save(user);
-                    return new Response(true, null);
+                    return new AuthResponse(true, null);
                 }
             }
         }
@@ -146,7 +146,7 @@ public class UserService implements UserDetailsService {
         return (new Date().getTime() - registrationTimestamp.getTime()) > REGISTRATION_TIME_OUT;
     }
 
-    public Response verifyRegistrationToken(String token) {
+    public AuthResponse verifyRegistrationToken(String token) {
         return this.checkUser(token);
     }
 
@@ -154,8 +154,8 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(principal.getName());
     }
 
-    public Response registerUser(String username, String password,
-                                 String name, String surname,String email) {
+    public AuthResponse registerUser(String username, String password,
+                                     String name, String surname, String email) {
         User user = new User(username, password, name, surname, email);
         return this.registerUser(user);
     }
