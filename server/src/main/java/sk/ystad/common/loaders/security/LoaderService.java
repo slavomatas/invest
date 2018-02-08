@@ -32,7 +32,7 @@ public class LoaderService {
         User user = new User();
         user.setEmail("test@test.com");
         user.setUsername("test@test.com");
-        user.setPassword("25d55ad283aa400af464c76d713c07ad");
+        user.setPassword("$2a$10$dt8q0sp8IJdtz9HbIk7c6Oo1EBP.a3rA30TkikJIqWfsY6T63YYGO");
         user.setRegistrationConfirmed(true);
         user.setName("Jožko");
         user.setSurname("Mrkvička");
