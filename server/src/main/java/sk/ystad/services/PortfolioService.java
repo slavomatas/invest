@@ -75,22 +75,24 @@ public class PortfolioService {
 
         List<QueryResult.Result> results = queryResult.getResults();
 
-        if (results != null && results.size() > 0) {
+        try {
             List<Object> summaryValues = results.get(0).getSeries().get(0).getValues().get(0);
-            if (!summaryValues.isEmpty()) {
-                Returns returns = new Returns();
-                returns.setMonthly((double) summaryValues.get(1));
-                returns.setWeekly((double) summaryValues.get(2));
-                returns.setYearly((double) summaryValues.get(3));
-                returns.setAll((double) summaryValues.get(4));
-
-                portfolio.setReturns(returns);
-                portfolio.setCash((double) summaryValues.get(5));
-                portfolio.setLastChangeAbs((double) summaryValues.get(6));
-                portfolio.setLastChangePct((double) summaryValues.get(7));
-                portfolio.setMarketValue((double) summaryValues.get(8));
-            }
+            Returns returns = new Returns();
+            returns.setMonthly((double) summaryValues.get(1));
+            returns.setWeekly((double) summaryValues.get(2));
+            returns.setYearly((double) summaryValues.get(3));
+            returns.setAll((double) summaryValues.get(4));
+            portfolio.setReturns(returns);
+            portfolio.setCash((double) summaryValues.get(5));
+            portfolio.setLastChangeAbs((double) summaryValues.get(6));
+            portfolio.setLastChangePct((double) summaryValues.get(7));
+            portfolio.setMarketValue((double) summaryValues.get(8));
         }
+        catch (NullPointerException e) {
+            logger.error("InfluxDB Parser Error: " + e);
+        }
+
+
         return portfolio;
     }
 
@@ -108,15 +110,17 @@ public class PortfolioService {
 
         List<QueryResult.Result> results = queryResult.getResults();
 
-        if (results != null && results.size() > 0) {
+        try {
             List<String> positionNames = results.get(0).getSeries().get(0).getColumns();
             List<List<Object>> marketValues = results.get(0).getSeries().get(0).getValues();
             List<Object> actualmarketValues = marketValues.get(marketValues.size() - 1);
-            if (!positionNames.isEmpty() && !actualmarketValues.isEmpty()) {
-                for (int i = 1; i < positionNames.size(); i++) {
-                    positionsWithMarketValue.add(new Position(positionNames.get(i), (Double) actualmarketValues.get(i)));
-                }
+            for (int i = 1; i < positionNames.size(); i++) {
+                positionsWithMarketValue.add(new Position(positionNames.get(i),
+                        (Double) actualmarketValues.get(i)));
             }
+        }
+        catch (NullPointerException e) {
+            logger.error("InfluxDB Parser Error: " + e);
         }
 
         return positionsWithMarketValue;
@@ -134,15 +138,16 @@ public class PortfolioService {
         QueryResult queryResult = this.influxDB.query(query);
 
         List<QueryResult.Result> results = queryResult.getResults();
-        if (results != null && results.size() > 0) {
+        try {
             QueryResult.Result result = results.get(0);
             List<QueryResult.Series> resultSeries = result.getSeries();
-            if (resultSeries != null && results.size() > 0) {
-                QueryResult.Series series = resultSeries.get(0);
-                List<List<Object>> values = series.getValues();
-                List<Object> lastValue = values.get(values.size() - 1);
-                return (Double) lastValue.get(1);
-            }
+            QueryResult.Series series = resultSeries.get(0);
+            List<List<Object>> values = series.getValues();
+            List<Object> lastValue = values.get(values.size() - 1);
+            return (Double) lastValue.get(1);
+        }
+        catch (NullPointerException e) {
+            logger.error("InfluxDB Parser Error: " + e);
         }
 
         return 0.0;
@@ -161,19 +166,20 @@ public class PortfolioService {
 
         List<Position> positions = new ArrayList<>();
         List<QueryResult.Result> results = queryResult.getResults();
-        if (results != null && results.size() > 0) {
+        try {
             QueryResult.Result result = results.get(0);
             List<QueryResult.Series> resultSeries = result.getSeries();
-            if (resultSeries != null && resultSeries.size() > 0) {
-                QueryResult.Series series = resultSeries.get(0);
-                List<String> columns = series.getColumns();
-                List<List<Object>> values = series.getValues();
-                List<Object> lastValue = values.get(values.size() - 1);
-                for (int i = 1; i < columns.size(); i++) {
-                    Position position = new Position(columns.get(i), (Double) lastValue.get(i));
-                    positions.add(position);
-                }
+            QueryResult.Series series = resultSeries.get(0);
+            List<String> columns = series.getColumns();
+            List<List<Object>> values = series.getValues();
+            List<Object> lastValue = values.get(values.size() - 1);
+            for (int i = 1; i < columns.size(); i++) {
+                Position position = new Position(columns.get(i), (Double) lastValue.get(i));
+                positions.add(position);
             }
+        }
+        catch (NullPointerException e) {
+           logger.error("InfluxDB Parser Error: " + e);
         }
 
         return positions;

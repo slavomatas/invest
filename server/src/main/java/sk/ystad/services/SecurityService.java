@@ -48,14 +48,14 @@ public class SecurityService {
         QueryResult queryResult = this.influxDB.query(query);
 
         List<QueryResult.Result> results = queryResult.getResults();
-        if (results != null && results.size() > 0) {
-            if (results.get(0) != null && results.get(0).getSeries() != null && results.get(0).getSeries().get(0) != null &&
-                    results.get(0).getSeries().get(0).getValues() != null && results.get(0).getSeries().get(0).getValues().get(0) != null
-                    && results.get(0).getSeries().get(0).getValues().get(0).get(10) != null) {
-                Double value = (Double) results.get(0).getSeries().get(0).getValues().get(0).get(10);
-                return new Position(symbol, value);
-            }
+        try {
+            Double value = (Double) results.get(0).getSeries().get(0).getValues().get(0).get(10);
+            return new Position(symbol, value);
         }
+        catch (NullPointerException e) {
+            logger.error("InfluxDB Parser Error: " + e);
+        }
+
         return null;
     }
 }

@@ -1,10 +1,13 @@
 package sk.ystad.services;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sk.ystad.ServerApplication;
 import sk.ystad.model.measurements.ImmutableMeasure;
 import sk.ystad.model.measurements.Measure;
 import sk.ystad.model.measurements.positions.Position;
@@ -19,6 +22,9 @@ import java.util.List;
 
 @Service
 public class PortfolioMeasurementsService {
+
+    private static final Logger logger = LogManager
+            .getLogger(ServerApplication.class);
 
     private final InfluxDB influxDB;
     private final PortfolioRepository portfolioRepository;
@@ -77,23 +83,19 @@ public class PortfolioMeasurementsService {
         }
         Query query = new Query(queryStr, measure.getName());
         QueryResult queryResult = this.influxDB.query(query);
-
-        List<QueryResult.Result> results = queryResult.getResults();
-        if (results != null && results.size() > 0) {
+        try {
+            List<QueryResult.Result> results = queryResult.getResults();
             QueryResult.Result result = results.get(0);
             List<QueryResult.Series> resultSeries = result.getSeries();
-            if (resultSeries != null && resultSeries.size() > 0) {
-                QueryResult.Series series = resultSeries.get(0);
-                List<List<Object>> values = series.getValues();
-                for (List<Object> rowValues : values) {
-                    try {
-                        portfolioCumulativeReturns.add(new TimeSeriesSimpleItem(rowValues.get(0).toString(),
-                                (Double) rowValues.get(1)));
-                    } catch (Exception e) {
-                        //TODO add log
-                    }
-                }
+            QueryResult.Series series = resultSeries.get(0);
+            List<List<Object>> values = series.getValues();
+            for (List<Object> rowValues : values) {
+                portfolioCumulativeReturns.add(new TimeSeriesSimpleItem(rowValues.get(0).toString(),
+                        (Double) rowValues.get(1)));
             }
+        }
+        catch (NullPointerException e) {
+            logger.error("InfluxDB Parser Error: " + e);
         }
 
         return portfolioCumulativeReturns;
