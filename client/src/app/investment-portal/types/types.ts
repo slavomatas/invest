@@ -1,6 +1,7 @@
 export interface Portfolio {
   name: string;
   id: number;
+  description: string;
 }
 
 export interface CumulativeMeasurement {

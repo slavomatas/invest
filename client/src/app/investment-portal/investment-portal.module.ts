@@ -26,7 +26,7 @@ import { HorizontalBarChartComponent } from './components/dashboard/dashboard-po
 import { CreatePortfolioComponent } from './components/create-portfolio/create-portfolio.component';
 import { ClickableWidgetComponent } from './components/create-portfolio/clickable-widget/clickable-widget.component';
 import { ClickableWidgetListComponent } from './components/create-portfolio/clickable-widget-list/clickable-widget-list.component';
-
+import { CreateManualPortfolioDialogComponent } from './components/create-portfolio/create-manual-portfolio-dialog/create-manual-portfolio-dialog.component';
 
 const routes = [
   { path: 'login', component: LoginComponent },
@@ -58,8 +58,8 @@ const routes = [
     HorizontalBarChartComponent,
     CreatePortfolioComponent,
     ClickableWidgetComponent,
-    ClickableWidgetListComponent
-
+    ClickableWidgetListComponent,
+    CreateManualPortfolioDialogComponent
   ],
   imports: [
     SharedModule,
@@ -77,6 +77,9 @@ const routes = [
       useClass: AuthHttpInterceptor,
       multi: true
     }
+  ],
+  entryComponents: [
+    CreateManualPortfolioDialogComponent
   ]
 })
 

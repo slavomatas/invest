@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import {
   Portfolio, PortfolioDetails, CumulativeMeasurement,
   TypeOfReturns, TypeOfPortfolioReturn
@@ -11,9 +11,10 @@ import { NgRedux, select } from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
 import { AppState } from '../../store/store';
 import { LoggingService } from '../logging/logging.service';
+import { RequestOptions } from '@angular/http';
 
- const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
- const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';
+const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
+const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {
@@ -22,8 +23,7 @@ export class PortfolioService implements IPortfolioService {
     private http: HttpClient,
     private ngRedux: NgRedux<AppState>,
     private loggingService: LoggingService
-  )
-  {
+  ) {
 
   }
 
@@ -34,7 +34,7 @@ export class PortfolioService implements IPortfolioService {
 
     let promises: Promise<ChartModelPortfolio>[];
 
-    if (dateTo == null){
+    if (dateTo == null) {
       dateTo = new Date();
     }
 
@@ -79,7 +79,7 @@ export class PortfolioService implements IPortfolioService {
     // get portfolio measurements and push them into series
     await this.getCumulativeMeasurements(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: CumulativeMeasurement[]) => {
 
-       measurements.map((measurement: CumulativeMeasurement) => {
+      measurements.map((measurement: CumulativeMeasurement) => {
         portfolioChart.series.push({
           name: new Date(measurement.name).toDateString(),
           value: Number.parseFloat(measurement.value)
@@ -92,7 +92,7 @@ export class PortfolioService implements IPortfolioService {
 
       const length = measurements.length;
 
-      if (length > 0){
+      if (length > 0) {
         portfolioChart.marketValue = Number.parseFloat(measurements[length - 1].value);
         portfolioChart.oldMarketValue = Number.parseFloat(measurements[0].value);
       } else {
@@ -103,6 +103,26 @@ export class PortfolioService implements IPortfolioService {
     });
 
     return portfolioChart;
+  }
+
+  public createPortfolio(portfolio: Portfolio): Promise<Portfolio> {
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    return this.http.post<Portfolio>(
+      GET_PORTFOLIOS_URL, JSON.stringify(portfolio), {
+        headers: headers
+      }).toPromise();
+
+    /*
+    return this.http.post<Portfolio>(
+      GET_PORTFOLIOS_URL,
+      JSON.stringify(portfolio),
+      { headers: headers }
+    ).toPromise();
+    */
   }
 
   /**
@@ -139,8 +159,8 @@ export class PortfolioService implements IPortfolioService {
     return this.http
       .get<CumulativeMeasurement[]>(requestUrl,
         {
-        params: params
-      });
+          params: params
+        });
   }
 
   /**
@@ -203,8 +223,6 @@ export class PortfolioService implements IPortfolioService {
 
   }
 
-
-
   public getPortfolioReturn(portfolioId: number, portfolioReturnType: TypeOfPortfolioReturn, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]> {
     let params: HttpParams = new HttpParams();
 
@@ -221,7 +239,7 @@ export class PortfolioService implements IPortfolioService {
     const requestUrl = GET_PORTFOLIO_RETURN_VALUE_URL + '/' + portfolioId + '/' + portfolioReturnType;
     this.loggingService.captureRequestWithParams(requestUrl, JSON.stringify(params));
     return this.http
-      .get<CumulativeMeasurement[]>(requestUrl , {
+      .get<CumulativeMeasurement[]>(requestUrl, {
         params: params
       });
   }
@@ -242,10 +260,10 @@ export class PortfolioService implements IPortfolioService {
       });
   }
 
-  getPortfolioPositions(portfolioId: number): Promise<{name: string; value: number; }[]> {
+  getPortfolioPositions(portfolioId: number): Promise<{ name: string; value: number; }[]> {
     const requestUrl = GET_PORTFOLIOS_URL + '/' + portfolioId + '/positions';
     return this.http
-      .get<{name: string; value: number; }[]>(requestUrl).toPromise();
+      .get<{ name: string; value: number; }[]>(requestUrl).toPromise();
   }
 
 
@@ -275,21 +293,22 @@ export class PortfolioService implements IPortfolioService {
 
       default:
         return today;
-      }
     }
   }
+}
 
 
 export class MockPortfolioService {
 
   getPortfoliosListDetails(portfolioReturnType: TypeOfPortfolioReturn): Promise<PortfolioDetails[]> {
 
-    return new Promise((resolve) =>  {
+    return new Promise((resolve) => {
       setTimeout(
         () => {
           resolve(
             [
-              { name: 'Mock portfolio 1',
+              {
+                name: 'Mock portfolio 1',
                 id: 1,
                 marketValue: 107,
                 oldMarketValue: 115,
@@ -300,14 +319,15 @@ export class MockPortfolioService {
                 },
                 positions:
                   [
-                    {symbol: 'BIL', value: 40.632},
-                    {symbol: 'CEV', value: 49.737},
-                    {symbol: 'NFO', value: 36.745},
-                    {symbol: 'PSR', value: 40.632},
-                    {symbol: 'AGG', value: 36.240},
+                    { symbol: 'BIL', value: 40.632 },
+                    { symbol: 'CEV', value: 49.737 },
+                    { symbol: 'NFO', value: 36.745 },
+                    { symbol: 'PSR', value: 40.632 },
+                    { symbol: 'AGG', value: 36.240 },
                   ]
               },
-              { name: 'Mock portfolio 2',
+              {
+                name: 'Mock portfolio 2',
                 id: 2,
                 marketValue: 200,
                 oldMarketValue: 150,
@@ -318,14 +338,15 @@ export class MockPortfolioService {
                 },
                 positions:
                   [
-                    {symbol: 'B&T', value: 103.7},
-                    {symbol: 'JOE', value: 29.356},
-                    {symbol: 'DOE', value: 30.126},
-                    {symbol: 'P2P', value: 47},
-                    {symbol: 'AGG', value: 73},
+                    { symbol: 'B&T', value: 103.7 },
+                    { symbol: 'JOE', value: 29.356 },
+                    { symbol: 'DOE', value: 30.126 },
+                    { symbol: 'P2P', value: 47 },
+                    { symbol: 'AGG', value: 73 },
                   ]
               },
-              { name: 'Mock portfolio 3',
+              {
+                name: 'Mock portfolio 3',
                 id: 2,
                 marketValue: 90,
                 oldMarketValue: 65,
@@ -336,10 +357,10 @@ export class MockPortfolioService {
                 },
                 positions:
                   [
-                    {symbol: 'BIL', value: 17},
-                    {symbol: 'CEV', value: 13.4},
-                    {symbol: 'NFO', value: 22.65},
-                    {symbol: 'PSR', value: 19.735},
+                    { symbol: 'BIL', value: 17 },
+                    { symbol: 'CEV', value: 13.4 },
+                    { symbol: 'NFO', value: 22.65 },
+                    { symbol: 'PSR', value: 19.735 },
                   ]
               },
 
@@ -352,14 +373,14 @@ export class MockPortfolioService {
 
   public getPortfolios(): Promise<Portfolio[]> {
 
-    return new Promise((resolve) =>  {
+    return new Promise((resolve) => {
       setTimeout(
         () => {
           resolve(
             [
-              { name: 'Mock portfolio 1', id: 1 },
-              { name: 'Mock portfolio 2', id: 2 },
-              { name: 'Mock portfolio 3', id: 3 }
+              { name: 'Mock portfolio 1', id: 1, description: "Mock portfolio 1 Description" },
+              { name: 'Mock portfolio 2', id: 2, description: "Mock portfolio 2 Description" },
+              { name: 'Mock portfolio 3', id: 3, description: "Mock portfolio 3 Description" }
             ]
           );
         },
