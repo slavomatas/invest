@@ -59,10 +59,9 @@ export class PortfolioService implements IPortfolioService {
   public async closePortfolio(portfolio: PortfolioDetails): Promise<PortfolioDetails> {
 
     let promise: Promise<PortfolioDetails>;
-    const body = JSON.stringify(portfolio);
 
     promise = this
-      .http.put<PortfolioDetails>(PORTFOLIOS_URL, body).toPromise();
+      .http.put<PortfolioDetails>(PORTFOLIOS_URL, portfolio).toPromise();
 
     return promise;
   }
