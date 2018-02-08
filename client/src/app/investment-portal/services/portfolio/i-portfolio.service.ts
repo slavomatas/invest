@@ -11,4 +11,5 @@ export interface IPortfolioService {
   getPortfolioReturn(portfolioId: number, portfolioReturnType: TypeOfPortfolioReturn, dateFrom?: Date, dateTo?: Date): Observable<PortfolioReturn[]>;
   getPortfolioMarketValue(portfolioId: number, date?: Date): Observable<number>;
   getPortfolioPositions(portfolioId: number): Promise<{name: string; value: number; }[]>;
+  closePortfolio(portfolio: PortfolioDetails): Promise<PortfolioDetails>;
 }

@@ -14,8 +14,8 @@ import { LoggingService } from '../logging/logging.service';
 import { RequestOptions } from '@angular/http';
 import { RequestStatus } from '../../types/authentication-types';
 
-const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
-const GET_PORTFOLIOS_URL = 'api/v1/user/portfolios';
+ const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
+ const PORTFOLIOS_URL = 'api/v1/user/portfolios';
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {
@@ -51,6 +51,20 @@ export class PortfolioService implements IPortfolioService {
     });
 
     return res;
+  }
+
+  /**
+   * Closes portfolio and should get the same response
+   */
+  public async closePortfolio(portfolio: PortfolioDetails): Promise<PortfolioDetails> {
+
+    let promise: Promise<PortfolioDetails>;
+    const body = JSON.stringify(portfolio);
+
+    promise = this
+      .http.put<PortfolioDetails>(PORTFOLIOS_URL, body).toPromise();
+
+    return promise;
   }
 
   /**
@@ -114,7 +128,7 @@ export class PortfolioService implements IPortfolioService {
    */
   public createPortfolio(portfolio: Portfolio): Promise<Portfolio> {
     return this.http
-      .post<Portfolio>(GET_PORTFOLIOS_URL, portfolio).toPromise();
+      .post<Portfolio>(PORTFOLIOS_URL, portfolio).toPromise();
   }
 
   /**
@@ -123,7 +137,7 @@ export class PortfolioService implements IPortfolioService {
    */
   public getPortfolios(): Promise<PortfolioDetails[]> {
     return this.http
-      .get<PortfolioDetails[]>(GET_PORTFOLIOS_URL).toPromise();
+      .get<PortfolioDetails[]>(PORTFOLIOS_URL).toPromise();
   }
 
   /**
@@ -220,8 +234,8 @@ export class PortfolioService implements IPortfolioService {
       });
   }
 
-  getPortfolioPositions(portfolioId: number): Promise<{ name: string; value: number; }[]> {
-    const requestUrl = GET_PORTFOLIOS_URL + '/' + portfolioId + '/positions';
+  getPortfolioPositions(portfolioId: number): Promise<{name: string; value: number; }[]> {
+    const requestUrl = PORTFOLIOS_URL + '/' + portfolioId + '/positions';
     return this.http
       .get<{ name: string; value: number; }[]>(requestUrl).toPromise();
   }

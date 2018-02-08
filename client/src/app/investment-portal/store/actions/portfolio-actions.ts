@@ -14,6 +14,8 @@ export class PortfolioActions {
     static GET_PORTFOLIOS = 'GET_PORTFOLIOS';
     static FGET_PORTFOLIOS = 'FGET_PORTFOLIOS';
 
+    static PUT_PORTFOLIO = 'PUT_PORTFOLIO';
+
     static SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED = 'SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED';
     static SET_CUMULATIVE_CHART_PERIOD = 'SET_CUMULATIVE_CHART_PERIOD';
     static SET_PORTFOLIO_SUMMARY = 'SET_PORTFOLIO_SUMMARY';
@@ -50,6 +52,25 @@ export class PortfolioActions {
       this.ngRedux.dispatch({
         type: PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED,
         payload: data
+      });
+    }
+
+    public putPortfolio(data: PortfolioDetails){
+
+      const portfolioList: PortfolioDetails[] = this.ngRedux.getState().dashboardPortfolioList;
+      const newPortfolioList: PortfolioDetails[];
+
+      portfolioList.forEach((portfolio) => {
+        if (data.id === portfolio.id){
+          newPortfolioList.push(data);
+        } else {
+          newPortfolioList.push(portfolio);
+        }
+      });
+
+      this.ngRedux.dispatch({
+        type: PortfolioActions.PUT_PORTFOLIO,
+        payload: newPortfolioList
       });
     }
 

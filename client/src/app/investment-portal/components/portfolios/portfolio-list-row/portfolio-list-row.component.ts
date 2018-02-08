@@ -3,6 +3,9 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { RouterModule, Routes } from '@angular/router';
 import { colorScheme } from '../../../constants/constants';
 import { PortfolioDetails } from '../../../types/types';
+import { PortfolioService } from '../../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../../store/actions/portfolio-actions';
+
 
 @Component({
   selector: 'invest-portfolio-list-row',
@@ -23,7 +26,11 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
   limit: Number;
   descMoreShown: Boolean = false;
 
-  constructor() {
+  constructor(
+    private actions: PortfolioActions,
+    private portfolioService: PortfolioService
+  ) {
+
 
   }
 
@@ -48,16 +55,24 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
     this.limit = this.descriptionLimit;
   }
 
-  managePortfolioUpdateOperation(portfolioId: String) {
+  managePortfolioUpdateOperation(portfolio: PortfolioDetails) {
     console.log('managePortfolioUpdateOperation');
   }
 
-  managePortfolioCloneOperation(portfolioId: String) {
+  managePortfolioCloneOperation(portfolio: PortfolioDetails) {
     console.log('managePortfolioCloneOperation');
   }
 
-  managePortfolioRemoveOperation(portfolioId: String) {
-    console.log('managePortfolioRemoveOperation');
+  managePortfolioRemoveOperation(portfolio: PortfolioDetails) {
+    const putPortfolio: PortfolioDetails = portfolio;
+
+    /*putPortfolio.isClosed = true;
+
+    this.portfolioService.closePortfolio(putPortfolio).then((data: PortfolioDetails) => {
+      if (data != null) {
+        this.actions.putPortfolio(data);
+      }
+    });*/
   }
 
   descShowLess(){
