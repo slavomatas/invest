@@ -6,16 +6,14 @@ import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import retrofit2.http.HTTP;
 import sk.ystad.ServerApplication;
 import sk.ystad.model.measurements.Measures;
 import sk.ystad.model.measurements.positions.Position;
-import sk.ystad.model.securities.Security;
 import sk.ystad.repositories.securities.SecurityRepository;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -32,8 +30,8 @@ public class SecurityService {
         this.influxDB = influxDB;
     }
 
-    public Security getSecurityBySymbol(String symbol) {
-        return securityRepository.findBySymbol(symbol);
+    public ResponseEntity getSecurityBySymbol(String symbol) {
+        return new ResponseEntity<>(securityRepository.findBySymbol(symbol), HttpStatus.OK);
     }
 
     /**
@@ -42,7 +40,7 @@ public class SecurityService {
      * @param date
      * @return
      */
-    public Position getSecurityPrice(String symbol, String date) {
+    public ResponseEntity getSecurityPrice(String symbol, String date) {
         String queryStr = String.format("SELECT * FROM %s WHERE time='%s'", symbol, date);
         Query query = new Query(queryStr, Measures.CLOSE_PRICE.getName());
         QueryResult queryResult = this.influxDB.query(query);
@@ -50,12 +48,12 @@ public class SecurityService {
         List<QueryResult.Result> results = queryResult.getResults();
         try {
             Double value = (Double) results.get(0).getSeries().get(0).getValues().get(0).get(10);
-            return new Position(symbol, value);
+            return new ResponseEntity<>(new Position(symbol, value), HttpStatus.OK);
         }
         catch (NullPointerException e) {
             logger.error("InfluxDB Parser Error: " + e);
         }
 
-        return null;
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }

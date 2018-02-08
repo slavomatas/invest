@@ -6,7 +6,8 @@ import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sk.ystad.ServerApplication;
 import sk.ystad.common.utils.FormatingUtil;
@@ -21,10 +22,8 @@ import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.repositories.securities.SecurityRepository;
 import sk.ystad.repositories.users.*;
 
-import javax.sound.sampled.Port;
 import java.security.Principal;
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +55,7 @@ public class PortfolioService {
         this.userPositionRepository = userPositionRepository;
     }
 
-    public List<Portfolio> getByUserId(Principal principal) {
+    public ResponseEntity getByUserId(Principal principal) {
         User user = userRepository.findByUsername(principal.getName());
         List<Portfolio> portfolios = user.getPortfolios();
 
@@ -65,7 +64,7 @@ public class PortfolioService {
             getPortfolioDetails(p);
             p.setPositions(getPositionsWithMarketValue(p));
         }
-        return portfolios;
+        return new ResponseEntity<>(portfolios, HttpStatus.OK);
     }
 
     public Portfolio getPortfolioDetails(Portfolio portfolio) {
@@ -75,21 +74,21 @@ public class PortfolioService {
 
         List<QueryResult.Result> results = queryResult.getResults();
 
-        if (results != null && results.size() > 0) {
+        try {
             List<Object> summaryValues = results.get(0).getSeries().get(0).getValues().get(0);
-            if (!summaryValues.isEmpty()) {
-                Returns returns = new Returns();
-                returns.setMonthly((double) summaryValues.get(1));
-                returns.setWeekly((double) summaryValues.get(2));
-                returns.setYearly((double) summaryValues.get(3));
-                returns.setAll((double) summaryValues.get(4));
-
-                portfolio.setReturns(returns);
-                portfolio.setCash((double) summaryValues.get(5));
-                portfolio.setLastChangeAbs((double) summaryValues.get(6));
-                portfolio.setLastChangePct((double) summaryValues.get(7));
-                portfolio.setMarketValue((double) summaryValues.get(8));
-            }
+            Returns returns = new Returns();
+            returns.setMonthly((double) summaryValues.get(1));
+            returns.setWeekly((double) summaryValues.get(2));
+            returns.setYearly((double) summaryValues.get(3));
+            returns.setAll((double) summaryValues.get(4));
+            portfolio.setReturns(returns);
+            portfolio.setCash((double) summaryValues.get(5));
+            portfolio.setLastChangeAbs((double) summaryValues.get(6));
+            portfolio.setLastChangePct((double) summaryValues.get(7));
+            portfolio.setMarketValue((double) summaryValues.get(8));
+        }
+        catch (NullPointerException e) {
+            logger.error("InfluxDB Parser Error: " + e);
         }
         return portfolio;
     }
@@ -108,15 +107,17 @@ public class PortfolioService {
 
         List<QueryResult.Result> results = queryResult.getResults();
 
-        if (results != null && results.size() > 0) {
+        try {
             List<String> positionNames = results.get(0).getSeries().get(0).getColumns();
             List<List<Object>> marketValues = results.get(0).getSeries().get(0).getValues();
             List<Object> actualmarketValues = marketValues.get(marketValues.size() - 1);
-            if (!positionNames.isEmpty() && !actualmarketValues.isEmpty()) {
-                for (int i = 1; i < positionNames.size(); i++) {
-                    positionsWithMarketValue.add(new Position(positionNames.get(i), (Double) actualmarketValues.get(i)));
-                }
+            for (int i = 1; i < positionNames.size(); i++) {
+                positionsWithMarketValue.add(new Position(positionNames.get(i),
+                        (Double) actualmarketValues.get(i)));
             }
+        }
+        catch (NullPointerException e) {
+            logger.error("InfluxDB Parser Error: " + e);
         }
 
         return positionsWithMarketValue;
@@ -134,15 +135,16 @@ public class PortfolioService {
         QueryResult queryResult = this.influxDB.query(query);
 
         List<QueryResult.Result> results = queryResult.getResults();
-        if (results != null && results.size() > 0) {
+        try {
             QueryResult.Result result = results.get(0);
             List<QueryResult.Series> resultSeries = result.getSeries();
-            if (resultSeries != null && results.size() > 0) {
-                QueryResult.Series series = resultSeries.get(0);
-                List<List<Object>> values = series.getValues();
-                List<Object> lastValue = values.get(values.size() - 1);
-                return (Double) lastValue.get(1);
-            }
+            QueryResult.Series series = resultSeries.get(0);
+            List<List<Object>> values = series.getValues();
+            List<Object> lastValue = values.get(values.size() - 1);
+            return (Double) lastValue.get(1);
+        }
+        catch (NullPointerException e) {
+            logger.error("InfluxDB Parser Error: " + e);
         }
 
         return 0.0;
@@ -161,19 +163,20 @@ public class PortfolioService {
 
         List<Position> positions = new ArrayList<>();
         List<QueryResult.Result> results = queryResult.getResults();
-        if (results != null && results.size() > 0) {
+        try {
             QueryResult.Result result = results.get(0);
             List<QueryResult.Series> resultSeries = result.getSeries();
-            if (resultSeries != null && resultSeries.size() > 0) {
-                QueryResult.Series series = resultSeries.get(0);
-                List<String> columns = series.getColumns();
-                List<List<Object>> values = series.getValues();
-                List<Object> lastValue = values.get(values.size() - 1);
-                for (int i = 1; i < columns.size(); i++) {
-                    Position position = new Position(columns.get(i), (Double) lastValue.get(i));
-                    positions.add(position);
-                }
+            QueryResult.Series series = resultSeries.get(0);
+            List<String> columns = series.getColumns();
+            List<List<Object>> values = series.getValues();
+            List<Object> lastValue = values.get(values.size() - 1);
+            for (int i = 1; i < columns.size(); i++) {
+                Position position = new Position(columns.get(i), (Double) lastValue.get(i));
+                positions.add(position);
             }
+        }
+        catch (NullPointerException e) {
+           logger.error("InfluxDB Parser Error: " + e);
         }
 
         return positions;
@@ -186,13 +189,19 @@ public class PortfolioService {
      * @param portfolio
      * @return updated portfolio
      */
-    public Portfolio updatePortfolio(Principal principal, Portfolio portfolio) {
+    public ResponseEntity updatePortfolio(Principal principal, Portfolio portfolio) {
         User user = userRepository.findByUsername(principal.getName());
         if (user != null) {
             portfolio.setUser(user);
-            return portfolioRepository.save(portfolio);
+            Portfolio updatedPortfolio = portfolioRepository.save(portfolio);
+            if (updatedPortfolio != null) {
+                return new ResponseEntity<>(updatedPortfolio, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
-        return null;
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     public UserPosition addPosition(long portfolioId, String symbol) {
@@ -216,7 +225,7 @@ public class PortfolioService {
      * @param amount
      * @return
      */
-    public Trade addTrade(long portfolioId, String symbol,  String timestamp, Double price, int amount) {
+    public Trade addTrade(long portfolioId, String symbol, String timestamp, Double price, int amount) {
         //Load user portfolio
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         UserPosition userPosition = positionRepository.findBySecuritySymbol(symbol);

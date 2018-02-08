@@ -7,7 +7,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -53,14 +55,15 @@ public class UserPortfoliosServiceTest {
     @Test
     public void returnPortfoliosForGivenUser() throws Exception {
         List<Portfolio> testPortfolios = new ArrayList<>();
-        User user = new User(3L);
+        User user = new User(1L);
         testPortfolios.add(new Portfolio(1L, "Portfolio1", user));
         testPortfolios.add(new Portfolio(2L, "Portfolio2", user));
         user.setPortfolios(testPortfolios);
 
 
         Mockito.when(
-                userPortfoliosService.findByUserId(any(Principal.class))).thenReturn(testPortfolios);
+                userPortfoliosService.findByUserId(any(Principal.class)))
+                .thenReturn(new ResponseEntity<>(testPortfolios, HttpStatus.OK));
 
 
         mvc.perform(get("/v1/user/portfolios")

@@ -2,6 +2,8 @@ package sk.ystad.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.securities.Security;
@@ -15,8 +17,7 @@ import java.util.List;
 @RestController
 public class FinSecurityController {
 
-    final
-    SecurityService securityService;
+    private final SecurityService securityService;
 
     @Autowired
     public FinSecurityController(SecurityService securityService) {
@@ -24,12 +25,12 @@ public class FinSecurityController {
     }
 
     @RequestMapping(value = "/{symbol}/securities", method = RequestMethod.GET)
-    public Security getSecurityBySymbol(@PathVariable String symbol){
+    public ResponseEntity getSecurityBySymbol(@PathVariable String symbol){
         return securityService.getSecurityBySymbol(symbol);
     }
 
     @RequestMapping(value = "/security/{symbol}", method = RequestMethod.GET)
-    public Position getSecurityPrice(@PathVariable String symbol, @RequestParam String date) {
+    public ResponseEntity getSecurityPrice(@PathVariable String symbol, @RequestParam String date) {
         return securityService.getSecurityPrice(symbol, date);
     }
 
