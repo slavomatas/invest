@@ -95,7 +95,13 @@ public class LogRequestFilter extends OncePerRequestFilter implements Ordered {
         Map<String, Object> trace = new LinkedHashMap<String, Object>();
         trace.put("method", request.getMethod());
         trace.put("path", request.getRequestURI());
-        trace.put("principal", principal.getName());
+        try {
+            trace.put("principal", principal.getName());
+        }
+        catch (Exception e) {
+            logger.warn("Unauthorized service call: " + e.getMessage());
+        }
+
         trace.put("query", request.getQueryString());
         trace.put("statusCode", status);
 
