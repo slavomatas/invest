@@ -40,12 +40,13 @@ public class PortfolioService {
     private final TradeRepository tradeRepository;
     private final SecurityRepository securityRepository;
     private final UserPositionRepository userPositionRepository;
+    private final UserService userService;
 
     private static final Logger logger = LogManager
             .getLogger(ServerApplication.class);
 
     @Autowired
-    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository, TradeRepository tradeRepository, UserPositionRepository userPositionRepository) {
+    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository, TradeRepository tradeRepository, UserPositionRepository userPositionRepository, UserService userService) {
         this.influxDB = influxDB;
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
@@ -53,6 +54,7 @@ public class PortfolioService {
         this.securityRepository = securityRepository;
         this.tradeRepository = tradeRepository;
         this.userPositionRepository = userPositionRepository;
+        this.userService = userService;
     }
 
     public ResponseEntity getByUserId(Principal principal) {
@@ -249,5 +251,17 @@ public class PortfolioService {
         tradeRepository.save(trade);
         logger.info("Added trade to repository  " + trade);
         return trade;
+    }
+
+    public ResponseEntity createPortfolio(Principal principal, Portfolio portfolio) {
+        User user = (User) userService.getByUsername(principal).getBody();
+        if (user != null) {
+            portfolio.setUser(user);
+            Portfolio resultPortfolio = portfolioRepository.save(portfolio);
+            if(resultPortfolio != null){
+                return new ResponseEntity<>(resultPortfolio, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }

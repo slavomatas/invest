@@ -47,4 +47,12 @@ public class PortfolioController {
     public ResponseEntity updatePortfolio(Principal principal, @RequestBody Portfolio portfolio){
         return portfolioService.updatePortfolio(principal, portfolio);
     }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="/user/portfolios", method = RequestMethod.POST, produces ="application/json")
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Create new portfolio", notes = "UserID is retrieved from session")
+    public ResponseEntity createPortfolio(Principal principal, @RequestBody Portfolio portfolio) {
+        return portfolioService.createPortfolio(principal, portfolio);
+    }
 }
