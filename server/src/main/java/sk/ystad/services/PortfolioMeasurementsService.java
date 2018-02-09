@@ -93,7 +93,7 @@ public class PortfolioMeasurementsService {
                 portfolioCumulativeReturns.add(new TimeSeriesSimpleItem(rowValues.get(0).toString(),
                         (Double) rowValues.get(1)));
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IndexOutOfBoundsException e ) {
             logger.error("InfluxDB Parser Error: " + e);
         }
 

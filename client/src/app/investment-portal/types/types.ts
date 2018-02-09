@@ -30,7 +30,7 @@ export interface PortfolioDetails {
   lastChangePct: number;
   returns: TypeOfReturns;
   cash: number;
-  isClosed: boolean;
+  closed: boolean;
   isDisplayed: boolean;
   positions:
     {
@@ -41,7 +41,7 @@ export interface PortfolioDetails {
     {
       name: string,
       value: number
-    }[];  
+    }[];
 }
 
 export interface PortfolioTimeSeries {

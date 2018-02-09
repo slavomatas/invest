@@ -50,6 +50,22 @@ public class Portfolio {
     @Column(name = "is_closed")
     private boolean isClosed;
 
+    public Portfolio(Long id, String name, String description, double marketValue, double lastChangeAbs, double lastChangePct, Returns returns, double cash, List<Position> positions, List<UserPosition> usersPositions, User user, String idInflux, boolean isClosed) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.marketValue = marketValue;
+        this.lastChangeAbs = lastChangeAbs;
+        this.lastChangePct = lastChangePct;
+        this.returns = returns;
+        this.cash = cash;
+        this.positions = positions;
+        this.usersPositions = usersPositions;
+        this.user = user;
+        this.idInflux = idInflux;
+        this.isClosed = isClosed;
+    }
+
     public  Portfolio(){
 
     }

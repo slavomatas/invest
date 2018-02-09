@@ -195,12 +195,18 @@ public class PortfolioService {
         User user = userRepository.findByUsername(principal.getName());
         if (user != null) {
             portfolio.setUser(user);
-            Portfolio updatedPortfolio = portfolioRepository.save(portfolio);
-            if (updatedPortfolio != null) {
-                return new ResponseEntity<>(updatedPortfolio, HttpStatus.OK);
+            try {
+                portfolio.setIdInflux(portfolioRepository.findOne(portfolio.getId()).getIdInflux());
+                Portfolio updatedPortfolio = portfolioRepository.save(portfolio);
+                if (updatedPortfolio != null) {
+                    return new ResponseEntity<>(updatedPortfolio, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             }
-            else {
-                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            catch (NullPointerException e) {
+                logger.error("Could not update portfolio: " + e.getMessage());
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
