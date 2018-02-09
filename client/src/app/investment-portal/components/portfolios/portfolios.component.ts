@@ -11,7 +11,7 @@ import { AppState } from '../../store/store';
 })
 export class PortfoliosComponent implements OnInit {
 
-  portfolioList$ = this.ngRedux.select(state => state.dashboardPortfolioList);
+  portfolioList$ = this.ngRedux.select(state => state.portfolioList);
 
    constructor(private ngRedux: NgRedux<AppState>) { }
 
