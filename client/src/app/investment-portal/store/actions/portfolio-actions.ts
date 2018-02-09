@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from 'redux';
 import { NgRedux } from '@angular-redux/store';
-import { PortfolioDetails, PortfolioTimeSeries } from '../../types/types';
+import { PortfolioDetails, PortfolioTimeSeries, Portfolio } from '../../types/types';
 import { AppState } from '../store';
 
 @Injectable()
@@ -23,6 +23,33 @@ export class PortfolioActions {
 
     public getPortfoliosCumulativeData() {
         this.ngRedux.dispatch({ type: PortfolioActions.GET_PORTFOLIOS_CUMULATIVE_DATA });
+    }
+
+    public addPortfolio(portfolio: Portfolio) {
+      const newPortfolioList = this.ngRedux.getState().portfolioList;
+      newPortfolioList.push({
+        id: portfolio.id,
+        name: portfolio.name,
+        description: portfolio.description,
+        marketValue: 0,
+        oldMarketValues: {
+          oneM: 0,
+          threeM: 0,
+          sixM: 0,
+          nineM: 0,
+          twelveM: 0,
+          all: 0
+        },
+        lastChangeAbs: 0,
+        lastChangePct: 0,
+        returns: {},
+        cash: 0,
+        isClosed: false,
+        isDisplayed: true,
+        positions: [],
+        series: []
+      });
+      this.ngRedux.dispatch({ type: PortfolioActions.GET_PORTFOLIOS, payload: newPortfolioList});
     }
 
     public getPortfoliosComulativeDataFullfiled(success: boolean, data?: PortfolioTimeSeries[]) {
