@@ -112,7 +112,17 @@ public class Etf extends SecurityData {
 
     public static class EtfBuilder {
         public Etf buildFromCsv(CSVRecord csvRecord) throws ParseException {
-            return new Etf(csvRecord);
+            Etf etf = new Etf(csvRecord);
+            try {
+                if (etf.getSecurity().isActive() && ("AMEX".equals(etf.getExchange()) ||
+                        "NYSE".equals(etf.getExchange()) || "OTC".equals(etf.getExchange()))) {
+                    return etf;
+                } else {
+                    return null;
+                }
+            } catch (NullPointerException e) {
+                return null;
+            }
         }
     }
 }

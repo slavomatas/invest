@@ -20,7 +20,7 @@ import java.util.List;
 public class SecurityLoader {
 
     /**
-     *  Loads ETFs from file "../data/US_ETF.csv"
+     * Loads ETFs from file "../data/US_ETF.csv"
      *
      * @param securityRepository - repository from controller, which allows saving into database
      * @return loader result object that has information about loading
@@ -32,6 +32,7 @@ public class SecurityLoader {
         CSVParser parser = null;
         int succesfullCount = 0;
         int failedCount = 0;
+        int filteredCount = 0;
         File file = new File("../data/US_ETF.csv");
 
         try {
@@ -39,7 +40,7 @@ public class SecurityLoader {
             Reader targetReader = new FileReader(file);
             parser = CSVParser.parse(targetReader, CSVFormat.EXCEL.withHeader("CsiNumber", "Symbol", "Name",
                     "Exchange", "IsActive", "StartDate", "EndDate", "Sector", "Industry", "ConversionFactor", "SwitchCfDate", "PreSwitchCf",
-                    "LastVolume", "Type,", "Currency"));
+                    "LastVolume", "Type,", "ChildExchange,", "Currency"));
             //foreach line creating etf from file and adding it into list
             // handles 2 exceptions: ParseException
             //                       NumberFormatException
@@ -48,9 +49,13 @@ public class SecurityLoader {
                 try {
 
                     Etf tmpEtf = new Etf.EtfBuilder().buildFromCsv(csvRecord);
-                    etfs.add(tmpEtf.getSecurity());
+                    if (tmpEtf != null) {
+                        etfs.add(tmpEtf.getSecurity());
+                        succesfullCount++;
+                    } else {
+                        filteredCount++;
+                    }
 
-                    succesfullCount++;
                 } catch (ParseException | NumberFormatException e) {
                     failedCount++;
                     //log.error("Unable to parse etf csv file - problem with date format, at line " + (succesfullCount + 1) + ", " + e.getMessage());
@@ -68,6 +73,6 @@ public class SecurityLoader {
             resultMessage = "Unable to save etf - security repository is null";
             //log.error(resultMessage);
         }
-        return new LoaderResult(resultMessage, succesfullCount, failedCount);
+        return new LoaderResult(resultMessage, succesfullCount, failedCount, filteredCount);
     }
 }
