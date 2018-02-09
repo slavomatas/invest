@@ -126,6 +126,11 @@
             <artifactId>sentry-log4j2</artifactId>
             <version>1.6.7</version>
         </dependency>
+        <dependency>
+            <groupId>pmd</groupId>
+            <artifactId>pmd</artifactId>
+            <version>4.2.4</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>portal</finalName>
