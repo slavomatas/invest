@@ -6,6 +6,7 @@ import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { AppState } from '../../../../store/store';
 import { PortfolioDetails } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
+import { getDisplayedPortfolios } from '../../../../utils/portfolio-utils';
 
 @Component({
   selector: 'invest-cumulative-line-chart-legend',
@@ -14,7 +15,7 @@ import { cloneDeep } from 'lodash';
 })
 export class LineChartLegendComponent implements OnInit {
 
-  dashboardPortfolioList$ =  this.ngRedux.select(state => state.portfolioList);
+  portfolioList$ =  this.ngRedux.select(state => state.portfolioList);
 
   portfolios: PortfolioDetails[] = [];
   colors = colorScheme;
@@ -22,9 +23,9 @@ export class LineChartLegendComponent implements OnInit {
   constructor(private portfolioService: PortfolioService,
               private actions: PortfolioActions,
               private ngRedux: NgRedux<AppState>) {
-    this.dashboardPortfolioList$.subscribe((data: PortfolioDetails[]) => {
+    this.portfolioList$.subscribe((data: PortfolioDetails[]) => {
       if (data != null && data.length > 0 ) {
-        this.portfolios = data;
+        this.portfolios = data.filter(portfolio => !portfolio.closed);
       }
     });
   }

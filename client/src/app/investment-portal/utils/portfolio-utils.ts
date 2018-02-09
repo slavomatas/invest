@@ -83,10 +83,10 @@ export function getDateFrom(dateTo: Date, stringPeriod: string): Date {
         }
     }
     dateFrom.setMonth(dateTo.getMonth() - monthCount);
-    return dateFrom; 
+    return dateFrom;
 }
 
 export function getDisplayedPortfolios(portfolios: PortfolioDetails[], getClosed: boolean = false) {
-    // return portfolios.filter(portfolio => portfolio.isDisplayed && portfolio.isClosed === getClosed);
-    return portfolios.filter(portfolio => portfolio.isDisplayed);
+    return portfolios.filter(portfolio => portfolio.isDisplayed && portfolio.closed === getClosed);
+    // return portfolios.filter(portfolio => portfolio.isDisplayed);
 }

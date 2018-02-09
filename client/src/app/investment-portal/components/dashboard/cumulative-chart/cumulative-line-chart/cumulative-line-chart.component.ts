@@ -8,7 +8,7 @@ import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { AppState } from '../../../../store/store';
 import { PortfolioDetails } from '../../../../types/types';
-import { getDateFrom } from '../../../../utils/portfolio-utils';
+import { getDateFrom, getDisplayedPortfolios } from '../../../../utils/portfolio-utils';
 
 @Component({
   selector: 'invest-cumulative-line-chart',
@@ -22,7 +22,7 @@ export class LineChartComponent implements OnInit {
   // @select() readonly chartPortfolios$: Observable<ChartModelPortfolio[]>;
   // @select('chartPortfolios') chartPortfolios$: Observable<ChartModelPortfolio[]>;
 
-  portfolioList$ =  this.ngRedux.select(state => state.portfolioList.filter(portfolio => portfolio.isDisplayed)) ;
+  portfolioList$ =  this.ngRedux.select(state => state.portfolioList) ;
   cumulativeChartSelectedPeriod$ = this.ngRedux.select(state => state.cumulativeChartSelectedPeriod);
 
   chartData: PortfolioDetails[] = [];
@@ -54,7 +54,7 @@ export class LineChartComponent implements OnInit {
     private portfolioService: PortfolioService,
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
-    
+
     this.cumulativeChartSelectedPeriod$.subscribe((selectedPeriod: string) => {
       if (selectedPeriod != null) {
         this.cumulativeChartSelectedPeriod = selectedPeriod;
@@ -69,7 +69,7 @@ export class LineChartComponent implements OnInit {
     // subscribe on chartPortfolios from redux Store
     this.portfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
       if (reduxPortfolios != null && reduxPortfolios.length > 0) {
-        this.chartData = cloneDeep(reduxPortfolios);
+        this.chartData = cloneDeep(getDisplayedPortfolios(reduxPortfolios));
         this.filterChartData();
       }
     });
@@ -97,7 +97,7 @@ export class LineChartComponent implements OnInit {
         });
       // return portfolio;
     });
-    
+
     this.chartData = cloneDeep(this.chartData);
   }
 }
