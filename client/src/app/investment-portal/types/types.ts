@@ -32,11 +32,7 @@ export interface PortfolioDetails {
   cash: number;
   closed: boolean;
   isDisplayed: boolean;
-  positions:
-    {
-      symbol: string;
-      value: number;
-    }[];
+  positions: PortfolioPosition[];
   series:                 // series - time series of the portfolio
     {
       name: string,
@@ -51,6 +47,27 @@ export interface PortfolioTimeSeries {
     {
       name: string,
       value: number
+    }[];
+}
+
+export interface PortfolioPosition {
+  symbol: string;
+  value: number;    // market value of position - used on dashboard in portfolio overview list
+  name: string;
+  quantity: number; // sum trades.amount
+  price: number;
+  currency: string;
+  priceLast20Days: {
+    name: string;
+    value: number;
+  }[];
+  marketValue: number;
+  lastChange: number;
+  trades: {
+      tradeId: number
+      price: number;
+      amount: number;
+      dateTime: Date;
     }[];
 }
 
