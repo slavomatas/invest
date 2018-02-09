@@ -63,13 +63,14 @@ public class PortfolioService {
 
         //Get influx data for each portfolio
         for (Portfolio p : portfolios) {
-            getPortfolioDetails(p);
+            getPortfolioDetails(p.getId());
             p.setPositions(getPositionsWithMarketValue(p));
         }
         return new ResponseEntity<>(portfolios, HttpStatus.OK);
     }
 
-    public Portfolio getPortfolioDetails(Portfolio portfolio) {
+    public Portfolio getPortfolioDetails(long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolio.getIdInflux());
         Query query = new Query(queryStr, Measures.PORTFOLIO_SUMMARY.getName());
         QueryResult queryResult = this.influxDB.query(query);

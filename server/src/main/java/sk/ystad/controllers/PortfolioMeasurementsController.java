@@ -70,8 +70,7 @@ public class PortfolioMeasurementsController {
     @ApiOperation(value = "Get positions with market value for portfolio", notes = "Array of positions with market value for given portfolio can be provided.")
     @GetMapping("/user/portfolios/{portfolioId}/details")
     public Portfolio getPortfolioDetails(@PathVariable("portfolioId") Long portfolioId) {
-        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-        return portfolioService.getPortfolioDetails(portfolio);
+        return portfolioService.getPortfolioDetails(portfolioId);
     }
 
 }
