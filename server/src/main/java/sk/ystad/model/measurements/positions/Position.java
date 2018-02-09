@@ -10,6 +10,9 @@ public class Position {
         this.value = value;
     }
 
+    public Position() {
+    }
+
     public String getSymbol() {
         // Parse the symbol string
         String s = symbol;

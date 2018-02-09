@@ -1,37 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import {PortfolioService} from '../../../services/portfolio/portfolio.service';
-import {PortfolioActions} from '../../../store/actions/portfolio-actions';
-import {NgRedux} from '@angular-redux/store';
-import {PortfolioDetails, TypeOfPortfolioReturn} from '../../../types/types';
-import { cloneDeep } from 'lodash';
-import { AppState } from '../../../store/store';
-
+import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { PortfolioDetails} from '../../../types/types';
+import { getDisplayedPortfolios } from '../../../utils/portfolio-utils';
 
 @Component({
-  selector: 'fuse-app-dashboard-portfolio-list',
+  selector: 'invest-dashboard-portfolio-list',
   templateUrl: './dashboard-portfolio-list.component.html',
   styleUrls: ['./dashboard-portfolio-list.component.scss']
 })
-export class DashboardPortfolioListComponent implements OnInit {
+export class DashboardPortfolioListComponent implements OnChanges {
+  @Input() dashboardPortfolioList: PortfolioDetails[];
 
-  dashboardPortfolioList$ =  this.ngRedux.select(state => state.dashboardPortfolioList) ;
-  dashboardPortfolioList: PortfolioDetails[];
+  nonClosedPortfolios: PortfolioDetails[];
 
-  constructor(
-    private portfolioService: PortfolioService,
-    private actions: PortfolioActions,
-    private ngRedux: NgRedux<AppState>) {
-    this.dashboardPortfolioList$.subscribe((data: PortfolioDetails[]) => {
-      this.dashboardPortfolioList = cloneDeep(data);
-    });
-
+  constructor() {
   }
 
-  ngOnInit() {
-    this.portfolioService.getPortfoliosListDetails(TypeOfPortfolioReturn.daily).then((data: PortfolioDetails[]) => {
-      this.actions.getPortfoliosListDetails(true, data);
-    });
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['dashboardPortfolioList']) {
+        this.nonClosedPortfolios = getDisplayedPortfolios(this.dashboardPortfolioList);
+    }
   }
 
 }

@@ -31,6 +31,12 @@ export class NavigationModel
                           'bg'   : '#F44336',
                           'fg'   : '#FFFFFF'
                       }
+                    },
+                    {
+                        'title' : 'Create Portfolio',
+                        'type' : 'item',
+                        'icon' : 'add',
+                        'url' : '/portfolios/create'
                     }
                 ]
             }

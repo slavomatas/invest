@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgRedux} from '@angular-redux/store';
-import { ChartModelPortfolio } from '../../../../types/dashboard-types';
 import { colorScheme } from '../../../../constants/constants';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { AppState } from '../../../../store/store';
+import { PortfolioDetails } from '../../../../types/types';
+import { cloneDeep } from 'lodash';
+import { getDisplayedPortfolios } from '../../../../utils/portfolio-utils';
 
 @Component({
   selector: 'invest-cumulative-line-chart-legend',
@@ -13,18 +15,17 @@ import { AppState } from '../../../../store/store';
 })
 export class LineChartLegendComponent implements OnInit {
 
-  chartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
-  // chartActivePortfolios$ =  this.ngRedux.select(state => state.chartPortfolios);
+  portfolioList$ =  this.ngRedux.select(state => state.portfolioList);
 
-  portfolios: ChartModelPortfolio[] = [];
+  portfolios: PortfolioDetails[] = [];
   colors = colorScheme;
 
   constructor(private portfolioService: PortfolioService,
               private actions: PortfolioActions,
               private ngRedux: NgRedux<AppState>) {
-    this.chartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
+    this.portfolioList$.subscribe((data: PortfolioDetails[]) => {
       if (data != null && data.length > 0 ) {
-        this.portfolios = data;
+        this.portfolios = data.filter(portfolio => !portfolio.closed);
       }
     });
   }
@@ -33,10 +34,10 @@ export class LineChartLegendComponent implements OnInit {
   }
 
   legendEvent(event, index) {
-    console.log(index);
-    this.portfolios[index].selected = !this.portfolios[index].selected;
+    console.log('legend clicket index', index);
+    this.portfolios[index].isDisplayed = !this.portfolios[index].isDisplayed;
 
-    // change redux state
-    this.actions.setPortfolioCumulativeChartSelected(this.portfolios);
+    this.actions.getPortfolios(true, cloneDeep(this.portfolios));
+
   }
 }

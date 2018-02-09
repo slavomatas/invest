@@ -1,7 +1,6 @@
 import { Action } from 'redux';
-import { User, PortfolioDetails } from '../types/types';
+import { User, PortfolioDetails, PortfolioTimeSeries } from '../types/types';
 import { Token } from '../types/authentication-types';
-import { ChartModelPortfolio } from '../types/dashboard-types';
 import { PortfolioActions } from './actions/portfolio-actions';
 import { AuthenticationActions } from './actions/authentication-actions';
 
@@ -9,8 +8,9 @@ import { AuthenticationActions } from './actions/authentication-actions';
 export interface AppState {
     user: User;
     token: Token;
-    chartPortfolios: ChartModelPortfolio[];
-    dashboardPortfolioList: PortfolioDetails[];
+    portfolioTimeSeries: PortfolioTimeSeries[];
+    portfolioList: PortfolioDetails[];
+    displayedPortfolios: PortfolioDetails[];
     isGettingPortfoliosCumulativeData: boolean;
     cumulativeFetchError: string | undefined;
     portfoliosDetailsFetchError: string | undefined;
@@ -20,8 +20,9 @@ export interface AppState {
 }
 
 export const INITIAL_STATE: AppState = {
-    chartPortfolios: [],
-    dashboardPortfolioList: [],
+    portfolioTimeSeries: [],
+    portfolioList: [],
+    displayedPortfolios: [],
     isGettingPortfoliosCumulativeData: false,
     cumulativeFetchError: undefined,
     portfoliosDetailsFetchError: undefined,
@@ -39,7 +40,7 @@ export function rootReducer(lastState: AppState, action: any): AppState {
             return <AppState>{
               ...lastState,
               isGettingPortfoliosCumulativeData: false,
-              chartPortfolios: action.payload,
+              portfolioTimeSeries: action.payload,
               cumulativeFetchError: undefined
             };
         case PortfolioActions.FGET_CUMULATIVE_FULFILLED_FAILURE:
@@ -54,13 +55,13 @@ export function rootReducer(lastState: AppState, action: any): AppState {
               isGettingPortfoliosCumulativeData: true,
               cumulativeFetchError: undefined
             };
-        case PortfolioActions.GET_PORTFOLIOS_LIST_DETAILS:
+        case PortfolioActions.GET_PORTFOLIOS:
           return {
             ...lastState,
-            dashboardPortfolioList: action.payload,
+            portfolioList: action.payload,
             portfoliosDetailsFetchError: undefined
           };
-        case PortfolioActions.FGET_PORTFOLIOS_LIST_DETAILS:
+        case PortfolioActions.FGET_PORTFOLIOS:
           return {
             ...lastState,
             portfoliosDetailsFetchError: action.payload
@@ -74,9 +75,8 @@ export function rootReducer(lastState: AppState, action: any): AppState {
         case PortfolioActions.SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED:
           return {
             ...lastState,
-            chartPortfolios: action.payload,
+            displayedPortfolios: action.payload,
           };
-
         case AuthenticationActions.GET_USER_SUCCESS:
             return <AppState> {
               ...lastState,

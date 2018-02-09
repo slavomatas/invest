@@ -2,6 +2,8 @@ package sk.ystad.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import sk.ystad.common.data_structures.Response;
+import sk.ystad.common.data_structures.AuthResponse;
 import sk.ystad.common.services.EmailService;
 import sk.ystad.model.auth.Role;
 import sk.ystad.model.users.User;
@@ -72,9 +74,9 @@ public class UserService implements UserDetailsService {
         return userDetails;
     }
 
-    public Response registerUser(User user) {
+    public AuthResponse registerUser(User user) {
         if (emailExist(user.getEmail()) || usernameExist(user.getUsername())) {
-            return new Response(false, "User already exists");
+            return new AuthResponse(false, "User already exists");
         }
         while (tokenExists(user.getRegistrationToken())) {
             user.generateNewToken();
@@ -84,7 +86,7 @@ public class UserService implements UserDetailsService {
         hashPassword(user);
         userRepository.save(user);
         sendEmail(user);
-        return new Response(true, null);
+        return new AuthResponse(true, null);
     }
 
     private void sendEmail(User user) {
@@ -122,21 +124,21 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public Response checkUser(String token) {
+    public AuthResponse checkUser(String token) {
         User user = userRepository.findByRegistrationToken(token);
         if (user == null) {
-            return new Response(false, null);
+            return new AuthResponse(false, null);
         } else {
             if (user.isRegistrationConfirmed()) {
-                return new Response(true, null);
+                return new AuthResponse(true, null);
             } else {
                 if (registrationExpired(user.getRegistrationTimestamp())) {
                     userRepository.delete(user);
-                    return new Response(false, null);
+                    return new AuthResponse(false, null);
                 } else {
                     user.setRegistrationConfirmed(true);
                     userRepository.save(user);
-                    return new Response(true, null);
+                    return new AuthResponse(true, null);
                 }
             }
         }
@@ -146,18 +148,18 @@ public class UserService implements UserDetailsService {
         return (new Date().getTime() - registrationTimestamp.getTime()) > REGISTRATION_TIME_OUT;
     }
 
-    public Response verifyRegistrationToken(String token) {
-        return this.checkUser(token);
+    public ResponseEntity verifyRegistrationToken(String token) {
+        return new ResponseEntity<>(this.checkUser(token), HttpStatus.OK);
     }
 
-    public User getByUsername(Principal principal) {
-        return userRepository.findByUsername(principal.getName());
+    public ResponseEntity getByUsername(Principal principal) {
+        return new ResponseEntity<>(userRepository.findByUsername(principal.getName()), HttpStatus.OK);
     }
 
-    public Response registerUser(String username, String password,
-                                 String name, String surname,String email) {
+    public ResponseEntity registerUser(String username, String password,
+                                       String name, String surname, String email) {
         User user = new User(username, password, name, surname, email);
-        return this.registerUser(user);
+        return new ResponseEntity<>(this.registerUser(user), HttpStatus.OK);
     }
 
 

@@ -3,11 +3,12 @@ import { cloneDeep } from 'lodash';
 import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 // import {port} from '_debugger';
-import { ChartModelPortfolio } from '../../../../types/dashboard-types';
 import { colorScheme } from '../../../../constants/constants';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { AppState } from '../../../../store/store';
+import { PortfolioDetails } from '../../../../types/types';
+import { getDateFrom, getDisplayedPortfolios } from '../../../../utils/portfolio-utils';
 
 @Component({
   selector: 'invest-cumulative-line-chart',
@@ -21,10 +22,12 @@ export class LineChartComponent implements OnInit {
   // @select() readonly chartPortfolios$: Observable<ChartModelPortfolio[]>;
   // @select('chartPortfolios') chartPortfolios$: Observable<ChartModelPortfolio[]>;
 
-  // select chart portfolios and filter just the one with selected === true
-  selectedChartPortfolios$ =  this.ngRedux.select(state => state.chartPortfolios.filter(portfolio => portfolio.selected)) ;
+  portfolioList$ =  this.ngRedux.select(state => state.portfolioList) ;
+  cumulativeChartSelectedPeriod$ = this.ngRedux.select(state => state.cumulativeChartSelectedPeriod);
 
-  chartData: ChartModelPortfolio[] = [];
+  chartData: PortfolioDetails[] = [];
+  tmpChartData: PortfolioDetails[] = [];
+  cumulativeChartSelectedPeriod: string;
 
   // view: any[] = [900, 400];
 
@@ -52,10 +55,22 @@ export class LineChartComponent implements OnInit {
     private actions: PortfolioActions,
     private ngRedux: NgRedux<AppState>) {
 
+    this.cumulativeChartSelectedPeriod$.subscribe((selectedPeriod: string) => {
+      if (selectedPeriod != null) {
+        this.cumulativeChartSelectedPeriod = selectedPeriod;
+
+        if (this.chartData != null && this.chartData.length > 0) {
+          // get initial past date
+          this.filterChartData();
+        }
+      }
+    });
+
     // subscribe on chartPortfolios from redux Store
-    this.selectedChartPortfolios$.subscribe((data: ChartModelPortfolio[]) => {
-      if (data != null && data.length > 0) {
-        this.chartData = cloneDeep(data);
+    this.portfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
+      if (reduxPortfolios != null && reduxPortfolios.length > 0) {
+        this.chartData = cloneDeep(getDisplayedPortfolios(reduxPortfolios));
+        this.filterChartData();
       }
     });
 
@@ -68,5 +83,21 @@ export class LineChartComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  private filterChartData() {
+    const pastDate = getDateFrom(new Date(), this.cumulativeChartSelectedPeriod);
+
+    this.chartData.forEach((portfolio) => {
+      portfolio.series = portfolio.series
+        .filter((sero) => {
+          const seroActDate = Date.parse(sero.name);
+          const pastDateVal = pastDate.getTime();
+          return seroActDate > pastDateVal;
+        });
+      // return portfolio;
+    });
+
+    this.chartData = cloneDeep(this.chartData);
   }
 }

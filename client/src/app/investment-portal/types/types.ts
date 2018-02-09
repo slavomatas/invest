@@ -1,6 +1,7 @@
 export interface Portfolio {
   name: string;
   id: number;
+  description: string;
 }
 
 export interface CumulativeMeasurement {
@@ -20,15 +21,36 @@ export interface User {
 }
 
 export interface PortfolioDetails {
-  name: string;
   id: number;
+  name: string;
+  description: string;
   marketValue: number;
-  oldMarketValue: number;
+  oldMarketValues: TypeOfOldMarketValue;   // oldMarketValue - cumulative chart market value at the beginning of the preiod
+  lastChangeAbs: number;
+  lastChangePct: number;
   returns: TypeOfReturns;
+  cash: number;
+  closed: boolean;
+  isDisplayed: boolean;
   positions:
     {
       symbol: string;
       value: number;
+    }[];
+  series:                 // series - time series of the portfolio
+    {
+      name: string,
+      value: number
+    }[];
+}
+
+export interface PortfolioTimeSeries {
+  id: number;
+
+  series:
+    {
+      name: string,
+      value: number
     }[];
 }
 
@@ -39,6 +61,16 @@ export interface TypeOfReturns {
   quarterly?: number;
   yearly?: number;
   cumulative?: number;
+  all?: number;
+}
+
+export interface TypeOfOldMarketValue {
+  oneM?: number;
+  threeM?: number;
+  sixM?: number;
+  nineM?: number;
+  twelveM?: number;
+  all?: number;
 }
 
 export enum TypeOfPortfolioReturn {

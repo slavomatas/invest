@@ -3,12 +3,12 @@ package sk.ystad.common.data_structures;
 /**
  * Generic response for REST calls
  */
-public class Response {
+public class AuthResponse {
 
     private boolean success;
     private String msg;
 
-    public Response(boolean success, String message) {
+    public AuthResponse(boolean success, String message) {
         this.success = success;
         this.msg = message;
     }

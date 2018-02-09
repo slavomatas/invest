@@ -9,15 +9,11 @@ export interface PortfolioSummary {
   periodMarketValuePercentage: number;
 }
 
-export interface ChartModelPortfolio {
-  name: string;
-  id: number;
-  selected: boolean;
-  marketValue: number;
-  oldMarketValue: number;
-  series:
-    {
-      name: string,
-      value: number
-    }[];
-}
+// export interface PortfolioTimeSeries {
+//   id: number;
+//   series:
+//     {
+//       name: string,
+//       value: number
+//     }[];
+// }

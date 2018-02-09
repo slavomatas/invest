@@ -44,6 +44,7 @@
 
 <div id="period-selector" class="center">
   <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='1M'; else selected1M">1M</div>
+  <!-- <div class="period-box" (click)="periodEvent($event)" [ngClass]="{selected: selectedPeriod == '1M'}">1M</div> -->
   <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='3M'; else selected3M">3M</div>
   <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='6M'; else selected6M">6M</div>
   <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='9M'; else selected9M">9M</div>

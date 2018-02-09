@@ -18,6 +18,7 @@ public class Measures {
 
     //Portfolio Measures
     public static final Measure POSITION_WEIGHTS = ImmutableMeasure.of("POSITION_WEIGHTS");
+    public static final Measure PORTFOLIO_POSITIONS = ImmutableMeasure.of("PORTFOLIO_POSITIONS");
     public static final Measure PORTFOLIO_MARKET_VALUE = ImmutableMeasure.of("PORTFOLIO_MARKET_VALUE");
     public static final Measure PORTFOLIO_DAILY_RETURN = ImmutableMeasure.of("PORTFOLIO_RETURNS");
     public static final Measure PORTFOLIO_WEEKLY_RETURN = ImmutableMeasure.of("PORTFOLIO_WEEKLY_RETURNS");

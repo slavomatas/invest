@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { PortfolioDetails } from '../../types/types';
+import { NgRedux } from '@angular-redux/store';
+import { AppState } from '../../store/store';
+
 
 @Component({
   selector: 'invest-portfolios',
@@ -7,7 +11,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PortfoliosComponent implements OnInit {
 
-  constructor() { }
+  portfolioList$ = this.ngRedux.select(state => state.portfolioList);
+
+   constructor(private ngRedux: NgRedux<AppState>) { }
 
   ngOnInit() {
   }

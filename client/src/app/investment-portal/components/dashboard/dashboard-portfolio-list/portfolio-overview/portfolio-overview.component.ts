@@ -32,7 +32,7 @@ export class PortfolioOverviewComponent implements OnInit {
   constructor( ) { }
 
   ngOnInit() {
-    this.updatePercentage(this.portfolioDetails.oldMarketValue, this.portfolioDetails.marketValue);
+    this.percentage = this.portfolioDetails.lastChangePct;
     this.setChartData(this.portfolioDetails.positions);
   }
 
@@ -49,10 +49,6 @@ export class PortfolioOverviewComponent implements OnInit {
         }
       );
     }
-  }
-
-  private updatePercentage(oldMarketValue: number, newMarketValue: number) {
-    this.percentage = (((newMarketValue - oldMarketValue) / newMarketValue));
   }
 
 }

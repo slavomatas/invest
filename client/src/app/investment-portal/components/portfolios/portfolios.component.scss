@@ -1,0 +1,13 @@
+.portfolio-list-parent {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    width: 100%;
+}
+
+.portfolio-list-item {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-bottom: 10px;
+}

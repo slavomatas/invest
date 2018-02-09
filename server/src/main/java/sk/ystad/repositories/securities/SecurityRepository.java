@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SecurityRepository extends CrudRepository<Security, Long> {
-    public List<Security> findBySymbol(String symbol);
+    public Security findBySymbol(String symbol);
 }

@@ -1,16 +1,13 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
-import { forEach } from '@angular/router/src/utils/collection';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { PortfolioDetails } from '../../../../types/types';
 import { colorScheme } from '../../../../constants/constants';
-import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
-import { AppState } from '../../../../store/store';
+
 @Component({
   selector: 'invest-horizontal-bar-chart',
   templateUrl: 'horizontal-bar-chart.component.html',
   styleUrls: ['horizontal-bar-chart.component.scss']
 })
-export class HorizontalBarChartComponent implements OnInit, OnChanges {
+export class HorizontalBarChartComponent implements OnChanges {
   @Input() portfolioDetailsList: PortfolioDetails[];
   portfoliosNum = 1;
   single: any = [];
@@ -25,33 +22,25 @@ export class HorizontalBarChartComponent implements OnInit, OnChanges {
   showYAxisLabel = true;
   yAxisLabel = '';
   barPadding = 155;
-  view = [700, 230 * this.portfoliosNum];
+  view = [, 250 * this.portfoliosNum];
 
   colorScheme = {
     domain: colorScheme
   };
 
-  constructor(
-    private actions: PortfolioActions,
-    private ngRedux: NgRedux<AppState>
-  ) {
-
-  }
+  constructor( ) {  }
 
   ngOnChanges(changes: SimpleChanges) {
     for (const portfolio of this.portfolioDetailsList) {
       this.single.push(
         {
           'name': portfolio.name,
-          'value': portfolio.returns.daily
+          'value': portfolio.lastChangeAbs
         }
       );
     }
     this.portfoliosNum = this.portfolioDetailsList.length;
-    this.view = [700, 250 * this.portfoliosNum];
-  }
-  ngOnInit() {
-
+    this.view = [, 250 * this.portfoliosNum];
   }
 
   onSelect(event) {

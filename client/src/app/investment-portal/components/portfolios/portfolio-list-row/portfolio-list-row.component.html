@@ -1,0 +1,90 @@
+  <mat-card class="container invest-card" fxLayout="row">
+    <div *ngIf=portfolioData.closed>IS CLOSED</div>
+    <div class="item item-main">
+      <div class="container invest-data" fxLayout fxFlexFill>
+        <div class="item item-1" fxWrap>
+          <div class="mat-accent" id="portfolio-name">
+            {{portfolioData.name}}
+          </div> <!--a ng-href="/portfolio/{{portfolio.id}}/overview">{{portfolio.name}}</a-->
+          <div>
+            <span class="secondary-text" class="nowrap">{{portfolioData.marketValue}}
+              (<div *ngIf="portfolioData.cash != 0; else no_cash">{{portfolioData.cash}}</div>)</span>
+                <span style="align-items: center">
+              {{portfolioData.lastChangeAbs}}&nbsp;
+              <i *ngIf="portfolioData.lastChangePct > 0" class="material-icons md-18">trending_up</i>
+              <i *ngIf="portfolioData.lastChangePct < 0" class="material-icons md-18">trending_down</i>&nbsp;{{portfolioData.lastChangePct}}%
+            </span>
+          </div>
+        </div>
+        <div class="item item-2" fxWrap>
+          <div>
+            <div class="nowrap"><strong>Strategy:&nbsp;</strong>Backhand flash</div> <!-- not supported by backend yet -->
+            <div class="nowrap"><strong>Use It As:&nbsp;</strong>Better to not use</div> <!-- not supported by backend yet -->
+          </div>
+        </div>
+        <div *ngIf="portfolioData.positions != null" class="item item-chart" fxHide.sm >
+          <ngx-charts-bar-vertical
+            [view]=""
+            [scheme]="colorScheme"
+            [results]="chartData"
+            [gradient]="gradient"
+            [xAxis]="false"
+            [yAxis]="false"
+            [legend]="false"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]=""
+            [yAxisLabel]=""
+            (select)="onSelect($event)">
+          </ngx-charts-bar-vertical>
+        </div>
+      </div>
+      <!--div *ngIf="portfolioData.description != null" class="invest-description" >
+
+          <p class="portfolio-description">{{portfolioData.description | slice:0:limit}}</p>
+          <div *ngIf="portfolioData.description.length > descriptionLimit">
+            <div [hidden]="portfolioData.description.length < limit">
+              ...
+              <a (click)="descShowMore()"> More</a>
+            </div>
+            <a [hidden]="!descMoreShown"
+               (click)="descShowLess()"> Less
+            </a>
+          </div>
+      </div-->
+    </div>
+    <div class="item-edit" fxFlex="15%">
+      <div class="item item-edit">
+        <button class="invest-inline">
+          <!--a href="/portfolio/{{portfolio.id}}/overview" /-->
+          <span matTooltip="View" matTooltipPosition="above">
+            <mat-icon><i class="material-icons">visibility</i></mat-icon>
+          </span>
+        </button>
+      </div>
+      <div class="item item-edit">
+        <button class="invest-inline" (click)="managePortfolioUpdateOperation(portfolioData)">
+          <span matTooltip="Edit" matTooltipPosition="above">
+            <mat-icon><i class="material-icons">mode_edit</i></mat-icon>
+          </span>
+        </button>
+      </div>
+      <div class="item item-edit">
+        <button class="invest-inline" (click)="managePortfolioCloneOperation(portfolioData)">
+          <span matTooltip="Copy" matTooltipPosition="above">
+            <mat-icon><i class="material-icons">content_copy</i></mat-icon>
+          </span>
+        </button>
+      </div>
+      <div class="item item-edit">
+        <button class="invest-inline" (click)="managePortfolioRemoveOperation(portfolioData)">
+          <span matTooltip="Remove" matTooltipPosition="above">
+            <mat-icon><i class="material-icons">delete</i></mat-icon>
+          </span>
+        </button>
+      </div>
+    </div>
+
+  </mat-card>
+
+<ng-template #no_cash>NO CASH</ng-template>

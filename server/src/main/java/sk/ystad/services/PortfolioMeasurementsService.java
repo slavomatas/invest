@@ -1,14 +1,20 @@
 package sk.ystad.services;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.influxdb.InfluxDB;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sk.ystad.ServerApplication;
 import sk.ystad.model.measurements.ImmutableMeasure;
-import sk.ystad.model.measurements.Measures;
+import sk.ystad.model.measurements.Measure;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.timeseries.TimeSeriesSimpleItem;
-import sk.ystad.model.users.portfolios.PortfolioDetails;
-import sk.ystad.model.users.portfolios.Returns;
-import sk.ystad.repositories.measurements.PortfolioMeasurementRepository;
+import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.repositories.users.PortfolioRepository;
 
 import java.time.LocalDate;
@@ -19,18 +25,20 @@ import java.util.List;
 @Service
 public class PortfolioMeasurementsService {
 
-    private final PortfolioMeasurementRepository portfolioMeasurementRepository;
+    private static final Logger logger = LogManager
+            .getLogger(ServerApplication.class);
+
+    private final InfluxDB influxDB;
     private final PortfolioRepository portfolioRepository;
 
     @Autowired
-    public PortfolioMeasurementsService(PortfolioMeasurementRepository portfolioMeasurementRepository, PortfolioRepository portfolioRepository) {
-        this.portfolioMeasurementRepository = portfolioMeasurementRepository;
+    public PortfolioMeasurementsService(InfluxDB influxDB, PortfolioRepository portfolioRepository) {
+        this.influxDB = influxDB;
         this.portfolioRepository = portfolioRepository;
     }
 
 
-    public List<TimeSeriesSimpleItem> getMeasurement(Long portfolioId, String measurementType, LocalDateTime dateFrom, LocalDateTime dateTo) {
-        List<TimeSeriesSimpleItem> timeSeriesItems = new ArrayList<>();
+    public ResponseEntity getMeasurement(Long portfolioId, String measurementType, LocalDateTime dateFrom, LocalDateTime dateTo) {
 
         LocalDate localDateFrom = null;
         LocalDate localDateTo = null;
@@ -43,11 +51,10 @@ public class PortfolioMeasurementsService {
 
         String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of(measurementType);
-        return portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo);
+        return new ResponseEntity<>(findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo), HttpStatus.OK);
     }
 
-    public List<TimeSeriesSimpleItem> getMeasurementMarket(Long portfolioId, LocalDateTime dateFrom, LocalDateTime dateTo) {
-        List<TimeSeriesSimpleItem> timeSeriesItems = new ArrayList<>();
+    public ResponseEntity getMeasurementMarket(Long portfolioId, LocalDateTime dateFrom, LocalDateTime dateTo) {
 
         LocalDate localDateFrom = null;
         LocalDate localDateTo = null;
@@ -60,45 +67,37 @@ public class PortfolioMeasurementsService {
 
         String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
         ImmutableMeasure immutableMeasure = ImmutableMeasure.of("PORTFOLIO_MARKET_VALUE");
-        return portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo);
+        return new ResponseEntity<>(findMeasure(influxId, immutableMeasure, localDateFrom, localDateTo), HttpStatus.OK);
 
     }
 
-    public List<Position> getPositionsWithMarketValue(Long portfolioId) {
-        String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
-        return portfolioMeasurementRepository.getPositionsWithMarketValue(influxId);
+
+    public List<TimeSeriesSimpleItem> findMeasure(String portfolioId, Measure measure, LocalDate dateFrom, LocalDate dateTo) {
+
+        List<TimeSeriesSimpleItem> portfolioCumulativeReturns = new ArrayList<>();
+        String queryStr;
+        if (dateFrom == null || dateTo == null) {
+            queryStr = String.format("SELECT * FROM %s ORDER BY time ASC", portfolioId);
+        } else {
+            queryStr = String.format("SELECT * FROM %s WHERE time >= '%s' AND time < '%s' ORDER BY time ASC", portfolioId, dateFrom, dateTo);
+        }
+        Query query = new Query(queryStr, measure.getName());
+        QueryResult queryResult = this.influxDB.query(query);
+        try {
+            List<QueryResult.Result> results = queryResult.getResults();
+            QueryResult.Result result = results.get(0);
+            List<QueryResult.Series> resultSeries = result.getSeries();
+            QueryResult.Series series = resultSeries.get(0);
+            List<List<Object>> values = series.getValues();
+            for (List<Object> rowValues : values) {
+                portfolioCumulativeReturns.add(new TimeSeriesSimpleItem(rowValues.get(0).toString(),
+                        (Double) rowValues.get(1)));
+            }
+        } catch (NullPointerException | IndexOutOfBoundsException e ) {
+            logger.error("InfluxDB Parser Error: " + e);
+        }
+
+        return portfolioCumulativeReturns;
     }
 
-    public PortfolioDetails getPortfolioDetails(Long portfolioId) {
-        String influxId = this.portfolioRepository.findOne(portfolioId).getIdInflux();
-        //Get position values of portfolio
-        List<Position> positions =  portfolioMeasurementRepository.getPositionsWithMarketValue(influxId);
-
-        //Get old and new market value of the portfolio
-        ImmutableMeasure immutableMeasure = ImmutableMeasure.of(Measures.PORTFOLIO_MARKET_VALUE.getName());
-        List<TimeSeriesSimpleItem> marketValues = portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, null, null);
-        Double newMarketValue = marketValues.get(marketValues.size() - 1).getValue();
-        Double oldMarketValue = marketValues.get(0).getValue();
-
-        //Get returns of portfolio
-        Returns returns = new Returns();
-        immutableMeasure = ImmutableMeasure.of(Measures.PORTFOLIO_DAILY_RETURN.getName());
-        List<TimeSeriesSimpleItem> portfolioReturns = portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, null, null);
-        returns.setDaily(portfolioReturns.get(portfolioReturns.size() - 1).getValue());
-
-        immutableMeasure = ImmutableMeasure.of(Measures.PORTFOLIO_WEEKLY_RETURN.getName());
-        portfolioReturns = portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, null, null);
-        returns.setWeekly(portfolioReturns.get(portfolioReturns.size() - 1).getValue());
-
-        immutableMeasure = ImmutableMeasure.of(Measures.PORTFOLIO_CUMULATIVE_RETURN.getName());
-        portfolioReturns = portfolioMeasurementRepository.findMeasure(influxId, immutableMeasure, null, null);
-        returns.setCumulative(portfolioReturns.get(portfolioReturns.size() - 1).getValue());
-
-        return new PortfolioDetails(this.portfolioRepository.findOne(portfolioId).getName(),
-                portfolioId,
-                newMarketValue,
-                oldMarketValue,
-                returns,
-                positions);
-    }
 }
