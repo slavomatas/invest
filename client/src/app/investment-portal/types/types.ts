@@ -61,7 +61,6 @@ export interface PortfolioPosition {
     name: string;
     value: number;
   }[];
-  marketValue: number;
   lastChange: number;
   trades: {
       tradeId: number
