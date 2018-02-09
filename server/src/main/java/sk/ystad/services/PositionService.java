@@ -18,6 +18,7 @@ import sk.ystad.repositories.users.PositionRepository;
 import sk.ystad.repositories.users.TradeRepository;
 import sk.ystad.repositories.users.UserPositionRepository;
 
+import java.security.Principal;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -100,5 +101,23 @@ public class PositionService {
         tradeRepository.save(trade);
         logger.info("Added trade to repository  " + trade);
         return new ResponseEntity<>(trade, HttpStatus.OK);
+    }
+
+    /**
+     * Update trade in database
+     * @param principal
+     * @param trade
+     * @return
+     */
+    public ResponseEntity updateTrade(Principal principal, Trade trade) {
+        try {
+            trade = tradeRepository.save(trade);
+            logger.info("Updated trade: " + trade.toString());
+            return new ResponseEntity(trade, HttpStatus.OK);
+        }
+        catch (NullPointerException e) {
+            logger.error("Failed to update trade: " + e.getMessage());
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

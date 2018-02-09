@@ -53,4 +53,13 @@ public class PositionController {
                           Principal principal){
         return positionService.addTrade(portfolioId, symbol, timestamp, price, amount);
     }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="/user/portfolios/{portfolioId}/position/{symbol}/trade", method = RequestMethod.PUT)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Update a trade")
+    public ResponseEntity updateTrade(@PathVariable(value="trade") Trade trade,
+                                   Principal principal){
+        return positionService.updateTrade(principal, trade);
+    }
 }
