@@ -1,5 +1,7 @@
 package sk.ystad.model.securities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.csv.CSVRecord;
 
 import javax.persistence.*;
@@ -16,6 +18,7 @@ public class Security implements Serializable {
 
     private Long securityId;
 
+    @JsonIgnore
     private SecurityData securityData;
 
     @Column(name = "symbol")
@@ -27,6 +30,8 @@ public class Security implements Serializable {
 
     private boolean isActive;
 
+
+    @JsonIgnore
     private List<ExternalSecurity> externalIds = new ArrayList<>();
 
 //    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
