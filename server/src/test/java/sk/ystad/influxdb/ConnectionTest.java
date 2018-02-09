@@ -1,5 +1,7 @@
 package sk.ystad.influxdb;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
@@ -9,6 +11,7 @@ import org.influxdb.dto.QueryResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.influxdb.InfluxDBProperties;
 import org.springframework.data.influxdb.InfluxDBTemplate;
@@ -23,7 +26,18 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ConnectionTest {
 
-   // static Logger LOG = Logger.getLogger(ConnectionTest.class.getName());
+
+    @Value("${spring.influxdb.url}")
+    String influxUrl;
+
+    @Value("${spring.influxdb.username}")
+    String influxUsername;
+
+    @Value("${spring.influxdb.password}")
+    String influxPassword;
+
+    private static final Logger logger = LogManager
+            .getLogger(ConnectionTest.class);
 
     @Autowired
     public InfluxDBTemplate<Point> influxDBTemplate;
@@ -52,7 +66,7 @@ public class ConnectionTest {
         // ... and query the latest data
         final Query q = new Query("SELECT * FROM cpu GROUP BY tenant", influxDBTemplate.getDatabase());
         QueryResult queryResult = influxDBTemplate.getConnection().query(q);
-        //LOG.info(queryResult);
+        logger.info(queryResult);
         influxDBTemplate.getConnection().deleteDatabase(dbName);
 
         assertEquals((Double) 1.0, queryResult.getResults().get(0).getSeries().get(0).getValues().get(0).get(2));
@@ -62,10 +76,13 @@ public class ConnectionTest {
 
     @Test
     public void nativeConnectionTest(){
+
+
+
         String dbName = "DEFAULT";
 
         // Connect to InfluxDB
-        InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:9086", "invest", "t4gepDLL5SBjxsyj");
+        InfluxDB influxDB = InfluxDBFactory.connect(influxUrl, influxUsername, influxPassword);
         // Create a database
 
         influxDB.createDatabase(dbName);
