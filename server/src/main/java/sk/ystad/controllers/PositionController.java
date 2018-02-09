@@ -3,6 +3,7 @@ package sk.ystad.controllers;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sk.ystad.model.users.portfolios.positions.Trade;
@@ -32,7 +33,7 @@ public class PositionController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
-//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
     public ResponseEntity addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
                                     Principal principal){
@@ -42,7 +43,7 @@ public class PositionController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios/{portfolioId}/position/{symbol}/trade", method = RequestMethod.POST)
-//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create a trade")
     public ResponseEntity addTrade(@PathVariable(value="portfolioId") long portfolioId,
                           @PathVariable(value="symbol") String symbol,
