@@ -33,7 +33,7 @@ public class PositionController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios/{portfolioId}", method = RequestMethod.POST)
-    //@PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create postion", notes = "UserID is retrieved from session")
     public ResponseEntity addPosition(@PathVariable(value="portfolioId") long portfolioId, @RequestParam("symbol") String symbol,
                                     Principal principal){
@@ -43,7 +43,7 @@ public class PositionController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios/{portfolioId}/position/{symbol}/trade", method = RequestMethod.POST)
-  //  @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create a trade")
     public ResponseEntity addTrade(@PathVariable(value="portfolioId") long portfolioId,
                           @PathVariable(value="symbol") String symbol,
@@ -56,7 +56,7 @@ public class PositionController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/trade", method = RequestMethod.PUT)
-    //@PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Update a trade")
     public ResponseEntity updateTrade(@RequestBody Trade trade,
                                    Principal principal){

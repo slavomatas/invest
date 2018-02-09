@@ -63,13 +63,14 @@ public class PortfolioService {
 
         //Get influx data for each portfolio
         for (Portfolio p : portfolios) {
-            getPortfolioDetails(p);
-            p.setPositions(getPositionsWithMarketValue(p));
+            getPortfolioDetails(p.getId());
+            p.setPositions(getPositionsWithMarketValue(p.getId()));
         }
         return new ResponseEntity<>(portfolios, HttpStatus.OK);
     }
 
-    public Portfolio getPortfolioDetails(Portfolio portfolio) {
+    public Portfolio getPortfolioDetails(long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolio.getIdInflux());
         Query query = new Query(queryStr, Measures.PORTFOLIO_SUMMARY.getName());
         QueryResult queryResult = this.influxDB.query(query);
@@ -98,11 +99,12 @@ public class PortfolioService {
     /**
      * Method returns positions of portfolio with their last market value. If portfolio does not have any positions, empty array is returned.
      *
-     * @param portfolio Portfolio
+     * @param portfolioId Portfolio ID
      * @return List of positions with their market value
      */
-    public List<Position> getPositionsWithMarketValue(Portfolio portfolio) {
+    public List<Position> getPositionsWithMarketValue(long portfolioId) {
         List<Position> positionsWithMarketValue = new ArrayList<>();
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolio.getIdInflux());
         Query query = new Query(queryStr, Measures.PORTFOLIO_POSITIONS.getName());
         QueryResult queryResult = this.influxDB.query(query);

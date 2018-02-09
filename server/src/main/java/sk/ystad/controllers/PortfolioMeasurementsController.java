@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.ystad.model.measurements.positions.Position;
-import sk.ystad.model.timeseries.TimeSeriesSimpleItem;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.repositories.users.PortfolioRepository;
 import sk.ystad.services.PortfolioMeasurementsService;
@@ -61,17 +60,15 @@ public class PortfolioMeasurementsController {
     @CrossOrigin(origins = "*")
     @ApiOperation(value = "Get details for portfolio", notes = "Array of positions with market value for given portfolio can be provided.")
     @GetMapping("/user/portfolios/{portfolioId}/positions")
-    public List<Position> getPositionsWithMarketValue(@PathVariable("portfolioId") Long portfolioId) {
-        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-        return portfolioService.getPositionsWithMarketValue(portfolio);
+    public ResponseEntity getPositionsWithMarketValue(@PathVariable("portfolioId") Long portfolioId) {
+        return new ResponseEntity<>(portfolioService.getPositionsWithMarketValue(portfolioId), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "*")
     @ApiOperation(value = "Get positions with market value for portfolio", notes = "Array of positions with market value for given portfolio can be provided.")
     @GetMapping("/user/portfolios/{portfolioId}/details")
-    public Portfolio getPortfolioDetails(@PathVariable("portfolioId") Long portfolioId) {
-        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-        return portfolioService.getPortfolioDetails(portfolio);
+    public ResponseEntity getPortfolioDetails(@PathVariable("portfolioId") Long portfolioId) {
+        return new ResponseEntity<>(portfolioService.getPortfolioDetails(portfolioId), HttpStatus.OK);
     }
 
 }
