@@ -70,4 +70,12 @@ public class PositionController {
     public ResponseEntity getAllPositions(@PathVariable(value="portfolioId") Long portfolioId) {
         return positionService.getAllPositions(portfolioId);
     }
+    
+    @RequestMapping(value ="/user/portfolios/{portfolioId}/position/{symbol}/trade", method = RequestMethod.PUT)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Update a trade")
+    public ResponseEntity updateTrade(@PathVariable(value="trade") Trade trade,
+                                   Principal principal){
+        return positionService.updateTrade(principal, trade);
+    }
 }
