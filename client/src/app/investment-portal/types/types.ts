@@ -67,7 +67,7 @@ export interface PortfolioPosition {
       tradeId: number
       price: number;
       amount: number;
-      dateTime: Date;
+      dateTime: string;
     }[];
 }
 
