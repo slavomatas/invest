@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -56,7 +58,7 @@ public class AuthorizationControllerTest {
         String surname ="test";
         String password ="test";
 
-        Mockito.when(userService.registerUser(any(User.class))).thenReturn(authResponse);
+        Mockito.when(userService.registerUser(email, password, name, surname, email)).thenReturn(new ResponseEntity(authResponse, HttpStatus.OK));
 
         mvc.perform(post("/auth/register")
                 .param("name", name)
@@ -76,7 +78,7 @@ public class AuthorizationControllerTest {
         AuthResponse authResponse = new AuthResponse(true, null);
         String token = "stkvhVq4XwKvVCE6jiJqbqP8Y3mxKyfO";
 
-        Mockito.when(userService.checkUser(token)).thenReturn(authResponse);
+        Mockito.when(userService.verifyRegistrationToken(token)).thenReturn(new ResponseEntity(authResponse, HttpStatus.OK));
 
         mvc.perform(post("/auth/register/" + token)
                 .contentType(MediaType.APPLICATION_JSON))
