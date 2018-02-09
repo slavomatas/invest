@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import {
   Portfolio, PortfolioDetails, CumulativeMeasurement,
-  TypeOfReturns, TypeOfPortfolioReturn
+  TypeOfReturns, TypeOfPortfolioReturn, PortfolioPosition
 } from '../../types/types';
 import { PortfolioReturn } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
@@ -16,6 +16,28 @@ import { setOldMarketValue, getDateFrom } from '../../utils/portfolio-utils';
  const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
  const PORTFOLIOS_URL = 'api/v1/user/portfolios';
 
+
+ interface PortfolioPositionsResponse {
+    positionId: number;
+    security: {
+      symbol: string;
+      name: string;
+      currency: string
+      active: true;
+    };
+    trades: {
+      tradeId: number;
+      price: number;
+      amount: number;
+      dateTime: string;
+    }[];
+    priceLast20Days: {
+      name: string;
+      value: number;
+    }[];
+    lastChange: number;
+  }
+
 @Injectable()
 export class PortfolioService implements IPortfolioService {
 
@@ -25,6 +47,51 @@ export class PortfolioService implements IPortfolioService {
     private loggingService: LoggingService
   ) {
 
+  }
+
+  /**
+   * Loads Positions for given portfolio
+   * @param portfolio Portfolio to get positions for
+   * @returns array of Porfolio Position that have new data from REST. Value is taken from @param portfolio
+   */
+  public getPortfolioPositions(portfolio: PortfolioDetails): Promise<PortfolioPosition[]> {
+    const requestUrl = PORTFOLIOS_URL + '/' + portfolio.id + '/positions';
+
+    return this.http.get<PortfolioPositionsResponse[]>(requestUrl).toPromise()
+      .then((responsePositions: PortfolioPositionsResponse[]) => {
+        const newPositionsArray: PortfolioPosition[] = [];
+
+        // create new position with market value of given porfolio for each response position
+        responsePositions.forEach((responsePosition: PortfolioPositionsResponse) => {
+
+          // filter position of given portfolio based on its symbol
+          const actPosition = portfolio.positions.filter(position => position.symbol === responsePosition.security.symbol)[0];
+
+          // compute quantity as sum of amount of all trades
+          let quantity = 0;
+          responsePosition.trades.forEach((trade) => {
+            quantity += trade.amount;
+          });
+
+          // price is the last value of last 20 days
+          const price = responsePosition.priceLast20Days[responsePosition.priceLast20Days.length - 1].value;
+
+          // update position of given portfolio with data from REST
+          actPosition.symbol = responsePosition.security.symbol;
+          actPosition.name = responsePosition.security.name;
+          actPosition.quantity = quantity;
+          actPosition.price = price;
+          actPosition.currency = responsePosition.security.currency;
+          actPosition.priceLast20Days = responsePosition.priceLast20Days;
+          actPosition.lastChange = responsePosition.lastChange;
+          actPosition.trades = responsePosition.trades;
+
+          // add updated position into result array
+          newPositionsArray.push(actPosition);
+        });
+
+        return newPositionsArray;
+      });
   }
 
 
@@ -197,13 +264,6 @@ export class PortfolioService implements IPortfolioService {
         params: params
       });
   }
-
-  getPortfolioPositions(portfolioId: number): Promise<{name: string; value: number; }[]> {
-    const requestUrl = PORTFOLIOS_URL + '/' + portfolioId + '/positions';
-    return this.http
-      .get<{ name: string; value: number; }[]>(requestUrl).toPromise();
-  }
-
 
   private getFirstDateOfPeriod(portfolioReturnType: TypeOfPortfolioReturn): Date {
     const today = new Date();
