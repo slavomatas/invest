@@ -68,10 +68,8 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
 
     putPortfolio.closed = true;
 
-    this.portfolioService.closePortfolio(putPortfolio).then((data: PortfolioDetails) => {
-      if (data != null) {
-        this.actions.putPortfolio(data);
-      }
+    this.portfolioService.closePortfolio(putPortfolio).then(() => {
+        this.actions.updatePortfolio(putPortfolio);
     });
   }
 

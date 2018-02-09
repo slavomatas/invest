@@ -77,11 +77,6 @@ export function rootReducer(lastState: AppState, action: any): AppState {
             ...lastState,
             displayedPortfolios: action.payload,
           };
-        case PortfolioActions.PUT_PORTFOLIO:
-          return <AppState> {
-            ...lastState,
-            dashboardPortfolioList: action.payload
-          };
         case AuthenticationActions.GET_USER_SUCCESS:
             return <AppState> {
               ...lastState,
