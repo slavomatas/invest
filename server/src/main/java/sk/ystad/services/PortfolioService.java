@@ -71,6 +71,12 @@ public class PortfolioService {
 
     public Portfolio getPortfolioDetails(long portfolioId) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+
+        // Return portfolio immediately if no influxId is set
+        if (portfolio.getIdInflux() == null) {
+            return portfolio;
+        }
+
         String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolio.getIdInflux());
         Query query = new Query(queryStr, Measures.PORTFOLIO_SUMMARY.getName());
         QueryResult queryResult = this.influxDB.query(query);
@@ -103,8 +109,15 @@ public class PortfolioService {
      * @return List of positions with their market value
      */
     public List<Position> getPositionsWithMarketValue(long portfolioId) {
-        List<Position> positionsWithMarketValue = new ArrayList<>();
+
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+
+        //Check if portfolio influxId is set
+        if (portfolio.getIdInflux() == null) {
+            return new ArrayList<>();
+        }
+
+        List<Position> positionsWithMarketValue = new ArrayList<>();
         String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolio.getIdInflux());
         Query query = new Query(queryStr, Measures.PORTFOLIO_POSITIONS.getName());
         QueryResult queryResult = this.influxDB.query(query);
@@ -119,11 +132,9 @@ public class PortfolioService {
                 positionsWithMarketValue.add(new Position(positionNames.get(i),
                         (Double) actualmarketValues.get(i)));
             }
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             logger.error("InfluxDB Parser Error: " + e);
         }
-
         return positionsWithMarketValue;
     }
 
@@ -161,6 +172,12 @@ public class PortfolioService {
      * @return List of positions with weight
      */
     public List<Position> getActualPortfolioPositionsWeights(String portfolioId) {
+
+        // If no portfolio influx id is set
+        if (portfolioId == null) {
+            return new ArrayList<>();
+        }
+
         String queryStr = String.format("SELECT * FROM %s GROUP BY *", portfolioId);
         Query query = new Query(queryStr, Measures.POSITION_WEIGHTS.getName());
         QueryResult queryResult = this.influxDB.query(query);
