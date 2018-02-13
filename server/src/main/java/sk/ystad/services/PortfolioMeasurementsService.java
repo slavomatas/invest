@@ -74,6 +74,11 @@ public class PortfolioMeasurementsService {
 
     public List<TimeSeriesSimpleItem> findMeasure(String portfolioId, Measure measure, LocalDate dateFrom, LocalDate dateTo) {
 
+        // Return empty list if no portfolio id is set
+        if (portfolioId == null) {
+            return new ArrayList<>();
+        }
+
         List<TimeSeriesSimpleItem> portfolioCumulativeReturns = new ArrayList<>();
         String queryStr;
         if (dateFrom == null || dateTo == null) {
@@ -93,11 +98,9 @@ public class PortfolioMeasurementsService {
                 portfolioCumulativeReturns.add(new TimeSeriesSimpleItem(rowValues.get(0).toString(),
                         (Double) rowValues.get(1)));
             }
-        } catch (NullPointerException | IndexOutOfBoundsException e ) {
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
             logger.error("InfluxDB Parser Error: " + e);
         }
-
         return portfolioCumulativeReturns;
     }
-
 }
