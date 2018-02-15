@@ -1,0 +1,41 @@
+div.mat-tab-label-container {
+  padding: 0 24px;
+}
+
+#portfolio-detail-root > mat-tab-header > div.mat-tab-label-container {
+  padding: 0 24px;
+}
+
+h1 {
+  margin-left: 15px;
+}
+
+.widget {
+  margin-bottom: 16px;
+}
+
+/* Summary table */
+.invest-summary-container {
+  box-shadow: none;
+}
+
+.mat-table {
+  overflow: auto;
+}
+/* Summary table END */
+
+mat-row {
+  border-bottom-style: none;
+}
+
+.mat-header-cell{
+  text-align: center;
+}
+
+.mat-cell {
+  text-align: center;
+}
+
+.mat-tab-body-wrapper {
+  display: block !important;
+}

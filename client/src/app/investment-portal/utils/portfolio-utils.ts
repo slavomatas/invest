@@ -89,4 +89,9 @@ export function getDateFrom(dateTo: Date, stringPeriod: string): Date {
 export function getDisplayedPortfolios(portfolios: PortfolioDetails[], getClosed: boolean = false) {
     return portfolios.filter(portfolio => portfolio.isDisplayed && portfolio.closed === getClosed);
     // return portfolios.filter(portfolio => portfolio.isDisplayed);
+
+}
+
+export function findPortfolioById(portfolios: PortfolioDetails[], portfolioId: Number): PortfolioDetails {
+    return portfolios.filter(portfolio => portfolio.id === portfolioId)[0];
 }

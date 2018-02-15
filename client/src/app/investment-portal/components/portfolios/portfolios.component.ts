@@ -13,7 +13,7 @@ export class PortfoliosComponent implements OnInit {
 
   portfolioList$ = this.ngRedux.select(state => state.portfolioList);
 
-   constructor(private ngRedux: NgRedux<AppState>) { }
+  constructor(private ngRedux: NgRedux<AppState>) { }
 
   ngOnInit() {
   }

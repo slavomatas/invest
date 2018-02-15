@@ -27,7 +27,8 @@ import { CreatePortfolioComponent } from './components/create-portfolio/create-p
 import { ClickableWidgetComponent } from './components/create-portfolio/clickable-widget/clickable-widget.component';
 import { ClickableWidgetListComponent } from './components/create-portfolio/clickable-widget-list/clickable-widget-list.component';
 import { CreateManualPortfolioDialogComponent } from './components/create-portfolio/create-manual-portfolio-dialog/create-manual-portfolio-dialog.component';
-import {PortfolioListRowComponent } from './components/portfolios/portfolio-list-row/portfolio-list-row.component';
+import { PortfolioListRowComponent } from './components/portfolios/portfolio-list-row/portfolio-list-row.component';
+import { PortfolioDetailComponent } from './components/portfolio-detail/portfolio-detail.component';
 
 
 const routes = [
@@ -37,6 +38,7 @@ const routes = [
   { path: 'portfolios', component: PortfoliosComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'portfolios/create', component: CreatePortfolioComponent, canActivate: [AuthGuard] },
+  { path: 'portfolios/:id/overview', component: PortfolioDetailComponent, canActivate: [AuthGuard] },
 
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
@@ -62,7 +64,8 @@ const routes = [
     ClickableWidgetComponent,
     ClickableWidgetListComponent,
     CreateManualPortfolioDialogComponent,
-    PortfolioListRowComponent
+    PortfolioListRowComponent,
+    PortfolioDetailComponent
   ],
   imports: [
     SharedModule,
