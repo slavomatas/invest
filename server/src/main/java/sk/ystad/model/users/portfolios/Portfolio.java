@@ -50,7 +50,10 @@ public class Portfolio {
     @Column(name = "is_closed")
     private boolean isClosed;
 
-    public Portfolio(Long id, String name, String description, double marketValue, double lastChangeAbs, double lastChangePct, Returns returns, double cash, List<Position> positions, List<UserPosition> usersPositions, User user, String idInflux, boolean isClosed) {
+    @Column(name = "is_model")
+    private boolean isModel;
+
+    public Portfolio(Long id, String name, String description, double marketValue, double lastChangeAbs, double lastChangePct, Returns returns, double cash, List<Position> positions, List<UserPosition> usersPositions, User user, String idInflux, boolean isClosed, boolean isModel) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -64,6 +67,7 @@ public class Portfolio {
         this.user = user;
         this.idInflux = idInflux;
         this.isClosed = isClosed;
+        this.isModel = isModel;
     }
 
     public  Portfolio(){
@@ -207,5 +211,13 @@ public class Portfolio {
 
     public void setClosed(boolean closed) {
         isClosed = closed;
+    }
+
+    public boolean isModel() {
+        return isModel;
+    }
+
+    public void setModel(boolean model) {
+        isModel = model;
     }
 }
