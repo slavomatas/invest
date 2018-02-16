@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sk.ystad.common.loaders.LoaderResult;
 import sk.ystad.common.loaders.security.SecurityLoader;
 import sk.ystad.common.loaders.services.LoaderService;
-import sk.ystad.model.securities.Security;
 import sk.ystad.repositories.securities.SecurityRepository;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/loaders")
@@ -31,7 +28,13 @@ public class LoadersController {
 
     @RequestMapping("/testing_data")
     public String loadData() {
-        loaderService.loadData();
+        loaderService.loadTestingData();
+        return "ok";
+    }
+
+    @RequestMapping("/model_portfolios")
+    public String loadModelPortfolios() {
+        loaderService.loadModelPortfolios();
         return "ok";
     }
 }

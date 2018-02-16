@@ -1,10 +1,18 @@
 package sk.ystad.common.loaders.services;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sk.ystad.ServerApplication;
 import sk.ystad.model.auth.Role;
+import sk.ystad.model.securities.Etf;
 import sk.ystad.model.users.User;
 import sk.ystad.model.users.portfolios.Portfolio;
+import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.repositories.securities.SecurityRepository;
 import sk.ystad.repositories.users.PortfolioRepository;
@@ -13,7 +21,14 @@ import sk.ystad.repositories.users.RoleRepository;
 import sk.ystad.repositories.users.UserRepository;
 
 import javax.xml.crypto.Data;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 @Service
@@ -26,6 +41,8 @@ public class LoaderService {
     private final SecurityRepository securityRepository;
     private final PositionRepository positionRepository;
 
+    private static final Logger logger = LogManager.getLogger(LoaderService.class);
+
     @Autowired
     public LoaderService(UserRepository userRepository, RoleRepository roleRepository, PortfolioRepository portfolioRepository, SecurityRepository securityRepository, PositionRepository positionRepository) {
         this.userRepository = userRepository;
@@ -35,7 +52,7 @@ public class LoaderService {
         this.positionRepository = positionRepository;
     }
 
-    public void loadData() {
+    public void loadTestingData() {
 
 
         User user = new User();
@@ -92,4 +109,65 @@ public class LoaderService {
     }
 
 
+    public void loadModelPortfolios() {
+        File modelPortfiliosDir = new File("../data/Model Portfolios");
+        if (modelPortfiliosDir.exists()) {
+            processModelPortfolioFiles(modelPortfiliosDir);
+        }
+    }
+
+    private void processModelPortfolioFiles(File fileToProcess) {
+        if (fileToProcess.isDirectory()) {
+            File[] innerFiles = fileToProcess.listFiles();
+            if (innerFiles != null) {
+                for (File file : innerFiles) {
+                    processModelPortfolioFiles(file);
+                }
+            }
+        } else {
+            processModelPortfolioFile(fileToProcess);
+        }
+    }
+
+    private void processModelPortfolioFile(File fileToProcess) {
+        if (fileToProcess != null && fileToProcess.getName().endsWith(".csv")) {
+            String[] splittedFileName = fileToProcess.getName().split("\\.");
+            if (splittedFileName.length > 0) {
+                String porfolioName = splittedFileName[0];
+                Portfolio portfolio = new Portfolio();
+                portfolio.setName(porfolioName);
+                portfolio.setModel(true);
+                portfolio.setUsersPositions(createUserPostionsFromCsv(fileToProcess, portfolio));
+                portfolioRepository.save(portfolio);
+            }
+        }
+    }
+
+    private List<UserPosition> createUserPostionsFromCsv(File fileToProcess, Portfolio portfolio) {
+        List<UserPosition> positions = new ArrayList<>();
+        CSVParser parser = null;
+        try {
+            // csv parsing
+            Reader targetReader = new FileReader(fileToProcess);
+            parser = CSVParser.parse(targetReader, CSVFormat.EXCEL.withHeader("Symbol", "Weight"));
+            for (CSVRecord csvRecord : parser) {
+                try {
+                    UserPosition position = new UserPosition();
+                    position.setSecurity(securityRepository.findBySymbol(csvRecord.get("Symbol")));
+                    Trade trade = new Trade();
+                    trade.setAmount(Integer.parseInt(csvRecord.get("Weight")));
+                    trade.setPosition(position);
+                    trade.setDateTime(new Date());
+                    position.addTrade(trade);
+                    position.setPortfolio(portfolio);
+                    positions.add(position);
+                } catch (NumberFormatException e) {
+                    logger.warn("Error during position parsing " + e.getMessage());
+                }
+            }
+        } catch (IOException e) {
+            logger.error("Unable to parse model porfolio file csv file - problem with file " + e.getMessage());
+        }
+        return positions;
+    }
 }

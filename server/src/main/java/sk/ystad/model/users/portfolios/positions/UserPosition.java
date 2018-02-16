@@ -5,6 +5,7 @@ import sk.ystad.model.securities.Security;
 import sk.ystad.model.users.portfolios.Portfolio;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,7 @@ public class UserPosition {
     private Portfolio portfolio;
 
     public UserPosition() {
+        trades = new ArrayList<>();
     }
 
     public UserPosition(Security security, List<Trade> trades, Portfolio portfolio) {
@@ -79,5 +81,9 @@ public class UserPosition {
 
     public void setTrades(List<Trade> trades) {
         this.trades = trades;
+    }
+
+    public void addTrade(Trade trade) {
+        trades.add(trade);
     }
 }
