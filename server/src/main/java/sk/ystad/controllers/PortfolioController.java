@@ -42,7 +42,7 @@ public class PortfolioController {
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "List of portfolios",
             notes = "UserID is retrieved from session. " +
-                    "for type parameter 'MODEL' - get all user's portfolios with details, " +
+                    "for type parameter 'USER' - get all user's portfolios with details, " +
                     "for type parameter 'MODEL' - get all model portfolios, " +
                     "for type parameter 'ALL' - get all user's portfolios with details and all model portfolios")
     public ResponseEntity findByUserId(Principal principal,
