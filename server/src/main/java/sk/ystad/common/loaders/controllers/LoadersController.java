@@ -3,6 +3,7 @@ package sk.ystad.common.loaders.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sk.ystad.common.data_structures.AuthResponse;
 import sk.ystad.common.loaders.LoaderResult;
 import sk.ystad.common.loaders.security.SecurityLoader;
 import sk.ystad.common.loaders.services.LoaderService;
@@ -27,13 +28,14 @@ public class LoadersController {
     }
 
     @RequestMapping("/testing_data")
-    public String loadData() {
+    public AuthResponse loadData() {
         loaderService.loadTestingData();
-        return "ok";
+        return new AuthResponse(true, "Data has been loaded");
     }
 
     @RequestMapping("/model_portfolios")
-    public int loadModelPortfolios() {
-        return loaderService.loadModelPortfolios();
+    public AuthResponse loadModelPortfolios() {
+        int numberOfInsertedPortfolios = loaderService.loadModelPortfolios();
+        return new AuthResponse(true, numberOfInsertedPortfolios + " portfolios has been added to database");
     }
 }
