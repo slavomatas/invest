@@ -50,7 +50,7 @@ public class Portfolio {
     @Column(name = "is_closed")
     private boolean isClosed;
 
-    @Column(name = "is_model")
+    @Column(name = "is_model", nullable = false, columnDefinition="boolean default false")
     private boolean isModel;
 
     public Portfolio(Long id, String name, String description, double marketValue, double lastChangeAbs, double lastChangePct, Returns returns, double cash, List<Position> positions, List<UserPosition> usersPositions, User user, String idInflux, boolean isClosed, boolean isModel) {
