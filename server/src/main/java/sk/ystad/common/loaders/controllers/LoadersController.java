@@ -33,8 +33,7 @@ public class LoadersController {
     }
 
     @RequestMapping("/model_portfolios")
-    public String loadModelPortfolios() {
-        loaderService.loadModelPortfolios();
-        return "ok";
+    public int loadModelPortfolios() {
+        return loaderService.loadModelPortfolios();
     }
 }

@@ -7,9 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sk.ystad.ServerApplication;
 import sk.ystad.model.auth.Role;
-import sk.ystad.model.securities.Etf;
 import sk.ystad.model.users.User;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.users.portfolios.positions.Trade;
@@ -20,16 +18,13 @@ import sk.ystad.repositories.users.PositionRepository;
 import sk.ystad.repositories.users.RoleRepository;
 import sk.ystad.repositories.users.UserRepository;
 
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 @Service
 public class LoaderService {
@@ -53,8 +48,6 @@ public class LoaderService {
     }
 
     public void loadTestingData() {
-
-
         User user = new User();
         user.setEmail("test@test.com");
         user.setUsername("test@test.com");
@@ -74,7 +67,6 @@ public class LoaderService {
 
         portfolio = createPortfolio("Portfolio3", user, "PID5a6f4f4aaf69115d83a41e26");
         createPositions(portfolio, "IFGL", "JNK", "TLT", "VYM", "DEM", "DES", "DOL", "DON");
-
 
         portfolio = createPortfolio("Portfolio4", user, "PID5a6f4f4aaf69115d83a41e27");
         createPositions(portfolio, "JNK", "KBWD", "LQD", "PEY", "SDIV", "AGG");
@@ -108,28 +100,50 @@ public class LoaderService {
 
     }
 
-
-    public void loadModelPortfolios() {
+    /**
+     * Loads portfolios from ../data/Model Portfolios
+     *
+     * @return number of loaded portfolios
+     */
+    public int loadModelPortfolios() {
         File modelPortfiliosDir = new File("../data/Model Portfolios");
+        int portfoliosLoaded = 0;
         if (modelPortfiliosDir.exists()) {
-            processModelPortfolioFiles(modelPortfiliosDir);
+            portfoliosLoaded = processModelPortfolioFiles(modelPortfiliosDir);
         }
+        return portfoliosLoaded;
     }
 
-    private void processModelPortfolioFiles(File fileToProcess) {
+    /**
+     * Recursivelly search for model portfolio files
+     * if file is directory this method searches into it
+     *
+     * @param fileToProcess
+     * @return number of succesfully added portfolio files
+     */
+    private int processModelPortfolioFiles(File fileToProcess) {
         if (fileToProcess.isDirectory()) {
             File[] innerFiles = fileToProcess.listFiles();
+            int portfoliosLoaded = 0;
             if (innerFiles != null) {
                 for (File file : innerFiles) {
-                    processModelPortfolioFiles(file);
+                    portfoliosLoaded += processModelPortfolioFiles(file);
                 }
+                return portfoliosLoaded;
             }
+            return 0;
         } else {
-            processModelPortfolioFile(fileToProcess);
+            return processModelPortfolioFile(fileToProcess);
         }
     }
 
-    private void processModelPortfolioFile(File fileToProcess) {
+    /**
+     * processes portfolio file checks file naming
+     *
+     * @param fileToProcess should be file that ends with .csv and contains positions
+     * @return 1 when portfolio is saved to database successfully, else returns 0
+     */
+    private int processModelPortfolioFile(File fileToProcess) {
         if (fileToProcess != null && fileToProcess.getName().endsWith(".csv")) {
             String[] splittedFileName = fileToProcess.getName().split("\\.");
             if (splittedFileName.length > 0) {
@@ -138,11 +152,19 @@ public class LoaderService {
                 portfolio.setName(porfolioName);
                 portfolio.setModel(true);
                 portfolio.setUsersPositions(createUserPostionsFromCsv(fileToProcess, portfolio));
-                portfolioRepository.save(portfolio);
+                return portfolioRepository.save(portfolio) == null ? 0 : 1;
             }
         }
+        return 0;
     }
 
+    /**
+     * Creates positions and trades from csv file
+     *
+     * @param fileToProcess
+     * @param portfolio
+     * @return list of positions in portfolio
+     */
     private List<UserPosition> createUserPostionsFromCsv(File fileToProcess, Portfolio portfolio) {
         List<UserPosition> positions = new ArrayList<>();
         CSVParser parser = null;
