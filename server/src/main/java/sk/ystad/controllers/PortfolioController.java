@@ -50,7 +50,7 @@ public class PortfolioController {
         switch(type) {
             case "MODEL":
                 try {
-                    return new ResponseEntity<>(portfolioService.getModelPortfolios(), HttpStatus.OK);
+                    return new ResponseEntity<>(portfolioService.getModelPortfolios(principal), HttpStatus.OK);
                 }
                 catch (Exception e) {
                     logger.error("Get Model Portfolios Error: " + e);

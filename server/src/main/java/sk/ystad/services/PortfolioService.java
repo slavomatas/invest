@@ -66,7 +66,7 @@ public class PortfolioService {
 
     public List<Portfolio> getByUserId(Principal principal) {
         User user = userRepository.findByUsername(principal.getName());
-        List<Portfolio> portfolios = user.getPortfolios();
+        List<Portfolio> portfolios = portfolioRepository.getPortfoliosByUserAndModelIsFalse(user);
 
         //Get influx data for each portfolio
         for (Portfolio p : portfolios) {
@@ -304,11 +304,15 @@ public class PortfolioService {
     }
 
     /**
-     * Get all model portfolios
+     * Get all model portfolios for user
      * @return list of model portfolios
      */
-    public List<Portfolio> getModelPortfolios() {
-        return portfolioRepository.getPortfoliosByModel(true);
+    public List<Portfolio> getModelPortfolios(Principal principal) {
+        // Get all user model portfolios
+        List<Portfolio> modelPortfolios = portfolioRepository.getPortfoliosByModelAndUser(true, userRepository.findByUsername(principal.getName()));
+        // Get all default portfolios (they don't have assigned user)
+        modelPortfolios.addAll(portfolioRepository.getPortfoliosByModelAndUser(true, null));
+        return modelPortfolios;
     }
 
     /**
@@ -318,7 +322,7 @@ public class PortfolioService {
      */
     public List<Portfolio> getUserAndModelPortfolios(Principal principal) {
         List<Portfolio> portfolios = getByUserId(principal);
-        portfolios.addAll(getModelPortfolios());
+        portfolios.addAll(getModelPortfolios(principal));
         return portfolios;
     }
 }
