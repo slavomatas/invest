@@ -1,0 +1,42 @@
+<fuse-widget class="widget" fxLayout="row" fxFlex="100">
+
+    <!-- Front -->
+    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+  
+        <div class="simple-table-container" ms-responsive-table>
+            <div class=" table-title">
+                Positions
+            </div>
+  
+            <table class="simple">
+  
+                <thead>
+                    <tr>
+                        <th *ngFor="let column of portfolioTableColumns">
+                            {{column}}
+                        </th>
+                    </tr>
+                </thead>
+  
+                <tbody>
+                    <tr *ngFor="let position of positions; let i = index">
+                        <td>{{position.symbol}}</td>
+                        <td>{{position.name}}</td>
+                        <td>{{position.quantity}}</td>
+                        <td>{{position.price}}</td>
+                        <td> 
+                            <invest-portfolio-detail-position-chart [inputChartData]="position.priceLast20Days"  style="max-height: 40px!important;" ></invest-portfolio-detail-position-chart>
+                        </td>
+                        <td>{{position.marketValue}} </td>
+                        <td>{{position.lastChange}} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+  
+    </div>
+  </fuse-widget>
+  
+  
+  
+  
