@@ -310,8 +310,9 @@ public class PortfolioService {
     public List<Portfolio> getModelPortfolios(Principal principal) {
         // Get all user model portfolios
         List<Portfolio> modelPortfolios = portfolioRepository.getPortfoliosByModelAndUser(true, userRepository.findByUsername(principal.getName()));
-        // Get all default portfolios (they don't have assigned user)
-        modelPortfolios.addAll(portfolioRepository.getPortfoliosByModelAndUser(true, null));
+        // Get all default portfolios (admin's user - "test@test.com")
+        String admin_username = "test@test.com".equals(principal.getName())? null : "test@test.com";
+        modelPortfolios.addAll(portfolioRepository.getPortfoliosByModelAndUser(true, userRepository.findByUsername(admin_username)));
         return modelPortfolios;
     }
 
