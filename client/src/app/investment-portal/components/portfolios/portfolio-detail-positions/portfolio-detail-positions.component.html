@@ -4,9 +4,6 @@
     <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
   
         <div class="simple-table-container" ms-responsive-table>
-            <div class=" table-title">
-                Positions
-            </div>
   
             <table class="simple">
   
@@ -27,7 +24,7 @@
                         <td> 
                             <invest-portfolio-detail-position-chart [inputChartData]="position.priceLast20Days"  style="max-height: 40px!important;" ></invest-portfolio-detail-position-chart>
                         </td>
-                        <td>{{position.marketValue}} </td>
+                        <td>{{position.value}} </td>
                         <td>{{position.lastChange}} </td>
                     </tr>
                 </tbody>

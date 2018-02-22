@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PortfolioDetails } from '../../types/types';
+import { PortfolioDetails } from '../../../types/types';
 import { ActivatedRoute } from '@angular/router';
-import { findPortfolioById } from '../../utils/portfolio-utils';
+import { findPortfolioById } from '../../../utils/portfolio-utils';
 import { NgRedux } from '@angular-redux/store';
-import { AppState } from '../../store/store';
+import { AppState } from '../../../store/store';
 import { cloneDeep } from 'lodash';
 import { MatTableModule } from '@angular/material/table';
 import {MatTableDataSource} from '@angular/material';

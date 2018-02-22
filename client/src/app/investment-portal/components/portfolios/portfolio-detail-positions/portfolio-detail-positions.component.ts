@@ -60,7 +60,7 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
     this.positions = [
       {
         symbol: 'SPY',
-        value: null,
+        value: 1958.68,
         name: 'SPDR S&P 500 ETF',
         quantity: 20,
         price: 68.54,
@@ -119,7 +119,7 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
       },
       {
         symbol: 'CEW',
-        value: null,
+        value: 3576.2,
         name: 'SPDR S&P 500 ETF',
         quantity: 20,
         price: 68.54,
