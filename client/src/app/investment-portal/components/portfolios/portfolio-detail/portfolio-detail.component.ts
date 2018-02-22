@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
 import { PortfolioDetails } from '../../../types/types';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { findPortfolioById } from '../../../utils/portfolio-utils';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../../store/store';
 import { cloneDeep } from 'lodash';
 import { MatTableModule } from '@angular/material/table';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
+
 
 @Component({
   selector: 'invest-portfolio-detail',
@@ -14,7 +15,7 @@ import {MatTableDataSource} from '@angular/material';
   styleUrls: ['portfolio-detail.component.scss']
 })
 
-export class PortfolioDetailComponent implements OnInit {
+export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
   displayedColumns = ['marketValue', 'latestChange', 'week', 'month', 'year', 'all'];
   dataSource: MatTableDataSource<PortfolioDetails>;
@@ -49,11 +50,20 @@ export class PortfolioDetailComponent implements OnInit {
       this.dataSource = new MatTableDataSource(portfolioSource);
     });
 
+    // calculate 'week', 'month', 'year', 'all'
     console.log(JSON.stringify(this.portfolio));
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+
+  formatNumber(num: number, negativeSign: Boolean, decimalPlaces: number){
+
+    if (negativeSign && num < 0) {
+      num *= -1;
+    }
+    return num.toFixed(decimalPlaces);
   }
 
 }

@@ -19,27 +19,67 @@
 
             <ng-container matColumnDef="latestChange">
               <mat-header-cell *matHeaderCellDef> Latest Change </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.latestChangeAbs}} -> {{element.latestChangePct}} </mat-cell>
+              <mat-cell *matCellDef="let element"> {{formatNumber(element.lastChangeAbs, false, 3)}} &#8594; {{formatNumber(element.lastChangePct, false, 3)}}% </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="week">
               <mat-header-cell *matHeaderCellDef> Week </mat-header-cell>
-              <mat-cell *matCellDef="let element"> % </mat-cell>
+              <mat-cell *matCellDef="let element">
+                <div *ngIf="element.returns.weekly > 0" class="positive-placeholder">
+                  {{formatNumber(element.returns.weekly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.weekly < 0" class="negative-placeholder">
+                  {{formatNumber(element.returns.weekly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.weekly === 0">
+                  {{formatNumber(element.returns.weekly, false, 3)}}%
+                </div>
+              </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="month">
               <mat-header-cell *matHeaderCellDef> Month </mat-header-cell>
-              <mat-cell *matCellDef="let element"> % </mat-cell>
+              <mat-cell *matCellDef="let element">
+                <div *ngIf="element.returns.monthly > 0" class="positive-placeholder">
+                  {{formatNumber(element.returns.monthly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.monthly < 0" class="negative-placeholder">
+                  {{formatNumber(element.returns.monthly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.monthly === 0">
+                  {{formatNumber(element.returns.monthly, false, 3)}}%
+                </div>
+              </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="year">
               <mat-header-cell *matHeaderCellDef> Year </mat-header-cell>
-              <mat-cell *matCellDef="let element"> % </mat-cell>
+              <mat-cell *matCellDef="let element">
+                <div *ngIf="element.returns.yearly > 0" class="positive-placeholder">
+                  {{formatNumber(element.returns.yearly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.yearly < 0" class="negative-placeholder">
+                  {{formatNumber(element.returns.yearly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.yearly === 0">
+                  {{formatNumber(element.returns.yearly, false, 3)}}%
+                </div>
+              </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="all">
               <mat-header-cell *matHeaderCellDef> All </mat-header-cell>
-              <mat-cell *matCellDef="let element"> % </mat-cell>
+              <mat-cell *matCellDef="let element">
+                <div *ngIf="element.returns.all > 0" class="positive-placeholder">
+                  {{formatNumber(element.returns.all, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.all < 0" class="negative-placeholder">
+                  {{formatNumber(element.returns.all, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.all === 0">
+                  {{formatNumber(element.returns.all, false, 3)}}%
+                </div>
+              </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -80,5 +120,3 @@
   <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
   <mat-cell *matCellDef="let user"> {{user.name}} </mat-cell>
 </ng-container>
-
-

@@ -34,8 +34,17 @@ mat-row {
 
 .mat-cell {
   text-align: center;
+  font-size: 18px;
 }
 
 .mat-tab-body-wrapper {
   display: block !important;
+}
+
+.positive-placeholder {
+  color: green;
+}
+
+.negative-placeholder {
+  color: red;
 }
