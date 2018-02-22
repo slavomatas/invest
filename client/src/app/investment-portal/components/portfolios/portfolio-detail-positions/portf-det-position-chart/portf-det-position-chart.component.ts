@@ -3,10 +3,10 @@ import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'invest-portfolio-detail-position-chart',
-  templateUrl: './portfolio-detail-position-chart.component.html',
-  styleUrls: ['./portfolio-detail-position-chart.component.scss']
+  templateUrl: './portf-det-position-chart.component.html',
+  styleUrls: ['./portf-det-position-chart.component.scss']
 })
-export class PortfolioDetailPositionChartComponent implements OnInit, OnChanges {
+export class PortfDetPositionChartComponent implements OnInit, OnChanges {
 
   @Input() inputChartData: {name: string, value: number}[];
   chartData: {name: string, series: {name: string, value: number}[]}[];

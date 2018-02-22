@@ -6,7 +6,7 @@ import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../store/store';
 import { cloneDeep } from 'lodash';
 import { MatTableModule } from '@angular/material/table';
-import {MatTableDataSource} from "@angular/material";
+import {MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'invest-portfolio-detail',

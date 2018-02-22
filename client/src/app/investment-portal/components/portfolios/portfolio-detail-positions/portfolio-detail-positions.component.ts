@@ -107,7 +107,6 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
             value: 2140000
           }
         ],
-        marketValue: 1369.00,
         lastChange: 10200,
         trades: [
           {
@@ -135,7 +134,6 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
             value: 8240000
           }
         ],
-        marketValue: 1369.00,
         lastChange: 10200,
         trades: [
           {
