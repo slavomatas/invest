@@ -31,6 +31,7 @@ import { PortfolioListRowComponent } from './components/portfolios/portfolio-lis
 import { PortfolioDetailComponent } from './components/portfolios/portfolio-detail/portfolio-detail.component';
 import { PortfolioDetailPositionsComponent } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-positions.component';
 import { PortfDetPositionChartComponent } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portf-det-position-chart/portf-det-position-chart.component';
+import { EditPositionDialogComponent } from './components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 
 
 const routes = [
@@ -70,7 +71,7 @@ const routes = [
     PortfolioDetailComponent,
     PortfolioDetailPositionsComponent,
     PortfDetPositionChartComponent,
-
+    EditPositionDialogComponent
   ],
   imports: [
     SharedModule,
@@ -90,7 +91,8 @@ const routes = [
     }
   ],
   entryComponents: [
-    CreateManualPortfolioDialogComponent
+    CreateManualPortfolioDialogComponent,
+    EditPositionDialogComponent
   ]
 })
 
