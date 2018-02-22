@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PortfolioPosition } from '../../../types/types';
+import { PortfolioPosition } from '../../../../types/types';
 import { OnChanges, SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 import { cloneDeep } from 'lodash';
 

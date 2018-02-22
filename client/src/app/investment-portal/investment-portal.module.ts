@@ -29,8 +29,8 @@ import { ClickableWidgetListComponent } from './components/create-portfolio/clic
 import { CreateManualPortfolioDialogComponent } from './components/create-portfolio/create-manual-portfolio-dialog/create-manual-portfolio-dialog.component';
 import { PortfolioListRowComponent } from './components/portfolios/portfolio-list-row/portfolio-list-row.component';
 import { PortfolioDetailComponent } from './components/portfolios/portfolio-detail/portfolio-detail.component';
-import { PortfolioDetailPositionsComponent } from './components/portfolios/portfolio-detail-positions/portfolio-detail-positions.component';
-import { PortfDetPositionChartComponent } from './components/portfolios/portfolio-detail-positions/portf-det-position-chart/portf-det-position-chart.component';
+import { PortfolioDetailPositionsComponent } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-positions.component';
+import { PortfDetPositionChartComponent } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portf-det-position-chart/portf-det-position-chart.component';
 
 
 const routes = [
