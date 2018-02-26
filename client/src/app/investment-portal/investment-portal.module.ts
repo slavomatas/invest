@@ -41,7 +41,7 @@ const routes = [
   { path: 'portfolios', component: PortfoliosComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'portfolios/create', component: CreatePortfolioComponent, canActivate: [AuthGuard] },
-  { path: 'portfolios/:id/overview', component: PortfolioDetailComponent },
+  { path: 'portfolios/:id/overview', component: PortfolioDetailComponent, canActivate: [AuthGuard] },
 
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }

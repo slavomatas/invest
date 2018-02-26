@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { PortfolioPosition } from '../../../../types/types';
-import { OnChanges, SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { PortfolioPosition, PortfolioDetails } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
 
 export interface Single {
@@ -16,6 +15,8 @@ export interface Single {
 
 export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
 
+  @Input() portfolio: PortfolioDetails;
+  
   portfolioTableColumns: string[] = [];
   positions: PortfolioPosition[];
 
@@ -26,7 +27,11 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const newPositions: PortfolioPosition[] = changes['positions'].currentValue;
+    const newPortfolio: PortfolioDetails = changes['portfolio'].currentValue;
+
+    this.positions = newPortfolio.positions;
+    const newPositions: PortfolioPosition[] = newPortfolio.positions;
+
     if (newPositions) {
       const newArray = [];
       newPositions.forEach((position: PortfolioPosition) => {
@@ -55,110 +60,8 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
       'PRICE LAST 20 DAYS',
       'MKT VALUE',
       'LAST CHANGE',
+      ''
     ];
-
-    this.positions = [
-      {
-        symbol: 'SPY',
-        value: 1958.68,
-        name: 'SPDR S&P 500 ETF',
-        quantity: 20,
-        price: 68.54,
-        currency: 'NYSE ARCA',
-        priceLast20Days: [
-          {
-            name: '1',
-            value: 7300000
-          },
-          {
-            name: '2',
-            value: 8940000
-          },
-          {
-            name: '3',
-            value: 3040000
-          },
-          {
-            name: '4',
-            value: 2140000
-          },
-          {
-            name: '5',
-            value: 8940000
-          },
-          {
-            name: '6',
-            value: 3040000
-          },
-          {
-            name: '7',
-            value: 2140000
-          },
-          {
-            name: '8',
-            value: 8940000
-          },
-          {
-            name: '9',
-            value: 3040000
-          },
-          {
-            name: '10',
-            value: 2140000
-          }
-        ],
-        lastChange: 10200,
-        trades: [
-          {
-            tradeId: 1,
-            price: 1.12,
-            amount: 10,
-            dateTime: '1518175018834',
-          }
-        ]
-      },
-      {
-        symbol: 'CEW',
-        value: 3576.2,
-        name: 'SPDR S&P 500 ETF',
-        quantity: 20,
-        price: 68.54,
-        currency: 'NYSE ARCA',
-        priceLast20Days: [
-          {
-            name: '2010',
-            value: 5000000
-          },
-          {
-            name: '2011',
-            value: 8240000
-          }
-        ],
-        lastChange: 10200,
-        trades: [
-          {
-            tradeId: 1,
-            price: 1.12,
-            amount: 10,
-            dateTime: '1518175018834',
-          }
-        ]
-      },
-    ];
-
-
-    const newArray = [];
-      this.positions.forEach((position: PortfolioPosition) => {
-        const cData = {
-          name: position.symbol,
-          series: position.priceLast20Days
-        };
-
-        newArray.push(cData);
-      });
-
-      this.chartData = cloneDeep(newArray);
-
 
   }
 

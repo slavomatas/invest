@@ -20,7 +20,7 @@ export class PortfDetPositionChartComponent implements OnInit, OnChanges {
   showYAxisLabel = false;
   yAxisLabel = 'Population';
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#39a7db']
   };
   // line, area
   autoScale = true;
