@@ -1,5 +1,5 @@
-import { PortfolioDetails } from '../../../types/types';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { PortfolioDetails } from '../../../types/types';
 import { ActivatedRoute } from '@angular/router';
 import { findPortfolioById } from '../../../utils/portfolio-utils';
 import { NgRedux } from '@angular-redux/store';
@@ -25,7 +25,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
   portfolio: PortfolioDetails;
 
   portfolioId: number;
-  private sub: any;
+  private paramsSubscription: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,7 +40,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
+    this.paramsSubscription = this.route.params.subscribe(params => {
       this.portfolioId = +params['id'];
       this.portfolio = findPortfolioById(this.portfolios, this.portfolioId);
 
@@ -49,13 +49,10 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
       this.dataSource = new MatTableDataSource(portfolioSource);
     });
-
-    // calculate 'week', 'month', 'year', 'all'
-    console.log(JSON.stringify(this.portfolio));
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.paramsSubscription.unsubscribe();
   }
 
   formatNumber(num: number, negativeSign: Boolean, decimalPlaces: number){
