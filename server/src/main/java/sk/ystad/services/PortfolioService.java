@@ -289,4 +289,8 @@ public class PortfolioService {
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
+
+    public void recalculatePortfolio(Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+    }
 }
