@@ -55,7 +55,7 @@ export class PortfolioService implements IPortfolioService {
    * @returns array of Porfolio Position that have new data from REST. Value is taken from @param portfolio
    */
   public getPortfolioPositions(portfolio: PortfolioDetails): Promise<PortfolioPosition[]> {
-    const requestUrl = PORTFOLIOS_URL + '/' + portfolio.id + '/positions';
+    const requestUrl = 'api/v1/user/portfolio/' + portfolio.id + '/positions';
 
     return this.http.get<PortfolioPositionsResponse[]>(requestUrl).toPromise()
       .then((responsePositions: PortfolioPositionsResponse[]) => {
@@ -65,29 +65,32 @@ export class PortfolioService implements IPortfolioService {
         responsePositions.forEach((responsePosition: PortfolioPositionsResponse) => {
 
           // filter position of given portfolio based on its symbol
-          const actPosition = portfolio.positions.filter(position => position.symbol === responsePosition.security.symbol)[0];
+          if (portfolio.positions && portfolio.positions.length > 0) {
+            const actPosition = portfolio.positions.filter(position => position.symbol === responsePosition.security.symbol)[0];
 
-          // compute quantity as sum of amount of all trades
-          let quantity = 0;
-          responsePosition.trades.forEach((trade) => {
-            quantity += trade.amount;
-          });
+            // compute quantity as sum of amount of all trades
+            let quantity = 0;
+            responsePosition.trades.forEach((trade) => {
+              quantity += trade.amount;
+            });
 
-          // price is the last value of last 20 days
-          const price = responsePosition.priceLast20Days[responsePosition.priceLast20Days.length - 1].value;
+            // price is the last value of last 20 days
+            const price = responsePosition.priceLast20Days[responsePosition.priceLast20Days.length - 1].value;
 
-          // update position of given portfolio with data from REST
-          actPosition.symbol = responsePosition.security.symbol;
-          actPosition.name = responsePosition.security.name;
-          actPosition.quantity = quantity;
-          actPosition.price = price;
-          actPosition.currency = responsePosition.security.currency;
-          actPosition.priceLast20Days = responsePosition.priceLast20Days;
-          actPosition.lastChange = responsePosition.lastChange;
-          actPosition.trades = responsePosition.trades;
+            // update position of given portfolio with data from REST
+            actPosition.symbol = responsePosition.security.symbol;
+            actPosition.name = responsePosition.security.name;
+            actPosition.quantity = quantity;
+            actPosition.price = price;
+            actPosition.currency = responsePosition.security.currency;
+            actPosition.priceLast20Days = responsePosition.priceLast20Days;
+            actPosition.lastChange = responsePosition.lastChange;
+            actPosition.trades = responsePosition.trades;
 
-          // add updated position into result array
-          newPositionsArray.push(actPosition);
+            // add updated position into result array
+            newPositionsArray.push(actPosition);
+          }
+
         });
 
         return newPositionsArray;
