@@ -93,7 +93,7 @@
         <mat-tab-group id="portfolio-detail-overview-tab">
           <mat-tab label="Positions">
             <p>POSITIONS</p>
-            <invest-portfolio-detail-positions></invest-portfolio-detail-positions>
+            <invest-portfolio-detail-positions [portfolio]="reduxPortfolio"></invest-portfolio-detail-positions>
           </mat-tab>
           <mat-tab label="Trades">
             <p>TRADES</p>
