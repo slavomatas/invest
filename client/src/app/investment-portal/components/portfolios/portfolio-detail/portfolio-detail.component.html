@@ -97,6 +97,12 @@
           </mat-tab>
           <mat-tab label="Trades">
             <p>TRADES</p>
+            <invest-portfolio-detail-trades [portfolio]="reduxPortfolio"></invest-portfolio-detail-trades>
+            <div style="display: flex; justify-content: flex-end;">
+              <button (click)="onBuy()" matTooltip="Add trade" style="margin: 10px;">
+                <i class="material-icons md-48" style="font-size: 40px;">add_circle_outline</i>
+              </button>
+            </div>
           </mat-tab>
         </mat-tab-group>
       </fuse-widget>
