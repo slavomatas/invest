@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import {
   Portfolio, PortfolioDetails, CumulativeMeasurement,
-  TypeOfReturns, TypeOfPortfolioReturn, PortfolioPosition
+  TypeOfReturns, TypeOfPortfolioReturn, PortfolioPosition, Trade
 } from '../../types/types';
 import { PortfolioReturn } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
@@ -12,31 +12,26 @@ import { cloneDeep } from 'lodash';
 import { AppState } from '../../store/store';
 import { LoggingService } from '../logging/logging.service';
 import { setOldMarketValue, getDateFrom } from '../../utils/portfolio-utils';
+import { TradeFormObject } from '../../components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 
- const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
- const PORTFOLIOS_URL = 'api/v1/user/portfolios';
+const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
+const PORTFOLIOS_URL = 'api/v1/user/portfolios';
 
-
- interface PortfolioPositionsResponse {
-    positionId: number;
-    security: {
-      symbol: string;
-      name: string;
-      currency: string
-      active: true;
-    };
-    trades: {
-      tradeId: number;
-      price: number;
-      amount: number;
-      dateTime: string;
-    }[];
-    priceLast20Days: {
-      name: string;
-      value: number;
-    }[];
-    lastChange: number;
-  }
+interface PortfolioPositionsResponse {
+  positionId: number;
+  security: {
+    symbol: string;
+    name: string;
+    currency: string
+    active: true;
+  };
+  trades: Trade[];
+  priceLast20Days: {
+    name: string;
+    value: number;
+  }[];
+  lastChange: number;
+}
 
 @Injectable()
 export class PortfolioService implements IPortfolioService {
@@ -47,6 +42,17 @@ export class PortfolioService implements IPortfolioService {
     private loggingService: LoggingService
   ) {
 
+  }
+
+  public createTrade(trade: Trade, portfolioId: number, symbol: string): Promise<Trade> {
+    const requestUrl = PORTFOLIOS_URL + '/' + portfolioId + '/position/' + symbol + '/trade';
+    const body = new HttpParams()
+      .set('timestamp', trade.dateTime)
+      .set('price', trade.price.toString())
+      .set('amount', trade.amount.toString());
+
+    return this.http
+      .post<Trade>(requestUrl, body).toPromise();
   }
 
   /**
@@ -76,6 +82,8 @@ export class PortfolioService implements IPortfolioService {
 
             // price is the last value of last 20 days
             const price = responsePosition.priceLast20Days[responsePosition.priceLast20Days.length - 1].value;
+
+            console.log(responsePosition);
 
             // update position of given portfolio with data from REST
             actPosition.symbol = responsePosition.security.symbol;
@@ -144,7 +152,7 @@ export class PortfolioService implements IPortfolioService {
 
     // get portfolio measurements (time series) and push them into portfolioChart.series
     await this.getCumulativeMeasurements(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: CumulativeMeasurement[]) => {
-       measurements.map((measurement: CumulativeMeasurement) => {
+      measurements.map((measurement: CumulativeMeasurement) => {
         portfolio.series.push({
           name: new Date(measurement.name).toDateString(),
           value: Number.parseFloat(measurement.value)
@@ -156,7 +164,7 @@ export class PortfolioService implements IPortfolioService {
     await this.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: PortfolioReturn[]) => {
       const length = measurements.length;
 
-      if (length > 0){
+      if (length > 0) {
         portfolio.marketValue = Number.parseFloat(measurements[length - 1].value);
         setOldMarketValue(period, portfolio.oldMarketValues, Number.parseFloat(measurements[0].value));
         // portfolio.oldMarketValues = Number.parseFloat(measurements[0].value);

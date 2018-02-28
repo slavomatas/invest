@@ -50,6 +50,18 @@ export interface PortfolioTimeSeries {
     }[];
 }
 
+export interface Trade {
+  tradeId: number;
+  price: number;
+  amount: number;
+  dateTime: string;
+}
+
+export enum TransactionTypes {
+  BUY = 'Buy',
+  SELL = 'Sell'
+}
+
 export interface PortfolioPosition {
   symbol: string;
   value: number;    // market value of position - used on dashboard in portfolio overview list
@@ -62,12 +74,7 @@ export interface PortfolioPosition {
     value: number;
   }[];
   lastChange: number;
-  trades: {
-      tradeId: number
-      price: number;
-      amount: number;
-      dateTime: string;
-    }[];
+  trades: Trade[];
 }
 
 export interface TypeOfReturns {

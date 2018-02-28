@@ -1,25 +1,25 @@
-<h2 mat-dialog-title>Position</h2>
+<h2 mat-dialog-title>Position {{ transactionTypes }}</h2>
 
 <mat-dialog-content>
   <form class="example-form" [formGroup]="editForm">
     <mat-form-field class="example-full-width">
-      <mat-select placeholder="Transaction type" [(ngModel)]="trade.transactionType" formControlName="transactionType">
+      <mat-select placeholder="Transaction type" [(ngModel)]="data.trade.transactionType" formControlName="transactionType">
         <mat-option *ngFor="let type of transactionTypes" [value]="type">
           {{ type }}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Symbol" [(ngModel)]="trade.security" formControlName="security">
+      <input matInput placeholder="Symbol" [(ngModel)]="data.trade.symbol" formControlName="symbol">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Price" [(ngModel)]="trade.price" formControlName="price">
+      <input matInput placeholder="Price" [(ngModel)]="data.trade.price" formControlName="price">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Amount" [(ngModel)]="trade.amount" formControlName="amount">
+      <input matInput placeholder="Amount" [(ngModel)]="data.trade.amount" formControlName="amount">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput [matDatepicker]="myDatepicker" [(ngModel)]="trade.date"  placeholder="Date of transaction" formControlName="date">
+      <input matInput [matDatepicker]="myDatepicker" [(ngModel)]="data.trade.date"  placeholder="Date of transaction" formControlName="date">
       <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
       <mat-datepicker #myDatepicker></mat-datepicker>
     </mat-form-field>

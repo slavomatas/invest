@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
-import { Portfolio, PortfolioPosition } from '../../../types/types';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Portfolio, PortfolioPosition, TransactionTypes } from '../../../types/types';
 
 @Component({
   selector: 'invest-app-edit-position-dialog',
@@ -11,30 +11,20 @@ import { Portfolio, PortfolioPosition } from '../../../types/types';
 export class EditPositionDialogComponent implements OnInit {
 
   DEFAULT_TRADE_ID = 0;
-  transactionTypes = [
-    'Buy',
-    'Sell'
-  ];
-
-  trade = {
-    id: this.DEFAULT_TRADE_ID,
-    transactionType: this.transactionTypes[0],
-    security: 'BTC',
-    price: 0,
-    amount: 0,
-    date: Date()
-  };
+  transactionTypes: TransactionTypes[] = [TransactionTypes.BUY, TransactionTypes.SELL];
 
   editForm: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<EditPositionDialogComponent>
-  ) { }
+    public dialogRef: MatDialogRef<EditPositionDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { 
+  }
 
   ngOnInit() {
     this.editForm = new FormGroup({
       transactionType: new FormControl(),
-      security: new FormControl(),
+      symbol: new FormControl(),
       price: new FormControl(),
       amount: new FormControl(),
       date: new FormControl()
@@ -46,8 +36,16 @@ export class EditPositionDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.trade);
-    this.dialogRef.close();
+    this.dialogRef.close(this.data.trade);
   }
 
+}
+
+export interface TradeFormObject {
+  tradeId: number;
+  transactionType: string;
+  timestamp: string;
+  price: number;
+  amount: number;
+  symbol: string;
 }

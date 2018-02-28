@@ -1,6 +1,10 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { PortfolioPosition, PortfolioDetails } from '../../../../types/types';
+import { PortfolioPosition, PortfolioDetails, TransactionTypes, Trade } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
+import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import * as moment from 'moment';
+import { MatDialog } from '@angular/material';
+import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 
 export interface Single {
   name: string;
@@ -16,11 +20,11 @@ export interface Single {
 export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
 
   @Input() portfolio: PortfolioDetails;
-  
+
   portfolioTableColumns: string[] = [];
   positions: PortfolioPosition[];
 
-  chartData: {name: string, series: {name: string, value: number}[]}[] = [];
+  chartData: { name: string, series: { name: string, value: number }[] }[] = [];
 
   onSelect(event) {
     console.log(event);
@@ -50,7 +54,54 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
   ngOnInit() {
   }
 
-  constructor() { 
+  createTrade(type: TransactionTypes) {
+    const emptyTrade: TradeFormObject = {
+      tradeId: 0,
+      transactionType: type,
+      timestamp: Date(),
+      price: 0,
+      amount: 0,
+      symbol: 'TEST',
+    };
+
+    const dialogRef = this.dialog.open(EditPositionDialogComponent, {
+      data: { trade: emptyTrade }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let realAmount = 0;
+        if (result.transactionType === TransactionTypes.BUY) {
+          realAmount = result.amount;
+        } else {
+          realAmount = 0 - result.amount;
+        }
+
+        const trade: Trade = {
+          tradeId: result.tradeId,
+          price: result.price,
+          amount: realAmount,
+          dateTime: moment(result.timestamp).format('YYYY-MM-DD HH:mm:ss')
+        };
+
+        this.portfolioService.createTrade(trade, 1, result.symbol).then((createdTrade: Trade) => {
+          console.log(createdTrade);
+        });
+      }
+    });
+  }
+
+  onBuy() {
+    this.createTrade(TransactionTypes.BUY);
+  }
+
+  onSell() {
+    this.createTrade(TransactionTypes.SELL);
+  }
+
+  constructor(
+    private portfolioService: PortfolioService,
+    public dialog: MatDialog,
+  ) {
 
     this.portfolioTableColumns = [
       'SYMBOL',
