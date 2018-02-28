@@ -29,8 +29,12 @@ public class LoadersController {
 
     @RequestMapping("/testing_data")
     public AuthResponse loadData() {
-        loaderService.loadTestingData();
-        return new AuthResponse(true, "Data has been loaded");
+        try {
+            loaderService.loadTestingData();
+            return new AuthResponse(true, "Data has been loaded");
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            return new AuthResponse(false, "Datal loader crashed " + e.getMessage());
+        }
     }
 
     @RequestMapping("/model_portfolios")

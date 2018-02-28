@@ -46,7 +46,7 @@ public class LoaderService {
         this.tradeRepository = tradeRepository;
     }
 
-    public void loadTestingData() {
+    public void loadTestingData() throws NullPointerException, IndexOutOfBoundsException {
         User user = new User();
         user.setEmail("test@test.com");
         user.setUsername("test@test.com");
@@ -86,7 +86,7 @@ public class LoaderService {
         tradeRepository.save(new Trade(portfolio.getUsersPositions().get(3), 71.44, 20, new Date(1444003200000L)));
         tradeRepository.save(new Trade(portfolio.getUsersPositions().get(2), 135.21, 15, new Date(1444089600000L)));
         tradeRepository.save(new Trade(portfolio.getUsersPositions().get(4), 37.37, 7, new Date(1444176000000L)));
-        tradeRepository.save(new Trade(portfolio.getUsersPositions().get(1), 29.63, 10, new Date(1444262400000L)));
+        tradeRepository.save(new Trade(portfolio.getUsersPositions().get(0), 29.63, 10, new Date(1444262400000L)));
         tradeRepository.save(new Trade(portfolio.getUsersPositions().get(5), 74.09, 12, new Date(1444348800000L)));
 
         portfolio = createPortfolio("Portfolio4", user, "PID5a6f4f4aaf69115d83a41e27");
@@ -127,7 +127,7 @@ public class LoaderService {
     }
 
     private void createPositions(Portfolio portfolio, String... symbols) {
-        List userPositions = new ArrayList<UserPosition>();
+        List<UserPosition> userPositions = new ArrayList<UserPosition>();
         if (portfolio == null || symbols == null) {
             return;
         }
