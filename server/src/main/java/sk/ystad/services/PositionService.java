@@ -179,22 +179,4 @@ public class PositionService {
 
         return new ResponseEntity<>(positions, HttpStatus.OK);
     }
-
-    /**
-     * Update trade in database
-     * @param principal
-     * @param trade
-     * @return
-     */
-    public ResponseEntity updateTrade(Principal principal, Trade trade) {
-        try {
-            trade = tradeRepository.save(trade);
-            logger.info("Updated trade: " + trade.toString());
-            return new ResponseEntity(trade, HttpStatus.OK);
-        }
-        catch (NullPointerException e) {
-            logger.error("Failed to update trade: " + e.getMessage());
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }
