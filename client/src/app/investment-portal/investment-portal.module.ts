@@ -30,7 +30,9 @@ import { CreateManualPortfolioDialogComponent } from './components/create-portfo
 import { PortfolioListRowComponent } from './components/portfolios/portfolio-list-row/portfolio-list-row.component';
 import { PortfolioDetailComponent } from './components/portfolios/portfolio-detail/portfolio-detail.component';
 import { PortfolioDetailPositionsComponent } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-positions.component';
-import { PortfDetPositionChartComponent } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portf-det-position-chart/portf-det-position-chart.component';
+import { 
+  PortfolioDetailPositionChartComponent
+ } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-position-chart/portfolio-detail-position-chart.component';
 import { EditPositionDialogComponent } from './components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 
 
@@ -70,7 +72,7 @@ const routes = [
     PortfolioListRowComponent,
     PortfolioDetailComponent,
     PortfolioDetailPositionsComponent,
-    PortfDetPositionChartComponent,
+    PortfolioDetailPositionChartComponent,
     EditPositionDialogComponent
   ],
   imports: [
