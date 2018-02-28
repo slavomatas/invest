@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { PortfolioPosition, PortfolioDetails, TransactionTypes, Trade } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
 import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';

@@ -31,7 +31,6 @@ export class PortfolioDetailPositionChartComponent implements OnInit, OnChanges 
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('What I got', this.inputChartData);
     this.chartData = [];
     this.chartData.push({name: '', series: this.inputChartData});
     this.chartData = cloneDeep(this.chartData);

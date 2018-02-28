@@ -30,7 +30,7 @@ interface PortfolioPositionsResponse {
     name: string;
     value: number;
   }[];
-  lastChange: number;
+  lastChangeMarketValue: number;
 }
 
 @Injectable()
@@ -92,7 +92,7 @@ export class PortfolioService implements IPortfolioService {
             actPosition.price = price;
             actPosition.currency = responsePosition.security.currency;
             actPosition.priceLast20Days = responsePosition.priceLast20Days;
-            actPosition.lastChange = responsePosition.lastChange;
+            actPosition.lastChange = responsePosition.lastChangeMarketValue;
             actPosition.trades = responsePosition.trades;
 
             // add updated position into result array

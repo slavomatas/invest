@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { PortfolioDetails, PortfolioPosition } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
 

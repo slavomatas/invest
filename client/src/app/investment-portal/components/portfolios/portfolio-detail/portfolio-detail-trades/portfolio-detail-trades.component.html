@@ -16,31 +16,28 @@
               </thead>
 
               <tbody>
-                  <tr *ngFor="let position of positions; let i = index">
-                      <div *ngFor="let trade of position.trades">
+                  <ng-container *ngFor="let position of positions; let i = index">
+                      <tr *ngFor="let trade of position.trades">
                         <td>{{position.symbol}}</td>
                         <td *ngIf="trade.amount >= 0">Buy</td>
                         <td *ngIf="trade.amount < 0">Sell</td>
-                        <td>{{trade.dateTime}}</td>
-                        <td>{{trade.amount}}</td>
-                        <td>{{trade.price}}</td>
+                        <td>{{trade.dateTime | date:'mediumDate' }}</td>
+                        <td>{{trade.amount | number}}</td>
+                        <td>{{trade.price | number}}</td>
                         <td>
                             <div fxLayout="row">
                                 <div class="item item-edit">
-                                    <a href="" matTooltip="Edit">
+                                    <button matTooltip="Edit">
                                         <i class="material-icons md-24">mode_edit</i>
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </td>
-                      </div>
-                  </tr>
+                    </tr>
+                </ng-container>
               </tbody>
           </table>
       </div>
 
   </div>
 </fuse-widget>
-
-
-

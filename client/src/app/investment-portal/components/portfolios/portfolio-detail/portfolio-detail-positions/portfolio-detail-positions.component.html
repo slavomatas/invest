@@ -19,13 +19,13 @@
                     <tr *ngFor="let position of positions; let i = index">
                         <td>{{position.symbol}}</td>
                         <td>{{position.name}}</td>
-                        <td>{{position.quantity}}</td>
-                        <td>{{position.price}}</td>
+                        <td>{{position.quantity | number}}</td>
+                        <td>{{position.price | number}}</td>
                         <td> 
                             <invest-portfolio-detail-position-chart [inputChartData]="position.priceLast20Days"  style="max-height: 40px!important;" ></invest-portfolio-detail-position-chart>
                         </td>
-                        <td>{{position.value}} </td>
-                        <td>{{position.lastChange}} </td>
+                        <td>{{position.value | number}} </td>
+                        <td>{{position.lastChange  | number}} </td>
                         <td>
                             <div fxLayout="row">
                                 <div class="item item-edit">
@@ -44,10 +44,5 @@
                 </tbody>
             </table>
         </div>
-  
     </div>
   </fuse-widget>
-  
-  
-  
-  
