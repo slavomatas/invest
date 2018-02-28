@@ -1,16 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { NgRedux } from '@angular-redux/store';
-import { User } from '../../types/types';
+import { User, CookieNames } from '../../types/types';
 import { cloneDeep } from 'lodash';
 import { AppState } from '../../store/store';
+import { CookieService } from 'ngx-cookie-service';
+import { Token } from '../../types/authentication-types';
+import { AuthenticationActions } from '../../store/actions/authentication-actions';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   userStore$ = this.ngRedux.select(state => state.user);
   user: User = null;
   constructor(private router: Router,
-              private ngRedux: NgRedux<AppState>) {
+              private ngRedux: NgRedux<AppState>,
+              private cookieService: CookieService,
+              private authActions: AuthenticationActions,
+              private authService: AuthenticationService) {
     // subscribe on token from redux Store
     this.userStore$.subscribe((data: User) => {
       if (data != null) {
@@ -23,6 +30,20 @@ export class AuthGuard implements CanActivate {
     if (this.user != null) {
       // logged in so return true
       return true;
+    }
+
+    const cookieTokenString = this.cookieService.get(CookieNames.loginToken);
+
+    if (cookieTokenString) {
+      const token: Token = JSON.parse(cookieTokenString);
+
+      this.authActions.getAccessTokenFullfiled(true, token);
+      // Get user details
+      this.authService.getUser().then((userData: User) => {
+        this.authActions.getUserDataFullfiled(true, userData);
+        this.router.navigate(['dashboard']);
+      });
+
     }
 
     // not logged in so redirect to login page

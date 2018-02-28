@@ -81,3 +81,7 @@ export enum TypeOfPortfolioReturn {
   yearly = 'PORTFOLIO_YEARLY_RETURNS',
   cumulative = 'PORTFOLIO_CUMULATIVE_RETURNS'
 }
+
+export enum CookieNames {
+  loginToken = 'login-token'
+}
