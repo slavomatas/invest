@@ -1,0 +1,46 @@
+<fuse-widget class="widget" fxLayout="row" fxFlex="100">
+
+  <!-- Front -->
+  <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+      <div class="simple-table-container" ms-responsive-table>
+
+          <table class="simple">
+
+              <thead>
+                  <tr>
+                      <th *ngFor="let column of portfolioTableColumns">
+                          {{column}}
+                      </th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  <tr *ngFor="let position of positions; let i = index">
+                      <div *ngFor="let trade of position.trades">
+                        <td>{{position.symbol}}</td>
+                        <td *ngIf="trade.amount >= 0">Buy</td>
+                        <td *ngIf="trade.amount < 0">Sell</td>
+                        <td>{{trade.dateTime}}</td>
+                        <td>{{trade.amount}}</td>
+                        <td>{{trade.price}}</td>
+                        <td>
+                            <div fxLayout="row">
+                                <div class="item item-edit">
+                                    <a href="" matTooltip="Edit">
+                                        <i class="material-icons md-24">mode_edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                      </div>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+  </div>
+</fuse-widget>
+
+
+

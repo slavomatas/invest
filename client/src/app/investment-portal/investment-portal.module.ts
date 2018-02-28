@@ -34,6 +34,7 @@ import {
   PortfolioDetailPositionChartComponent
  } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-position-chart/portfolio-detail-position-chart.component';
 import { EditPositionDialogComponent } from './components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import { PortfolioDetailTradesComponent } from './components/portfolios/portfolio-detail/portfolio-detail-trades/portfolio-detail-trades.component';
 
 
 const routes = [
@@ -73,7 +74,8 @@ const routes = [
     PortfolioDetailComponent,
     PortfolioDetailPositionsComponent,
     PortfolioDetailPositionChartComponent,
-    EditPositionDialogComponent
+    EditPositionDialogComponent,
+    PortfolioDetailTradesComponent
   ],
   imports: [
     SharedModule,
