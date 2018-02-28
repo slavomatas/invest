@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { PortfolioDetails } from '../../types/types';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../store/store';
-import { PortfolioPosition } from '../../types/types';
 
 @Component({
   selector: 'invest-portfolios',
