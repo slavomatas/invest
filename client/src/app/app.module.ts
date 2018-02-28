@@ -54,7 +54,7 @@ const appRoutes: Routes = [
         FuseSplashScreenService,
         FuseConfigService,
         FuseNavigationService,
-        /*{ provide: ErrorHandler, useClass: RavenErrorHandler },*/
+        { provide: ErrorHandler, useClass: RavenErrorHandler },
         LoggingService
     ],
     bootstrap   : [
