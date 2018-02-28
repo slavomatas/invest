@@ -42,6 +42,7 @@ export interface PortfolioDetails {
       name: string,
       value: number
     }[];
+  model: boolean;
 }
 
 export interface PortfolioTimeSeries {
@@ -80,4 +81,10 @@ export enum TypeOfPortfolioReturn {
   quaterly = 'PORTFOLIO_QUARTERLY_RETURNS',
   yearly = 'PORTFOLIO_YEARLY_RETURNS',
   cumulative = 'PORTFOLIO_CUMULATIVE_RETURNS'
+}
+
+export enum TypeOfPortfolio {
+  all = 'ALL',
+  user = 'USER',
+  model = 'MODEL'
 }

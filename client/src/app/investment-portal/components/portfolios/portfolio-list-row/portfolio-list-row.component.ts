@@ -6,7 +6,6 @@ import { PortfolioDetails } from '../../../types/types';
 import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';
 
-
 @Component({
   selector: 'invest-portfolio-list-row',
   templateUrl: './portfolio-list-row.component.html',
@@ -31,18 +30,19 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
     private portfolioService: PortfolioService
   ) {
 
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['portfolioData']){
       this.chartData = [];
-      this.portfolioData.positions.forEach((position) => {
-        this.chartData.push({
-          name: position.symbol,
-          value: position.value
+      if (this.portfolioData.positions != null) {
+        this.portfolioData.positions.forEach((position) => {
+          this.chartData.push({
+            name: position.symbol,
+            value: position.value
+          });
         });
-      });
+      }
       this.portfolioData.marketValue = parseFloat(this.portfolioData.marketValue.toFixed(2));
       this.portfolioData.cash = parseFloat(this.portfolioData.cash.toFixed(4));
       this.portfolioData.lastChangeAbs = parseFloat(this.portfolioData.lastChangeAbs.toFixed(4));

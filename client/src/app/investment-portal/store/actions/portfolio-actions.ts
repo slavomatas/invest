@@ -44,7 +44,8 @@ export class PortfolioActions {
         closed: false,
         isDisplayed: true,
         positions: [],
-        series: []
+        series: [],
+        model: false
       });
       this.ngRedux.dispatch({ type: PortfolioActions.GET_PORTFOLIOS, payload: newPortfolioList});
     }
