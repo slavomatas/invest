@@ -58,7 +58,9 @@
         <button class="invest-inline">
           <!--a href="/portfolio/{{portfolio.id}}/overview" /-->
           <span matTooltip="View" matTooltipPosition="above">
-            <mat-icon><i class="material-icons">visibility</i></mat-icon>
+            <mat-icon>
+              <i class="material-icons" routerLink="/portfolios/{{portfolioData.id}}/overview">visibility</i>
+            </mat-icon>
           </span>
         </button>
       </div>

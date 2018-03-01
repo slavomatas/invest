@@ -1,5 +1,6 @@
 package sk.ystad.model.users.portfolios.positions;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Trade {
 
     private int amount;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 

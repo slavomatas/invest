@@ -1,4 +1,4 @@
-import { TypeOfOldMarketValue, PortfolioDetails } from '../types/types';
+import { TypeOfOldMarketValue, PortfolioDetails, Portfolio, Trade, PortfolioPosition } from '../types/types';
 
 export function getOldMarketValue(periodName: string, oldMarketValues: TypeOfOldMarketValue) {
     switch (periodName) {
@@ -89,4 +89,50 @@ export function getDateFrom(dateTo: Date, stringPeriod: string): Date {
 export function getDisplayedPortfolios(portfolios: PortfolioDetails[], getClosed: boolean = false) {
     return portfolios.filter(portfolio => portfolio.isDisplayed && portfolio.closed === getClosed);
     // return portfolios.filter(portfolio => portfolio.isDisplayed);
+
+}
+
+export function findPortfolioById(portfolios: PortfolioDetails[], portfolioId: Number): PortfolioDetails {
+    return portfolios.filter(portfolio => portfolio.id === portfolioId)[0];
+}
+
+export function updateTradeInPortfolio(portfolio: PortfolioDetails, symbol: string, trade: Trade) {
+  if (!portfolio.positions) {
+    portfolio.positions = [];
+  }
+
+  let positionExist = false;
+  portfolio.positions.forEach((position) => {
+    if (position.symbol === symbol) {
+
+      if (!position.trades) {
+        position.trades = [];
+      }
+
+      const newTrades: Trade[] = [];
+      let isUpdate = false;
+
+      position.trades.forEach((posTrade: Trade) => {
+        if (posTrade.tradeId === trade.tradeId) {
+          newTrades.push(trade);
+          isUpdate = true;
+        } else {
+          newTrades.push(posTrade);
+        }
+      });
+
+      if (!isUpdate) {
+        newTrades.push(trade);
+      }
+      position.trades = newTrades;
+      positionExist = true;
+    }
+  });
+
+  if (!positionExist) {
+    this.portfolio.positions.push(<PortfolioPosition>{
+      symbol: symbol,
+      trades: [trade]
+    });
+  }
 }
