@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sk.ystad.ServerApplication;
 import sk.ystad.common.utils.FormatingUtil;
-import sk.ystad.model.measurements.ImmutableMeasure;
 import sk.ystad.model.measurements.Measures;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.securities.Security;
@@ -20,10 +19,7 @@ import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.repositories.securities.SecurityRepository;
-import sk.ystad.repositories.users.PortfolioRepository;
-import sk.ystad.repositories.users.PositionRepository;
-import sk.ystad.repositories.users.TradeRepository;
-import sk.ystad.repositories.users.UserPositionRepository;
+import sk.ystad.repositories.users.*;
 
 import java.security.Principal;
 import java.text.ParseException;
@@ -40,15 +36,18 @@ public class PositionService {
     private final UserPositionRepository userPositionRepository;
     private final PositionRepository positionRepository;
     private final PortfolioRepository portfolioRepository;
+    @Autowired
+    private final UserRepository userRepository;
     private InfluxDB influxDB;
 
     @Autowired
-    public PositionService(PositionRepository positionRepository, TradeRepository tradeRepository, SecurityRepository securityRepository, UserPositionRepository userPositionRepository, PortfolioRepository portfolioRepository, InfluxDB influxDB) {
+    public PositionService(PositionRepository positionRepository, TradeRepository tradeRepository, SecurityRepository securityRepository, UserPositionRepository userPositionRepository, PortfolioRepository portfolioRepository, UserRepository userRepository, InfluxDB influxDB) {
         this.positionRepository = positionRepository;
         this.tradeRepository = tradeRepository;
         this.securityRepository = securityRepository;
         this.userPositionRepository = userPositionRepository;
         this.portfolioRepository = portfolioRepository;
+        this.userRepository = userRepository;
         this.influxDB = influxDB;
     }
 
@@ -91,8 +90,7 @@ public class PositionService {
     public ResponseEntity addTrade(long portfolioId, String symbol, String timestamp, Double price, int amount) {
         //Load user portfolio
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-        UserPosition userPosition = positionRepository.findBySecuritySymbol(symbol);
-
+        UserPosition userPosition = positionRepository.findBySecuritySymbolAndPortfolio(symbol, portfolio);
         //Try to format date
         Date formatedTimestamp = null;
         try {
