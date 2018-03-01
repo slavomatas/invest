@@ -1,10 +1,14 @@
 package sk.ystad.controllers;
 
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import sk.ystad.ServerApplication;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.users.User;
 import sk.ystad.model.users.portfolios.positions.Trade;
@@ -22,22 +26,54 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1")
 public class PortfolioController {
+    private static final Logger logger = LogManager
+            .getLogger(ServerApplication.class);
+
 
     private final PortfolioService portfolioService;
-    private final UserService userService;
 
     @Autowired
-    public PortfolioController(PortfolioService portfolioService, UserService userService) {
+    public PortfolioController(PortfolioService portfolioService) {
         this.portfolioService = portfolioService;
-        this.userService = userService;
     }
 
     @CrossOrigin(origins = "*")
     @RequestMapping(value ="/user/portfolios", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    @ApiOperation(value = "Get all user's portfolios details", notes = "UserID is retrieved from session")
-    public ResponseEntity findByUserId(Principal principal){
-        return portfolioService.getByUserId(principal);
+    @ApiOperation(value = "List of portfolios",
+            notes = "UserID is retrieved from session. " +
+                    "for type parameter 'USER' - get all user's portfolios with details, " +
+                    "for type parameter 'MODEL' - get all model portfolios, " +
+                    "for type parameter 'ALL' - get all user's portfolios with details and all model portfolios")
+    public ResponseEntity findByUserId(Principal principal,
+                                       @RequestParam(value = "type", defaultValue = "USER") String type){
+        switch(type) {
+            case "MODEL":
+                try {
+                    return new ResponseEntity<>(portfolioService.getModelPortfolios(principal), HttpStatus.OK);
+                }
+                catch (Exception e) {
+                    logger.error("Get Model Portfolios Error: " + e);
+                    return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            case "ALL":
+                try {
+                    return new ResponseEntity<>(portfolioService.getUserAndModelPortfolios(principal), HttpStatus.OK);
+                }
+                catch (Exception e) {
+                    logger.error("Get User and Model Portfolios Error: " + e);
+                    return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            case "USER":
+                try {
+                    return new ResponseEntity<>(portfolioService.getByUserId(principal), HttpStatus.OK);
+                }
+                catch (Exception e) {
+                    logger.error("Get User Portfolios Error: " + e);
+                    return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+        }
+        return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @CrossOrigin(origins = "*")

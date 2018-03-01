@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import {
   Portfolio, PortfolioDetails, CumulativeMeasurement,
-  TypeOfReturns, TypeOfPortfolioReturn, PortfolioPosition, Trade
+  TypeOfReturns, TypeOfPortfolioReturn, TypeOfPortfolio, PortfolioPosition, Trade
 } from '../../types/types';
 import { PortfolioReturn } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
@@ -198,11 +198,15 @@ export class PortfolioService implements IPortfolioService {
 
   /**
    * @description Gets all portfolios for user.
+   * @type Filter for returned portfolios. Possible values: USER(default), MODEL, ALL
    * @returns {Promise<Portfolio[]>}
    */
-  public getPortfolios(): Promise<PortfolioDetails[]> {
+  public getPortfolios(type?: TypeOfPortfolio): Promise<PortfolioDetails[]> {
+
+    const options = type ? { params: new HttpParams().set('type', type.toString()) } : {};
+
     return this.http
-      .get<PortfolioDetails[]>(PORTFOLIOS_URL).toPromise();
+      .get<PortfolioDetails[]>(PORTFOLIOS_URL, options).toPromise();
   }
 
   /**

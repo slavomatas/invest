@@ -62,7 +62,7 @@ public class UserPortfoliosServiceTest {
 
 
         Mockito.when(
-                userPortfoliosService.findByUserId(any(Principal.class)))
+                userPortfoliosService.findByUserId(any(Principal.class), null))
                 .thenReturn(new ResponseEntity<>(testPortfolios, HttpStatus.OK));
 
 
