@@ -72,7 +72,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
       timestamp: Date(),
       price: 0,
       amount: 0,
-      symbol: 'TEST FROM TRADES',
+      symbol: '',
     };
 
     const dialogRef = this.dialog.open(EditPositionDialogComponent, {
