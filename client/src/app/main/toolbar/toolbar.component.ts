@@ -3,9 +3,10 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { FuseConfigService } from '../../core/services/config.service';
 import { TranslateService } from '@ngx-translate/core';
 import {NgRedux} from '@angular-redux/store';
-import {User} from '../../investment-portal/types/types';
+import { User, CookieNames } from '../../investment-portal/types/types';
 import {AuthenticationActions} from '../../investment-portal/store/actions/authentication-actions';
 import { AppState } from '../../investment-portal/store/store';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector   : 'fuse-toolbar',
@@ -29,7 +30,8 @@ export class FuseToolbarComponent
         private fuseConfig: FuseConfigService,
         private translate: TranslateService,
         private ngRedux: NgRedux<AppState>,
-        private actions: AuthenticationActions
+        private actions: AuthenticationActions,
+        private cookieService: CookieService
     )
     {
         this.userStatusOptions = [
@@ -118,6 +120,9 @@ export class FuseToolbarComponent
     public onLogout()
     {
       this.actions.logoutUser();
+      this.cookieService.delete(CookieNames.loginToken);
+
+      // TODO call BE rest to invalidate token
       this.router.navigate(['login']);
     }
 }

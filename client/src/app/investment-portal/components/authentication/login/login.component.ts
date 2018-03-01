@@ -4,9 +4,10 @@ import { FuseConfigService } from '../../../../core/services/config.service';
 import { fuseAnimations } from '../../../../core/animations';
 import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { AuthenticationActions } from '../../../store/actions/authentication-actions';
-import { User } from '../../../types/types';
+import { User, CookieNames } from '../../../types/types';
 import { Token } from '../../../types/authentication-types';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector   : 'invest-login',
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit
         private formBuilder: FormBuilder,
         private router: Router,
         private actions: AuthenticationActions,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private cookieService: CookieService
     )
 
     {
@@ -46,7 +48,8 @@ export class LoginComponent implements OnInit
     {
         this.loginForm = this.formBuilder.group({
             email   : ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required]
+            password: ['', Validators.required],
+            rememberMe: []
         });
 
         this.loginForm.valueChanges.subscribe(() => {
@@ -80,6 +83,7 @@ export class LoginComponent implements OnInit
     {
       const password = this.loginForm.value.password;
       const email = this.loginForm.value.email;
+      const rememberMe = this.loginForm.value.rememberMe;
 
       // Get access token
       this.authenticationService.login( email, password).then( (loginData: Token) => {
@@ -87,6 +91,10 @@ export class LoginComponent implements OnInit
           // Get user details
           this.authenticationService.getUser().then((userData: User) => {
             this.actions.getUserDataFullfiled(true, userData);
+            // store token into cookie
+            if (rememberMe) {
+              this.cookieService.set(CookieNames.loginToken, JSON.stringify(loginData));
+            }
             // Forward to dashboard page
             this.router.navigate(['dashboard']);
           });

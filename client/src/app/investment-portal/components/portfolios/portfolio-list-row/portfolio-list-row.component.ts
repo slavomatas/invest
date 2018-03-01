@@ -44,7 +44,7 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
         });
       });
       this.portfolioData.marketValue = parseFloat(this.portfolioData.marketValue.toFixed(2));
-      this.portfolioData.cash = parseFloat(this.portfolioData.cash.toFixed(4));
+      this.portfolioData.cash = this.portfolioData.cash < 0.0001 ? this.portfolioData.cash : parseFloat(this.portfolioData.cash.toFixed(4));
       this.portfolioData.lastChangeAbs = parseFloat(this.portfolioData.lastChangeAbs.toFixed(4));
       this.portfolioData.lastChangePct = parseFloat(this.portfolioData.lastChangePct.toFixed(4));
     }

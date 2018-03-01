@@ -27,7 +27,14 @@ import { CreatePortfolioComponent } from './components/create-portfolio/create-p
 import { ClickableWidgetComponent } from './components/create-portfolio/clickable-widget/clickable-widget.component';
 import { ClickableWidgetListComponent } from './components/create-portfolio/clickable-widget-list/clickable-widget-list.component';
 import { CreateManualPortfolioDialogComponent } from './components/create-portfolio/create-manual-portfolio-dialog/create-manual-portfolio-dialog.component';
-import {PortfolioListRowComponent } from './components/portfolios/portfolio-list-row/portfolio-list-row.component';
+import { PortfolioListRowComponent } from './components/portfolios/portfolio-list-row/portfolio-list-row.component';
+import { PortfolioDetailComponent } from './components/portfolios/portfolio-detail/portfolio-detail.component';
+import { PortfolioDetailPositionsComponent } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-positions.component';
+import { 
+  PortfolioDetailPositionChartComponent
+ } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-position-chart/portfolio-detail-position-chart.component';
+import { EditPositionDialogComponent } from './components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import { PortfolioDetailTradesComponent } from './components/portfolios/portfolio-detail/portfolio-detail-trades/portfolio-detail-trades.component';
 
 
 const routes = [
@@ -37,6 +44,7 @@ const routes = [
   { path: 'portfolios', component: PortfoliosComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'portfolios/create', component: CreatePortfolioComponent, canActivate: [AuthGuard] },
+  { path: 'portfolios/:id/overview', component: PortfolioDetailComponent, canActivate: [AuthGuard] },
 
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
@@ -62,7 +70,12 @@ const routes = [
     ClickableWidgetComponent,
     ClickableWidgetListComponent,
     CreateManualPortfolioDialogComponent,
-    PortfolioListRowComponent
+    PortfolioListRowComponent,
+    PortfolioDetailComponent,
+    PortfolioDetailPositionsComponent,
+    PortfolioDetailPositionChartComponent,
+    EditPositionDialogComponent,
+    PortfolioDetailTradesComponent
   ],
   imports: [
     SharedModule,
@@ -82,7 +95,8 @@ const routes = [
     }
   ],
   entryComponents: [
-    CreateManualPortfolioDialogComponent
+    CreateManualPortfolioDialogComponent,
+    EditPositionDialogComponent
   ]
 })
 

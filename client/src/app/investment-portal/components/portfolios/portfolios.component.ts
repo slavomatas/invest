@@ -3,7 +3,6 @@ import { PortfolioDetails } from '../../types/types';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../store/store';
 
-
 @Component({
   selector: 'invest-portfolios',
   templateUrl: './portfolios.component.html',
@@ -13,7 +12,7 @@ export class PortfoliosComponent implements OnInit {
 
   portfolioList$ = this.ngRedux.select(state => state.portfolioList);
 
-   constructor(private ngRedux: NgRedux<AppState>) { }
+  constructor(private ngRedux: NgRedux<AppState>) { }
 
   ngOnInit() {
   }

@@ -32,11 +32,7 @@ export interface PortfolioDetails {
   cash: number;
   closed: boolean;
   isDisplayed: boolean;
-  positions:
-    {
-      symbol: string;
-      value: number;
-    }[];
+  positions: PortfolioPosition[];
   series:                 // series - time series of the portfolio
     {
       name: string,
@@ -52,6 +48,33 @@ export interface PortfolioTimeSeries {
       name: string,
       value: number
     }[];
+}
+
+export interface Trade {
+  tradeId: number;
+  price: number;
+  amount: number;
+  dateTime: string;
+}
+
+export enum TransactionTypes {
+  BUY = 'Buy',
+  SELL = 'Sell'
+}
+
+export interface PortfolioPosition {
+  symbol: string;
+  value: number;    // market value of position - used on dashboard in portfolio overview list
+  name: string;
+  quantity: number; // sum trades.amount
+  price: number;
+  currency: string;
+  priceLast20Days: {
+    name: string;
+    value: number;
+  }[];
+  lastChange: number;
+  trades: Trade[];
 }
 
 export interface TypeOfReturns {
@@ -80,4 +103,8 @@ export enum TypeOfPortfolioReturn {
   quaterly = 'PORTFOLIO_QUARTERLY_RETURNS',
   yearly = 'PORTFOLIO_YEARLY_RETURNS',
   cumulative = 'PORTFOLIO_CUMULATIVE_RETURNS'
+}
+
+export enum CookieNames {
+  loginToken = 'login-token'
 }
