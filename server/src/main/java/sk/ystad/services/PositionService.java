@@ -137,7 +137,9 @@ public class PositionService {
         List<UserPosition> positions = portfolio.getUsersPositions();
 
         LocalDate date20DaysAgo = LocalDate.now().minusDays(31);
-
+        logger.info("Loading positions for portfolio: " + portfolio.toString());
+        logger.info("Loaded positions: " + positions.size());
+        logger.info("Date: " + date20DaysAgo);
         for (UserPosition position: positions) {
             try {
                 String queryStr = String.format("SELECT * FROM %s WHERE time >= '%s' ORDER BY time ASC", position.getSecurity().getSymbol(), date20DaysAgo);
@@ -152,6 +154,7 @@ public class PositionService {
                 position.setPriceLast20Days(last20Days);
             }
             catch (NullPointerException e) {
+                logger.error("Failed to load positions: " + e);
                 return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
