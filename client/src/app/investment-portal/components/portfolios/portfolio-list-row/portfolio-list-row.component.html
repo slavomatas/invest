@@ -8,7 +8,7 @@
           </div> <!--a ng-href="/portfolio/{{portfolio.id}}/overview">{{portfolio.name}}</a-->
           <div>
             <span class="secondary-text" class="nowrap">{{portfolioData.marketValue}}
-              (<div *ngIf="portfolioData.cash != 0; else no_cash">{{portfolioData.cash}}</div>)</span>
+              (<div *ngIf="portfolioData.cash == 0; else cash">NO CASH</div>)</span>
                 <span style="align-items: center">
               {{portfolioData.lastChangeAbs}}&nbsp;
               <i *ngIf="portfolioData.lastChangePct > 0" class="material-icons md-18">trending_up</i>
@@ -89,4 +89,4 @@
 
   </mat-card>
 
-<ng-template #no_cash>NO CASH</ng-template>
+<ng-template #cash>{{formatSmallNumber(portfolioData.cash)}}</ng-template>
