@@ -84,7 +84,7 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
           dateTime: moment(result.timestamp).format('YYYY-MM-DD HH:mm:ss')
         };
 
-        this.portfolioService.createTrade(trade, 1, result.symbol).then((createdTrade: Trade) => {
+        this.portfolioService.createTrade(trade, this.portfolio.id, result.symbol).then((createdTrade: Trade) => {
           console.log(createdTrade);
         });
       }

@@ -55,6 +55,13 @@ export class PortfolioService implements IPortfolioService {
       .post<Trade>(requestUrl, body).toPromise();
   }
 
+  public editTrade(trade: Trade, portfolioId: number, symbol: string): Promise<Trade> {
+    const requestUrl = '/api/v1/user/trade';
+
+    return this.http
+      .put<Trade>(requestUrl, trade).toPromise();
+  }
+
   /**
    * Loads Positions for given portfolio
    * @param portfolio Portfolio to get positions for

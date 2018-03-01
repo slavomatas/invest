@@ -27,7 +27,7 @@
                         <td>
                             <div fxLayout="row">
                                 <div class="item item-edit">
-                                    <button matTooltip="Edit">
+                                    <button (click)="onEditTrade(trade, position.symbol)" matTooltip="Edit">
                                         <i class="material-icons md-24">mode_edit</i>
                                     </button>
                                 </div>

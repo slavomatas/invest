@@ -123,6 +123,7 @@ public class PositionService {
      */
     public ResponseEntity updateTrade(Principal principal, Trade trade) {
         try {
+            trade.setPosition(tradeRepository.findOne(trade.getTradeId()).getPosition());
             trade = tradeRepository.save(trade);
             logger.info("Updated trade: " + trade.toString());
             return new ResponseEntity(trade, HttpStatus.OK);
