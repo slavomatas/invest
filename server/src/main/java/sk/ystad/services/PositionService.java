@@ -153,7 +153,7 @@ public class PositionService {
                 position.setPriceLast20Days(last20Days);
             }
             catch (NullPointerException e) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
+                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 

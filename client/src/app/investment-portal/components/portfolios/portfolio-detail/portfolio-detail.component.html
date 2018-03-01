@@ -99,7 +99,7 @@
             <p>TRADES</p>
             <invest-portfolio-detail-trades [portfolio]="reduxPortfolio"></invest-portfolio-detail-trades>
             <div style="display: flex; justify-content: flex-end;">
-              <button matTooltip="Add trade" style="margin: 30px;">
+              <button (click)="onCreateTrade()" matTooltip="Add trade" style="margin: 30px;">
                 <i class="material-icons md-48" style="font-size: 50px;">add_circle_outline</i>
               </button>
             </div>

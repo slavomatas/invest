@@ -1,14 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PortfolioDetails, PortfolioPosition } from '../../../types/types';
+import { PortfolioDetails, PortfolioPosition, TransactionTypes, Trade } from '../../../types/types';
 import { ActivatedRoute } from '@angular/router';
 import { findPortfolioById } from '../../../utils/portfolio-utils';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../../store/store';
 import { cloneDeep } from 'lodash';
 import { MatTableModule } from '@angular/material/table';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';
+import { EditPositionDialogComponent, TradeFormObject } from '../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import * as moment from 'moment';
 
 
 @Component({
@@ -33,7 +35,8 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ngRedux: NgRedux<AppState>,
     private portfolioService: PortfolioService,
-    private portfolioAcitions: PortfolioActions
+    private portfolioAcitions: PortfolioActions,
+    public dialog: MatDialog,
   ) {
 
     this.portfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
@@ -59,6 +62,42 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
         this.portfolioAcitions.updatePortfolio(this.reduxPortfolio);
       });
 
+    });
+  }
+
+  onCreateTrade() {
+    const emptyTrade: TradeFormObject = {
+      tradeId: 0,
+      transactionType: TransactionTypes.BUY,
+      timestamp: Date(),
+      price: 0,
+      amount: 0,
+      symbol: 'TEST FROM TRADES',
+    };
+
+    const dialogRef = this.dialog.open(EditPositionDialogComponent, {
+      data: { trade: emptyTrade }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let realAmount = 0;
+        if (result.transactionType === TransactionTypes.BUY) {
+          realAmount = result.amount;
+        } else {
+          realAmount = 0 - result.amount;
+        }
+
+        const trade: Trade = {
+          tradeId: result.tradeId,
+          price: result.price,
+          amount: realAmount,
+          dateTime: moment(result.timestamp).format('YYYY-MM-DD HH:mm:ss')
+        };
+
+        this.portfolioService.createTrade(trade, 1, result.symbol).then((createdTrade: Trade) => {
+          console.log(createdTrade);
+        });
+      }
     });
   }
 
