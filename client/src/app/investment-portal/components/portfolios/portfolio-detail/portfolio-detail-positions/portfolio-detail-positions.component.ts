@@ -55,14 +55,14 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
   ngOnInit() {
   }
 
-  createTrade(type: TransactionTypes) {
+  createTrade(type: TransactionTypes, inputSymbol: string) {
     const emptyTrade: TradeFormObject = {
       tradeId: 0,
       transactionType: type,
       timestamp: Date(),
       price: 0,
       amount: 0,
-      symbol: 'TEST',
+      symbol: inputSymbol,
     };
 
     const dialogRef = this.dialog.open(EditPositionDialogComponent, {
@@ -76,6 +76,8 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
         } else {
           realAmount = 0 - result.amount;
         }
+
+        console.log(result.timestamp);
 
         const trade: Trade = {
           tradeId: result.tradeId,
@@ -91,12 +93,12 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
     });
   }
 
-  onBuy() {
-    this.createTrade(TransactionTypes.BUY);
+  onBuy(symbol: string) {
+    this.createTrade(TransactionTypes.BUY, symbol);
   }
 
-  onSell() {
-    this.createTrade(TransactionTypes.SELL);
+  onSell(symbol: string) {
+    this.createTrade(TransactionTypes.SELL, symbol);
   }
 
   constructor(

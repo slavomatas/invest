@@ -19,7 +19,7 @@
       <input matInput placeholder="Amount" [(ngModel)]="data.trade.amount" formControlName="amount">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput [matDatepicker]="myDatepicker" [(ngModel)]="data.trade.date"  placeholder="Date of transaction" formControlName="date">
+      <input matInput [matDatepicker]="myDatepicker" [(ngModel)]="data.trade.timestamp"  placeholder="Date of transaction" formControlName="date">
       <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
       <mat-datepicker #myDatepicker></mat-datepicker>
     </mat-form-field>
