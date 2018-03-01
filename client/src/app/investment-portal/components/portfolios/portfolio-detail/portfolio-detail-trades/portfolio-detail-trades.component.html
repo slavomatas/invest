@@ -21,7 +21,7 @@
                         <td>{{position.symbol}}</td>
                         <td *ngIf="trade.amount >= 0">Buy</td>
                         <td *ngIf="trade.amount < 0">Sell</td>
-                        <td>{{trade.dateTime | date:'mediumDate' }}</td>
+                        <td>{{trade.dateTime | date:'yyyy-MM-dd H:mm:ss' }}</td>
                         <td>{{trade.amount | number}}</td>
                         <td>{{trade.price | number}}</td>
                         <td>
