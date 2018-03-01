@@ -154,7 +154,7 @@ public class PositionService {
                 position.setPriceLast20Days(last20Days);
             }
             catch (NullPointerException e) {
-                logger.error("Failed to load positions: " + e.getStackTrace());
+                logger.error("Failed to load positions: ", e);
                 return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
