@@ -6,6 +6,8 @@ import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio
 import * as moment from 'moment';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { MatDialog } from '@angular/material';
+import { updateTradeInPortfolio } from '../../../../utils/portfolio-utils';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 
 @Component({
   selector: 'invest-portfolio-detail-trades',
@@ -15,11 +17,28 @@ import { MatDialog } from '@angular/material';
 export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
 
   @Input() portfolio: PortfolioDetails;
-  
+
   portfolioTableColumns: string[] = [];
   positions: PortfolioPosition[];
 
   chartData: {name: string, series: {name: string, value: number}[]}[] = [];
+
+  constructor(
+    private portfolioService: PortfolioService,
+    public dialog: MatDialog,
+    private portfolioActions: PortfolioActions
+  ) {
+
+    this.portfolioTableColumns = [
+      'SYMBOL',
+      'BUY/SELL',
+      'TRADE DATE',
+      'QUANTITY',
+      'TRADE PRICE',
+      ''
+    ];
+
+  }
 
   onSelect(event) {
     console.log(event);
@@ -84,27 +103,12 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
           dateTime: moment(result.timestamp).format('YYYY-MM-DD HH:mm:ss')
         };
 
-        this.portfolioService.editTrade(editedTrade, this.portfolio.id, result.symbol).then((createdTrade: Trade) => {
-          console.log(createdTrade);
+        this.portfolioService.editTrade(editedTrade, this.portfolio.id, result.symbol).then((updatedTrade: Trade) => {
+          updateTradeInPortfolio(this.portfolio, result.symbol, updatedTrade);
+          this.portfolioActions.updatePortfolio(this.portfolio);
         });
       }
     });
-  }
-
-  constructor(
-    private portfolioService: PortfolioService,
-    public dialog: MatDialog,
-  ) { 
-
-    this.portfolioTableColumns = [
-      'SYMBOL',
-      'BUY/SELL',
-      'TRADE DATE',
-      'QUANTITY',
-      'TRADE PRICE',
-      ''
-    ];
-
   }
 
 }

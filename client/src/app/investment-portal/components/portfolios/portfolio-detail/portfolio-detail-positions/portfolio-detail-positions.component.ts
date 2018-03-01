@@ -6,6 +6,8 @@ import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio
 import * as moment from 'moment';
 import { MatDialog } from '@angular/material';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+import { updateTradeInPortfolio } from '../../../../utils/portfolio-utils';
 
 export interface Single {
   name: string;
@@ -26,6 +28,26 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
   positions: PortfolioPosition[];
 
   chartData: { name: string, series: { name: string, value: number }[] }[] = [];
+
+  constructor(
+    private portfolioService: PortfolioService,
+    public dialog: MatDialog,
+    private portfolioActions: PortfolioActions
+  ) {
+
+    this.portfolioTableColumns = [
+      'SYMBOL',
+      'NAME',
+      'QUANTITY',
+      'PRICE',
+      'PRICE LAST 20 DAYS',
+      'MKT VALUE',
+      'LAST CHANGE',
+      ''
+    ];
+
+  }
+
 
   onSelect(event) {
     console.log(event);
@@ -77,8 +99,6 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
           realAmount = 0 - result.amount;
         }
 
-        console.log(result.timestamp);
-
         const trade: Trade = {
           tradeId: result.tradeId,
           price: result.price,
@@ -87,7 +107,8 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
         };
 
         this.portfolioService.createTrade(trade, this.portfolio.id, result.symbol).then((createdTrade: Trade) => {
-          console.log(createdTrade);
+          updateTradeInPortfolio(this.portfolio, result.symbol, createdTrade);
+          this.portfolioActions.updatePortfolio(this.portfolio);
         });
       }
     });
@@ -99,24 +120,6 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
 
   onSell(symbol: string) {
     this.createTrade(TransactionTypes.SELL, symbol);
-  }
-
-  constructor(
-    private portfolioService: PortfolioService,
-    public dialog: MatDialog,
-  ) {
-
-    this.portfolioTableColumns = [
-      'SYMBOL',
-      'NAME',
-      'QUANTITY',
-      'PRICE',
-      'PRICE LAST 20 DAYS',
-      'MKT VALUE',
-      'LAST CHANGE',
-      ''
-    ];
-
   }
 
 }

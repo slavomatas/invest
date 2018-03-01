@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PortfolioDetails, PortfolioPosition, TransactionTypes, Trade } from '../../../types/types';
 import { ActivatedRoute } from '@angular/router';
-import { findPortfolioById } from '../../../utils/portfolio-utils';
+import { findPortfolioById, updateTradeInPortfolio } from '../../../utils/portfolio-utils';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../../store/store';
 import { cloneDeep } from 'lodash';
@@ -35,7 +35,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ngRedux: NgRedux<AppState>,
     private portfolioService: PortfolioService,
-    private portfolioAcitions: PortfolioActions,
+    private portfolioActions: PortfolioActions,
     public dialog: MatDialog,
   ) {
 
@@ -59,7 +59,8 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
       // get trades from BE
       this.portfolioService.getPortfolioPositions(this.reduxPortfolio).then((positions: PortfolioPosition[]) => {
         this.reduxPortfolio.positions = positions;
-        this.portfolioAcitions.updatePortfolio(this.reduxPortfolio);
+        this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
+        this.portfolioActions.updatePortfolio(this.reduxPortfolio);
       });
 
     });
@@ -95,7 +96,9 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
         };
 
         this.portfolioService.createTrade(trade, this.portfolioId, result.symbol).then((createdTrade: Trade) => {
-          console.log(createdTrade);
+          updateTradeInPortfolio(this.reduxPortfolio, result.symbol, createdTrade);
+          this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
+          this.portfolioActions.updatePortfolio(this.reduxPortfolio);
         });
       }
     });
