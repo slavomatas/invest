@@ -25,6 +25,7 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -136,17 +137,16 @@ public class PositionService {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         List<UserPosition> positions = portfolio.getUsersPositions();
 
-        LocalDate date20DaysAgo = LocalDate.now().minusDays(31);
         logger.info("Loading positions for portfolio: " + portfolio.toString());
         logger.info("Loaded positions: " + positions.size());
-        logger.info("Date: " + date20DaysAgo);
         for (UserPosition position: positions) {
             try {
-                String queryStr = String.format("SELECT * FROM %s WHERE time >= '%s' ORDER BY time ASC", position.getSecurity().getSymbol(), date20DaysAgo);
+                String queryStr = String.format("SELECT * FROM %s ORDER BY time DESC LIMIT 20", position.getSecurity().getSymbol());
                 Query query = new Query(queryStr, Measures.CLOSE_PRICE.getName());
                 QueryResult queryResult = this.influxDB.query(query);
 
                 List<List<Object>> values = queryResult.getResults().get(0).getSeries().get(0).getValues();
+                Collections.reverse(values);
                 List<TimeSeriesSimpleItem> last20Days = new ArrayList<>();
                 for (List<Object> v: values) {
                     last20Days.add(new TimeSeriesSimpleItem((String) v.get(0), (Double) v.get(10)));
