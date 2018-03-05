@@ -17,6 +17,9 @@ export function getOldMarketValue(periodName: string, oldMarketValues: TypeOfOld
         case '12M': {
             return oldMarketValues.twelveM;
         }
+        case 'ALL': {
+            return oldMarketValues.all;
+        }
         default: {  // default set to 3 months period
             return oldMarketValues.threeM;
         }
@@ -43,6 +46,10 @@ export function setOldMarketValue(periodName: string, oldMarketValues: TypeOfOld
         }
         case '12M': {
             oldMarketValues.twelveM = value;
+            break;
+        }
+        case 'ALL': {
+            oldMarketValues.all = value;
             break;
         }
         default: {  // default set to 3 months period

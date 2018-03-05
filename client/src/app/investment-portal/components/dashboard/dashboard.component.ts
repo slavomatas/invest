@@ -43,6 +43,7 @@ export class DashboardComponent {
           });
           this.actions.getPortfolios(true, newPortfolioList);
         });
+        this.actions.setCumulativeChartPeriod('ALL');
       } 
     });
   }

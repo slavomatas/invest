@@ -88,7 +88,11 @@ export class LineChartReturnsComponent implements OnInit {
         } else {
           dateTo = new Date();
           dateFrom = getDateFrom(dateTo, periodString);
-          dateTo.setDate(dateFrom.getDate() - 1);
+          console.log('My log1', dateTo, dateFrom);
+          dateTo = cloneDeep(dateFrom);
+          dateTo.setDate(dateTo.getDate() + 3); // want only the day at the start of the period, but BE cant process the same date so we take them the period of days, 
+          // because of the fact we dont have weekends in the DB we have to make the period 3 days long so we'll receive at least 1 measurement for sure
+          console.log('My log2', dateTo, dateFrom);
         }
           
 
@@ -103,7 +107,7 @@ export class LineChartReturnsComponent implements OnInit {
               oldMarketValue = 0;
             }
             
-            setOldMarketValue(periodString, portfolio.oldMarketValues, 5000.00);
+            setOldMarketValue(periodString, portfolio.oldMarketValues, oldMarketValue);
           });
       } else {
         this.refreshReturns();

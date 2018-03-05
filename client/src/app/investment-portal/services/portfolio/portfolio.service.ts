@@ -161,9 +161,8 @@ export class PortfolioService implements IPortfolioService {
       dateTo = null;
       dateFrom = null;
     } else {
-      dateTo = new Date();
+      dateTo = new Date();          // not -1 because we need the start but event actual market value of portfolio
       dateFrom = getDateFrom(dateTo, period);
-      dateTo.setDate(dateFrom.getDate() - 1);
     }
 
 
@@ -177,7 +176,7 @@ export class PortfolioService implements IPortfolioService {
       });
     });
 
-    // get market value of a portfolio and update it
+    // get market value of a portfolio and update it (actual is in the end of return and the start one is at the beggining)
     await this.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: PortfolioReturn[]) => {
       const length = measurements.length;
 
