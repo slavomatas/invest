@@ -77,6 +77,10 @@ export function getDateFrom(dateTo: Date, stringPeriod: string): Date {
             monthCount = 12;
             break;
         }
+        case 'ALL': {
+            monthCount = 24;
+            break;
+        }
         default: {  // default set to 3 months period
             monthCount = 3;
             break;

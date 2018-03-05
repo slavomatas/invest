@@ -80,12 +80,19 @@ export class LineChartReturnsComponent implements OnInit {
 
     newPortfolioPromises = this.portfolioList.map(async (portfolio: PortfolioDetails) => {
       if (getOldMarketValue(periodString, portfolio.oldMarketValues) == null) {
-        const today = new Date();
-        const pastDay = getDateFrom(today, periodString);
-        const dateFrom = new Date();
-        dateFrom.setDate(pastDay.getDate() - 1);
+        let dateTo;
+        let dateFrom;
+        if (periodString === 'ALL') {
+          dateTo = null;
+          dateFrom = null;
+        } else {
+          dateTo = new Date();
+          dateFrom = getDateFrom(dateTo, periodString);
+          dateTo.setDate(dateFrom.getDate() - 1);
+        }
+          
 
-        await this.portfolioService.getPortfolioMarketValues(portfolio.id, dateFrom, pastDay).toPromise()
+        await this.portfolioService.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise()
           .then((returns: PortfolioReturn[]) => {
             const length = returns.length;
             let oldMarketValue;

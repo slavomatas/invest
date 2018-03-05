@@ -153,8 +153,18 @@ export class PortfolioService implements IPortfolioService {
   public async getCumulativeDataForPortfolio(portfolio: PortfolioDetails, period: string): Promise<PortfolioDetails> {
 
     portfolio.series = [];
-    const dateTo = new Date();
-    const dateFrom = getDateFrom(dateTo, period);
+    // const dateTo = new Date();
+    // const dateFrom = getDateFrom(dateTo, period);
+    let dateTo;
+    let dateFrom;
+    if (period === 'ALL') {
+      dateTo = null;
+      dateFrom = null;
+    } else {
+      dateTo = new Date();
+      dateFrom = getDateFrom(dateTo, period);
+      dateTo.setDate(dateFrom.getDate() - 1);
+    }
 
 
     // get portfolio measurements (time series) and push them into portfolioChart.series
