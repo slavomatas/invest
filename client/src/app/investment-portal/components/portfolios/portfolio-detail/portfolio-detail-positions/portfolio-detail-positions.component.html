@@ -29,14 +29,14 @@
                         <td>
                             <div fxLayout="row">
                                 <div class="item item-edit">
-                                    <a (click)="onBuy(position.symbol)" matTooltip="Add">
+                                    <button (click)="onBuy(position.symbol)" matTooltip="Add">
                                         <i class="material-icons md-24">add</i>
-                                    </a>
+                                    </button>
                                 </div>
                                 <div class="item item-edit">
-                                    <a (click)="onSell(position.symbol)" matTooltip="Remove">
+                                    <button (click)="onSell(position.symbol)" matTooltip="Remove">
                                         <i class="material-icons md-24">remove</i>
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </td>
