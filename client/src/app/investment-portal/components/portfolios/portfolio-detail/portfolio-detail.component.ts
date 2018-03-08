@@ -46,6 +46,10 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  onResize() {
+    this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
+  }
+
   ngOnInit() {
     this.paramsSubscription = this.route.params.subscribe(params => {
       this.portfolioId = +params['id'];

@@ -89,7 +89,7 @@
         </div>
       </fuse-widget>
 
-      <fuse-widget class="mat-white-bg">
+      <fuse-widget class="mat-white-bg" (window:resize)="onResize($event)">
         <mat-tab-group id="portfolio-detail-overview-tab">
           <mat-tab label="Positions">
             <p>POSITIONS</p>
