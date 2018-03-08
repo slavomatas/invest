@@ -56,10 +56,14 @@ export class PortfolioService implements IPortfolioService {
   }
 
   public editTrade(trade: Trade, portfolioId: number, symbol: string): Promise<Trade> {
-    const requestUrl = '/api/v1/user/trade';
+    
+    let promise: Promise<Trade>;
+    const requestUrl = 'api/v1/user/trade';
 
-    return this.http
+    promise = this.http
       .put<Trade>(requestUrl, trade).toPromise();
+
+    return promise;
   }
 
   /**
