@@ -4,9 +4,8 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sk.ystad.model.kapacitor.KapacitorAlert;
 import sk.ystad.services.KapacitorService;
 
 @RestController
@@ -24,11 +23,9 @@ public class KapacitorController {
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/portfolio/change", method = RequestMethod.POST)
-    //@PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @RequestMapping(value ="/kapacitor/alert", method = RequestMethod.POST)
     @ApiOperation(value = "Process alert from Kapacitor", notes = "")
-    public ResponseEntity portfolioChanged(@RequestBody String string){
-        logger.info(string);
-        return new ResponseEntity("Alert recieved", HttpStatus.OK);
+    public void processAlert(@RequestBody KapacitorAlert kapacitorAlert) {
+        kapacitorService.processAlert(kapacitorAlert);
     }
 }
