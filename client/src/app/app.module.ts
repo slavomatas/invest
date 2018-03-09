@@ -16,10 +16,13 @@ import { FuseNavigationService } from './core/components/navigation/navigation.s
 import { InvestmentPortalModule } from './investment-portal/investment-portal.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { LoggingService } from './investment-portal/services/logging/logging.service';
+import { environment } from '../environments/environment';
 
-Raven
-  .config('https://7ece5aae6fdd496fad129dc5793641f2@sentry.io/283250')
-  .install();
+if (environment.production) {
+    Raven
+    .config('https://7ece5aae6fdd496fad129dc5793641f2@sentry.io/283250')
+    .install();
+}
 
 export class RavenErrorHandler implements ErrorHandler {
   handleError(err: any): void {
@@ -54,7 +57,7 @@ const appRoutes: Routes = [
         FuseSplashScreenService,
         FuseConfigService,
         FuseNavigationService,
-        { provide: ErrorHandler, useClass: RavenErrorHandler },
+        environment.production ? { provide: ErrorHandler, useClass: RavenErrorHandler } : [],
         LoggingService
     ],
     bootstrap   : [
