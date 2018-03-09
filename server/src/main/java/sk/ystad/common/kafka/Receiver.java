@@ -20,7 +20,7 @@ public class Receiver {
         return latch;
     }
 
-    @KafkaListener(topics = "${spring.kafka.topic.boot}")
+    //@KafkaListener(topics = "${spring.kafka.topic.boot}")
     public void receive(ConsumerRecord<?, ?> consumerRecord) {
         logger.info("received payload='{}'", consumerRecord.toString());
         latch.countDown();
