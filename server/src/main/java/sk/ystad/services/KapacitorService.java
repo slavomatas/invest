@@ -17,7 +17,7 @@ public class KapacitorService {
      * Process received alert from Kapacitor
      */
     public void processAlert(KapacitorAlert kapacitorAlert) {
-
+        //TODO proccess alert
     }
 
 }
