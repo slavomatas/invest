@@ -30,11 +30,12 @@ import { CreateManualPortfolioDialogComponent } from './components/create-portfo
 import { PortfolioListRowComponent } from './components/portfolios/portfolio-list-row/portfolio-list-row.component';
 import { PortfolioDetailComponent } from './components/portfolios/portfolio-detail/portfolio-detail.component';
 import { PortfolioDetailPositionsComponent } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-positions.component';
-import { 
+import {
   PortfolioDetailPositionChartComponent
  } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-position-chart/portfolio-detail-position-chart.component';
 import { EditPositionDialogComponent } from './components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import { PortfolioDetailTradesComponent } from './components/portfolios/portfolio-detail/portfolio-detail-trades/portfolio-detail-trades.component';
+import { AmazingTimePickerModule } from 'amazing-time-picker';
 
 
 const routes = [
@@ -82,7 +83,8 @@ const routes = [
     RouterModule.forRoot(routes),
     StoreModule,
     FuseWidgetModule,
-    NgxChartsModule
+    NgxChartsModule,
+    AmazingTimePickerModule
   ],
   providers: [
     AuthGuard,
