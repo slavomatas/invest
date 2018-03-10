@@ -5,15 +5,24 @@ import { cloneDeep } from 'lodash';
 import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource } from '@angular/material';
 import { updateTradeInPortfolio } from '../../../../utils/portfolio-utils';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+
+interface PositionTrade {
+  symbol: string;
+  tradeId: number;
+  price: number;
+  amount: number;
+  dateTime: string;
+}
 
 @Component({
   selector: 'invest-portfolio-detail-trades',
   templateUrl: './portfolio-detail-trades.component.html',
   styleUrls: ['./portfolio-detail-trades.component.scss']
 })
+
 export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
 
   @Input() portfolio: PortfolioDetails;
@@ -21,7 +30,10 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
   portfolioTableColumns: string[] = [];
   positions: PortfolioPosition[];
 
-  chartData: {name: string, series: {name: string, value: number}[]}[] = [];
+  dataSource: MatTableDataSource<TradeFormObject>;
+
+  displayedColumns = ['symbol', 'buySell', 'quantity', 'amount', 'price', 'buttons'];
+
 
   constructor(
     private portfolioService: PortfolioService,
@@ -47,28 +59,43 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     const newPortfolio: PortfolioDetails = changes['portfolio'].currentValue;
 
+    console.log('#Miso2 portfolio has changed', newPortfolio);
+
     this.positions = newPortfolio.positions;
-    const newPositions: PortfolioPosition[] = newPortfolio.positions;
-
-    if (newPositions) {
-      const newArray = [];
-      newPositions.forEach((position: PortfolioPosition) => {
-        const cData = {
-          name: position.symbol,
-          series: position.priceLast20Days
-        };
-
-        newArray.push(cData);
+    
+    
+    if ( this.positions ) {
+      const tradeList: TradeFormObject[] = [];
+      this.positions.forEach(position => {
+        if (position.trades) {
+          position.trades.forEach(trade => {
+            let newTrade: TradeFormObject;
+            newTrade = {
+              symbol: position.symbol,
+              tradeId: trade.tradeId,
+              price: trade.price,
+              amount: trade.amount,
+              timestamp: trade.dateTime,
+              transactionType: (trade.amount >= 0 ? TransactionTypes.BUY : TransactionTypes.SELL)
+            };
+    
+            tradeList.push(newTrade);
+          });
+        }
       });
-
-      this.chartData = cloneDeep(newArray);
+      console.log('#Miso3 tradeList for table', tradeList);
+      this.dataSource = new MatTableDataSource(tradeList);
     }
+
+    
+
+
   }
 
   ngOnInit() {
   }
 
-  onEditTrade(trade: Trade, symbol: string) {
+  onEditTrade(trade: TradeFormObject, symbol: string) {
     let realAmount = Math.abs(trade.amount);
     let realTransactionType = TransactionTypes.BUY;
     if (trade.amount < 0) {
@@ -78,7 +105,7 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
     const emptyTrade: TradeFormObject = {
       tradeId: trade.tradeId,
       transactionType: realTransactionType,
-      timestamp: trade.dateTime,
+      timestamp: trade.timestamp,
       price: trade.price,
       amount: realAmount,
       symbol: symbol,

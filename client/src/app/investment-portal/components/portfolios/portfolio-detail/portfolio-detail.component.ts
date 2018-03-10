@@ -41,7 +41,13 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
     this.portfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
       if (reduxPortfolios != null && reduxPortfolios.length > 0) {
+        console.log('#Miso1 portfolios has changed', reduxPortfolios);
+        
         this.portfolios = cloneDeep((reduxPortfolios));
+        if (this.portfolioId) {
+          this.update();
+        }
+        
       }
     });
   }
@@ -53,6 +59,19 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.paramsSubscription = this.route.params.subscribe(params => {
       this.portfolioId = +params['id'];
+      this.update();
+
+       // get trades from BE
+       this.portfolioService.getPortfolioPositions(this.reduxPortfolio).then((positions: PortfolioPosition[]) => {
+        this.reduxPortfolio.positions = positions;
+        this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
+        this.portfolioActions.updatePortfolio(this.reduxPortfolio);
+      });
+    });
+  }
+
+  // need to call update of reduxPortfolio every time when something changes in REDUX so the change reflects in child elements with @Input
+  update() {
       this.reduxPortfolio = findPortfolioById(this.portfolios, this.portfolioId);
 
       // prepare data for table
@@ -60,16 +79,8 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
       portfolioSource.push(this.reduxPortfolio);
       this.dataSource = new MatTableDataSource(portfolioSource);
 
-      // get trades from BE
-      this.portfolioService.getPortfolioPositions(this.reduxPortfolio).then((positions: PortfolioPosition[]) => {
-        this.reduxPortfolio.positions = positions;
-        this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
-        this.portfolioActions.updatePortfolio(this.reduxPortfolio);
-      });
-
-    });
+     
   }
-
   onCreateTrade() {
     const emptyTrade: TradeFormObject = {
       tradeId: 0,

@@ -2,47 +2,75 @@
 
     <!-- Front -->
     <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-  
-        <div class="simple-table-container" ms-responsive-table>
-  
-            <table class="simple">
-  
-                <thead>
-                    <tr>
-                        <th *ngFor="let column of portfolioTableColumns">
-                            {{column}}
-                        </th>
-                    </tr>
-                </thead>
-  
-                <tbody>
-                    <tr *ngFor="let position of positions; let i = index">
-                        <td>{{position.symbol}}</td>
-                        <td>{{position.name}}</td>
-                        <td>{{position.quantity | number}}</td>
-                        <td>{{position.price | number}}</td>
-                        <td> 
-                            <invest-portfolio-detail-position-chart [inputChartData]="position.priceLast20Days"  style="max-height: 40px!important;" ></invest-portfolio-detail-position-chart>
-                        </td>
-                        <td>{{position.value | number}} </td>
-                        <td>{{position.lastChange  | number}} </td>
-                        <td>
-                            <div fxLayout="row">
-                                <div class="item item-edit">
-                                    <button (click)="onBuy(position.symbol)" matTooltip="Add">
-                                        <i class="material-icons md-24">add</i>
-                                    </button>
-                                </div>
-                                <div class="item item-edit">
-                                    <button (click)="onSell(position.symbol)" matTooltip="Remove">
-                                        <i class="material-icons md-24">remove</i>
-                                    </button>
-                                </div>
+        <div>
+            <mat-table #table [dataSource]="dataSource" matSort>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="symbol">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> SYMBOL </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+                </ng-container>
+            
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> NAME </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                </ng-container>
+            
+                <!-- Quantity/amount Column -->
+                <ng-container matColumnDef="quantity">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> QUANTITY </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.quantity | number}} </mat-cell>
+                </ng-container>
+            
+                <!-- Price Column -->
+                <ng-container matColumnDef="price">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> PRICE </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.price | number}} </mat-cell>
+                </ng-container>
+                
+                <!-- Last 20 days chart Column -->
+                <ng-container matColumnDef="priceLast20Days">
+                    <mat-header-cell *matHeaderCellDef> PRICE LAST 20 DAYS </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                            <invest-portfolio-detail-position-chart [inputChartData]="element.priceLast20Days"  style="max-height: 40px!important;" ></invest-portfolio-detail-position-chart>
+                    </mat-cell>
+                </ng-container>
+                
+                <!-- Market value Column -->
+                <ng-container matColumnDef="value">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> MKT VALUE </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.value | number}} </mat-cell>
+                </ng-container>
+                
+                <!-- Last change Column -->
+                <ng-container matColumnDef="lastChange">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> LAST CHANGE </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.lastChange | number}} </mat-cell>
+                </ng-container>
+
+                <!-- Buttons Column -->
+                <ng-container matColumnDef="buttons">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Buttons </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <div fxLayout="row">
+                            <div class="item item-edit">
+                                <button (click)="onBuy(position.symbol)" matTooltip="Add">
+                                    <i class="material-icons md-24">add</i>
+                                </button>
                             </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <div class="item item-edit">
+                                <button (click)="onSell(position.symbol)" matTooltip="Remove">
+                                    <i class="material-icons md-24">remove</i>
+                                </button>
+                            </div>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+            
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
         </div>
     </div>
   </fuse-widget>
