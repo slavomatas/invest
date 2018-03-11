@@ -25,7 +25,6 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
 
   @Input() portfolio: PortfolioDetails;
 
-  portfolioTableColumns: string[] = [];
   positions: PortfolioPosition[];
   dataSource: MatTableDataSource<PortfolioPosition>;
 
@@ -35,20 +34,7 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
     private portfolioService: PortfolioService,
     public dialog: MatDialog,
     private portfolioActions: PortfolioActions
-  ) {
-
-    this.portfolioTableColumns = [
-      'SYMBOL',
-      'NAME',
-      'QUANTITY',
-      'PRICE',
-      'PRICE LAST 20 DAYS',
-      'MKT VALUE',
-      'LAST CHANGE',
-      ''
-    ];
-
-  }
+  ) {}
 
 
   onSelect(event) {
@@ -60,8 +46,6 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
 
     this.positions = newPortfolio.positions;
     this.dataSource = new MatTableDataSource(newPortfolio.positions);
-    
-    console.log('#Miso4 change of positions', this.positions);
   }
 
   ngOnInit() {

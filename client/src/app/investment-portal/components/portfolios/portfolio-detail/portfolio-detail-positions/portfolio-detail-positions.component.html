@@ -55,12 +55,12 @@
                     <mat-cell *matCellDef="let element">
                         <div fxLayout="row">
                             <div class="item item-edit">
-                                <button (click)="onBuy(position.symbol)" matTooltip="Add">
+                                <button (click)="onBuy(element.symbol)" matTooltip="Add">
                                     <i class="material-icons md-24">add</i>
                                 </button>
                             </div>
                             <div class="item item-edit">
-                                <button (click)="onSell(position.symbol)" matTooltip="Remove">
+                                <button (click)="onSell(element.symbol)" matTooltip="Remove">
                                     <i class="material-icons md-24">remove</i>
                                 </button>
                             </div>

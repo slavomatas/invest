@@ -41,7 +41,6 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
     this.portfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
       if (reduxPortfolios != null && reduxPortfolios.length > 0) {
-        console.log('#Miso1 portfolios has changed', reduxPortfolios);
         
         this.portfolios = cloneDeep((reduxPortfolios));
         if (this.portfolioId) {
