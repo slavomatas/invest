@@ -22,7 +22,7 @@ interface PortfolioPositionsResponse {
   security: {
     symbol: string;
     name: string;
-    currency: string
+    currency: string;
     active: true;
   };
   trades: Trade[];
@@ -56,14 +56,10 @@ export class PortfolioService implements IPortfolioService {
   }
 
   public editTrade(trade: Trade, portfolioId: number, symbol: string): Promise<Trade> {
-    
-    let promise: Promise<Trade>;
     const requestUrl = 'api/v1/user/trade';
 
-    promise = this.http
+    return this.http
       .put<Trade>(requestUrl, trade).toPromise();
-
-    return promise;
   }
 
   /**
@@ -115,7 +111,6 @@ export class PortfolioService implements IPortfolioService {
         return newPositionsArray;
       });
   }
-
 
   /**
    * Fetches cumulative data for all portfolios
