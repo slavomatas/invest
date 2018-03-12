@@ -1,4 +1,4 @@
-<ngx-charts-line-chart
+<ngx-charts-line-chart *ngIf="dataEmpty === false"
   [scheme]="colorScheme"
   [results]="chartData"
   [gradient]="gradient"
@@ -14,3 +14,8 @@
   [autoScale]="autoScale"
   (select)="onSelect($event)">
 </ngx-charts-line-chart>
+<div class="img-parent">
+  <mat-spinner class="img-child" *ngIf="dataEmpty === undefined"></mat-spinner>
+  <img *ngIf="dataEmpty === true" class="img-child" src="assets/images/no-data.png" alt="No data available">
+</div>
+
