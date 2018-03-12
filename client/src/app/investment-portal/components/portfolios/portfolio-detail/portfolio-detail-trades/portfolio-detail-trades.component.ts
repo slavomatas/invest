@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { PortfolioDetails, PortfolioPosition, Trade, TransactionTypes } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
 import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatSort } from '@angular/material';
 import { updateTradeInPortfolio } from '../../../../utils/portfolio-utils';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 
@@ -23,22 +23,24 @@ interface PositionTrade {
   styleUrls: ['./portfolio-detail-trades.component.scss']
 })
 
-export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
+export class PortfolioDetailTradesComponent implements OnChanges {
 
   @Input() portfolio: PortfolioDetails;
+
+  // @ViewChild(MatSort) sort: MatSort;
 
   positions: PortfolioPosition[];
 
   dataSource: MatTableDataSource<TradeFormObject>;
 
-  displayedColumns = ['symbol', 'buySell', 'quantity', 'amount', 'price', 'buttons'];
-
+  displayedColumns = ['symbol', 'transactionType', 'timestamp', 'amount', 'price', 'buttons'];
 
   constructor(
     private portfolioService: PortfolioService,
     public dialog: MatDialog,
     private portfolioActions: PortfolioActions
   ) {}
+
 
   onSelect(event) {
     console.log(event);
@@ -70,13 +72,6 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
       });
       this.dataSource = new MatTableDataSource(tradeList);
     }
-
-    
-
-
-  }
-
-  ngOnInit() {
   }
 
   onEditTrade(trade: TradeFormObject, symbol: string) {
@@ -121,5 +116,4 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
       }
     });
   }
-
 }

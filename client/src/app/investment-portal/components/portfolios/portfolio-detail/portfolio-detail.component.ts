@@ -130,6 +130,9 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     return num.toFixed(decimalPlaces);
   }
 
+  onMatTabClick() {
+    this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
+  }
 }
 
 
