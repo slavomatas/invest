@@ -41,18 +41,14 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
     this.portfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
       if (reduxPortfolios != null && reduxPortfolios.length > 0) {
-        
+
         this.portfolios = cloneDeep((reduxPortfolios));
         if (this.portfolioId) {
           this.update();
         }
-        
+
       }
     });
-  }
-
-  onResize() {
-    this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
   }
 
   ngOnInit() {
@@ -78,7 +74,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
       portfolioSource.push(this.reduxPortfolio);
       this.dataSource = new MatTableDataSource(portfolioSource);
 
-     
+
   }
   onCreateTrade() {
     const emptyTrade: TradeFormObject = {

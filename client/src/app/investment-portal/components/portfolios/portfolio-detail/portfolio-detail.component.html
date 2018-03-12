@@ -89,7 +89,7 @@
         </div>
       </fuse-widget>
 
-      <fuse-widget class="mat-white-bg" (window:resize)="onResize($event)">
+      <fuse-widget class="mat-white-bg">
         <mat-tab-group id="portfolio-detail-overview-tab" (selectedTabChange)="onMatTabClick()" >
           <mat-tab label="Positions">
             <invest-portfolio-detail-positions [portfolio]="reduxPortfolio"></invest-portfolio-detail-positions>
