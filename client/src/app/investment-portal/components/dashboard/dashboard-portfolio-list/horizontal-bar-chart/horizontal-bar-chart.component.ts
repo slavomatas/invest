@@ -31,6 +31,7 @@ export class HorizontalBarChartComponent implements OnChanges {
   constructor( ) {  }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.single = [];
     for (const portfolio of this.portfolioDetailsList) {
       this.single.push(
         {
