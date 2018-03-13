@@ -3,6 +3,7 @@ import { Action } from 'redux';
 import { NgRedux } from '@angular-redux/store';
 import { PortfolioDetails, PortfolioTimeSeries, Portfolio } from '../../types/types';
 import { AppState } from '../store';
+import { getNewPortfolioColor } from '../../utils/portfolio-utils';
 
 @Injectable()
 export class PortfolioActions {
@@ -24,6 +25,7 @@ export class PortfolioActions {
 
     public addPortfolio(portfolio: Portfolio) {
       const newPortfolioList = this.ngRedux.getState().portfolioList;
+      const newPortfolioColor = getNewPortfolioColor(newPortfolioList.length);
       newPortfolioList.push({
         id: portfolio.id,
         name: portfolio.name,
@@ -45,7 +47,8 @@ export class PortfolioActions {
         isDisplayed: true,
         positions: [],
         series: [],
-        model: false
+        model: false,
+        color: newPortfolioColor
       });
       this.ngRedux.dispatch({ type: PortfolioActions.GET_PORTFOLIOS, payload: newPortfolioList});
     }

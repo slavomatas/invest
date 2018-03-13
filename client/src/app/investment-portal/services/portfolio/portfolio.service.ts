@@ -11,7 +11,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
 import { AppState } from '../../store/store';
 import { LoggingService } from '../logging/logging.service';
-import { setOldMarketValue, getDateFrom } from '../../utils/portfolio-utils';
+import { setOldMarketValue, getDateFrom, getNewPortfolioColor } from '../../utils/portfolio-utils';
 import { TradeFormObject } from '../../components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 
 const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
@@ -120,8 +120,9 @@ export class PortfolioService implements IPortfolioService {
     let promises: Promise<PortfolioDetails>[] = [];
 
     await this.getPortfolios().then(async (portfolios: PortfolioDetails[]) => {
-      promises = portfolios.map(async (portfolio: PortfolioDetails) => {
+      promises = portfolios.map(async (portfolio: PortfolioDetails, index: number) => {
         portfolio.oldMarketValues = {};
+        portfolio.color = getNewPortfolioColor(index);
         return await this.getCumulativeDataForPortfolio(portfolio, period);
       });
     });

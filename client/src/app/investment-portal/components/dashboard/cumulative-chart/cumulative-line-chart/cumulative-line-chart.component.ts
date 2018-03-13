@@ -7,8 +7,8 @@ import { colorScheme } from '../../../../constants/constants';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { AppState } from '../../../../store/store';
-import { PortfolioDetails } from '../../../../types/types';
-import { getDateFrom, getDisplayedPortfolios } from '../../../../utils/portfolio-utils';
+import { PortfolioDetails, Portfolio } from '../../../../types/types';
+import { getDateFrom, getDisplayedPortfolios, getPortfoliosColors } from '../../../../utils/portfolio-utils';
 
 @Component({
   selector: 'invest-cumulative-line-chart',
@@ -104,6 +104,9 @@ export class LineChartComponent implements OnInit {
     });
 
     this.chartData = cloneDeep(this.chartData);
+    this.colorScheme = {
+      domain: getPortfoliosColors(this.chartData)
+    };
     console.log('#Miso2 filter', this.chartData, this.dataEmpty);
   }
 }
