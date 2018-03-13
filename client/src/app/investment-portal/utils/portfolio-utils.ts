@@ -155,7 +155,6 @@ export function updateTradeInPortfolio(portfolio: PortfolioDetails, symbol: stri
  */
 export function getNewPortfolioColor(currentPortfoliosCount: number) {
   const newColor = colorScheme[currentPortfoliosCount + 1];
-  console.log('###', newColor);
   return newColor;
 }
 
