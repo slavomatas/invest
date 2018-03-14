@@ -90,7 +90,6 @@ export class PortfolioService implements IPortfolioService {
             // price is the last value of last 20 days
             const price = responsePosition.priceLast20Days[responsePosition.priceLast20Days.length - 1].value;
 
-            console.log(responsePosition);
 
             // update position of given portfolio with data from REST
             actPosition.symbol = responsePosition.security.symbol;
