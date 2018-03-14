@@ -99,7 +99,6 @@ export class LineChartComponent implements OnInit {
         if (this.dataEmpty && portfolio.series.length > 0) {
           this.dataEmpty = false;
         }
-        console.log('#Miso3 filter', portfolio.series.length, this.dataEmpty, this.chartData);
       // return portfolio;
     });
 
@@ -107,6 +106,5 @@ export class LineChartComponent implements OnInit {
     this.colorScheme = {
       domain: getPortfoliosColors(this.chartData)
     };
-    console.log('#Miso2 filter', this.chartData, this.dataEmpty);
   }
 }
