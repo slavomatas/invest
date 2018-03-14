@@ -115,7 +115,9 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.paramsSubscription.unsubscribe();
+    if (this.paramsSubscription !== undefined) {
+      this.paramsSubscription.unsubscribe();
+    }
   }
 
   formatNumber(num: number, negativeSign: Boolean, decimalPlaces: number){
