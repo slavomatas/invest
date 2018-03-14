@@ -7,8 +7,8 @@ import { colorScheme } from '../../../../constants/constants';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { AppState } from '../../../../store/store';
-import { PortfolioDetails } from '../../../../types/types';
-import { getDateFrom, getDisplayedPortfolios } from '../../../../utils/portfolio-utils';
+import { PortfolioDetails, Portfolio } from '../../../../types/types';
+import { getDateFrom, getDisplayedPortfolios, getPortfoliosColors } from '../../../../utils/portfolio-utils';
 
 @Component({
   selector: 'invest-cumulative-line-chart',
@@ -28,6 +28,7 @@ export class LineChartComponent implements OnInit {
   chartData: PortfolioDetails[] = [];
   tmpChartData: PortfolioDetails[] = [];
   cumulativeChartSelectedPeriod: string;
+  dataEmpty = undefined;
 
   // view: any[] = [900, 400];
 
@@ -36,7 +37,7 @@ export class LineChartComponent implements OnInit {
   showXAxis = true;
   showYAxis = true;
   showGridLines= false;
-  timeline = true;
+  timeline = false;
   gradient = false;
   showLegend = false;
   showXAxisLabel = true;
@@ -73,7 +74,6 @@ export class LineChartComponent implements OnInit {
         this.filterChartData();
       }
     });
-
   }
 
   onSelect(event) {
@@ -88,6 +88,7 @@ export class LineChartComponent implements OnInit {
   private filterChartData() {
     const pastDate = getDateFrom(new Date(), this.cumulativeChartSelectedPeriod);
 
+    this.dataEmpty = true;
     this.chartData.forEach((portfolio) => {
       portfolio.series = portfolio.series
         .filter((sero) => {
@@ -95,9 +96,17 @@ export class LineChartComponent implements OnInit {
           const pastDateVal = pastDate.getTime();
           return seroActDate > pastDateVal;
         });
+        if (this.dataEmpty && portfolio.series.length > 0) {
+          this.dataEmpty = false;
+        }
+        console.log('#Miso3 filter', portfolio.series.length, this.dataEmpty, this.chartData);
       // return portfolio;
     });
 
     this.chartData = cloneDeep(this.chartData);
+    this.colorScheme = {
+      domain: getPortfoliosColors(this.chartData)
+    };
+    console.log('#Miso2 filter', this.chartData, this.dataEmpty);
   }
 }

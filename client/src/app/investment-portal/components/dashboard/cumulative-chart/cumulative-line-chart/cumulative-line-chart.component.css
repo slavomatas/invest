@@ -1,0 +1,17 @@
+.img-parent {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.img-child {
+    margin: auto;
+    width: 60%;
+    opacity: 0.5;
+}
+
+.spinner-child {
+    margin: auto;
+    /* opacity: 0.5; */
+
+}

@@ -90,13 +90,11 @@
       </fuse-widget>
 
       <fuse-widget class="mat-white-bg">
-        <mat-tab-group id="portfolio-detail-overview-tab">
+        <mat-tab-group id="portfolio-detail-overview-tab" (selectedTabChange)="onMatTabClick()" >
           <mat-tab label="Positions">
-            <p>POSITIONS</p>
             <invest-portfolio-detail-positions [portfolio]="reduxPortfolio"></invest-portfolio-detail-positions>
           </mat-tab>
           <mat-tab label="Trades">
-            <p>TRADES</p>
             <invest-portfolio-detail-trades [portfolio]="reduxPortfolio"></invest-portfolio-detail-trades>
             <div style="display: flex; justify-content: flex-end;">
               <button (click)="onCreateTrade()" matTooltip="Add trade" style="margin: 30px;">

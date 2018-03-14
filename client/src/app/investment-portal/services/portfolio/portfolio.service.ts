@@ -11,7 +11,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
 import { AppState } from '../../store/store';
 import { LoggingService } from '../logging/logging.service';
-import { setOldMarketValue, getDateFrom } from '../../utils/portfolio-utils';
+import { setOldMarketValue, getDateFrom, getNewPortfolioColor } from '../../utils/portfolio-utils';
 import { TradeFormObject } from '../../components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 
 const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
@@ -22,7 +22,7 @@ interface PortfolioPositionsResponse {
   security: {
     symbol: string;
     name: string;
-    currency: string
+    currency: string;
     active: true;
   };
   trades: Trade[];
@@ -56,7 +56,7 @@ export class PortfolioService implements IPortfolioService {
   }
 
   public editTrade(trade: Trade, portfolioId: number, symbol: string): Promise<Trade> {
-    const requestUrl = '/api/v1/user/trade';
+    const requestUrl = 'api/v1/user/trade';
 
     return this.http
       .put<Trade>(requestUrl, trade).toPromise();
@@ -112,7 +112,6 @@ export class PortfolioService implements IPortfolioService {
       });
   }
 
-
   /**
    * Fetches cumulative data for all portfolios
    */
@@ -121,8 +120,9 @@ export class PortfolioService implements IPortfolioService {
     let promises: Promise<PortfolioDetails>[] = [];
 
     await this.getPortfolios().then(async (portfolios: PortfolioDetails[]) => {
-      promises = portfolios.map(async (portfolio: PortfolioDetails) => {
+      promises = portfolios.map(async (portfolio: PortfolioDetails, index: number) => {
         portfolio.oldMarketValues = {};
+        portfolio.color = getNewPortfolioColor(index);
         return await this.getCumulativeDataForPortfolio(portfolio, period);
       });
     });
@@ -153,8 +153,17 @@ export class PortfolioService implements IPortfolioService {
   public async getCumulativeDataForPortfolio(portfolio: PortfolioDetails, period: string): Promise<PortfolioDetails> {
 
     portfolio.series = [];
-    const dateTo = new Date();
-    const dateFrom = getDateFrom(dateTo, period);
+    // const dateTo = new Date();
+    // const dateFrom = getDateFrom(dateTo, period);
+    let dateTo;
+    let dateFrom;
+    if (period === 'ALL') {
+      dateTo = null;
+      dateFrom = null;
+    } else {
+      dateTo = new Date();          // not -1 because we need the start but event actual market value of portfolio
+      dateFrom = getDateFrom(dateTo, period);
+    }
 
 
     // get portfolio measurements (time series) and push them into portfolioChart.series
@@ -167,7 +176,7 @@ export class PortfolioService implements IPortfolioService {
       });
     });
 
-    // get market value of a portfolio and update it
+    // get market value of a portfolio and update it (actual is in the end of return and the start one is at the beggining)
     await this.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise().then((measurements: PortfolioReturn[]) => {
       const length = measurements.length;
 

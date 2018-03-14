@@ -1,5 +1,5 @@
 <div id="period-selector" class="center">
-  <div *ngFor="let portfolio of portfolios; let i = index" [ngClass]="{isDisplayed: portfolio.isDisplayed}" class="legend-box" style.border-bottom-color={{colors[i]}} (click)="legendEvent($event, i)">
+  <div *ngFor="let portfolio of portfolios; let i = index" [ngClass]="{isDisplayed: portfolio.isDisplayed}" class="legend-box" style.border-bottom-color={{portfolio.color}} (click)="legendEvent($event, i)">
     {{portfolio.name}}
   </div>
 </div>

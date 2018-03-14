@@ -1,17 +1,27 @@
-.portfolio-list-parent {
-    display: flex;
-    flex-direction: column;
-    overflow: scroll;
-    width: 100%;
+:host 
+{
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  flex: 1;
 }
 
-.portfolio-list-item {
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  margin-bottom: 10px;
+#filter-container 
+{
+  display: flex;
+  margin: 1.5em 5em 0 1.5em;
+  justify-content: flex-end;
+  width: 80%;
 }
 
-#filter {
-  display: block;
+#list-container 
+{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width:80%;
+  overflow: auto;
+  max-width: 864px;
 }

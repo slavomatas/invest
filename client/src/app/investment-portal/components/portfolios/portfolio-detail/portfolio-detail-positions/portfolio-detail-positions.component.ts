@@ -4,10 +4,11 @@ import { PortfolioPosition, PortfolioDetails, TransactionTypes, Trade } from '..
 import { cloneDeep } from 'lodash';
 import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource } from '@angular/material';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
 import { updateTradeInPortfolio } from '../../../../utils/portfolio-utils';
+
 
 export interface Single {
   name: string;
@@ -24,29 +25,16 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
 
   @Input() portfolio: PortfolioDetails;
 
-  portfolioTableColumns: string[] = [];
   positions: PortfolioPosition[];
+  dataSource: MatTableDataSource<PortfolioPosition>;
 
-  chartData: { name: string, series: { name: string, value: number }[] }[] = [];
+  displayedColumns = ['symbol', 'name', 'quantity', 'price', 'priceLast20Days', 'value', 'lastChange', 'buttons'];
 
   constructor(
     private portfolioService: PortfolioService,
     public dialog: MatDialog,
     private portfolioActions: PortfolioActions
-  ) {
-
-    this.portfolioTableColumns = [
-      'SYMBOL',
-      'NAME',
-      'QUANTITY',
-      'PRICE',
-      'PRICE LAST 20 DAYS',
-      'MKT VALUE',
-      'LAST CHANGE',
-      ''
-    ];
-
-  }
+  ) {}
 
 
   onSelect(event) {
@@ -57,21 +45,7 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
     const newPortfolio: PortfolioDetails = changes['portfolio'].currentValue;
 
     this.positions = newPortfolio.positions;
-    const newPositions: PortfolioPosition[] = newPortfolio.positions;
-
-    if (newPositions) {
-      const newArray = [];
-      newPositions.forEach((position: PortfolioPosition) => {
-        const cData = {
-          name: position.symbol,
-          series: position.priceLast20Days
-        };
-
-        newArray.push(cData);
-      });
-
-      this.chartData = cloneDeep(newArray);
-    }
+    this.dataSource = new MatTableDataSource(newPortfolio.positions);
   }
 
   ngOnInit() {

@@ -80,12 +80,23 @@ export class LineChartReturnsComponent implements OnInit {
 
     newPortfolioPromises = this.portfolioList.map(async (portfolio: PortfolioDetails) => {
       if (getOldMarketValue(periodString, portfolio.oldMarketValues) == null) {
-        const today = new Date();
-        const pastDay = getDateFrom(today, periodString);
-        const dateFrom = new Date();
-        dateFrom.setDate(pastDay.getDate() - 1);
+        let dateTo;
+        let dateFrom;
+        if (periodString === 'ALL') {
+          dateTo = null;
+          dateFrom = null;
+        } else {
+          dateTo = new Date();
+          dateFrom = getDateFrom(dateTo, periodString);
+          console.log('My log1', dateTo, dateFrom);
+          dateTo = cloneDeep(dateFrom);
+          dateTo.setDate(dateTo.getDate() + 3); // want only the day at the start of the period, but BE cant process the same date so we take them the period of days, 
+          // because of the fact we dont have weekends in the DB we have to make the period 3 days long so we'll receive at least 1 measurement for sure
+          console.log('My log2', dateTo, dateFrom);
+        }
+          
 
-        await this.portfolioService.getPortfolioMarketValues(portfolio.id, dateFrom, pastDay).toPromise()
+        await this.portfolioService.getPortfolioMarketValues(portfolio.id, dateFrom, dateTo).toPromise()
           .then((returns: PortfolioReturn[]) => {
             const length = returns.length;
             let oldMarketValue;
@@ -96,7 +107,7 @@ export class LineChartReturnsComponent implements OnInit {
               oldMarketValue = 0;
             }
             
-            setOldMarketValue(periodString, portfolio.oldMarketValues, 5000.00);
+            setOldMarketValue(periodString, portfolio.oldMarketValues, oldMarketValue);
           });
       } else {
         this.refreshReturns();

@@ -37,12 +37,13 @@ export class DashboardComponent {
       if (reduxPortfolioList == null || reduxPortfolioList.length === 0) {
         const dateTo = new Date();
         const dateFrom = this.getDefaultDateFrom(dateTo);
-        this.portfolioService.getPortfoliosCumulativeData('3M').then((newPortfolioList: PortfolioDetails[]) => {
+        this.portfolioService.getPortfoliosCumulativeData('ALL').then((newPortfolioList: PortfolioDetails[]) => {
           newPortfolioList.forEach((portfolio: PortfolioDetails) => {
             portfolio.isDisplayed = true;
           });
           this.actions.getPortfolios(true, newPortfolioList);
         });
+        this.actions.setCumulativeChartPeriod('ALL');
       } 
     });
   }

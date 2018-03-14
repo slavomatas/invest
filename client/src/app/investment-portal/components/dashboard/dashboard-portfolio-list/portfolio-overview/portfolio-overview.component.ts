@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import {forEach} from '@angular/router/src/utils/collection';
 import { PortfolioDetails } from '../../../../types/types';
@@ -19,7 +19,7 @@ interface Position {
   templateUrl: './portfolio-overview.component.html',
   styleUrls: ['./portfolio-overview.component.scss']
 })
-export class PortfolioOverviewComponent implements OnInit {
+export class PortfolioOverviewComponent implements OnChanges {
   @Input() portfolioDetails: PortfolioDetails;
 
   chartData: ChartData[] = [];
@@ -31,7 +31,7 @@ export class PortfolioOverviewComponent implements OnInit {
 
   constructor( ) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.percentage = this.portfolioDetails.lastChangePct;
     this.setChartData(this.portfolioDetails.positions);
   }

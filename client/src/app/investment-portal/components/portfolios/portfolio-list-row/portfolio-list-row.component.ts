@@ -23,7 +23,6 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
   };
 
   limit: Number;
-  descMoreShown: Boolean = false;
 
   constructor(
     private actions: PortfolioActions,
@@ -73,17 +72,17 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
   }
 
   descShowLess(){
+    // console.log(this.limit + ' => ' + this.descriptionLimit);
     this.limit = this.descriptionLimit;
-    this.descMoreShown = false;
   }
 
   descShowMore(){
-    this.limit = 2500;
-    this.descMoreShown = true;
+    // console.log(this.limit + ' => ' + 9999);
+    this.limit = 9999;
   }
 
   formatSmallNumber(input: number){
-    return input >= 0.0001 ? String(input) : "0.000";
+    return input >= 0.0001 ? String(input) : '0.000';
   }
 
 }

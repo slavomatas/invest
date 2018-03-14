@@ -1,4 +1,5 @@
 import { TypeOfOldMarketValue, PortfolioDetails, Portfolio, Trade, PortfolioPosition } from '../types/types';
+import { colorScheme } from '../constants/constants';
 
 export function getOldMarketValue(periodName: string, oldMarketValues: TypeOfOldMarketValue) {
     switch (periodName) {
@@ -16,6 +17,9 @@ export function getOldMarketValue(periodName: string, oldMarketValues: TypeOfOld
         }
         case '12M': {
             return oldMarketValues.twelveM;
+        }
+        case 'ALL': {
+            return oldMarketValues.all;
         }
         default: {  // default set to 3 months period
             return oldMarketValues.threeM;
@@ -43,6 +47,10 @@ export function setOldMarketValue(periodName: string, oldMarketValues: TypeOfOld
         }
         case '12M': {
             oldMarketValues.twelveM = value;
+            break;
+        }
+        case 'ALL': {
+            oldMarketValues.all = value;
             break;
         }
         default: {  // default set to 3 months period
@@ -75,6 +83,10 @@ export function getDateFrom(dateTo: Date, stringPeriod: string): Date {
         }
         case '12M': {
             monthCount = 12;
+            break;
+        }
+        case 'ALL': {
+            monthCount = 24;
             break;
         }
         default: {  // default set to 3 months period
@@ -135,4 +147,23 @@ export function updateTradeInPortfolio(portfolio: PortfolioDetails, symbol: stri
       trades: [trade]
     });
   }
+}
+
+/**
+ * Gets next available color for portfolio based on current portfolios count
+ * @param currentPortfoliosCount Count of portfolios currently available (not necessarily displayed)
+ */
+export function getNewPortfolioColor(currentPortfoliosCount: number) {
+  const newColor = colorScheme[currentPortfoliosCount + 1];
+  return newColor;
+}
+
+/**
+ * Collects colors from given portfolios and returns array of string colors
+ * @param portfolios Portfolios for which color should be collected
+ */
+export function getPortfoliosColors(portfolios: PortfolioDetails[]): string[] {
+  return portfolios.map(element => {
+    return element.color;
+  });
 }

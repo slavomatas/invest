@@ -1,44 +1,46 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { PortfolioDetails, PortfolioPosition, Trade, TransactionTypes } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
 import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatSort } from '@angular/material';
 import { updateTradeInPortfolio } from '../../../../utils/portfolio-utils';
 import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
+
+interface PositionTrade {
+  symbol: string;
+  tradeId: number;
+  price: number;
+  amount: number;
+  dateTime: string;
+}
 
 @Component({
   selector: 'invest-portfolio-detail-trades',
   templateUrl: './portfolio-detail-trades.component.html',
   styleUrls: ['./portfolio-detail-trades.component.scss']
 })
-export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
+
+export class PortfolioDetailTradesComponent implements OnChanges {
 
   @Input() portfolio: PortfolioDetails;
 
-  portfolioTableColumns: string[] = [];
+  // @ViewChild(MatSort) sort: MatSort;
+
   positions: PortfolioPosition[];
 
-  chartData: {name: string, series: {name: string, value: number}[]}[] = [];
+  dataSource: MatTableDataSource<TradeFormObject>;
+
+  displayedColumns = ['symbol', 'transactionType', 'timestamp', 'amount', 'price', 'buttons'];
 
   constructor(
     private portfolioService: PortfolioService,
     public dialog: MatDialog,
     private portfolioActions: PortfolioActions
-  ) {
+  ) {}
 
-    this.portfolioTableColumns = [
-      'SYMBOL',
-      'BUY/SELL',
-      'TRADE DATE',
-      'QUANTITY',
-      'TRADE PRICE',
-      ''
-    ];
-
-  }
 
   onSelect(event) {
     console.log(event);
@@ -48,27 +50,31 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
     const newPortfolio: PortfolioDetails = changes['portfolio'].currentValue;
 
     this.positions = newPortfolio.positions;
-    const newPositions: PortfolioPosition[] = newPortfolio.positions;
-
-    if (newPositions) {
-      const newArray = [];
-      newPositions.forEach((position: PortfolioPosition) => {
-        const cData = {
-          name: position.symbol,
-          series: position.priceLast20Days
-        };
-
-        newArray.push(cData);
+    
+    if ( this.positions ) {
+      const tradeList: TradeFormObject[] = [];
+      this.positions.forEach(position => {
+        if (position.trades) {
+          position.trades.forEach(trade => {
+            let newTrade: TradeFormObject;
+            newTrade = {
+              symbol: position.symbol,
+              tradeId: trade.tradeId,
+              price: trade.price,
+              amount: trade.amount,
+              timestamp: trade.dateTime,
+              transactionType: (trade.amount >= 0 ? TransactionTypes.BUY : TransactionTypes.SELL)
+            };
+    
+            tradeList.push(newTrade);
+          });
+        }
       });
-
-      this.chartData = cloneDeep(newArray);
+      this.dataSource = new MatTableDataSource(tradeList);
     }
   }
 
-  ngOnInit() {
-  }
-
-  onEditTrade(trade: Trade, symbol: string) {
+  onEditTrade(trade: TradeFormObject, symbol: string) {
     let realAmount = Math.abs(trade.amount);
     let realTransactionType = TransactionTypes.BUY;
     if (trade.amount < 0) {
@@ -78,7 +84,7 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
     const emptyTrade: TradeFormObject = {
       tradeId: trade.tradeId,
       transactionType: realTransactionType,
-      timestamp: trade.dateTime,
+      timestamp: trade.timestamp,
       price: trade.price,
       amount: realAmount,
       symbol: symbol,
@@ -110,5 +116,4 @@ export class PortfolioDetailTradesComponent implements OnInit, OnChanges {
       }
     });
   }
-
 }

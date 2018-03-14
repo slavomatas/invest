@@ -39,6 +39,7 @@ export interface PortfolioDetails {
       value: number
     }[];
   model: boolean;
+  color: string;
 }
 
 export interface PortfolioTimeSeries {
