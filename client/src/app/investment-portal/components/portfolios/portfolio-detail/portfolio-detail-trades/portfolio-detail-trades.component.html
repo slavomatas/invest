@@ -1,0 +1,61 @@
+<fuse-widget class="widget" fxLayout="row" fxFlex="100">
+
+  <!-- Front -->
+  <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+      <div>
+        <mat-table #table [dataSource]="dataSource">
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="symbol">
+              <mat-header-cell *matHeaderCellDef> SYMBOL </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+            </ng-container>
+        
+            <!-- Buy/Sell Column -->
+            <ng-container matColumnDef="transactionType">
+              <mat-header-cell *matHeaderCellDef > BUY/SELL </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.transactionType}} </mat-cell>
+            </ng-container>
+        
+            <!-- Trade date Column -->
+            <ng-container matColumnDef="timestamp">
+              <mat-header-cell *matHeaderCellDef> TRADE DATE </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.timestamp | date:'yyyy-MM-dd H:mm:ss' }} </mat-cell>
+            </ng-container>
+        
+            <!-- Amount Column -->
+            <ng-container matColumnDef="amount">
+              <mat-header-cell *matHeaderCellDef> QUANTITY </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.amount | number}} </mat-cell>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef> PRICE </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.price | number}} </mat-cell>
+            </ng-container>
+             
+            <!-- Buttons Column -->
+            <ng-container matColumnDef="buttons">
+                <mat-header-cell *matHeaderCellDef> Buttons </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <div fxLayout="row">
+                        <div class="item item-edit">
+                            <button (click)="onEditTrade(element, element.symbol)" matTooltip="Edit">
+                                <i class="material-icons md-24">mode_edit</i>
+                            </button>
+                        </div>
+                    </div>
+                </mat-cell>
+            </ng-container>
+        
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+    </div>
+
+      
+
+  </div>
+</fuse-widget>

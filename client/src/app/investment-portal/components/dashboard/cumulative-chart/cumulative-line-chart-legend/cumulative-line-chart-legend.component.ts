@@ -34,10 +34,8 @@ export class LineChartLegendComponent implements OnInit {
   }
 
   legendEvent(event, index) {
-    console.log('legend clicket index', index);
     this.portfolios[index].isDisplayed = !this.portfolios[index].isDisplayed;
 
     this.actions.getPortfolios(true, cloneDeep(this.portfolios));
-
   }
 }

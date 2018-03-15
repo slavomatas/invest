@@ -4,6 +4,7 @@ import { PortfolioService } from '../../../services/portfolio/portfolio.service'
 import { Portfolio } from '../../../types/types';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'invest-app-create-manual-portfolio-dialog',
@@ -25,7 +26,8 @@ export class CreateManualPortfolioDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<CreateManualPortfolioDialogComponent>,
     private portfolioService: PortfolioService,
-    private actions: PortfolioActions
+    private actions: PortfolioActions,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -44,7 +46,8 @@ export class CreateManualPortfolioDialogComponent implements OnInit {
   onSubmit() {
     this.portfolioService.createPortfolio(this.portfolio).then((createdPortfolio: Portfolio) => {
       this.actions.addPortfolio(createdPortfolio);
-      console.log(JSON.stringify(createdPortfolio));
+      const route = 'portfolios/' + createdPortfolio.id + '/overview';
+      this.router.navigate([route]);
     });
     this.dialogRef.close();
   }

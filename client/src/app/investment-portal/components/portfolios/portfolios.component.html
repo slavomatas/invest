@@ -1,10 +1,22 @@
-<div class="portfolio-list-parent">
-    <invest-portfolio-list-row
-      *ngFor="let portfolio of portfolioList$ | async"
-      class="portfolio-list-item"
-      [portfolioData]="portfolio"
-      descriptionLimit="5">
-    </invest-portfolio-list-row>
+<!-- filter -->
+<div id="filter-container" >
+  <mat-form-field id="filter-portfolio-type" flex-basis="auto">
+    <mat-select placeholder="Portfolio type" [(ngModel)]="selectedPortfolioType" (selectionChange)="onFilterSelectionChange($event)" >
+      <mat-option *ngFor="let portfolioType of portfolioTypes" [value]="portfolioType.value">
+        {{ portfolioType.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div id="list-container">
+  <!-- portfolio list -->
+  <invest-portfolio-list-row
+    *ngFor="let portfolio of portfolioList"
+    class="portfolio-list-item"
+    [portfolioData]="portfolio"
+    descriptionLimit="60">
+  </invest-portfolio-list-row>
 </div>
 
 

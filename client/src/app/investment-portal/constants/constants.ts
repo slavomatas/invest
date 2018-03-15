@@ -1,1 +1,5 @@
-export const colorScheme: string[] = ['#1C77C3', '#69D2E7', '#A7DBD8', '#F38630', '#F3A712', '#99C24D', '#63D471'];
+export const colorScheme: string[] = [
+  '#e6194b', '#3cb44b', '#ffe119', '#0082c8', '#f58231', '#911eb4', '#46f0f0',
+  '#f032e6', '#d2f53c', '#fabebe', '#008080', '#e6beff', '#aa6e28', '#fffac8', '#800000',
+  '#aaffc3', '#808000', '#ffd8b1', '#000080', '#808080'
+  ];

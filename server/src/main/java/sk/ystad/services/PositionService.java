@@ -2,25 +2,32 @@ package sk.ystad.services;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.influxdb.InfluxDB;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sk.ystad.ServerApplication;
 import sk.ystad.common.utils.FormatingUtil;
+import sk.ystad.model.measurements.Measures;
+import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.securities.Security;
+import sk.ystad.model.timeseries.TimeSeriesSimpleItem;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.repositories.securities.SecurityRepository;
-import sk.ystad.repositories.users.PortfolioRepository;
-import sk.ystad.repositories.users.PositionRepository;
-import sk.ystad.repositories.users.TradeRepository;
-import sk.ystad.repositories.users.UserPositionRepository;
+import sk.ystad.repositories.users.*;
 
 import java.security.Principal;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PositionService {
@@ -30,14 +37,19 @@ public class PositionService {
     private final UserPositionRepository userPositionRepository;
     private final PositionRepository positionRepository;
     private final PortfolioRepository portfolioRepository;
+    @Autowired
+    private final UserRepository userRepository;
+    private InfluxDB influxDB;
 
     @Autowired
-    public PositionService(PositionRepository positionRepository, TradeRepository tradeRepository, SecurityRepository securityRepository, UserPositionRepository userPositionRepository, PortfolioRepository portfolioRepository) {
+    public PositionService(PositionRepository positionRepository, TradeRepository tradeRepository, SecurityRepository securityRepository, UserPositionRepository userPositionRepository, PortfolioRepository portfolioRepository, UserRepository userRepository, InfluxDB influxDB) {
         this.positionRepository = positionRepository;
         this.tradeRepository = tradeRepository;
         this.securityRepository = securityRepository;
         this.userPositionRepository = userPositionRepository;
         this.portfolioRepository = portfolioRepository;
+        this.userRepository = userRepository;
+        this.influxDB = influxDB;
     }
 
     private static final Logger logger = LogManager
@@ -79,8 +91,7 @@ public class PositionService {
     public ResponseEntity addTrade(long portfolioId, String symbol, String timestamp, Double price, int amount) {
         //Load user portfolio
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-        UserPosition userPosition = positionRepository.findBySecuritySymbol(symbol);
-
+        UserPosition userPosition = positionRepository.findBySecuritySymbolAndPortfolio(symbol, portfolio);
         //Try to format date
         Date formatedTimestamp = null;
         try {
@@ -111,6 +122,7 @@ public class PositionService {
      */
     public ResponseEntity updateTrade(Principal principal, Trade trade) {
         try {
+            trade.setPosition(tradeRepository.findOne(trade.getTradeId()).getPosition());
             trade = tradeRepository.save(trade);
             logger.info("Updated trade: " + trade.toString());
             return new ResponseEntity(trade, HttpStatus.OK);
@@ -119,5 +131,54 @@ public class PositionService {
             logger.error("Failed to update trade: " + e.getMessage());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    public ResponseEntity getAllPositions(Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        List<UserPosition> positions = portfolio.getUsersPositions();
+
+        logger.info("Loading positions for portfolio: " + portfolio.toString());
+        logger.info("Loaded positions: " + positions.size());
+        for (UserPosition position: positions) {
+            try {
+                String queryStr = String.format("SELECT * FROM %s ORDER BY time DESC LIMIT 20", position.getSecurity().getSymbol());
+                Query query = new Query(queryStr, Measures.CLOSE_PRICE.getName());
+                QueryResult queryResult = this.influxDB.query(query);
+
+                List<List<Object>> values = queryResult.getResults().get(0).getSeries().get(0).getValues();
+                Collections.reverse(values);
+                List<TimeSeriesSimpleItem> last20Days = new ArrayList<>();
+                for (List<Object> v: values) {
+                    last20Days.add(new TimeSeriesSimpleItem((String) v.get(0), (Double) v.get(10)));
+                }
+                position.setPriceLast20Days(last20Days);
+            }
+            catch (NullPointerException e) {
+                logger.error("Failed to load positions: ", e);
+                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        try {
+            String queryStr = String.format("SELECT * FROM %s ORDER BY time DESC LIMIT 2", portfolio.getIdInflux());
+            Query query = new Query(queryStr, Measures.PORTFOLIO_POSITIONS.getName());
+            QueryResult queryResult = this.influxDB.query(query);
+            List<List<Object>> values = queryResult.getResults().get(0).getSeries().get(0).getValues();
+            List<String> columns = queryResult.getResults().get(0).getSeries().get(0).getColumns();
+            for (int i = 1; i < values.get(0).size(); i++) {
+                Position p = new Position(columns.get(i),0.0);
+                for (UserPosition position: positions) {
+                    if (position.getSecurity().getSymbol().equals(p.getSymbol())) {
+                        position.setMarketValue((Double) values.get(0).get(i));
+                        position.setLastChangeMarketValue((Double) values.get(0).get(i) - (Double) values.get(1).get(i));
+                    }
+                }
+            }
+        }
+        catch (NullPointerException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(positions, HttpStatus.OK);
     }
 }

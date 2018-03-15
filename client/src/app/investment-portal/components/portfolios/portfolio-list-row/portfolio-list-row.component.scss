@@ -1,45 +1,99 @@
-mat-card {
-  padding: 12px;
-}
-
-.invest-card {
-  border-left: 15px;
-  border-right: 15px;
-  width: 100% !important;
-}
-
-.mat-accent {
+// Portfolio name color
+.mat-accent 
+{
   color: #039be5;
 }
 
-#portfolio-name {
-  font-size: 24px;
-}
-
-.item-chart {
-  height: 80px;
-}
-
-div.item-edit {
+.invest-card
+{
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  .portfolio-infobox
+  {
+    // background-color: coral;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-grow: 1;
+    flex-basis: auto;
+
+    .portfolio-data
+    {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      //background-color: cadetblue;
+      border-bottom: 0.4em;
+
+      .portfolio-data-stats
+      {
+        display: flex;
+        margin: 0 0.2em 0 0.2em;
+        flex: 2;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        #portfolio-name
+        {
+          margin-bottom: 0.2em;
+          font-size: 24px;
+        }
+
+        .portfolio-data-info
+        {
+          display: flex;
+          flex-direction: row;
+        
+          .portfolio-data-info-left
+          {
+            flex: 1;
+            margin: 0 0.2em 0 0.2em;
+          }
+
+          .portfolio-data-info-right
+          {
+            flex: 1;
+            margin: 0 0.2em 0 0.2em;
+          }
+        }
+      }
+
+      .portfolio-data-positions
+      {
+        flex: 1;
+        margin: 0 0.2em 0 0.2em;
+        max-height: 86px;
+      }
+    }
+
+    .portfolio-description
+    {
+      //background-color: darkseagreen;
+      flex-grow: 1;
+      overflow-wrap: break-word;
+    }
+  }
+
+  .portfolio-controls
+  {
+    //background-color: crimson;
+    padding: 0 0.5em 0 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-basis: auto;
+  }
 }
 
-.nowrap {
-  white-space: nowrap;
+.inline
+{
+  display: inline;
 }
 
-.item-main {
-  display:block;
-  overflow:auto;
+.closed
+{
+  color: #e50321
 }
-
-.invest-data {
-}
-
-.invest-description {
-
-}
-
 

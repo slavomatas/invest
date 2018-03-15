@@ -2,9 +2,11 @@ package sk.ystad.model.users.portfolios.positions;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import sk.ystad.model.securities.Security;
+import sk.ystad.model.timeseries.TimeSeriesSimpleItem;
 import sk.ystad.model.users.portfolios.Portfolio;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +18,6 @@ public class UserPosition {
     @Column(name = "positionId")
     private Long positionId;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "securityId", referencedColumnName = "securityId")
     private Security security;
@@ -29,7 +30,16 @@ public class UserPosition {
     @JsonIgnore
     private Portfolio portfolio;
 
+    @Transient
+    private Double marketValue;
+    @Transient
+    private Double lastChangeMarketValue;
+
+    @Transient
+    private List<TimeSeriesSimpleItem> priceLast20Days;
+
     public UserPosition() {
+        trades = new ArrayList<>();
     }
 
     public UserPosition(Security security, List<Trade> trades, Portfolio portfolio) {
@@ -79,5 +89,33 @@ public class UserPosition {
 
     public void setTrades(List<Trade> trades) {
         this.trades = trades;
+    }
+
+    public void addTrade(Trade trade) {
+        trades.add(trade);
+    }
+
+    public List<TimeSeriesSimpleItem> getPriceLast20Days() {
+        return priceLast20Days;
+    }
+
+    public void setPriceLast20Days(List<TimeSeriesSimpleItem> priceLast20Days) {
+        this.priceLast20Days = priceLast20Days;
+    }
+
+    public Double getMarketValue() {
+        return marketValue;
+    }
+
+    public void setMarketValue(Double marketValue) {
+        this.marketValue = marketValue;
+    }
+
+    public Double getLastChangeMarketValue() {
+        return lastChangeMarketValue;
+    }
+
+    public void setLastChangeMarketValue(Double lastChangeMarketValue) {
+        this.lastChangeMarketValue = lastChangeMarketValue;
     }
 }

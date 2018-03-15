@@ -1,0 +1,126 @@
+<div class="content page-layout blank" fusePerfectScrollbar="">
+
+  <!-- MAIN TABULAR VIEW -->
+  <mat-tab-group id="portfolio-detail-root">
+
+    <!-- OVERVIEW TAB -->
+    <mat-tab label="Overview">
+
+      <h1>Summary</h1>
+      <fuse-widget class="mat-white-bg">
+        <div class="invest-summary-container">
+
+          <mat-table #table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="marketValue">
+              <mat-header-cell *matHeaderCellDef> Market Value </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.marketValue}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="latestChange">
+              <mat-header-cell *matHeaderCellDef> Latest Change </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{formatNumber(element.lastChangeAbs, false, 3)}} &#8594; {{formatNumber(element.lastChangePct, false, 3)}}% </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="week">
+              <mat-header-cell *matHeaderCellDef> Week </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <div *ngIf="element.returns.weekly > 0" class="positive-placeholder">
+                  {{formatNumber(element.returns.weekly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.weekly < 0" class="negative-placeholder">
+                  {{formatNumber(element.returns.weekly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.weekly === 0">
+                  {{formatNumber(element.returns.weekly, false, 3)}}%
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="month">
+              <mat-header-cell *matHeaderCellDef> Month </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <div *ngIf="element.returns.monthly > 0" class="positive-placeholder">
+                  {{formatNumber(element.returns.monthly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.monthly < 0" class="negative-placeholder">
+                  {{formatNumber(element.returns.monthly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.monthly === 0">
+                  {{formatNumber(element.returns.monthly, false, 3)}}%
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="year">
+              <mat-header-cell *matHeaderCellDef> Year </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <div *ngIf="element.returns.yearly > 0" class="positive-placeholder">
+                  {{formatNumber(element.returns.yearly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.yearly < 0" class="negative-placeholder">
+                  {{formatNumber(element.returns.yearly, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.yearly === 0">
+                  {{formatNumber(element.returns.yearly, false, 3)}}%
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="all">
+              <mat-header-cell *matHeaderCellDef> All </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <div *ngIf="element.returns.all > 0" class="positive-placeholder">
+                  {{formatNumber(element.returns.all, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.all < 0" class="negative-placeholder">
+                  {{formatNumber(element.returns.all, false, 3)}}%
+                </div>
+                <div *ngIf="element.returns.all === 0">
+                  {{formatNumber(element.returns.all, false, 3)}}%
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+
+        </div>
+      </fuse-widget>
+
+      <fuse-widget class="mat-white-bg">
+        <mat-tab-group id="portfolio-detail-overview-tab" (selectedTabChange)="onMatTabClick()" >
+          <mat-tab label="Positions">
+            <invest-portfolio-detail-positions [portfolio]="reduxPortfolio"></invest-portfolio-detail-positions>
+          </mat-tab>
+          <mat-tab label="Trades">
+            <invest-portfolio-detail-trades [portfolio]="reduxPortfolio"></invest-portfolio-detail-trades>
+            <div style="display: flex; justify-content: flex-end;">
+              <button (click)="onCreateTrade()" matTooltip="Add trade" style="margin: 30px;">
+                <i class="material-icons md-48" style="font-size: 50px;">add_circle_outline</i>
+              </button>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </fuse-widget>
+    </mat-tab>
+
+    <!-- PERFORMANCE TAB -->
+    <mat-tab label="Performance">
+      <h1>Some more tab content</h1>
+    </mat-tab>
+
+    <!-- RISK TAB -->
+    <mat-tab label="Risk">
+      <h1>Some more tab content</h1>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+
+<!-- TEMPLATE DEFINITIONS -->
+<ng-container matColumnDef="overview-summary">
+  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+  <mat-cell *matCellDef="let user"> {{user.name}} </mat-cell>
+</ng-container>

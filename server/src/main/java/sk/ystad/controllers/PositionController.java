@@ -62,4 +62,13 @@ public class PositionController {
                                    Principal principal){
         return positionService.updateTrade(principal, trade);
     }
+    
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="/user/portfolio/{portfolioId}/positions", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Get list of positions for portfolio")
+    public ResponseEntity getAllPositions(@PathVariable(value="portfolioId") Long portfolioId) {
+        return positionService.getAllPositions(portfolioId);
+    }
+    
 }

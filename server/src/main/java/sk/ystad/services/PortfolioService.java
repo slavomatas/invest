@@ -46,7 +46,14 @@ public class PortfolioService {
             .getLogger(ServerApplication.class);
 
     @Autowired
-    public PortfolioService(UserRepository userRepository, InfluxDB influxDB, PortfolioRepository portfolioRepository, PositionRepository positionRepository, SecurityRepository securityRepository, TradeRepository tradeRepository, UserPositionRepository userPositionRepository, UserService userService) {
+    public PortfolioService(UserRepository userRepository,
+                            InfluxDB influxDB,
+                            PortfolioRepository portfolioRepository,
+                            PositionRepository positionRepository,
+                            SecurityRepository securityRepository,
+                            TradeRepository tradeRepository,
+                            UserPositionRepository userPositionRepository,
+                            UserService userService) {
         this.influxDB = influxDB;
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
@@ -57,16 +64,16 @@ public class PortfolioService {
         this.userService = userService;
     }
 
-    public ResponseEntity getByUserId(Principal principal) {
+    public List<Portfolio> getByUserId(Principal principal) {
         User user = userRepository.findByUsername(principal.getName());
-        List<Portfolio> portfolios = user.getPortfolios();
+        List<Portfolio> portfolios = portfolioRepository.getPortfoliosByUserAndModelIsFalse(user);
 
         //Get influx data for each portfolio
         for (Portfolio p : portfolios) {
             getPortfolioDetails(p.getId());
             p.setPositions(getPositionsWithMarketValue(p.getId()));
         }
-        return new ResponseEntity<>(portfolios, HttpStatus.OK);
+        return portfolios;
     }
 
     public Portfolio getPortfolioDetails(long portfolioId) {
@@ -278,6 +285,12 @@ public class PortfolioService {
         return trade;
     }
 
+    /**
+     *
+     * @param principal
+     * @param portfolio
+     * @return
+     */
     public ResponseEntity createPortfolio(Principal principal, Portfolio portfolio) {
         User user = (User) userService.getByUsername(principal).getBody();
         if (user != null) {
@@ -288,6 +301,30 @@ public class PortfolioService {
             }
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Get all model portfolios for user
+     * @return list of model portfolios
+     */
+    public List<Portfolio> getModelPortfolios(Principal principal) {
+        // Get all user model portfolios
+        List<Portfolio> modelPortfolios = portfolioRepository.getPortfoliosByModelAndUser(true, userRepository.findByUsername(principal.getName()));
+        // Get all default portfolios (admin's user - "test@test.com")
+        String admin_username = "test@test.com".equals(principal.getName())? null : "test@test.com";
+        modelPortfolios.addAll(portfolioRepository.getPortfoliosByModelAndUser(true, userRepository.findByUsername(admin_username)));
+        return modelPortfolios;
+    }
+
+    /**
+     * Get all user's and model portfolios
+     * @param principal
+     * @return list of user's and model portfolios
+     */
+    public List<Portfolio> getUserAndModelPortfolios(Principal principal) {
+        List<Portfolio> portfolios = getByUserId(principal);
+        portfolios.addAll(getModelPortfolios(principal));
+        return portfolios;
     }
 
     public void recalculatePortfolio(Long portfolioId) {
