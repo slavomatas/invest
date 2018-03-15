@@ -326,4 +326,8 @@ public class PortfolioService {
         portfolios.addAll(getModelPortfolios(principal));
         return portfolios;
     }
+
+    public void recalculatePortfolio(Long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+    }
 }

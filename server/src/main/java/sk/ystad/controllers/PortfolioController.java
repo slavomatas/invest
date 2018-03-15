@@ -30,6 +30,9 @@ public class PortfolioController {
             .getLogger(ServerApplication.class);
 
 
+    private static final Logger logger = LogManager
+            .getLogger(ServerApplication.class);
+
     private final PortfolioService portfolioService;
 
     @Autowired
@@ -90,5 +93,19 @@ public class PortfolioController {
     @ApiOperation(value = "Create new portfolio", notes = "UserID is retrieved from session")
     public ResponseEntity createPortfolio(Principal principal, @RequestBody Portfolio portfolio) {
         return portfolioService.createPortfolio(principal, portfolio);
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="/user/portfolio/{portfolioId}", method = RequestMethod.GET)
+//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Recalculate portfolio metrics", notes = "UserID is retrieved from session")
+    public ResponseEntity recalculatePortfolio(@PathVariable(name = "portfolioId") Long portfolioId) {
+        try {
+            portfolioService.recalculatePortfolio(portfolioId);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        catch (Exception e) {
+           return  new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
