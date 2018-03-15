@@ -29,10 +29,6 @@ public class PortfolioController {
     private static final Logger logger = LogManager
             .getLogger(ServerApplication.class);
 
-
-    private static final Logger logger = LogManager
-            .getLogger(ServerApplication.class);
-
     private final PortfolioService portfolioService;
 
     @Autowired
