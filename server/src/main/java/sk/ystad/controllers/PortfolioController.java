@@ -17,6 +17,7 @@ import sk.ystad.repositories.users.UserRepository;
 import sk.ystad.services.PortfolioService;
 import sk.ystad.services.UserService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -79,7 +80,7 @@ public class PortfolioController {
     @RequestMapping(value ="/user/portfolios", method = RequestMethod.PUT)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Update portfolio", notes = "UserID is retrieved from session")
-    public ResponseEntity updatePortfolio(Principal principal, @RequestBody Portfolio portfolio){
+    public ResponseEntity updatePortfolio(Principal principal,@Valid @RequestBody Portfolio portfolio){
         return portfolioService.updatePortfolio(principal, portfolio);
     }
 
@@ -87,7 +88,7 @@ public class PortfolioController {
     @RequestMapping(value ="/user/portfolios", method = RequestMethod.POST, produces ="application/json")
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create new portfolio", notes = "UserID is retrieved from session")
-    public ResponseEntity createPortfolio(Principal principal, @RequestBody Portfolio portfolio) {
+    public ResponseEntity createPortfolio(Principal principal, @Valid @RequestBody Portfolio portfolio) {
         return portfolioService.createPortfolio(principal, portfolio);
     }
 
