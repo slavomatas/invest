@@ -49,7 +49,7 @@ public class PositionController {
                           @PathVariable(value="symbol") String symbol,
                           @RequestParam("timestamp") String timestamp,
                           @RequestParam("price") Double price,
-                          @RequestParam("amount") int amount,
+                          @RequestParam("amount") double amount,
                           Principal principal){
         return positionService.addTrade(portfolioId, symbol, timestamp, price, amount);
     }
