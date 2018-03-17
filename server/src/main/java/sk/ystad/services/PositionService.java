@@ -88,7 +88,7 @@ public class PositionService {
      * @param amount
      * @return
      */
-    public ResponseEntity addTrade(long portfolioId, String symbol, String timestamp, Double price, int amount) {
+    public ResponseEntity addTrade(long portfolioId, String symbol, String timestamp, Double price, double amount) {
         //Load user portfolio
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         UserPosition userPosition = positionRepository.findBySecuritySymbolAndPortfolio(symbol, portfolio);

@@ -2,8 +2,10 @@ package sk.ystad.model.users.portfolios.positions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
 @Entity
@@ -20,9 +22,11 @@ public class Trade {
     @JsonIgnore
     private UserPosition position;
 
+    @NotEmpty(message = "Attribute price cannot be empty")
+    @Min(value = 0, message = "Attribute price must have positive value")
     private double price;
 
-    private int amount;
+    private double amount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,7 +35,7 @@ public class Trade {
     public Trade() {
     }
 
-    public Trade(UserPosition position, double price, int amount, Date dateTime) {
+    public Trade(UserPosition position, double price, double amount, Date dateTime) {
         this.position = position;
         this.price = price;
         this.amount = amount;
@@ -62,11 +66,11 @@ public class Trade {
         this.price = price;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
