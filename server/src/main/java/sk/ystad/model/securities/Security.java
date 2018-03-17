@@ -3,6 +3,7 @@ package sk.ystad.model.securities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.csv.CSVRecord;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.persistence.AccessType;
@@ -22,10 +23,13 @@ public class Security implements Serializable {
     private SecurityData securityData;
 
     @Column(name = "symbol")
+    @NotEmpty(message = "Attribute symbol cannot be empty")
     private String symbol;
 
+    @NotEmpty(message = "Attribute name cannot be empty")
     private String name;
 
+    @NotEmpty(message = "Attribute currency cannot be empty")
     private String currency;
 
     private boolean isActive;
