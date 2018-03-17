@@ -29,6 +29,7 @@ public class Trade {
     private double amount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @NotEmpty(message = "Attribute time cannot be empty")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 
