@@ -10,6 +10,7 @@ import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.services.PositionService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -58,7 +59,7 @@ public class PositionController {
     @RequestMapping(value ="/user/trade", method = RequestMethod.PUT)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Update a trade")
-    public ResponseEntity updateTrade(@RequestBody Trade trade,
+    public ResponseEntity updateTrade(@Valid @RequestBody Trade trade,
                                    Principal principal){
         return positionService.updateTrade(principal, trade);
     }
