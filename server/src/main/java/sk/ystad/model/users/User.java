@@ -1,6 +1,7 @@
 package sk.ystad.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
 import sk.ystad.model.auth.Role;
 import sk.ystad.model.users.portfolios.Portfolio;
 
@@ -19,19 +20,24 @@ public class User {
     private Long id;
 
     @Column(name = "username")
+    @NotEmpty(message = "Attribute username cannot be empty")
     private String username;
 
     @Column(name = "password")
+    @NotEmpty(message = "Attribute password cannot be empty")
     @JsonIgnore
     private String password;
 
     @Column(name = "name")
+    @NotEmpty(message = "Attribute name cannot be empty")
     private String name;
 
     @Column(name = "email")
+    @NotEmpty(message = "Attribute email cannot be empty")
     private String email;
 
     @Column(name = "surname")
+    @NotEmpty(message = "Attribute surname cannot be empty")
     private String surname;
 
     @Column(name = "token")
