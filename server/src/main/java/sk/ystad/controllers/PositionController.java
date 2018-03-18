@@ -1,6 +1,7 @@
 package sk.ystad.controllers;
 
 import io.swagger.annotations.ApiOperation;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.services.PositionService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.security.Principal;
 
 @RestController
@@ -47,10 +49,10 @@ public class PositionController {
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create a trade")
     public ResponseEntity addTrade(@PathVariable(value="portfolioId") long portfolioId,
-                          @PathVariable(value="symbol") String symbol,
-                          @RequestParam("timestamp") String timestamp,
-                          @RequestParam("price") Double price,
-                          @RequestParam("amount") double amount,
+                          @PathVariable(value="symbol") @NotEmpty String symbol,
+                          @RequestParam("timestamp") @NotEmpty String timestamp,
+                          @RequestParam("price") @Min(0) Double price,
+                          @RequestParam("amount") @NotEmpty double amount,
                           Principal principal){
         return positionService.addTrade(portfolioId, symbol, timestamp, price, amount);
     }
