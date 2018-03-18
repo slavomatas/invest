@@ -1,14 +1,18 @@
 package sk.ystad.controllers;
 
 import io.swagger.annotations.ApiOperation;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import sk.ystad.common.data_structures.AuthResponse;
 import sk.ystad.model.users.User;
 import sk.ystad.services.UserService;
 
+import javax.validation.ConstraintViolationException;
 import java.security.Principal;
 
 
@@ -33,8 +37,8 @@ public class UserController {
     @CrossOrigin(origins = "*")
     @PostMapping("auth/register")
     @ApiOperation(value = "Register new user", notes = "Registers new user")
-    public ResponseEntity register(@RequestParam(value = "password") String password, @RequestParam(value = "surname") String surname,
-                             @RequestParam(value = "name") String name, @RequestParam(value = "email") String email) {
+    public ResponseEntity register(@RequestParam(value = "password") @NotEmpty String password, @RequestParam(value = "surname") @NotEmpty String surname,
+                                   @RequestParam(value = "name") @NotEmpty String name, @NotEmpty @RequestParam(value = "email") String email) {
         return userService.registerUser(email, password, name, surname, email);
     }
 
