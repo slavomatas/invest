@@ -51,16 +51,16 @@
 
                 <!-- Buttons Column -->
                 <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef> Buttons </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef> BUTTONS </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <div fxLayout="row">
                             <div class="item item-edit">
-                                <button (click)="onBuy(element.symbol)" matTooltip="Add">
+                                <button (click)="onBuy(element.symbol)" matTooltip="Buy">
                                     <i class="material-icons md-24">add</i>
                                 </button>
                             </div>
                             <div class="item item-edit">
-                                <button (click)="onSell(element.symbol)" matTooltip="Remove">
+                                <button (click)="onSell(element.symbol)" matTooltip="Sell">
                                     <i class="material-icons md-24">remove</i>
                                 </button>
                             </div>

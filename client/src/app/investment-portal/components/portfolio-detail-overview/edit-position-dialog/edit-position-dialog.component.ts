@@ -12,17 +12,20 @@ import * as moment from 'moment';
 })
 export class EditPositionDialogComponent implements OnInit {
 
+  
   DEFAULT_TRADE_ID = 0;
   transactionTypes: TransactionTypes[] = [TransactionTypes.BUY, TransactionTypes.SELL];
 
   editForm: FormGroup;
   date: Date;
   time: string;
+  title: string;
 
   constructor(
     public dialogRef: MatDialogRef<EditPositionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    this.title = data.dialogTitle !== undefined ? data.dialogTitle : DialogTitle.DEFAULT;
   }
 
   ngOnInit() {
@@ -30,7 +33,7 @@ export class EditPositionDialogComponent implements OnInit {
       transactionType: new FormControl(this.data.trade.transactionType, [Validators.required]),
       symbol: new FormControl(this.data.trade.symbol, [Validators.required]),
       price: new FormControl(this.data.trade.price, [Validators.required, isNumberValidator()]),
-      amount: new FormControl(this.data.trade.amount, [Validators.required, isNumberValidator(true)]),
+      amount: new FormControl(this.data.trade.amount, [Validators.required, isNumberValidator()]),
       date: new FormControl(this.data.trade.timestamp, [Validators.required]),
       time: new FormControl(this.data.trade.timestamp, [Validators.required])
     });
@@ -83,4 +86,11 @@ export interface TradeFormObject {
   price: number;
   amount: number;
   symbol: string;
+}
+
+/** Constants to be used as the Title in dialog component */
+export enum DialogTitle {
+  ADD = 'Add transaction',
+  EDIT = 'Edit transaction',
+  DEFAULT = 'Transaction'
 }

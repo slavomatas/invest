@@ -9,7 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';
-import { EditPositionDialogComponent, TradeFormObject } from '../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import { EditPositionDialogComponent, TradeFormObject, DialogTitle } from '../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
 
 
@@ -87,7 +87,10 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(EditPositionDialogComponent, {
-      data: { trade: emptyTrade }
+      data: { 
+        trade: emptyTrade,
+        dialogTitle: DialogTitle.ADD
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
