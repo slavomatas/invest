@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { PortfolioDetails } from '../../../../types/types';
 import { colorScheme } from '../../../../constants/constants';
+import { getPortfoliosColors } from '../../../../utils/portfolio-utils';
 
 @Component({
   selector: 'invest-horizontal-bar-chart',
@@ -42,6 +43,9 @@ export class HorizontalBarChartComponent implements OnChanges {
     }
     this.portfoliosNum = this.portfolioDetailsList.length;
     this.view = [, 250 * this.portfoliosNum];
+    this.colorScheme = {
+      domain: getPortfoliosColors(this.portfolioDetailsList)
+    };
   }
 
   onSelect(event) {
