@@ -20,12 +20,12 @@
         
             <!-- Trade date Column -->
             <ng-container matColumnDef="timestamp">
-              <mat-header-cell *matHeaderCellDef> TRADE DATE </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef> TRANSACTION DATE </mat-header-cell>
               <mat-cell *matCellDef="let element"> {{element.timestamp | date:'yyyy-MM-dd H:mm:ss' }} </mat-cell>
             </ng-container>
         
             <!-- Amount Column -->
-            <ng-container matColumnDef="amount">
+            <ng-container matColumnDef="quantity">
               <mat-header-cell *matHeaderCellDef> QUANTITY </mat-header-cell>
               <mat-cell *matCellDef="let element"> {{element.amount | number}} </mat-cell>
             </ng-container>
@@ -38,7 +38,7 @@
              
             <!-- Buttons Column -->
             <ng-container matColumnDef="buttons">
-                <mat-header-cell *matHeaderCellDef> Buttons </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef> BUTTONS </mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     <div fxLayout="row">
                         <div class="item item-edit">
