@@ -36,6 +36,7 @@ import {
 import { EditPositionDialogComponent } from './components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import { PortfolioDetailTradesComponent } from './components/portfolios/portfolio-detail/portfolio-detail-trades/portfolio-detail-trades.component';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
+import { MessageBarService } from './message-bar.service';
 
 
 const routes = [
@@ -94,7 +95,8 @@ const routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
       multi: true
-    }
+    },
+    MessageBarService
   ],
   entryComponents: [
     CreateManualPortfolioDialogComponent,
