@@ -13,7 +13,10 @@ import retrofit2.http.HTTP;
 import sk.ystad.ServerApplication;
 import sk.ystad.model.measurements.Measures;
 import sk.ystad.model.measurements.positions.Position;
+import sk.ystad.model.securities.Security;
 import sk.ystad.repositories.securities.SecurityRepository;
+
+import java.sql.ResultSet;
 import java.util.List;
 
 @Service
@@ -55,5 +58,18 @@ public class SecurityService {
         }
 
         return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    public void someMthod(String inputText){
+        try {
+            Security sss = securityRepository.findBySymbol("SPY");
+            Object securities = securityRepository.findByNameElasticlyOrSymbolStartingWith(inputText, inputText);
+            String s = "saa";
+        } catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        for(int i = 0; i < 100; i++, i++) {
+
+        }
     }
 }

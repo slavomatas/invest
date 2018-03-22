@@ -34,5 +34,11 @@ public class FinSecurityController {
         return securityService.getSecurityPrice(symbol, date);
     }
 
+    @RequestMapping(value = "/sec/test/{symbol}", method = RequestMethod.GET)
+    public ResponseEntity test(@PathVariable String symbol) {
+        securityService.someMthod(symbol);
+        return null;
+    }
+
 }
 
