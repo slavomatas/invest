@@ -138,14 +138,34 @@ export function updateTradeInPortfolio(portfolio: PortfolioDetails, symbol: stri
       }
       position.trades = newTrades;
       positionExist = true;
+
+    //   recalculate quantity of position
+        let quantity = 0;
+        position.trades.forEach((actualTrade) => {
+            quantity += actualTrade.amount;
+        });
+        position.quantity = quantity; 
     }
   });
 
   if (!positionExist) {
-    this.portfolio.positions.push(<PortfolioPosition>{
-      symbol: symbol,
-      trades: [trade]
-    });
+    //   Fixing business logic? We don't have any field for name of new position, last20days price...
+      const newPosition: PortfolioPosition = {
+        symbol: symbol,
+        value: trade.amount * trade.price,
+        name: symbol,
+        quantity: trade.amount,
+        price: trade.price,
+        currency: 'USD',
+        priceLast20Days: [{
+            name: trade.dateTime,
+            value: trade.price,
+          }],
+        lastChange: trade.amount * trade.price,
+        trades: [trade]
+      };
+
+    this.portfolio.positions.push(newPosition);
   }
 }
 
