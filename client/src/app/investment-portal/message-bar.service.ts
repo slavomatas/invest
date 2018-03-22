@@ -34,12 +34,7 @@ export class MessageBarService {
         this.removeMessage(newMessage.id);
       }, hideAfterMs);
     }
-    setTimeout(
-      () => {
-        this.removeMessage(newMessage.id);
-      },
-      5000
-    );
+
   }
 
   removeMessage(messageID: number) {
