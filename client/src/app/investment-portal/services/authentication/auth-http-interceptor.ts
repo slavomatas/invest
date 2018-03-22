@@ -47,7 +47,7 @@ export class AuthHttpInterceptor implements HttpInterceptor {
         .catch((error, caught) => {
           // intercept the response error and displace it to the console
           console.log(error);
-          this.messageService.addMessage('We could not process your request.');
+          this.messageService.addMessage('We could not process your request.', 5000);
           // return the error to the method that called it
           return Observable.throw(error);
         }) as any;

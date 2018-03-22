@@ -8,7 +8,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   constructor(private injector: Injector) { }
   handleError(error) {
     const messageService = this.injector.get(MessageBarService);
-    messageService.addMessage('Whops, something went wrong.');
+    messageService.addMessage('Whops, something went wrong.', 5000);
 
     if (environment.production) {
       Raven.captureException(error);
