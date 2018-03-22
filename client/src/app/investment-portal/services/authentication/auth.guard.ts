@@ -32,16 +32,23 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
+    // check cookie token
     const cookieTokenString = this.cookieService.get(CookieNames.loginToken);
 
     if (cookieTokenString) {
       const token: Token = JSON.parse(cookieTokenString);
 
-      this.authActions.getAccessTokenFullfiled(true, token);
-      // Get user details
-      this.authService.getUser().then((userData: User) => {
-        this.authActions.getUserDataFullfiled(true, userData);
-        this.router.navigate(['dashboard']);
+      // check token validity
+      this.authService.isLoginTokenValid(token).then((isTokenValid: boolean) => {
+        if (isTokenValid) {
+          // save token into redux
+          this.authActions.getAccessTokenFullfiled(true, token);
+          // Get user details
+          this.authService.getUser().then((userData: User) => {
+          this.authActions.getUserDataFullfiled(true, userData);
+            this.router.navigate(['dashboard']);
+          });
+        }
       });
 
     }

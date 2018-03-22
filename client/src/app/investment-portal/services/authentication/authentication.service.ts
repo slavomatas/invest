@@ -10,6 +10,7 @@ const REGISTER_USER_URL = 'api/auth/register';
 const LOGIN_USER_URL = 'api/oauth/token';
 const GET_USER_URL = 'api/v1/user';
 const GET_VERIFY_TOKEN_URL = 'api/auth/register';
+const CHECK_LOGIN_TOKEN_VALIDITY = 'api/oauth/check_token';
 
 
 @Injectable()
@@ -45,6 +46,17 @@ export class AuthenticationService implements IAuthenticationService {
 
     this.loggingService.captureRequestWithParams(LOGIN_USER_URL, body);
     return this.http.post<Token>(LOGIN_USER_URL, body, {headers}).toPromise();
+  }
+
+  /**
+   * Calls BE Rest to check if given user login token is valid
+   * @param token Token to be tested
+   */
+  public isLoginTokenValid(token: Token): Promise<boolean>{
+    return this.http.post<any>(CHECK_LOGIN_TOKEN_VALIDITY + '?token=' + token.access_token, {}).toPromise()
+      .then((response) => {
+        return response.error == null;
+      });
   }
 
 
