@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../core/modules/shared.module';
 import { applyMiddleware } from 'redux';
@@ -37,7 +37,15 @@ import { EditPositionDialogComponent } from './components/portfolio-detail-overv
 import { PortfolioDetailTradesComponent } from './components/portfolios/portfolio-detail/portfolio-detail-trades/portfolio-detail-trades.component';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { MessageBarService } from './message-bar.service';
+import { GlobalErrorHandler } from './services/global-error-handler/global-error-handler';
+import { environment } from '../../environments/environment';
+import * as Raven from 'raven-js';
 
+if (environment.production) {
+  Raven
+  .config('https://7ece5aae6fdd496fad129dc5793641f2@sentry.io/283250')
+  .install();
+}
 
 const routes = [
   { path: 'login', component: LoginComponent },
@@ -96,7 +104,11 @@ const routes = [
       useClass: AuthHttpInterceptor,
       multi: true
     },
-    MessageBarService
+    MessageBarService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    }
   ],
   entryComponents: [
     CreateManualPortfolioDialogComponent,

@@ -4,3 +4,26 @@
   width: 100%;
   bottom: 0px;
 }
+
+.dialog-parent {
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 4px;
+}
+
+.dialog-self {
+  background: #ff0000;
+  z-index: 100;
+}
+
+.close-button {
+  float: right;
+  cursor: pointer;
+  color: white;
+}
+
+.dialog-text {
+  color: white;
+}
+

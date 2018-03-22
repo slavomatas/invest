@@ -1,4 +1,6 @@
 <div class="messages-parent">
-  <invest-message *ngFor="let message of messages" (closeClicked)="closeClicked($event)" [message]="message"></invest-message>
+  <div *ngFor="let message of messages" [@anim]="message.state">
+    <invest-message (closeClicked)="closeClicked($event)" [message]="message"></invest-message>
+  </div>
 </div>
 

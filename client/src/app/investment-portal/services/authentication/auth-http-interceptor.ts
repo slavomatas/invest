@@ -7,13 +7,14 @@ import {NgRedux} from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
 import {Token} from '../../types/authentication-types';
 import { AppState } from '../../store/store';
+import { MessageBarService } from '../../message-bar.service';
 
 @Injectable()
 export class AuthHttpInterceptor implements HttpInterceptor {
   token$ = this.ngRedux.select(state => state.token);
   accessToken;
 
-  constructor(private ngRedux: NgRedux<AppState>) {
+  constructor(private ngRedux: NgRedux<AppState>, private messageService: MessageBarService) {
     // subscribe on token from redux Store
     this.token$.subscribe((data: Token) => {
       if (data != null) {
@@ -46,6 +47,7 @@ export class AuthHttpInterceptor implements HttpInterceptor {
         .catch((error, caught) => {
           // intercept the response error and displace it to the console
           console.log(error);
+          this.messageService.addMessage('We could not process your request.');
           // return the error to the method that called it
           return Observable.throw(error);
         }) as any;
