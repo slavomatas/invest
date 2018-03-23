@@ -44,7 +44,7 @@ const appRoutes: Routes = [
     providers   : [
         FuseSplashScreenService,
         FuseConfigService,
-        FuseNavigationService
+        FuseNavigationService,
         LoggingService
     ],
     bootstrap   : [
