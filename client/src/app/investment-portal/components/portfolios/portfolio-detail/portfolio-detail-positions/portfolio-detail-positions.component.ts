@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { DecimalPipe } from '@angular/common';
 import { PortfolioPosition, PortfolioDetails, TransactionTypes, Trade } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
-import { TradeFormObject, EditPositionDialogComponent } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import { TradeFormObject, EditPositionDialogComponent, DialogTitle } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
@@ -62,7 +62,10 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
     };
 
     const dialogRef = this.dialog.open(EditPositionDialogComponent, {
-      data: { trade: emptyTrade }
+      data: { 
+        trade: emptyTrade,
+        dialogTitle: DialogTitle.ADD
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

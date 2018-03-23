@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Position {{ transactionTypes }}</h2>
+<h2 mat-dialog-title>{{title}}</h2>
 
 <mat-dialog-content>
   <form class="example-form" [formGroup]="editForm">
@@ -16,7 +16,7 @@
       <input matInput placeholder="Price" [(ngModel)]="data.trade.price" formControlName="price">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Amount" [(ngModel)]="data.trade.amount" formControlName="amount">
+      <input matInput placeholder="Quantity" [(ngModel)]="data.trade.amount" formControlName="amount">
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <input matInput [matDatepicker]="myDatepicker" [(ngModel)]="date"  placeholder="Date of transaction" formControlName="date">
