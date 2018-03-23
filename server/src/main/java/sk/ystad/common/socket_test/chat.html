@@ -15,7 +15,7 @@
         }
 
         function connect() {
-            var socket = new SockJS('http://localhost:8085/greeting');
+            var socket = new SockJS('http://localhost:8085/socket');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function(frame) {
                 setConnected(true);

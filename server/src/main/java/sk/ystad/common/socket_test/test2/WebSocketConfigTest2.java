@@ -24,8 +24,8 @@ public class WebSocketConfigTest2 implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(greetingHandler(), "/greeting").setAllowedOrigins("*").withSockJS();
-        registry.addHandler(textHandler(), "/messages");
+        registry.addHandler(greetingHandler(), "/socket").setAllowedOrigins("*").withSockJS();
+        registry.addHandler(textHandler(), "/chat");
     }
 
     @Bean
