@@ -6,7 +6,8 @@
     <!-- OVERVIEW TAB -->
     <mat-tab label="Overview">
 
-      <h1>Summary</h1>
+      <h1 id="step1">Summary</h1>
+      <button (click)="startGuideClick()">Start Guide</button>
       <fuse-widget class="mat-white-bg">
         <div class="invest-summary-container">
 
@@ -14,11 +15,11 @@
 
             <ng-container matColumnDef="marketValue">
               <mat-header-cell *matHeaderCellDef> Market Value </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.marketValue}} </mat-cell>
+              <mat-cell *matCellDef="let element" style="fill: rgb(31, 119, 180); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" id="step2"> <span>{{element.marketValue}}</span> </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="latestChange">
-              <mat-header-cell *matHeaderCellDef> Latest Change </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef id="step3"> Latest Change </mat-header-cell>
               <mat-cell *matCellDef="let element"> {{formatNumber(element.lastChangeAbs, false, 3)}} &#8594; {{formatNumber(element.lastChangePct, false, 3)}}% </mat-cell>
             </ng-container>
 

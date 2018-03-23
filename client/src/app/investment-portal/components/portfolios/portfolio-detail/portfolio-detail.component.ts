@@ -65,6 +65,32 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  startGuideClick() {
+    const introJs = require('../../../../../../node_modules/intro.js/intro.js');
+    const guide = introJs.introJs();
+
+    // guide.start();
+    // guide.addHints();
+
+    introJs.introJs().setOptions({
+      steps:  [{
+                    element: '#step1',
+                    intro: 'Step one description',
+                    position: 'bottom'
+                  },
+                  {
+                     element: '#step2',
+                     intro: 'Step <i>two</i> description',
+                    position: 'bottom'
+                  },
+                  {
+                    element: '#step3',
+                    intro: 'Step <span style="color: green;">three</span> description',
+                    position: 'bottom'
+                  }]
+      }).start();
+  }
+
   // need to call update of reduxPortfolio every time when something changes in REDUX so the change reflects in child elements with @Input
   update() {
       this.reduxPortfolio = findPortfolioById(this.portfolios, this.portfolioId);
@@ -87,7 +113,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(EditPositionDialogComponent, {
-      data: { 
+      data: {
         trade: emptyTrade,
         dialogTitle: DialogTitle.ADD
       }

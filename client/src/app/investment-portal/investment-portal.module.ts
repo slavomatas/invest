@@ -35,7 +35,6 @@ import {
  } from './components/portfolios/portfolio-detail/portfolio-detail-positions/portfolio-detail-position-chart/portfolio-detail-position-chart.component';
 import { EditPositionDialogComponent } from './components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import { PortfolioDetailTradesComponent } from './components/portfolios/portfolio-detail/portfolio-detail-trades/portfolio-detail-trades.component';
-import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { MessageBarService } from './message-bar.service';
 import { GlobalErrorHandler } from './services/global-error-handler/global-error-handler';
 import { environment } from '../../environments/environment';
@@ -92,8 +91,7 @@ const routes = [
     RouterModule.forRoot(routes),
     StoreModule,
     FuseWidgetModule,
-    NgxChartsModule,
-    AmazingTimePickerModule
+    NgxChartsModule
   ],
   providers: [
     AuthGuard,
