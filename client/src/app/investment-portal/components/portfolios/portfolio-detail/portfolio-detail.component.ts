@@ -158,7 +158,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  formatNumber(num: number, negativeSign: Boolean, decimalPlaces: number){
+  formatNumber(num: number = 0, negativeSign: Boolean, decimalPlaces: number){
 
     if (negativeSign && num < 0) {
       num *= -1;
