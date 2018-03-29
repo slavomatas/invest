@@ -15,15 +15,18 @@ export class MessageService {
   stompClient: Client;
 
   constructor() {
-    const socket = new SockJS('/api/socket') as WebSocket;
+    const socket = new SockJS('api/socket') as WebSocket;
     this.stompClient = stompjs.over(socket);
     this.stompClient.connect({}, (frame: Frame) => {
-      console.log('CONNECT CONNECT');
-      this.stompClient.subscribe('/api/app/chat', (message: Message) => {
+      this.stompClient.subscribe('/app/chat', (message: Message) => {
         this.onMessage(message);
       });
     });
   }
+
+   public sendMessage(message) {
+      this.stompClient.send('/app/chat', {}, message);
+   }
 
 
   private onMessage(message: Message) {
