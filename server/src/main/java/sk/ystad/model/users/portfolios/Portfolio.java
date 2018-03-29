@@ -1,6 +1,7 @@
 package sk.ystad.model.users.portfolios;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.users.User;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
@@ -14,6 +15,7 @@ public class Portfolio {
 
     private Long id;
 
+    @NotEmpty(message = "Attribute name cannot be empty")
     @Column(name = "name")
     private String name;
 
