@@ -105,7 +105,9 @@ export class LoginComponent implements OnInit
         const rememberMe = this.loginForm.value.rememberMe;
         this.formError.active = false;
 
-      this.messageService.sendMessage('test login');// Get access token
+
+
+      // Get access token
       const loginPromise: Promise<Token> =this.authenticationService.login( email, password);
 
         loginPromise.then( (loginData: Token) => {

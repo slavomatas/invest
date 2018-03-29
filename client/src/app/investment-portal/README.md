@@ -70,7 +70,8 @@ settings described below. Be aware **not to commit** `Development setting` into 
    "secure": false,
    "pathRewrite": {
      "^/api": ""
-   }
+   },
+   "ws":true
  },
  "changeOrigin": false
 }
@@ -84,6 +85,7 @@ settings described below. Be aware **not to commit** `Development setting` into 
     "target": "https://investment-portal.duckdns.org/portal",
     "secure": false
   },
+  "ws":true,
   "changeOrigin": true
 }
 ```
