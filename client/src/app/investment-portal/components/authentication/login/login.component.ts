@@ -8,19 +8,26 @@ import { User, CookieNames } from '../../../types/types';
 import { Token } from '../../../types/authentication-types';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import {MessageService} from '../../../services/websocket/message.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
     selector   : 'invest-login',
     templateUrl: './login.component.html',
     styleUrls  : ['./login.component.scss'],
-    animations : fuseAnimations
+    animations : fuseAnimations,
+    providers: [MessageService]
 })
 export class LoginComponent implements OnInit
 {
     loginForm: FormGroup;
     loginFormErrors: any;
 
+    messages: Array<string> = [];
+    messageSub: Subscription;
+
     constructor(
+        private messageService: MessageService,
         private fuseConfig: FuseConfigService,
         private formBuilder: FormBuilder,
         private router: Router,
@@ -55,6 +62,8 @@ export class LoginComponent implements OnInit
         this.loginForm.valueChanges.subscribe(() => {
             this.onLoginFormValuesChanged();
         });
+
+      this.messageSub = this.messageService.messageReceived$.subscribe( message => this.messages.push(message));
     }
 
     onLoginFormValuesChanged()
