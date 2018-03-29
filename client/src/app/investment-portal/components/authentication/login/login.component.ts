@@ -8,12 +8,15 @@ import { User, CookieNames } from '../../../types/types';
 import { Token } from '../../../types/authentication-types';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import {MessageService} from '../../../services/websocket/message.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
     selector   : 'invest-login',
     templateUrl: './login.component.html',
     styleUrls  : ['./login.component.scss'],
-    animations : fuseAnimations
+    animations : fuseAnimations,
+    providers: [MessageService]
 })
 export class LoginComponent implements OnInit
 {
@@ -24,7 +27,11 @@ export class LoginComponent implements OnInit
         message: String;
     };
 
+    messages: Array<string> = [];
+    messageSub: Subscription;
+
     constructor(
+        private messageService: MessageService,
         private fuseConfig: FuseConfigService,
         private formBuilder: FormBuilder,
         private router: Router,
@@ -65,6 +72,7 @@ export class LoginComponent implements OnInit
             this.onLoginFormValuesChanged();
         });
 
+      this.messageSub = this.messageService.messageReceived$.subscribe( message => this.messages.push(message));
     }
 
     onLoginFormValuesChanged()
@@ -99,7 +107,7 @@ export class LoginComponent implements OnInit
 
         // Get access token
         const loginPromise: Promise<Token> = this.authenticationService.login(email, password);
-        
+
         loginPromise.then((loginData: Token) => {
             this.actions.getAccessTokenFullfiled(true, loginData);
             // Get user details
@@ -131,7 +139,7 @@ export class LoginComponent implements OnInit
                         this.formError.message = 'Something went wrong!';
                         this.formError.active = true;
                 }
-            } 
+            }
 
             return Promise.resolve(response);
         });
