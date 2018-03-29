@@ -105,23 +105,23 @@ export class LoginComponent implements OnInit
         const rememberMe = this.loginForm.value.rememberMe;
         this.formError.active = false;
 
-        // Get access token
-        const loginPromise: Promise<Token> = this.authenticationService.login(email, password);
+      this.messageService.sendMessage('test login');// Get access token
+      const loginPromise: Promise<Token> =this.authenticationService.login( email, password);
 
-        loginPromise.then((loginData: Token) => {
-            this.actions.getAccessTokenFullfiled(true, loginData);
-            // Get user details
-            this.authenticationService.getUser().then((userData: User) => {
-                this.actions.getUserDataFullfiled(true, userData);
-                // store token into cookie
-                if (rememberMe) {
-                this.cookieService.set(CookieNames.loginToken, JSON.stringify(loginData));
-                }
-                // Forward to dashboard page
-                this.router.navigate(['dashboard']);
-            });
-        })
-        // Check for an error on request
+        loginPromise.then( (loginData: Token) => {
+          this.actions.getAccessTokenFullfiled(true, loginData);
+          // Get user details
+          this.authenticationService.getUser().then((userData: User) => {
+            this.actions.getUserDataFullfiled(true, userData);
+            // store token into cookie
+            if (rememberMe) {
+              this.cookieService.set(CookieNames.loginToken, JSON.stringify(loginData));
+            }
+            // Forward to dashboard page
+            this.router.navigate(['dashboard']);
+          });
+      })
+    // Check for an error on request
         .catch((response: Response | any) => {
             if (response instanceof Response) {
                 return Promise.reject(response);
@@ -138,8 +138,7 @@ export class LoginComponent implements OnInit
                     default:
                         this.formError.message = 'Something went wrong!';
                         this.formError.active = true;
-                }
-            }
+                }}
 
             return Promise.resolve(response);
         });
