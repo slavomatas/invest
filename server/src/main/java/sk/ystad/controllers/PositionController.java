@@ -61,15 +61,9 @@ public class PositionController {
                           @RequestParam("timestamp") @NotEmpty String timestamp,
                           @RequestParam("price") @Min(0) double price,
                           @RequestParam("amount") @NotEmpty double amount,
-                          Principal principal){
-        try {
+                          Principal principal) throws NotFoundException{
 
-            return positionService.addTrade(portfolioId, symbol, timestamp, price, amount);
-        }
-        catch (NotFoundException e) {
-            logger.error("Security '" + symbol + "'not found. ", e);
-            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-        }
+        return positionService.addTrade(portfolioId, symbol, timestamp, price, amount);
     }
 
     @CrossOrigin(origins = "*")
