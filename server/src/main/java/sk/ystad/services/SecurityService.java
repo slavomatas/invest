@@ -60,16 +60,15 @@ public class SecurityService {
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-    public void someMthod(String inputText){
-        try {
-            Security sss = securityRepository.findBySymbol("SPY");
-            Object securities = securityRepository.findByNameElasticlyOrSymbolStartingWith(inputText, inputText);
-            String s = "saa";
-        } catch (Exception e){
-            logger.error(e.getMessage());
-        }
-        for(int i = 0; i < 100; i++, i++) {
-
-        }
+    /**
+     * Find security using fulltext search on name and symbol columns
+     * @param text text used in fulltext search
+     * @param limit number to limit number of results
+     * @return List of found securities
+     */
+    public List<Security> findSecurityFulltext(String text, Integer limit) {
+        text = "%" + text + "%";
+        List<Security> securities = securityRepository.fullTextSearchNameOrSymbol(text, limit);
+        return securities;
     }
 }
