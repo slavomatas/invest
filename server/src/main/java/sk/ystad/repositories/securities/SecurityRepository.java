@@ -15,8 +15,9 @@ public interface SecurityRepository extends CrudRepository<Security, Long> {
     public Security findBySymbol(String symbol);
 
     @Query(value = "SELECT * FROM security " +
-            "WHERE upper(name) LIKE upper(:text) " +
-            "OR upper(symbol) LIKE upper(:text)  " +
+            "WHERE (upper(name) LIKE upper(:text) " +
+            "OR upper(symbol) LIKE upper(:text))" +
+            "AND active = true " +
             "LIMIT :limit", nativeQuery = true)
     public List<Security> fullTextSearchNameOrSymbol(@Param("text") String text, @Param("limit") Integer limit);
 
