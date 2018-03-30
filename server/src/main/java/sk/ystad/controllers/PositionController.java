@@ -1,12 +1,18 @@
 package sk.ystad.controllers;
 
 import io.swagger.annotations.ApiOperation;
+import javassist.NotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import sk.ystad.ServerApplication;
 import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 import sk.ystad.services.PositionService;
@@ -18,6 +24,8 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/v1")
 public class PositionController {
+    private static final Logger logger = LogManager
+            .getLogger(ServerApplication.class);
 
     final
     PositionService positionService;
@@ -51,10 +59,17 @@ public class PositionController {
     public ResponseEntity addTrade(@PathVariable(value="portfolioId") long portfolioId,
                           @PathVariable(value="symbol") @NotEmpty String symbol,
                           @RequestParam("timestamp") @NotEmpty String timestamp,
-                          @RequestParam("price") @Min(0) Double price,
+                          @RequestParam("price") @Min(0) double price,
                           @RequestParam("amount") @NotEmpty double amount,
                           Principal principal){
-        return positionService.addTrade(portfolioId, symbol, timestamp, price, amount);
+        try {
+
+            return positionService.addTrade(portfolioId, symbol, timestamp, price, amount);
+        }
+        catch (NotFoundException e) {
+            logger.error("Security '" + symbol + "'not found. ", e);
+            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     @CrossOrigin(origins = "*")

@@ -22,14 +22,12 @@ public class Trade {
     @JsonIgnore
     private UserPosition position;
 
-    @NotEmpty(message = "Attribute price cannot be empty")
     @Min(value = 0, message = "Attribute price must have positive value")
     private double price;
 
     private double amount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @NotEmpty(message = "Attribute time cannot be empty")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 

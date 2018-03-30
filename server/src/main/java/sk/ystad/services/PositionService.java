@@ -1,11 +1,13 @@
 package sk.ystad.services;
 
+import javassist.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -88,7 +90,17 @@ public class PositionService {
      * @param amount
      * @return
      */
-    public ResponseEntity addTrade(long portfolioId, String symbol, String timestamp, Double price, double amount) {
+    public ResponseEntity addTrade(long portfolioId,
+                                   String symbol,
+                                   String timestamp,
+                                   double price,
+                                   double amount) throws NotFoundException {
+
+        //Check if security exists
+        Security security = securityRepository.findBySymbol(symbol);
+        if (security == null) {
+            throw new NotFoundException("Security '" + symbol + "' not found.");
+        }
         //Load user portfolio
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         UserPosition userPosition = positionRepository.findBySecuritySymbolAndPortfolio(symbol, portfolio);
@@ -103,7 +115,6 @@ public class PositionService {
 
         //Position doesn't exist, create it
         if (userPosition == null) {
-            Security security = securityRepository.findBySymbol(symbol);
             userPosition = new UserPosition(security, null, portfolio);
             userPositionRepository.save(userPosition);
             logger.info("Created position: " + userPosition);
@@ -125,7 +136,7 @@ public class PositionService {
             trade.setPosition(tradeRepository.findOne(trade.getTradeId()).getPosition());
             trade = tradeRepository.save(trade);
             logger.info("Updated trade: " + trade.toString());
-            return new ResponseEntity(trade, HttpStatus.OK);
+            return new ResponseEntity<>(trade, HttpStatus.OK);
         }
         catch (NullPointerException e) {
             logger.error("Failed to update trade: " + e.getMessage());
