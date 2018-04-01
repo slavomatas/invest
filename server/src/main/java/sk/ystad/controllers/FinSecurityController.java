@@ -1,9 +1,12 @@
 package sk.ystad.controllers;
 
 
+import io.swagger.annotations.ApiOperation;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.securities.Security;
@@ -32,6 +35,13 @@ public class FinSecurityController {
     @RequestMapping(value = "/security/{symbol}", method = RequestMethod.GET)
     public ResponseEntity getSecurityPrice(@PathVariable String symbol, @RequestParam String date) {
         return securityService.getSecurityPrice(symbol, date);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Get securities using fulltext search", notes = "")
+    @RequestMapping(value = "/security/search/{text}", method = RequestMethod.GET)
+    public ResponseEntity test(@NotEmpty @PathVariable String text, @RequestParam Integer limit) {
+        return new ResponseEntity<>(securityService.findSecurityFulltext(text, limit), HttpStatus.OK);
     }
 
 }
