@@ -18,7 +18,7 @@ public class UserPosition {
     @Column(name = "positionId")
     private Long positionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "securityId", referencedColumnName = "securityId")
     private Security security;
 
