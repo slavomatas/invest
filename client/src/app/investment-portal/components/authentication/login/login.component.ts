@@ -93,8 +93,6 @@ export class LoginComponent implements OnInit
       const email = this.loginForm.value.email;
       const rememberMe = this.loginForm.value.rememberMe;
 
-      this.messageService.sendMessage('before login');
-
       // Get access token
       this.authenticationService.login( email, password).then( (loginData: Token) => {
           this.actions.getAccessTokenFullfiled(true, loginData);
@@ -107,6 +105,7 @@ export class LoginComponent implements OnInit
             }
             // Forward to dashboard page
             this.router.navigate(['dashboard']);
+            this.messageService.sendMessage('before login');
           });
       });
     }
