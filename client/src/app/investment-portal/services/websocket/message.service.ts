@@ -17,7 +17,7 @@ export class MessageService {
     const socket = new SockJS('api/socket') as WebSocket;
     this.stompClient = stompjs.over(socket);
     this.stompClient.connect({}, (frame: Frame) => {
-      this.stompClient.subscribe('/chat', (message: Message) => {
+      this.stompClient.subscribe('/user/queue/messages', (message: Message) => {
         this.onMessage(message);
       });
     });

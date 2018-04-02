@@ -15,8 +15,7 @@ import {Subscription} from 'rxjs/Subscription';
     selector   : 'invest-login',
     templateUrl: './login.component.html',
     styleUrls  : ['./login.component.scss'],
-    animations : fuseAnimations,
-    providers: [MessageService]
+    animations : fuseAnimations
 })
 export class LoginComponent implements OnInit
 {
@@ -93,6 +92,8 @@ export class LoginComponent implements OnInit
       const password = this.loginForm.value.password;
       const email = this.loginForm.value.email;
       const rememberMe = this.loginForm.value.rememberMe;
+
+      this.messageService.sendMessage('before login');
 
       // Get access token
       this.authenticationService.login( email, password).then( (loginData: Token) => {

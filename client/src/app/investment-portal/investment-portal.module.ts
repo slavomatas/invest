@@ -40,6 +40,7 @@ import { MessageBarService } from './message-bar.service';
 import { GlobalErrorHandler } from './services/global-error-handler/global-error-handler';
 import { environment } from '../../environments/environment';
 import * as Raven from 'raven-js';
+import { MessageService } from './services/websocket/message.service';
 
 if (environment.production) {
   Raven
@@ -108,7 +109,8 @@ const routes = [
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
-    }
+    },
+    MessageService
   ],
   entryComponents: [
     CreateManualPortfolioDialogComponent,
