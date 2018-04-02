@@ -106,8 +106,6 @@ export class LoginComponent implements OnInit
 
 
 
-      this.messageService.sendMessage('before login');
-
       // Get access token
       const loginPromise: Promise<Token> =this.authenticationService.login( email, password);
 
@@ -122,6 +120,7 @@ export class LoginComponent implements OnInit
             }
             // Forward to dashboard page
             this.router.navigate(['dashboard']);
+            this.messageService.sendMessage('before login');
           });
       })
     // Check for an error on request
