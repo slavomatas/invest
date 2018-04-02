@@ -39,6 +39,7 @@ import { MessageBarService } from './message-bar.service';
 import { GlobalErrorHandler } from './services/global-error-handler/global-error-handler';
 import { environment } from '../../environments/environment';
 import * as Raven from 'raven-js';
+import { MessageService } from './services/websocket/message.service';
 import { TourService, TourMatMenuModule } from 'ngx-tour-md-menu';
 
 if (environment.production) {
@@ -109,6 +110,7 @@ const routes = [
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
     },
+    MessageService,
     TourService
   ],
   entryComponents: [

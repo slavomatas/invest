@@ -8,6 +8,7 @@ import { PortfolioActions } from '../../store/actions/portfolio-actions';
 import { NgRedux } from '@angular-redux/store';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { FuseTranslationLoaderService } from '../../../core/services/translation-loader.service';
+import { MessageService } from '../../services/websocket/message.service';
 
 @Component({
   selector: 'invest-app-create-portfolio',
@@ -28,10 +29,12 @@ export class CreatePortfolioComponent implements OnInit {
   ];
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public messageService: MessageService,
   ) { }
 
   ngOnInit() {
+    this.messageService.sendMessage('I am going to create portfolio');
   }
 
   private createManualPortfolio() {

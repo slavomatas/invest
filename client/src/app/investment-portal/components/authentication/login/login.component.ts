@@ -15,8 +15,7 @@ import {Subscription} from 'rxjs/Subscription';
     selector   : 'invest-login',
     templateUrl: './login.component.html',
     styleUrls  : ['./login.component.scss'],
-    animations : fuseAnimations,
-    providers: [MessageService]
+    animations : fuseAnimations
 })
 export class LoginComponent implements OnInit
 {
@@ -106,6 +105,8 @@ export class LoginComponent implements OnInit
         this.formError.active = false;
 
 
+
+      this.messageService.sendMessage('before login');
 
       // Get access token
       const loginPromise: Promise<Token> =this.authenticationService.login( email, password);
