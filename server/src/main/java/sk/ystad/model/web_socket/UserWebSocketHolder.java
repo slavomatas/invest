@@ -1,4 +1,4 @@
-package sk.ystad.common.services;
+package sk.ystad.model.web_socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,9 +44,23 @@ public class UserWebSocketHolder {
             for (WebSocketSession session : sessions) {
                 if (session.isSubscribedToPortfolio(portfolioId)) {
                     System.out.println(session.getSessionId() + " " + template);
-                    template.convertAndSendToUser(session.getSessionId(), "/queue/messages", "some message here", session.getMessageHeader());
+                    template.convertAndSendToUser(session.getSessionId(), "/queue/messages",
+                            "{\"command\":\"update_portfolio\", \"portfolio_id\":\"" + portfolioId +
+                                    "\"}", session.getMessageHeader());
                 }
             }
         }
+    }
+
+    public boolean removeSession(String sessionId) {
+        synchronized (this.sessions) {
+            for (int i = 0; i < sessions.size(); i++) {
+                if (sessionId.equals(sessions.get(i).getSessionId())) {
+                    sessions.remove(i);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

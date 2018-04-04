@@ -9,6 +9,8 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import sk.ystad.model.users.portfolios.Portfolio;
+import sk.ystad.model.web_socket.UserWebSocketHolder;
+import sk.ystad.model.web_socket.WebSocketSingleton;
 import sk.ystad.repositories.users.PortfolioRepository;
 import sk.ystad.repositories.users.UserRepository;
 
@@ -38,11 +40,6 @@ public class WebSocketService {
                 WebSocketSingleton.getInstance().addSubscriptions(email, subscribeArray,
                         headerAccessor.getSessionId(), headerAccessor.getMessageHeaders());
             }
-//            if(user == null){
-//                logger.debug("user is null");
-//            } else {
-//                logger.debug("user is not");
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

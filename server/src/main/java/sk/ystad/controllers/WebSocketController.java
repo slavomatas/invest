@@ -33,12 +33,10 @@ public class WebSocketController {
     @MessageMapping("/send/message")
     public void onReceivedMessage(String message, SimpMessageHeaderAccessor headerAccessor) {
         headerAccessor.setLeaveMutable(true);
-        message = "{\"command\":\"subscribe_to\",\"values\":[{\"event\":\"portfolios_change\"},{\"event\":\"portfolio_change\",\"id\":\"10\"}]}";
         webSocketService.processMessage(message, headerAccessor);
-        String sessionId = headerAccessor.getSessionId();
-        System.out.println(sessionId + " " + template);
-        this.template.convertAndSendToUser(sessionId, "/queue/messages", new SimpleDateFormat("HH:mm:ss").format(new Date()) + "- " + message, headerAccessor.getMessageHeaders());
-        this.template.convertAndSendToUser(sessionId, "/queue/messages", new SimpleDateFormat("HH:mm:ss").format(new Date()) + "- " + message, headerAccessor.getMessageHeaders());
+//        this.template.convertAndSendToUser(sessionId, "/queue/messages",
+//                new SimpleDateFormat("HH:mm:ss").format(new Date()) + "- " +
+//                        message, headerAccessor.getMessageHeaders());
     }
 
 

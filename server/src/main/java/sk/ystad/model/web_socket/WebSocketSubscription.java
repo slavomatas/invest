@@ -1,4 +1,4 @@
-package sk.ystad.common.services;
+package sk.ystad.model.web_socket;
 
 public class WebSocketSubscription {
     private String event;
