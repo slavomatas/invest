@@ -1,4 +1,4 @@
-package sk.ystad.common.services;
+package sk.ystad.model.web_socket;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,7 +12,7 @@ public class WebSocketSession {
 
     private String sessionId;
     private final List<WebSocketSubscription> subscriptions;
-    MessageHeaders messageHeader;
+    private MessageHeaders messageHeader;
 
     public WebSocketSession(String sessionId, MessageHeaders messageHeaders) {
         this.sessionId = sessionId;

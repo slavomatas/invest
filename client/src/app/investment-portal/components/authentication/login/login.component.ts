@@ -121,7 +121,7 @@ export class LoginComponent implements OnInit
             }
             // Forward to dashboard page
             this.router.navigate(['dashboard']);
-            this.messageService.sendMessage('before login');
+            this.messageService.sendMessage('{"command":"subscribe_to","values":[{"event":"portfolios_change"}]}');
           });
       })
     // Check for an error on request
