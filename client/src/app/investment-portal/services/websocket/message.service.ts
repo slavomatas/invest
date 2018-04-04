@@ -6,6 +6,7 @@ import {Subject} from 'rxjs/Subject';
 import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../store/store';
 import { User } from '../../types/types';
+import { Token } from '../../types/authentication-types';
 
 @Injectable()
 export class MessageService {
@@ -15,8 +16,8 @@ export class MessageService {
 
   stompClient: Client;
 
-  user$ = this.ngRedux.select(state => state.user);
-  userEmail;
+  token$ = this.ngRedux.select(state => state.token);
+  userToken;
 
   constructor(
     private ngRedux: NgRedux<AppState>
@@ -29,15 +30,15 @@ export class MessageService {
       });
     });
 
-    this.user$.subscribe((data: User) => {
+    this.token$.subscribe((data: Token) => {
       if (data != null) {
-        this.userEmail = data.email;
+        this.userToken = data.access_token;
       }
     });
   }
 
    public sendMessage(message) {
-      this.stompClient.send('/app/send/message', {'email': this.userEmail}, message);
+      this.stompClient.send('/app/send/message', {'email': this.userToken}, message);
    }
 
 
