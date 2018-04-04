@@ -6,9 +6,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sk.ystad.ServerApplication;
+import sk.ystad.common.services.WebSocketService;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.users.User;
 import sk.ystad.model.users.portfolios.positions.Trade;
@@ -30,10 +32,14 @@ public class PortfolioController {
             .getLogger(ServerApplication.class);
 
     private final PortfolioService portfolioService;
+    private final WebSocketService webSocketService;
+    private final SimpMessagingTemplate template;
 
     @Autowired
-    public PortfolioController(PortfolioService portfolioService) {
+    public PortfolioController(PortfolioService portfolioService, WebSocketService webSocketService, SimpMessagingTemplate template) {
         this.portfolioService = portfolioService;
+        this.webSocketService = webSocketService;
+        this.template = template;
     }
 
     @CrossOrigin(origins = "*")
@@ -103,5 +109,12 @@ public class PortfolioController {
         catch (Exception e) {
            return  new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value ="portfolio/{id}/calculation", method = RequestMethod.GET)
+    public String calculationFinished(@PathVariable long id){
+        webSocketService.calulationFinished(id, template);
+        return "ok";
     }
 }

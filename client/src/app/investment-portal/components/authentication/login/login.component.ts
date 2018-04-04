@@ -100,6 +100,7 @@ export class LoginComponent implements OnInit
           this.authenticationService.getUser().then((userData: User) => {
             this.actions.getUserDataFullfiled(true, userData);
             // store token into cookie
+            console.log(userData);
             if (rememberMe) {
               this.cookieService.set(CookieNames.loginToken, JSON.stringify(loginData));
             }
