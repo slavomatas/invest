@@ -18,6 +18,8 @@ export class MessageService {
 
   token$ = this.ngRedux.select(state => state.token);
   userToken;
+  user$ = this.ngRedux.select(state => state.user);
+  userEmail;
 
   constructor(
     private ngRedux: NgRedux<AppState>
@@ -35,10 +37,15 @@ export class MessageService {
         this.userToken = data.access_token;
       }
     });
+    this.user$.subscribe((data: User) => {
+      if (data != null) {
+        this.userEmail = data.email;
+      }
+    });
   }
 
    public sendMessage(message) {
-      this.stompClient.send('/app/send/message', {'email': this.userToken}, message);
+      this.stompClient.send('/app/send/message', {'token': this.userToken, 'email': this.userEmail}, message);
    }
 
 
