@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Portfolio, PortfolioPosition, TransactionTypes } from '../../../types/types';
+import { Portfolio, PortfolioPosition, TransactionTypes, PortfolioDetails, Trade } from '../../../types/types';
 import { Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { PortfolioService } from '../../../services/portfolio/portfolio.service';
+import { PortfolioActions } from '../../../store/actions/portfolio-actions';
+import { updateTradeInPortfolio } from '../../../utils/portfolio-utils';
 import * as moment from 'moment';
 
 @Component({
@@ -17,15 +20,35 @@ export class EditPositionDialogComponent implements OnInit {
   transactionTypes: TransactionTypes[] = [TransactionTypes.BUY, TransactionTypes.SELL];
 
   editForm: FormGroup;
+  editFormErrors: any;
   date: Date;
   time: string;
   title: string;
+  formError: {
+    active: Boolean;
+    message: String;
+  };
 
   constructor(
     public dialogRef: MatDialogRef<EditPositionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private portfolioActions: PortfolioActions,
+    private portfolioService: PortfolioService
   ) {
     this.title = data.dialogTitle !== undefined ? data.dialogTitle : DialogTitle.DEFAULT;
+    this.editFormErrors = {
+      transactionType: {},
+      symbol         : {},
+      price          : {},
+      amount         : {},
+      date           : {},
+      time           : {}
+    };
+
+    this.formError = {
+      active  : false,
+      message : ''
+    };
   }
 
   ngOnInit() {
@@ -36,6 +59,10 @@ export class EditPositionDialogComponent implements OnInit {
       amount: new FormControl(this.data.trade.amount, [Validators.required, isNumberValidator()]),
       date: new FormControl(this.data.trade.timestamp, [Validators.required]),
       time: new FormControl(this.data.trade.timestamp, [Validators.required])
+    }); 
+
+    this.editForm.valueChanges.subscribe(() => {
+      this.onEditFormValuesChanged();
     });
 
     this.date = new Date(this.data.trade.timestamp);
@@ -50,7 +77,92 @@ export class EditPositionDialogComponent implements OnInit {
     // set time from input
     this.date.setHours(this.getTimePart(this.time, 'hours'), this.getTimePart(this.time, 'minutes'));
     this.data.trade.timestamp = this.date.getTime();
-    this.dialogRef.close(this.data.trade);
+
+    let realAmount = 0;
+    if (this.data.trade.transactionType === TransactionTypes.BUY) {
+      realAmount = this.data.trade.amount;
+    } else {
+      realAmount = 0 - this.data.trade.amount;
+    }
+
+    const trade: Trade = {
+      tradeId: this.data.trade.tradeId,
+      price: this.data.trade.price,
+      amount: realAmount,
+      dateTime: moment(this.data.trade.timestamp).format('YYYY-MM-DD HH:mm:ss')
+    };
+
+    switch (this.data.dialogAction){
+      case DialogAction.ADD:
+        this.portfolioService.createTrade(trade, this.data.portfolio.id, this.data.trade.symbol).then((createdTrade: Trade) => {
+          updateTradeInPortfolio(this.data.portfolio, this.data.trade.symbol, createdTrade);
+          this.portfolioActions.updatePortfolio(this.data.portfolio);
+          this.dialogRef.close(this.data.trade);
+        })
+        // Check for an error on request
+        .catch(this.handleFormError);
+        break;
+      case DialogAction.EDIT:
+        this.portfolioService.editTrade(trade, this.data.portfolio.id, this.data.trade.symbol).then((updatedTrade: Trade) => {
+          updateTradeInPortfolio(this.data.portfolio, this.data.trade.symbol, updatedTrade);
+          this.portfolioActions.updatePortfolio(this.data.portfolio);
+          this.dialogRef.close(this.data.trade);
+        }).catch(this.handleFormError);
+        break;
+      default:
+        // Do nothing
+        break;
+    }        
+  }
+
+  private handleFormError = (response: Response | any) =>
+  {
+    console.log(response);
+    if (response instanceof Response) {
+      return Promise.reject(response);
+    } else {
+      switch (response.status){
+        case 400: // Bad request
+            this.formError.message = response.error.error_description != null ? response.error.error_description : 'Something went wrong!';
+            this.formError.active = true;
+            break;
+        case 500: // Internal Server Error
+            this.formError.message = 'Something went wrong!';
+            this.formError.active = true;
+            break;
+        case 504: // Bad gateway
+            this.formError.message = 'Failed to connect to server!';
+            this.formError.active = true;
+            break;
+        default:
+            return Promise.reject(response);
+    }
+  } 
+
+  return Promise.resolve(response);
+  }
+
+  onEditFormValuesChanged()
+  {
+    for ( const field in this.editFormErrors )
+    {
+        if ( !this.editFormErrors.hasOwnProperty(field) )
+        {
+            continue;
+        }
+
+        // Clear previous errors
+        this.editFormErrors[field] = {};
+
+        // Get the control
+        const control = this.editForm.get(field);
+
+        if ( control && control.dirty && !control.valid )
+        {
+            this.editFormErrors[field] = control.errors;
+        }
+    }
+    this.formError.active = false;
   }
 
   /**
@@ -93,4 +205,10 @@ export enum DialogTitle {
   ADD = 'Add transaction',
   EDIT = 'Edit transaction',
   DEFAULT = 'Transaction'
+}
+
+/** Constants to be used as the Title in dialog component */
+export enum DialogAction {
+  ADD = 'ADD',
+  EDIT = 'EDIT'
 }

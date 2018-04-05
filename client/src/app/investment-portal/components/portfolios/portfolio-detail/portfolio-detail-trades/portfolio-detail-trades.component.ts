@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { PortfolioDetails, PortfolioPosition, Trade, TransactionTypes } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
-import { TradeFormObject, EditPositionDialogComponent, DialogTitle } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import { TradeFormObject, EditPositionDialogComponent, DialogTitle, DialogAction } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
 import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
 import { MatDialog, MatTableDataSource, MatSort } from '@angular/material';
@@ -75,7 +75,7 @@ export class PortfolioDetailTradesComponent implements OnChanges {
   }
 
   onEditTrade(trade: TradeFormObject, symbol: string) {
-    let realAmount = Math.abs(trade.amount);
+    const realAmount = Math.abs(trade.amount);
     let realTransactionType = TransactionTypes.BUY;
     if (trade.amount < 0) {
       realTransactionType = TransactionTypes.SELL;
@@ -91,30 +91,11 @@ export class PortfolioDetailTradesComponent implements OnChanges {
     };
 
     const dialogRef = this.dialog.open(EditPositionDialogComponent, {
-      data: { trade: emptyTrade,
-        dialogTitle: DialogTitle.EDIT
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        realAmount = 0;
-        if (result.transactionType === TransactionTypes.BUY) {
-          realAmount = result.amount;
-        } else {
-          realAmount = 0 - result.amount;
-        }
-
-        const editedTrade: Trade = {
-          tradeId: result.tradeId,
-          price: result.price,
-          amount: realAmount,
-          dateTime: moment(result.timestamp).format('YYYY-MM-DD HH:mm:ss')
-        };
-
-        this.portfolioService.editTrade(editedTrade, this.portfolio.id, result.symbol).then((updatedTrade: Trade) => {
-          updateTradeInPortfolio(this.portfolio, result.symbol, updatedTrade);
-          this.portfolioActions.updatePortfolio(this.portfolio);
-        });
+      data: { 
+        trade: emptyTrade,
+        dialogTitle: DialogTitle.EDIT,
+        dialogAction: DialogAction.EDIT,
+        portfolio: this.portfolio
       }
     });
   }

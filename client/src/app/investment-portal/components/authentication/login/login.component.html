@@ -36,18 +36,21 @@
                     </mat-checkbox>
                 </div>
 
+                <div *ngIf="formError.active === true"
+                    class="mat-error invest-error alert" role = "alert">
+                    {{formError.message}}
+                </div>
+
                 <button type="submit" (click)="onLogin()" mat-raised-button color="accent" class="submit-button" aria-label="LOG IN"
                         [disabled]="loginForm.invalid" >
                     LOGIN
                 </button>
 
             </form>
-
             <div class="register" fxLayout="column" fxLayoutAlign="center center">
                 <span class="text">Don't have an account?</span>
                 <a class="link" [routerLink]="'/registration'">Create an account</a>
             </div>
-
         </div>
 
     </div>

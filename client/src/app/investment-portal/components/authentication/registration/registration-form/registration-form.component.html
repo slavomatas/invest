@@ -56,9 +56,14 @@
             Password must be at least 8 char
           </mat-error>
           <mat-error *ngIf="!registerFormErrors.passwordConfirm.required && !registerFormErrors.passwordConfirm.minlength && registerFormErrors.passwordConfirm.matchOther">
-            Password no match
+            Passwords don't match
           </mat-error>
         </mat-form-field>
+
+        <div *ngIf="formError.active === true"
+            class="mat-error invest-error alert" role = "alert">
+            {{formError.message}}
+        </div>
 
         <button type="submit" (click)="onRegister()" mat-raised-button color="accent" class="submit-button" aria-label="CREATE AN ACCOUNT"
                 [disabled]="registerForm.invalid">

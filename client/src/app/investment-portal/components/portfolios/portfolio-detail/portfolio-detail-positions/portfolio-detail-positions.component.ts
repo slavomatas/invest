@@ -2,12 +2,9 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { DecimalPipe } from '@angular/common';
 import { PortfolioPosition, PortfolioDetails, TransactionTypes, Trade } from '../../../../types/types';
 import { cloneDeep } from 'lodash';
-import { TradeFormObject, EditPositionDialogComponent, DialogTitle } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import { TradeFormObject, EditPositionDialogComponent, DialogTitle, DialogAction } from '../../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
 import { MatDialog, MatTableDataSource } from '@angular/material';
-import { PortfolioService } from '../../../../services/portfolio/portfolio.service';
-import { PortfolioActions } from '../../../../store/actions/portfolio-actions';
-import { updateTradeInPortfolio } from '../../../../utils/portfolio-utils';
 
 
 export interface Single {
@@ -31,9 +28,7 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
   displayedColumns = ['symbol', 'name', 'quantity', 'price', 'priceLast20Days', 'value', 'lastChange', 'buttons'];
 
   constructor(
-    private portfolioService: PortfolioService,
-    public dialog: MatDialog,
-    private portfolioActions: PortfolioActions
+    public dialog: MatDialog
   ) {}
 
 
@@ -64,29 +59,9 @@ export class PortfolioDetailPositionsComponent implements OnChanges, OnInit {
     const dialogRef = this.dialog.open(EditPositionDialogComponent, {
       data: { 
         trade: emptyTrade,
-        dialogTitle: DialogTitle.ADD
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        let realAmount = 0;
-        if (result.transactionType === TransactionTypes.BUY) {
-          realAmount = result.amount;
-        } else {
-          realAmount = 0 - result.amount;
-        }
-
-        const trade: Trade = {
-          tradeId: result.tradeId,
-          price: result.price,
-          amount: realAmount,
-          dateTime: moment(result.timestamp).format('YYYY-MM-DD HH:mm:ss')
-        };
-
-        this.portfolioService.createTrade(trade, this.portfolio.id, result.symbol).then((createdTrade: Trade) => {
-          updateTradeInPortfolio(this.portfolio, result.symbol, createdTrade);
-          this.portfolioActions.updatePortfolio(this.portfolio);
-        });
+        dialogTitle: DialogTitle.ADD,
+        dialogAction: DialogAction.ADD,
+        portfolio: this.portfolio,
       }
     });
   }

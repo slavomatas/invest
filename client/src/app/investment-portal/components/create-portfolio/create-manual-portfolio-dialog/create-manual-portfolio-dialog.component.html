@@ -4,10 +4,17 @@
   <form class="example-form" [formGroup]="createForm">
     <mat-form-field class="example-full-width">
       <input matInput placeholder="Name" [(ngModel)]="portfolio.name" required formControlName="name">
+      <mat-error *ngIf="createFormErrors.name.required">
+        Name is required
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <input matInput placeholder="Description" [(ngModel)]="portfolio.description" formControlName="description">
     </mat-form-field>
+    <div *ngIf="formError.active === true"s
+      class="mat-error invest-error alert" role = "alert">
+      {{formError.message}}
+    </div>
   </form>
 </mat-dialog-content>
 

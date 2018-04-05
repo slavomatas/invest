@@ -20,6 +20,10 @@ export class RegistrationFormComponent implements OnInit {
   staticAlertClosed = true;
   registrationMessage: string;
   alertType: string;
+  formError: {
+    active: Boolean;
+    message: String;
+  };
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -43,6 +47,12 @@ export class RegistrationFormComponent implements OnInit {
       password       : {},
       passwordConfirm: {}
     };
+
+    this.formError = {
+      active  : false,
+      message : ''
+    };
+
   }
 
   ngOnInit() {
@@ -79,6 +89,7 @@ export class RegistrationFormComponent implements OnInit {
         this.registerFormErrors[field] = control.errors;
       }
     }
+    this.formError.active = false;
   }
 
   public onRegister() {
@@ -86,6 +97,7 @@ export class RegistrationFormComponent implements OnInit {
     const surname = this.registerForm.value.surname;
     const email = this.registerForm.value.email;
     const password = this.registerForm.value.password;
+    this.formError.active = false;
 
     this.authenticationService.register( name, surname, email, password).then((data: RequestStatus) => {
       this.staticAlertClosed = false;
@@ -99,6 +111,32 @@ export class RegistrationFormComponent implements OnInit {
         this.registrationMessage = data.msg;
         this.alertType = 'danger';
       }
+    })
+    // Check for an error on request
+    .catch((response: Response | any) => {
+      console.log(response);
+      if (response instanceof Response) {
+          return Promise.reject(response);
+      } else {
+          switch (response.status){
+              case 400: // Bad request
+                  this.formError.message = response.error.error_description != null ? response.error.error_description : 'Something went wrong!';
+                  this.formError.active = true;
+                  break;
+              case 500: // Internal Server Error
+                  this.formError.message = 'Something went wrong!';
+                  this.formError.active = true;
+                  break;
+              case 504: // Bad gateway
+                  this.formError.message = 'Failed to connect to server!';
+                  this.formError.active = true;
+                  break;
+              default:
+                  return Promise.reject(response);
+          }
+      } 
+
+      return Promise.resolve(response);
     });
   }
 
