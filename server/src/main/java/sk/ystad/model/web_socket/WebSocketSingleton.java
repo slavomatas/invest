@@ -53,6 +53,9 @@ public class WebSocketSingleton {
         synchronized (this.sockets) {
             for (String key : sockets.keySet()) {
                 if (sockets.get(key).removeSession(sessionId)) {
+                    if (!sockets.get(key).hasSessions()) {
+                        sockets.remove(key);
+                    }
                     break;
                 }
             }
