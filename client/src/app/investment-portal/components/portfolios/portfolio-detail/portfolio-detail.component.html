@@ -5,8 +5,8 @@
 
     <!-- OVERVIEW TAB -->
     <mat-tab label="Overview">
-
-      <h1>Summary</h1>
+      <h1 tourAnchor="step-1">Summary</h1>
+      <button mat-raised-button (click)="startGuideClick()">Start Guide</button>
       <fuse-widget class="mat-white-bg">
         <div class="invest-summary-container">
 
@@ -14,7 +14,7 @@
 
             <ng-container matColumnDef="marketValue">
               <mat-header-cell *matHeaderCellDef> Market Value </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.marketValue}} </mat-cell>
+              <mat-cell *matCellDef="let element" tourAnchor="step-2"> <span>{{element.marketValue}}</span> </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="latestChange">
@@ -24,7 +24,7 @@
 
             <ng-container matColumnDef="week">
               <mat-header-cell *matHeaderCellDef> Week </mat-header-cell>
-              <mat-cell *matCellDef="let element">
+              <mat-cell *matCellDef="let element" tourAnchor="step-3">
                 <div *ngIf="element.returns.weekly > 0" class="positive-placeholder">
                   {{formatNumber(element.returns.weekly, false, 3)}}%
                 </div>
@@ -116,8 +116,9 @@
       <h1>Some more tab content</h1>
     </mat-tab>
   </mat-tab-group>
-</div>
 
+</div>
+<tour-step-template></tour-step-template>
 
 <!-- TEMPLATE DEFINITIONS -->
 <ng-container matColumnDef="overview-summary">

@@ -11,6 +11,7 @@ import { PortfolioService } from '../../../services/portfolio/portfolio.service'
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';
 import { EditPositionDialogComponent, TradeFormObject, DialogTitle } from '../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
+import { TourService } from 'ngx-tour-md-menu';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     private portfolioService: PortfolioService,
     private portfolioActions: PortfolioActions,
     public dialog: MatDialog,
+    public tourService: TourService
   ) {
 
     this.portfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
@@ -49,6 +51,8 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
       }
     });
+
+    this.tourService.events$.subscribe(x => console.log(x));
   }
 
   ngOnInit() {
@@ -63,6 +67,37 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
         this.portfolioActions.updatePortfolio(this.reduxPortfolio);
       });
     });
+  }
+
+  startGuideClick() {
+
+    this.tourService.initialize([{
+      anchorId: 'step-1',
+      content: 'Some content',
+      placement: 'below',
+      title: 'First',
+    },
+    {
+      anchorId: 'step-2',
+      content: 'Some content',
+      placement: 'below',
+      title: 'Second',
+    },
+    {
+      anchorId: 'step-3',
+      content: 'Some content',
+      placement: 'below',
+      title: 'Third',
+    },
+    {
+      anchorId: 'step-4',
+      content: 'Some content',
+      placement: 'below',
+      title: 'Fourth',
+    }
+  ]);
+
+    this.tourService.start();
   }
 
   // need to call update of reduxPortfolio every time when something changes in REDUX so the change reflects in child elements with @Input
@@ -87,7 +122,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(EditPositionDialogComponent, {
-      data: { 
+      data: {
         trade: emptyTrade,
         dialogTitle: DialogTitle.ADD
       }
