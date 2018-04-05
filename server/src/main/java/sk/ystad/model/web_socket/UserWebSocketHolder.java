@@ -43,7 +43,6 @@ public class UserWebSocketHolder {
         synchronized (this.sessions) {
             for (WebSocketSession session : sessions) {
                 if (session.isSubscribedToPortfolio(portfolioId)) {
-                    System.out.println(session.getSessionId() + " " + template);
                     template.convertAndSendToUser(session.getSessionId(), "/queue/messages",
                             "{\"command\":\"update_portfolio\", \"portfolio_id\":\"" + portfolioId +
                                     "\"}", session.getMessageHeader());
@@ -62,5 +61,11 @@ public class UserWebSocketHolder {
             }
         }
         return false;
+    }
+
+    public boolean hasSessions() {
+        synchronized (this.sessions) {
+            return sessions.size() > 0;
+        }
     }
 }

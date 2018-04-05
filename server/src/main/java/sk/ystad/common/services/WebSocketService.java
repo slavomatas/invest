@@ -8,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import sk.ystad.model.users.User;
 import sk.ystad.model.users.portfolios.Portfolio;
 import sk.ystad.model.web_socket.UserWebSocketHolder;
 import sk.ystad.model.web_socket.WebSocketSingleton;
 import sk.ystad.repositories.users.PortfolioRepository;
 import sk.ystad.repositories.users.UserRepository;
+
+import java.security.Principal;
 
 @Service
 public class WebSocketService {
@@ -33,7 +36,6 @@ public class WebSocketService {
         try {
             //if contais email that describes user
             String email = headerAccessor.getNativeHeader("email").get(0);
-//            User user = userRepository.findByEmail(email);
             JSONObject incommingJson = new JSONObject(message);
             if ("subscribe_to".equals(incommingJson.getString("command"))) {
                 JSONArray subscribeArray = incommingJson.getJSONArray("values");
