@@ -34,7 +34,6 @@ export class CreatePortfolioComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.messageService.sendMessage('I am going to create portfolio');
   }
 
   private createManualPortfolio() {

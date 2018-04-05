@@ -115,13 +115,12 @@ export class LoginComponent implements OnInit
           this.authenticationService.getUser().then((userData: User) => {
             this.actions.getUserDataFullfiled(true, userData);
             // store token into cookie
-            console.log(userData);
             if (rememberMe) {
               this.cookieService.set(CookieNames.loginToken, JSON.stringify(loginData));
             }
             // Forward to dashboard page
             this.router.navigate(['dashboard']);
-            this.messageService.sendMessage('{"command":"subscribe_to","values":[{"event":"portfolios_change"}]}');
+            this.messageService.connect();
           });
       })
     // Check for an error on request

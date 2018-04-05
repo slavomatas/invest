@@ -104,7 +104,7 @@ export function getDisplayedPortfolios(portfolios: PortfolioDetails[], getClosed
 
 }
 
-export function findPortfolioById(portfolios: PortfolioDetails[], portfolioId: Number): PortfolioDetails {
+export function findPortfolioById(portfolios: PortfolioDetails[], portfolioId: number): PortfolioDetails {
     return portfolios.filter(portfolio => portfolio.id === portfolioId)[0];
 }
 

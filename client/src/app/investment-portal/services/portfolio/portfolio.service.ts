@@ -11,8 +11,9 @@ import { NgRedux, select } from '@angular-redux/store';
 import { cloneDeep } from 'lodash';
 import { AppState } from '../../store/store';
 import { LoggingService } from '../logging/logging.service';
-import { setOldMarketValue, getDateFrom, getNewPortfolioColor } from '../../utils/portfolio-utils';
+import { setOldMarketValue, getDateFrom, getNewPortfolioColor, findPortfolioById } from '../../utils/portfolio-utils';
 import { TradeFormObject } from '../../components/portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
+import { PortfolioActions } from '../../store/actions/portfolio-actions';
 
 const GET_PORTFOLIO_RETURN_VALUE_URL = 'api/v1/measurements/portfolios';
 const PORTFOLIOS_URL = 'api/v1/user/portfolios';
@@ -39,9 +40,18 @@ export class PortfolioService implements IPortfolioService {
   constructor(
     private http: HttpClient,
     private ngRedux: NgRedux<AppState>,
-    private loggingService: LoggingService
+    private loggingService: LoggingService,
+    private actions: PortfolioActions
   ) {
 
+  }
+
+  public refreshPortfolioData(portfolioId: number): void {
+    const portfolios: PortfolioDetails[] = this.ngRedux.getState().portfolioList;
+    const portfolio: PortfolioDetails = findPortfolioById(portfolios, portfolioId);
+    this.getCumulativeDataForPortfolio(portfolio, 'ALL').then((updatedPortfolio: PortfolioDetails) => {
+      this.actions.updatePortfolio(updatedPortfolio);
+    });
   }
 
   public createTrade(trade: Trade, portfolioId: number, symbol: string): Promise<Trade> {
