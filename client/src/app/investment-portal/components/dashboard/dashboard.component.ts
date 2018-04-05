@@ -12,6 +12,7 @@ import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { AppState } from '../../store/store';
 import { PortfolioDetails } from '../../types/types';
 import { cloneDeep } from 'lodash';
+import {MessageService} from "../../services/websocket/message.service";
 
 @Component({
   selector: 'invest-dashboard',
@@ -21,13 +22,14 @@ import { cloneDeep } from 'lodash';
 })
 export class DashboardComponent {
   public static colors: string[] = ['#b71c1c', '#311b92', '#1b5e20', '#ff6f00', '#bf360c',  '#212121'];
-
+  count = 0;
   portfolioList$ = this.ngRedux.select(state => state.portfolioList);
 
   constructor(
     private portfolioService: PortfolioService,
     private translationLoader: FuseTranslationLoaderService,
     private actions: PortfolioActions,
+    private messageService: MessageService,
     private ngRedux: NgRedux<AppState>
   ) {
     this.translationLoader.loadTranslations(english, slovak);
@@ -44,7 +46,7 @@ export class DashboardComponent {
           this.actions.getPortfolios(true, newPortfolioList);
         });
         this.actions.setCumulativeChartPeriod('ALL');
-      } 
+      }
     });
   }
 
@@ -52,5 +54,9 @@ export class DashboardComponent {
     const dateFrom = new Date();
     dateFrom.setMonth(dateTo.getMonth() - 12);
     return dateFrom;
+  }
+
+  sendToSocket(){
+    this.messageService.sendMessage('pliisi pod ' + (this.count++)  );
   }
 }

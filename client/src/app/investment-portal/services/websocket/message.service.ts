@@ -37,7 +37,10 @@ export class MessageService {
   }
 
    public sendMessage(message) {
-      this.stompClient.send('/app/send/message', {'email': this.userEmail}, message);
+
+      this.stompClient.send('/app/send/message', {'email': this.userEmail, 'user':
+      JSON.stringify(this.ngRedux.getState().user)}, message);
+      console.log(JSON.stringify(this.ngRedux.getState().user));
    }
 
 
