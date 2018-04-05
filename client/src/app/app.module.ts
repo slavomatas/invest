@@ -1,4 +1,3 @@
-import * as Raven from 'raven-js';
 import {ErrorHandler, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
@@ -39,7 +38,7 @@ const appRoutes: Routes = [
         SharedModule,
         TranslateModule.forRoot(),
         FuseMainModule,
-        InvestmentPortalModule,
+        InvestmentPortalModule
     ],
     providers   : [
         FuseSplashScreenService,
