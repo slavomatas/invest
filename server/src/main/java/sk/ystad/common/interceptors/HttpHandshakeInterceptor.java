@@ -24,6 +24,7 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
 
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
                                Exception ex) {
+        System.out.print("saada");
     }
 
 }

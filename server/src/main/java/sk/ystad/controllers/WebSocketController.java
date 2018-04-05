@@ -17,6 +17,7 @@ import sk.ystad.common.services.WebSocketService;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class WebSocketController {
@@ -34,6 +35,9 @@ public class WebSocketController {
     public void onReceivedMessage(String message, SimpMessageHeaderAccessor headerAccessor) {
         headerAccessor.setLeaveMutable(true);
         webSocketService.processMessage(message, headerAccessor);
+//        headerAccessor.getUser();
+//        headerAccessor.getNativeHeader()
+//        Principal p = (Principal) hea
 //        this.template.convertAndSendToUser(sessionId, "/queue/messages",
 //                new SimpleDateFormat("HH:mm:ss").format(new Date()) + "- " +
 //                        message, headerAccessor.getMessageHeaders());
