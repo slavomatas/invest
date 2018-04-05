@@ -81,19 +81,19 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
       anchorId: 'step-2',
       content: 'Some content',
       placement: 'below',
-      title: 'First',
+      title: 'Second',
     },
     {
       anchorId: 'step-3',
       content: 'Some content',
       placement: 'below',
-      title: 'First',
+      title: 'Third',
     },
     {
       anchorId: 'step-4',
       content: 'Some content',
       placement: 'below',
-      title: 'First',
+      title: 'Fourth',
     }
   ]);
 
