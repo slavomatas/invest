@@ -60,7 +60,6 @@ export class CreateManualPortfolioDialogComponent implements OnInit {
 
   onCreateFormValuesChanged()
   {
-    console.log(this.createFormErrors)
     for ( const field in this.createFormErrors )
     {
         if ( !this.createFormErrors.hasOwnProperty(field) )
@@ -103,16 +102,13 @@ export class CreateManualPortfolioDialogComponent implements OnInit {
                   this.formError.message = response.error.error_description != null ? response.error.error_description : 'Something went wrong!';
                   this.formError.active = true;
                   break;
-              case 500: // Internal Server Error
-                  this.formError.message = 'Something went wrong!';
-                  this.formError.active = true;
-                  break;
               case 504: // Bad gateway
                   this.formError.message = 'Failed to connect to server!';
                   this.formError.active = true;
                   break;
               default:
-                  return Promise.reject(response);
+                  this.formError.message = 'Something went wrong!';
+                  this.formError.active = true;
           }
       } 
 
