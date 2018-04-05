@@ -19,11 +19,7 @@
             "testTsconfig": "tsconfig.spec.json",
             "prefix": "app",
             "styles": [
-                "styles.scss",
-                "../node_modules/intro.js/minified/introjs.min.css"
-            ],
-            "scripts": [
-              "../node_modules/intro.js/minified/intro.min.js"
+                "styles.scss"
             ],
             "environmentSource": "environments/environment.ts",
             "environments": {
