@@ -21,6 +21,12 @@ export class CreateManualPortfolioDialogComponent implements OnInit {
     description: ''
   };
 
+  createFormErrors: any;
+  formError: {
+    active: Boolean;
+    message: String;
+  };
+
   createForm: FormGroup;
 
   constructor(
@@ -28,15 +34,51 @@ export class CreateManualPortfolioDialogComponent implements OnInit {
     private portfolioService: PortfolioService,
     private actions: PortfolioActions,
     private router: Router
-  ) { }
+  ) {
+
+    this.createFormErrors = {
+      name: {}
+    };
+    this.formError = {
+      active  : false,
+      message : ''
+    };
+  }
 
   ngOnInit() {
     this.createForm = new FormGroup({
-      name: new FormControl([
+      name: new FormControl(this.portfolio.name, [
         Validators.required
       ]),
-      description: new FormControl()
-  });
+      description: new FormControl(this.portfolio.description)
+    });
+
+    this.createForm.valueChanges.subscribe(() => {
+      this.onCreateFormValuesChanged();
+    });
+  }
+
+  onCreateFormValuesChanged()
+  {
+    for ( const field in this.createFormErrors )
+    {
+        if ( !this.createFormErrors.hasOwnProperty(field) )
+        {
+            continue;
+        }
+
+        // Clear previous errors
+        this.createFormErrors[field] = {};
+
+        // Get the control
+        const control = this.createForm.get(field);
+
+        if ( control && control.dirty && !control.valid )
+        {
+            this.createFormErrors[field] = control.errors;
+        }
+    }
+    this.formError.active = false;
   }
 
   onCancel() {
@@ -48,8 +90,30 @@ export class CreateManualPortfolioDialogComponent implements OnInit {
       this.actions.addPortfolio(createdPortfolio);
       const route = 'portfolios/' + createdPortfolio.id + '/overview';
       this.router.navigate([route]);
+      this.dialogRef.close();
+    })
+    // Check for an error on request
+    .catch((response: Response | any) => {
+      if (response instanceof Response) {
+          return Promise.reject(response);
+      } else {
+          switch (response.status){
+              case 400: // Bad request
+                  this.formError.message = response.error.error_description != null ? response.error.error_description : 'Something went wrong!';
+                  this.formError.active = true;
+                  break;
+              case 504: // Bad gateway
+                  this.formError.message = 'Failed to connect to server!';
+                  this.formError.active = true;
+                  break;
+              default:
+                  this.formError.message = 'Something went wrong!';
+                  this.formError.active = true;
+          }
+      } 
+
+      return Promise.resolve(response);
     });
-    this.dialogRef.close();
   }
 
 }

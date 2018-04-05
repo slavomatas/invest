@@ -10,24 +10,47 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Symbol" [(ngModel)]="data.trade.symbol" formControlName="symbol">
+      <input matInput placeholder="Symbol" [(ngModel)]="data.trade.symbol" required formControlName="symbol">
+      <mat-error *ngIf="editFormErrors.symbol.required">
+        Symbol is required
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Price" [(ngModel)]="data.trade.price" formControlName="price">
+      <input matInput placeholder="Price" [(ngModel)]="data.trade.price" required formControlName="price">
+      <mat-error *ngIf="editFormErrors.price.required">
+        Price is required
+      </mat-error>
+      <mat-error *ngIf="editFormErrors.price.notNumber">
+        Please enter a valid number
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Quantity" [(ngModel)]="data.trade.amount" formControlName="amount">
+      <input matInput placeholder="Quantity" [(ngModel)]="data.trade.amount" required formControlName="amount">
+      <mat-error *ngIf="editFormErrors.amount.required">
+        Quantity is required
+      </mat-error>
+      <mat-error *ngIf="!editFormErrors.amount.required && editFormErrors.amount.notNumber">
+        Please enter a valid number
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput [matDatepicker]="myDatepicker" [(ngModel)]="date"  placeholder="Date of transaction" formControlName="date">
+      <input matInput [matDatepicker]="myDatepicker" [(ngModel)]="date"  placeholder="Date of transaction" required formControlName="date">
       <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
       <mat-datepicker #myDatepicker></mat-datepicker>
+      <mat-error *ngIf="editFormErrors.date.required">
+        Date is required
+      </mat-error>
     </mat-form-field>
-
     <mat-form-field class="example-full-width">
-      <input matInput type="text" atp-time-picker [(ngModel)]="time" formControlName="time"/>
+      <input matInput type="text" atp-time-picker [(ngModel)]="time" required formControlName="time"/>
+      <mat-error *ngIf="editFormErrors.time.required">
+        Time is required
+      </mat-error>
     </mat-form-field>
-
+    <div *ngIf="formError.active === true"
+      class="mat-error invest-error alert" role = "alert">
+      {{formError.message}}
+    </div>
   </form>
 </mat-dialog-content>
 
