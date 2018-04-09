@@ -10,6 +10,15 @@ import { AppState } from '../../../../store/store';
 import { PortfolioDetails, Portfolio } from '../../../../types/types';
 import { getDateFrom, getDisplayedPortfolios, getPortfoliosColors } from '../../../../utils/portfolio-utils';
 
+interface CumulativeChartData {
+  name: string;
+  series:
+    {
+      name: string,
+      value: number
+    }[];
+}
+
 @Component({
   selector: 'invest-cumulative-line-chart',
   templateUrl: 'cumulative-line-chart.component.html',
@@ -26,9 +35,10 @@ export class LineChartComponent implements OnInit {
   cumulativeChartSelectedPeriod$ = this.ngRedux.select(state => state.cumulativeChartSelectedPeriod);
 
   chartData: PortfolioDetails[] = [];
-  tmpChartData: PortfolioDetails[] = [];
+  tmpChartData: CumulativeChartData[] = [];
   cumulativeChartSelectedPeriod: string;
   dataEmpty = undefined;
+  
 
   // view: any[] = [900, 400];
 
@@ -40,9 +50,9 @@ export class LineChartComponent implements OnInit {
   timeline = false;
   gradient = false;
   showLegend = false;
-  showXAxisLabel = true;
+  showXAxisLabel = false;
   xAxisLabel = '';
-  showYAxisLabel = true;
+  showYAxisLabel = false;
   yAxisLabel = '%';
 
   colorScheme = {
@@ -89,6 +99,7 @@ export class LineChartComponent implements OnInit {
     const pastDate = getDateFrom(new Date(), this.cumulativeChartSelectedPeriod);
 
     this.dataEmpty = true;
+    this.tmpChartData = [];
     this.chartData.forEach((portfolio) => {
       portfolio.series = portfolio.series
         .filter((sero) => {
@@ -96,15 +107,32 @@ export class LineChartComponent implements OnInit {
           const pastDateVal = pastDate.getTime();
           return seroActDate > pastDateVal;
         });
-        if (this.dataEmpty && portfolio.series.length > 0) {
-          this.dataEmpty = false;
-        }
+
+      const tmpSeries = [];
+      portfolio.series.forEach((sero, index) => {
+        tmpSeries.push({
+          name: new Date(sero.name),
+          value: sero.value * 100
+        });
+      });
+
+
+      this.tmpChartData.push({
+        name: portfolio.name,
+        series: tmpSeries
+      });
+
+      if (this.dataEmpty && portfolio.series.length > 0) {
+        this.dataEmpty = false;
+      }
       // return portfolio;
     });
 
-    this.chartData = cloneDeep(this.chartData);
+    this.tmpChartData = cloneDeep(this.tmpChartData);
     this.colorScheme = {
       domain: getPortfoliosColors(this.chartData)
     };
+
+    
   }
 }
