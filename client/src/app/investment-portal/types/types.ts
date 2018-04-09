@@ -44,7 +44,6 @@ export interface PortfolioDetails {
 
 export interface PortfolioTimeSeries {
   id: number;
-
   series:
     {
       name: string,
