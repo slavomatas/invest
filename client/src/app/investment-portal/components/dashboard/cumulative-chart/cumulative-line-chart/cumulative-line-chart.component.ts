@@ -132,7 +132,9 @@ export class LineChartComponent implements OnInit {
     this.colorScheme = {
       domain: getPortfoliosColors(this.chartData)
     };
+  }
 
-    
+  yAxisFormat(val) {
+    return val + '%';
   }
 }

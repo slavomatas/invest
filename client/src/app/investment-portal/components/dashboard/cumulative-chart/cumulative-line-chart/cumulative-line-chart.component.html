@@ -12,7 +12,24 @@
   [xAxisLabel]="xAxisLabel"
   [yAxisLabel]="yAxisLabel"
   [autoScale]="autoScale"
+  [yAxisTickFormatting]="yAxisFormat"
   (select)="onSelect($event)">
+  <ng-template #tooltipTemplate let-model="model">
+    {{model.series}}: {{model.name | date:'mediumDate'}}
+    <br>
+    <span class="tooltip-value">{{model.value | number}}%</span>
+  </ng-template>
+  <ng-template #seriesTooltipTemplate let-model="model" let-series="series">
+      <div *ngFor="let oneModel of model" class="tooltip-wrapper">
+          <div class="tooltip-square"  [style.background]="oneModel.color"></div>
+          <div>
+              {{oneModel.series}}: {{oneModel.value | number}}%
+          </div>
+      </div>
+      <div *ngIf="!model">
+        test
+      </div>
+  </ng-template>
 </ngx-charts-line-chart>
 <div class="img-parent">
   <mat-spinner class="img-child" *ngIf="dataEmpty === undefined"></mat-spinner>
