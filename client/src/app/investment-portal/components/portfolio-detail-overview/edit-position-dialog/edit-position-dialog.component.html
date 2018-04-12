@@ -10,7 +10,13 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Symbol" [(ngModel)]="data.trade.symbol" required formControlName="symbol">
+      <input matInput placeholder="Symbol" [(ngModel)]="data.trade.symbol" required formControlName="symbol"
+             type="text" [matAutocomplete]="auto" (input)="inputChange($event.target.value)">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let security of securityOptions" [value]="security">
+          {{ security.symbol }} - {{ security.name }}
+        </mat-option>
+      </mat-autocomplete>
       <mat-error *ngIf="editFormErrors.symbol.required">
         Symbol is required
       </mat-error>

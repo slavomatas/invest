@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Portfolio, PortfolioPosition, TransactionTypes, PortfolioDetails, Trade } from '../../../types/types';
+import {Portfolio, PortfolioPosition, TransactionTypes, PortfolioDetails, Trade, Security} from '../../../types/types';
 import { Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';
 import { updateTradeInPortfolio } from '../../../utils/portfolio-utils';
 import * as moment from 'moment';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'invest-app-edit-position-dialog',
@@ -15,7 +16,7 @@ import * as moment from 'moment';
 })
 export class EditPositionDialogComponent implements OnInit {
 
-  
+
   DEFAULT_TRADE_ID = 0;
   transactionTypes: TransactionTypes[] = [TransactionTypes.BUY, TransactionTypes.SELL];
 
@@ -28,6 +29,8 @@ export class EditPositionDialogComponent implements OnInit {
     active: Boolean;
     message: String;
   };
+
+  securityOptions: Security[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<EditPositionDialogComponent>,
@@ -52,6 +55,7 @@ export class EditPositionDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.data);
     this.editForm = new FormGroup({
       transactionType: new FormControl(this.data.trade.transactionType, [Validators.required]),
       symbol: new FormControl(this.data.trade.symbol, [Validators.required]),
@@ -59,7 +63,7 @@ export class EditPositionDialogComponent implements OnInit {
       amount: new FormControl(this.data.trade.amount, [Validators.required, isNumberValidator()]),
       date: new FormControl(this.data.trade.timestamp, [Validators.required]),
       time: new FormControl(this.data.trade.timestamp, [Validators.required])
-    }); 
+    });
 
     this.editForm.valueChanges.subscribe(() => {
       this.onEditFormValuesChanged();
@@ -67,6 +71,14 @@ export class EditPositionDialogComponent implements OnInit {
 
     this.date = new Date(this.data.trade.timestamp);
     this.time = moment(this.data.trade.timestamp).format('HH:mm');
+  }
+
+  async inputChange(searchValue: string) {
+    this.securityOptions = cloneDeep(<Security[]>await this.portfolioService.getSecuritySymbols(searchValue, 5));
+  }
+
+  displayFn(security?: Security): string | undefined {
+    return security ? security.symbol : undefined;
   }
 
   onCancel() {
@@ -94,8 +106,8 @@ export class EditPositionDialogComponent implements OnInit {
 
     switch (this.data.dialogAction){
       case DialogAction.ADD:
-        this.portfolioService.createTrade(trade, this.data.portfolio.id, this.data.trade.symbol).then((createdTrade: Trade) => {
-          updateTradeInPortfolio(this.data.portfolio, this.data.trade.symbol, createdTrade);
+        this.portfolioService.createTrade(trade, this.data.portfolio.id, this.data.trade.symbol.symbol).then((createdTrade: Trade) => {
+          updateTradeInPortfolio(this.data.portfolio, this.data.trade.symbol.symbol, createdTrade);
           this.portfolioActions.updatePortfolio(this.data.portfolio);
           this.dialogRef.close(this.data.trade);
         })
@@ -103,8 +115,8 @@ export class EditPositionDialogComponent implements OnInit {
         .catch(this.handleFormError);
         break;
       case DialogAction.EDIT:
-        this.portfolioService.editTrade(trade, this.data.portfolio.id, this.data.trade.symbol).then((updatedTrade: Trade) => {
-          updateTradeInPortfolio(this.data.portfolio, this.data.trade.symbol, updatedTrade);
+        this.portfolioService.editTrade(trade, this.data.portfolio.id, this.data.trade.symbol.symbol).then((updatedTrade: Trade) => {
+          updateTradeInPortfolio(this.data.portfolio, this.data.trade.symbol.symbol, updatedTrade);
           this.portfolioActions.updatePortfolio(this.data.portfolio);
           this.dialogRef.close(this.data.trade);
         }).catch(this.handleFormError);
@@ -112,12 +124,11 @@ export class EditPositionDialogComponent implements OnInit {
       default:
         // Do nothing
         break;
-    }        
+    }
   }
 
   private handleFormError = (response: Response | any) =>
   {
-    console.log(response);
     if (response instanceof Response) {
       return Promise.reject(response);
     } else {
@@ -134,7 +145,7 @@ export class EditPositionDialogComponent implements OnInit {
             this.formError.message = 'Something went wrong!';
             this.formError.active = true;
     }
-  } 
+  }
 
   return Promise.resolve(response);
   }

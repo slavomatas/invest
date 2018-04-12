@@ -97,6 +97,13 @@ export interface TypeOfOldMarketValue {
   all?: number;
 }
 
+export interface Security {
+  symbol: string;
+  name: string;
+  currency: string
+  active: true;
+}
+
 export enum TypeOfPortfolioReturn {
   daily = 'PORTFOLIO_DAILY_RETURNS',
   weekly = 'PORTFOLIO_WEEKLY_RETURNS',

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import {
   Portfolio, PortfolioDetails, CumulativeMeasurement,
-  TypeOfReturns, TypeOfPortfolioReturn, TypeOfPortfolio, PortfolioPosition, Trade
+  TypeOfReturns, TypeOfPortfolioReturn, TypeOfPortfolio, PortfolioPosition, Trade, Security
 } from '../../types/types';
 import { PortfolioReturn } from '../../types/dashboard-types';
 import { IPortfolioService } from './i-portfolio.service';
@@ -322,6 +322,16 @@ export class PortfolioService implements IPortfolioService {
       default:
         return today;
     }
+  }
+
+  public getSecuritySymbols(searchText: string, limit: number): Promise<Security[]> {
+    let params: HttpParams = new HttpParams();
+    params.set('limit', limit.toString());
+
+    const requestUrl = 'api/v1/security/search/' + searchText + '?limit=' + limit ;
+    this.loggingService.captureRequestWithParams(requestUrl, JSON.stringify(params));
+    return this.http
+      .get<Security[]>(requestUrl).toPromise();
   }
 }
 
