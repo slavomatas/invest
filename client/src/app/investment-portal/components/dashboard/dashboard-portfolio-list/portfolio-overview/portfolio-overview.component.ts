@@ -53,4 +53,9 @@ export class PortfolioOverviewComponent implements OnChanges {
       );
     }
   }
+
+  valueFormat(val) {
+    console.log(val);
+    return val;
+  }
 }

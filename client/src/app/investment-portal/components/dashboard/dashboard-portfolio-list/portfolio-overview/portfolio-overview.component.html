@@ -4,7 +4,13 @@
     [results]="this.chartData"
     [gradient]="true"
     [label]="this.portfolioDetails.name"
+    [valueFormatting]="valueFormat"
     (select)="onSelect(this.portfolioDetails.id)">
+    <ng-template #tooltipTemplate let-model="model">
+      <span class="tooltip-name">{{model.name}}</span>
+      <br>
+      <span class="tooltip-value">${{model.value | number}}</span>
+    </ng-template>
   </ngx-charts-advanced-pie-chart>
 
   <div *ngIf="percentage >= 0; then positive_percentage else negative_percentage"></div>
