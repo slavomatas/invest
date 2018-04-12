@@ -110,11 +110,4 @@ public class PortfolioController {
            return  new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @CrossOrigin(origins = "*")
-    @RequestMapping(value ="portfolio/{id}/calculation", method = RequestMethod.GET)
-    public String calculationFinished(@PathVariable long id){
-        webSocketService.calulationFinished(id, template);
-        return "ok";
-    }
 }

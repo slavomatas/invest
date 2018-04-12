@@ -9,4 +9,5 @@ import java.util.List;
 public interface PortfolioRepository extends CrudRepository<Portfolio, Long> {
     List<Portfolio> getPortfoliosByUserAndModelIsFalse(User user);
     List<Portfolio> getPortfoliosByModelAndUser (boolean isModel, User user);
+    Portfolio getByIdInflux(String influxId);
 }

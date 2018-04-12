@@ -330,4 +330,8 @@ public class PortfolioService {
     public void recalculatePortfolio(Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
     }
+
+    public Portfolio getByInfluxId(String influxId) {
+        return portfolioRepository.getByIdInflux(influxId);
+    }
 }

@@ -89,7 +89,7 @@ export class MessageService {
     const command = JSON.parse(message.body);
     switch (command.command) {
       case 'update_portfolio': {
-        const portfolioId = command.portfolio_id;
+        const portfolioId = command.portfolioId;
         this.portfolioService.refreshPortfolioData(Number.parseInt(portfolioId));
         break;
       }
