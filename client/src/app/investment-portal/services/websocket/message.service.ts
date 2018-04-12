@@ -8,6 +8,8 @@ import { AppState } from '../../store/store';
 import { User } from '../../types/types';
 import { PortfolioService } from '../portfolio/portfolio.service';
 import { MessageBarService } from '../../message-bar.service';
+import { cloneDeep } from 'lodash';
+import {Token} from "../../types/authentication-types";
 
 @Injectable()
 export class MessageService {
@@ -19,6 +21,8 @@ export class MessageService {
   stompClient: Client;
 
   user$ = this.ngRedux.select(state => state.user);
+  token$ = this.ngRedux.select(state => state.token);
+  accessToken;
   userEmail;
   messageId: number = null;
 
@@ -32,10 +36,19 @@ export class MessageService {
         this.userEmail = data.email;
       }
     });
+    this.token$.subscribe((data: Token) => {
+      if (data != null) {
+        this.accessToken = cloneDeep(data.access_token);
+      }
+      else {
+        this.accessToken = null;
+      }
+    });
   }
 
   public connect() {
-    const socket = new SockJS('api/socket') as WebSocket;
+    const url = 'api/socket?access_token=' + this.accessToken;
+    const socket = new SockJS(url) as WebSocket;
     this.stompClient = stompjs.over(socket);
     this.stompClient.connect({}, (frame: Frame) => {
       this.stompClient.subscribe('/user/queue/messages', (message: Message) => {
@@ -65,8 +78,7 @@ export class MessageService {
 
    public sendMessage(message) {
 
-      this.stompClient.send('/app/send/message', {'email': this.userEmail, 'user':
-      JSON.stringify(this.ngRedux.getState().user)}, message);
+      this.stompClient.send('/app/send/message', {}, message);
    }
 
   public subscribeToDefaults() {
