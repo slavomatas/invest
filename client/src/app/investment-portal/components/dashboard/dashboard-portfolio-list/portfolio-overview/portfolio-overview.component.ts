@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import {forEach} from '@angular/router/src/utils/collection';
 import { PortfolioDetails } from '../../../../types/types';
 import { colorScheme } from '../../../../constants/constants';
+import { Router } from '@angular/router';
 
 interface ChartData {
   name: string;
@@ -29,15 +30,17 @@ export class PortfolioOverviewComponent implements OnChanges {
     domain: colorScheme
   };
 
-  constructor( ) { }
+  constructor(
+    private router: Router
+   ) { }
 
   ngOnChanges() {
     this.percentage = this.portfolioDetails.lastChangePct;
     this.setChartData(this.portfolioDetails.positions);
   }
 
-  onSelect(event) {
-    console.log(event);
+  onSelect(portfolioId) {
+    this.router.navigate(['/portfolios/' + portfolioId + '/overview']);
   }
 
   private setChartData(newData: Position[]) {
@@ -50,5 +53,4 @@ export class PortfolioOverviewComponent implements OnChanges {
       );
     }
   }
-
 }

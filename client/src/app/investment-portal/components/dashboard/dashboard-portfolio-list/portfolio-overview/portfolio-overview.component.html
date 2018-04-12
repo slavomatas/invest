@@ -3,8 +3,13 @@
     [scheme]="this.colorScheme"
     [results]="this.chartData"
     [gradient]="true"
-    [label]="'Market Value'"
-    (select)="onSelect($event)">
+    [label]="this.portfolioDetails.name"
+    (select)="onSelect(this.portfolioDetails.id)">
+    <ng-template #tooltipTemplate let-model="model">
+      <span class="tooltip-name">{{model.name}}</span>
+      <br>
+      <span class="tooltip-value">${{model.value | number}}</span>
+    </ng-template>
   </ngx-charts-advanced-pie-chart>
 
   <div *ngIf="percentage >= 0; then positive_percentage else negative_percentage"></div>
