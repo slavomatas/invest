@@ -30,12 +30,4 @@ public class WebSocketController {
         this.template = template;
         this.webSocketService = webSocketService;
     }
-
-    @MessageMapping("/send/message")
-    public void onReceivedMessage(String message, SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.setLeaveMutable(true);
-        webSocketService.processMessage(message, headerAccessor);
-    }
-
-
 }
