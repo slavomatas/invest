@@ -26,7 +26,7 @@
                 <!-- Price Column -->
                 <ng-container matColumnDef="price">
                   <mat-header-cell *matHeaderCellDef> PRICE </mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.price | number}} </mat-cell>
+                  <mat-cell *matCellDef="let element"> ${{element.price | number}} </mat-cell>
                 </ng-container>
 
                 <!-- Last 20 days chart Column -->
@@ -40,7 +40,7 @@
                 <!-- Market value Column -->
                 <ng-container matColumnDef="value">
                     <mat-header-cell *matHeaderCellDef> MKT VALUE </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.value | number}} </mat-cell>
+                    <mat-cell *matCellDef="let element"> ${{element.value | number}} </mat-cell>
                 </ng-container>
 
                 <!-- Last change Column -->
