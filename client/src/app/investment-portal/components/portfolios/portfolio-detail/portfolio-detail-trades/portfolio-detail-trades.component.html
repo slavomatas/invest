@@ -33,7 +33,7 @@
             <!-- Price Column -->
             <ng-container matColumnDef="price">
               <mat-header-cell *matHeaderCellDef> PRICE </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.price | number}} </mat-cell>
+              <mat-cell *matCellDef="let element"> ${{element.price | number}} </mat-cell>
             </ng-container>
              
             <!-- Buttons Column -->

@@ -14,13 +14,13 @@
 
             <ng-container matColumnDef="marketValue">
               <mat-header-cell *matHeaderCellDef> Market Value </mat-header-cell>
-              <mat-cell *matCellDef="let element" tourAnchor="step-2"> <span>{{element.marketValue}}</span> </mat-cell>
+              <mat-cell *matCellDef="let element" tourAnchor="step-2"> <span>${{element.marketValue}}</span> </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="latestChange">
               <mat-header-cell *matHeaderCellDef> Latest Change </mat-header-cell>
               <mat-cell *matCellDef="let element"> 
-                  {{formatNumber(element.lastChangeAbs, false, 3)}} &#8594; {{formatNumber(element.lastChangePct, false, 3)}}%
+                  ${{formatNumber(element.lastChangeAbs, false, 3)}} &#8594; {{formatNumber(element.lastChangePct, false, 3)}}%
               </mat-cell>
             </ng-container>
 

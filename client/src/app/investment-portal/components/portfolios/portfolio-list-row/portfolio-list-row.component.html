@@ -10,7 +10,7 @@
         <div class="portfolio-data-info">
           <div class="portfolio-data-info-left">
             <span>
-              {{portfolioData.marketValue}}
+              ${{portfolioData.marketValue}}
               <span *ngIf="portfolioData.cash == 0; else cash">(NO CASH)</span>
             </span>
             <span>
