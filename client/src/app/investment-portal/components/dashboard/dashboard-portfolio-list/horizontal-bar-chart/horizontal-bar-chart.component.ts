@@ -24,6 +24,7 @@ export class HorizontalBarChartComponent implements OnChanges {
   yAxisLabel = '';
   barPadding = 155;
   view = [, 250 * this.portfoliosNum];
+  showLegend = false;
 
   colorScheme = {
     domain: colorScheme
