@@ -1,11 +1,8 @@
 {
   "/api": {
-    "target": "http://localhost:8085",
-    "secure": false,
-    "pathRewrite": {
-      "^/api": ""
-    },
-    "ws":true
+    "target": "https://investment-portal.duckdns.org/portal",
+    "secure": false
   },
-  "changeOrigin": false
+  "ws":true,
+  "changeOrigin": true
 }
