@@ -54,10 +54,18 @@ export class LineChartComponent implements OnInit {
   xAxisLabel = '';
   showYAxisLabel = false;
   yAxisLabel = '%';
+  showRefLines = true;
+  showRefLabels = false;
 
   colorScheme = {
     domain: colorScheme
   };
+
+  refLines = [
+   
+    { value: 0, name: 'zero' },
+ 
+   ];
   // line, area
   autoScale = true;
 
