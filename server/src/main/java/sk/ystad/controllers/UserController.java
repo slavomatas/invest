@@ -7,12 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import sk.ystad.common.data_structures.AuthResponse;
-import sk.ystad.model.users.User;
 import sk.ystad.services.UserService;
-
-import javax.validation.ConstraintViolationException;
 import java.security.Principal;
 
 
@@ -47,5 +42,15 @@ public class UserController {
     @ApiOperation(value = "Verify registration token", notes = "Verifies if the submitted token is valid")
     public ResponseEntity verify(@PathVariable String token) {
         return userService.verifyRegistrationToken(token);
+    }
+
+
+    @CrossOrigin(origins = "*")
+    @PutMapping("v1/user/first_login")
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Update first login flag", notes = "")
+    public ResponseEntity updateFirstLogin(Principal principal, @RequestParam(value = "firstLogin") boolean firstLogin) {
+        userService.updateFirstLogin(principal, firstLogin);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
