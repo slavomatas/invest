@@ -1,51 +1,32 @@
 <div id="wrapper">
-  <div id="values">
-    <div id="market-value-parent">
-      <div id="market-value" class="center">
-        <tr>
-          <td class="value">
-            {{currencySymbol}}{{portfolioSummaryObject.marketValue}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            market value
-          </td>
-        </tr>
-      </div>
+  <div class="container">
+    <div id="period-value-parent" class="value flex-item-left">
+      {{currencySymbol}}{{portfolioSummaryObject.periodMarketValue}}
     </div>
-    <div id="period-value-parent">
-      <div id="period-value" class="center">
-        <tr>
-          <td class="value">
-            {{currencySymbol}}{{portfolioSummaryObject.periodMarketValue}}
-          </td>
-
-          <div *ngIf="portfolioSummaryObject.periodMarketValuePercentage >= 0; then positive_percentage else negative_percentage"></div>
-          <ng-template #positive_percentage>
-            <td id="period-value-percentage" class="green">
-              &#9650; ({{(portfolioSummaryObject.periodMarketValuePercentage * 100).toFixed(2)}}%)
-            </td>
-          </ng-template>
-          <ng-template #negative_percentage>
-            <td id="period-value-percentage" class="red">
-              &#9660; ({{(portfolioSummaryObject.periodMarketValuePercentage * 100).toFixed(2)}}%)
-            </td>
-          </ng-template>
-        </tr>
-        <tr>
-          <td>
-            {{definedPeriods.get(selectedPeriod)}}
-          </td>
-        </tr>
-      </div>
+    <div class="value flex-item-center">
+      &nbsp;&#8594;&nbsp;
+    </div>
+    <div id="market-value-parent" class="flex-item-right">
+      <span class="value">
+        {{currencySymbol}}{{portfolioSummaryObject.marketValue}}
+      </span>
+      <div *ngIf="portfolioSummaryObject.periodMarketValuePercentage >= 0; then positive_percentage else negative_percentage" ></div>
+      <ng-template #positive_percentage>
+        <span class="green period-value-percentage">
+          &#9650; ({{(portfolioSummaryObject.periodMarketValuePercentage * 100).toFixed(2)}}%)
+        </span>
+      </ng-template>
+      <ng-template #negative_percentage>
+        <span class="red period-value-percentage">
+          &#9660; ({{(portfolioSummaryObject.periodMarketValuePercentage * 100).toFixed(2)}}%)
+        </span>
+      </ng-template>
     </div>
   </div>
 </div>
 
 <div id="period-selector" class="center">
   <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='1M'; else selected1M">1M</div>
-  <!-- <div class="period-box" (click)="periodEvent($event)" [ngClass]="{selected: selectedPeriod == '1M'}">1M</div> -->
   <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='3M'; else selected3M">3M</div>
   <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='6M'; else selected6M">6M</div>
   <div class="period-box" (click)="periodEvent($event)" *ngIf="selectedPeriod!='9M'; else selected9M">9M</div>
