@@ -13,6 +13,10 @@
   [yAxisLabel]="yAxisLabel"
   [autoScale]="autoScale"
   [yAxisTickFormatting]="yAxisFormat"
+  [referenceLines] = "refLines"
+  [showRefLines] = "showRefLines"
+  [showRefLabels] = "showRefLabels"
+
   (select)="onSelect($event)">
   <ng-template #tooltipTemplate let-model="model">
     {{model.series}}: {{model.name | date:'mediumDate'}}
