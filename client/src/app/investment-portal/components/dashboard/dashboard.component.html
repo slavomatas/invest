@@ -1,9 +1,6 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
 
     <div fxLayout="column">
-
-
-
       <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget mat-white-bg" fxLayout="column" fxFlex="100" fxFlex.gt-xs="100" fxFlex.gt-md="50">
         <div class="padding-top padding-bottom fuse-widget-front mat-elevation-z2">
         <h2 class="mx-auto">{{'DASHBOARD.CUMULATIVE_CHART' | translate}}</h2>
@@ -13,14 +10,6 @@
         </div>
       </fuse-widget>
 
-      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100" fxFlex.gt-xs="100" fxFlex.gt-md="50">
-        <!-- Front -->
-        <div class=" padding-top padding-bottom fuse-widget-front mat-elevation-z2">
-          <invest-dashboard-portfolio-list *ngIf="portfolioList$" [dashboardPortfolioList]="portfolioList$ | async"></invest-dashboard-portfolio-list>
-        </div>
-        <!-- / Front -->
-      </fuse-widget>
+      <invest-dashboard-portfolio-list *ngIf="portfolioList$" [dashboardPortfolioList]="portfolioList$ | async"></invest-dashboard-portfolio-list>
     </div>
-
-
 </div>
