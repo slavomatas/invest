@@ -1,14 +1,19 @@
 @media screen and (max-width: 600px) {
-    #mobile-hide {
-      visibility: hidden;
-      clear: both;
-      float: left;
-      margin: 10px auto 5px 20px;
-      width: 28%;
-      display: none;
-    }
-
-    #overview-mobile-view {
-        padding-top: 0px;
-    }
+  #mobile-hide {
+    visibility: hidden;
+    clear: both;
+    float: left;
+    margin: 10px auto 5px 20px;
+    width: 28%;
+    display: none;
   }
+
+  #overview-mobile-view {
+    padding-top: 0px;
+  }
+}
+
+.horizontal-chart {
+  display: flex;
+  justify-content: center;
+}
