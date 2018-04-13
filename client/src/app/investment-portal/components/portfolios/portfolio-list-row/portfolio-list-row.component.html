@@ -4,9 +4,11 @@
     <div class="portfolio-data">
       <div class=portfolio-data-stats>
         <div class="mat-accent" id="portfolio-name">
-            {{portfolioData.name}}
+            <span *ngIf="showGuide" tourAnchor="portfolio-list-step-2">{{portfolioData.name}}</span>
+            <span *ngIf="!showGuide">{{portfolioData.name}}</span>
             <sup class="closed" *ngIf=portfolioData.closed>(CLOSED)</sup>
-        </div> <!--a ng-href="/portfolio/{{portfolio.id}}/overview">{{portfolio.name}}</a-->
+        </div>
+        
         <div class="portfolio-data-info">
           <div class="portfolio-data-info-left">
             <span>
@@ -27,7 +29,15 @@
           </div>
         </div>
       </div>
-      <div class="portfolio-data-positions">
+
+      <div class="portfolio-data-positions" *ngIf="showGuide" tourAnchor="portfolio-list-step-3">
+          <div *ngIf="true;then barChart"></div>
+      </div>
+      <div class="portfolio-data-positions" *ngIf="!showGuide">
+          <div *ngIf="true;then barChart"></div>
+      </div>
+
+      <ng-template #barChart>
         <ngx-charts-bar-vertical *ngIf="portfolioData.positions != null"
           [view]=""
           [scheme]="colorScheme"
@@ -42,7 +52,8 @@
           [yAxisLabel]=""
           (select)="onSelect($event)">
         </ngx-charts-bar-vertical>
-      </div>
+      </ng-template>
+      
     </div>
     <div class="portfolio-description" *ngIf="portfolioData.description != null">
       <!-- Portfolio description-->
@@ -64,7 +75,13 @@
   </div>
   <!-- Portfolio control buttons -->
   <div class="portfolio-controls">
-    <div class="portfolio-control-element">
+    <div class="portfolio-control-element" *ngIf="showGuide" tourAnchor="portfolio-list-step-4">
+        <div *ngIf="true;then visibilityContent"></div>
+    </div>
+    <div class="portfolio-control-element" *ngIf="!showGuide">
+        <div *ngIf="true;then visibilityContent"></div>
+    </div>
+    <ng-template #visibilityContent>
       <button>
         <span matTooltip="View" matTooltipPosition="above">
           <mat-icon>
@@ -72,7 +89,8 @@
           </mat-icon>
         </span>
       </button>
-    </div>
+    </ng-template>
+
     <div class="portfolio-control-element">
       <button (click)="managePortfolioUpdateOperation(portfolioData)">
         <span matTooltip="Edit" matTooltipPosition="above">
@@ -87,13 +105,22 @@
         </span>
       </button>
     </div>
-    <div class="portfolio-control-element">
+
+    <div class="portfolio-control-element" *ngIf="showGuide" tourAnchor="portfolio-list-step-5">
+        <div *ngIf="true;then deleteContent"></div>
+    </div>
+    <div class="portfolio-control-element" *ngIf="!showGuide">
+        <div *ngIf="true;then deleteContent"></div>
+    </div>
+
+    <ng-template #deleteContent>
       <button (click)="managePortfolioRemoveOperation(portfolioData)">
         <span matTooltip="Remove" matTooltipPosition="above">
           <mat-icon><i class="material-icons">delete</i></mat-icon>
         </span>
       </button>
-    </div>
+    </ng-template>
+    
   </div>  
 </mat-card>
 <ng-template #cash>({{formatSmallNumber(portfolioData.cash)}})</ng-template>

@@ -4,6 +4,8 @@ import { NgRedux } from '@angular-redux/store';
 import { AppState } from '../../store/store';
 import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { cloneDeep } from 'lodash';
+import { TourService } from 'ngx-tour-md-menu';
+import { demandPortfolioListTour } from '../../toures/tour-definitions';
 
 @Component({
   selector: 'invest-portfolios',
@@ -31,7 +33,8 @@ export class PortfoliosComponent implements OnInit {
 
   constructor(
     private ngRedux: NgRedux<AppState>,
-    private portfolioService: PortfolioService
+    private portfolioService: PortfolioService,
+    private tourService: TourService
   ) {
 
   }
@@ -79,6 +82,11 @@ export class PortfoliosComponent implements OnInit {
     } else {
       callback();
     }
+  }
+
+  startTourClick() {
+    this.tourService.initialize(demandPortfolioListTour);
+    this.tourService.start();
   }
 
 }
