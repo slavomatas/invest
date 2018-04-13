@@ -38,7 +38,7 @@ public class PortfolioController {
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/user/portfolios", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/portfolios", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "List of portfolios",
             notes = "UserID is retrieved from session. " +
@@ -46,29 +46,26 @@ public class PortfolioController {
                     "for type parameter 'MODEL' - get all model portfolios, " +
                     "for type parameter 'ALL' - get all user's portfolios with details and all model portfolios")
     public ResponseEntity findByUserId(Principal principal,
-                                       @RequestParam(value = "type", defaultValue = "USER") String type){
-        switch(type) {
+                                       @RequestParam(value = "type", defaultValue = "USER") String type) {
+        switch (type) {
             case "MODEL":
                 try {
                     return new ResponseEntity<>(portfolioService.getModelPortfolios(principal), HttpStatus.OK);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     logger.error("Get Model Portfolios Error: " + e);
                     return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             case "ALL":
                 try {
                     return new ResponseEntity<>(portfolioService.getUserAndModelPortfolios(principal), HttpStatus.OK);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     logger.error("Get User and Model Portfolios Error: " + e);
                     return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             case "USER":
                 try {
                     return new ResponseEntity<>(portfolioService.getByUserId(principal), HttpStatus.OK);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     logger.error("Get User Portfolios Error: " + e);
                     return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -77,15 +74,15 @@ public class PortfolioController {
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/user/portfolios", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/portfolios", method = RequestMethod.PUT)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Update portfolio", notes = "UserID is retrieved from session")
-    public ResponseEntity updatePortfolio(Principal principal,@Valid @RequestBody Portfolio portfolio){
+    public ResponseEntity updatePortfolio(Principal principal, @Valid @RequestBody Portfolio portfolio) {
         return portfolioService.updatePortfolio(principal, portfolio);
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/user/portfolios", method = RequestMethod.POST, produces ="application/json")
+    @RequestMapping(value = "/user/portfolios", method = RequestMethod.POST, produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Create new portfolio", notes = "UserID is retrieved from session")
     public ResponseEntity createPortfolio(Principal principal, @Valid @RequestBody Portfolio portfolio) {
@@ -93,16 +90,25 @@ public class PortfolioController {
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping(value ="/user/portfolio/{portfolioId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/portfolio/{portfolioId}", method = RequestMethod.GET)
 //    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     @ApiOperation(value = "Recalculate portfolio metrics", notes = "UserID is retrieved from session")
     public ResponseEntity recalculatePortfolio(@PathVariable(name = "portfolioId") Long portfolioId) {
         try {
             portfolioService.recalculatePortfolio(portfolioId);
             return new ResponseEntity(HttpStatus.OK);
-        }
-        catch (Exception e) {
-           return  new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/user/portfolio/test", method = RequestMethod.POST )
+//    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
+    @ApiOperation(value = "Recalculate portfolio metrics", notes = "UserID is retrieved from session")
+    public String testRest(@Valid @RequestBody String json) {
+        return "Incomming value = " + json;
+    }
+
+
 }

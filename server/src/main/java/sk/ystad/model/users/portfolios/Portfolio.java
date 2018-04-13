@@ -1,12 +1,16 @@
 package sk.ystad.model.users.portfolios;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotEmpty;
 import sk.ystad.model.measurements.positions.Position;
+import sk.ystad.model.simple_data.SimpleTrade;
 import sk.ystad.model.users.User;
+import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -52,7 +56,7 @@ public class Portfolio {
     @Column(name = "is_closed")
     private boolean isClosed;
 
-    @Column(name = "is_model", nullable = false, columnDefinition="boolean default false")
+    @Column(name = "is_model", nullable = false, columnDefinition = "boolean default false")
     private boolean isModel;
 
     public Portfolio(Long id, String name, String description, double marketValue, double lastChangeAbs, double lastChangePct, Returns returns, double cash, List<Position> positions, List<UserPosition> usersPositions, User user, String idInflux, boolean isClosed, boolean isModel) {
@@ -72,7 +76,7 @@ public class Portfolio {
         this.isModel = isModel;
     }
 
-    public  Portfolio(){
+    public Portfolio() {
 
     }
 
@@ -221,5 +225,14 @@ public class Portfolio {
 
     public void setModel(boolean model) {
         isModel = model;
+    }
+
+    @Transient
+    public List<Trade> getAllTrades() {
+        List<Trade> trades = new ArrayList<>();
+        for (UserPosition position : usersPositions) {
+            trades.addAll(position.getTrades());
+        }
+        return trades;
     }
 }

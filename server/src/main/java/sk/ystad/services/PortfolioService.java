@@ -42,6 +42,8 @@ public class PortfolioService {
     private final UserPositionRepository userPositionRepository;
     private final UserService userService;
 
+    private final RestCallingService restCallingService;
+
     private static final Logger logger = LogManager
             .getLogger(ServerApplication.class);
 
@@ -53,7 +55,7 @@ public class PortfolioService {
                             SecurityRepository securityRepository,
                             TradeRepository tradeRepository,
                             UserPositionRepository userPositionRepository,
-                            UserService userService) {
+                            UserService userService, RestCallingService restCallingService) {
         this.influxDB = influxDB;
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
@@ -62,6 +64,7 @@ public class PortfolioService {
         this.tradeRepository = tradeRepository;
         this.userPositionRepository = userPositionRepository;
         this.userService = userService;
+        this.restCallingService = restCallingService;
     }
 
     public List<Portfolio> getByUserId(Principal principal) {
@@ -327,7 +330,8 @@ public class PortfolioService {
         return portfolios;
     }
 
-    public void recalculatePortfolio(Long portfolioId) {
+    public void recalculatePortfolio(Long portfolioId) throws Exception {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        restCallingService.callRest(portfolio);
     }
 }
