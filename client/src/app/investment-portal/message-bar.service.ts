@@ -20,7 +20,7 @@ export class MessageBarService {
     });
   }
 
-  addMessage(messageText: string, hideAfterMs?: Number) {
+  addMessage(messageText: string, hideAfterMs?: Number): number {
     const newMessage: MessageType = {
       text: messageText,
       id: this.messages.length + 1,
@@ -34,7 +34,7 @@ export class MessageBarService {
         this.removeMessage(newMessage.id);
       }, hideAfterMs);
     }
-
+    return newMessage.id;
   }
 
   removeMessage(messageID: number) {

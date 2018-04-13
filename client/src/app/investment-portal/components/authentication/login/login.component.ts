@@ -8,6 +8,8 @@ import { User, CookieNames } from '../../../types/types';
 import { Token } from '../../../types/authentication-types';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import {MessageService} from '../../../services/websocket/message.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
     selector   : 'invest-login',
@@ -24,7 +26,11 @@ export class LoginComponent implements OnInit
         message: String;
     };
 
+    messages: Array<string> = [];
+    messageSub: Subscription;
+
     constructor(
+        private messageService: MessageService,
         private fuseConfig: FuseConfigService,
         private formBuilder: FormBuilder,
         private router: Router,
@@ -65,6 +71,7 @@ export class LoginComponent implements OnInit
             this.onLoginFormValuesChanged();
         });
 
+      this.messageSub = this.messageService.messageReceived$.subscribe( message => this.messages.push(message));
     }
 
     onLoginFormValuesChanged()
@@ -97,23 +104,26 @@ export class LoginComponent implements OnInit
         const rememberMe = this.loginForm.value.rememberMe;
         this.formError.active = false;
 
-        // Get access token
-        const loginPromise: Promise<Token> = this.authenticationService.login(email, password);
-        
-        loginPromise.then((loginData: Token) => {
-            this.actions.getAccessTokenFullfiled(true, loginData);
-            // Get user details
-            this.authenticationService.getUser().then((userData: User) => {
-                this.actions.getUserDataFullfiled(true, userData);
-                // store token into cookie
-                if (rememberMe) {
-                this.cookieService.set(CookieNames.loginToken, JSON.stringify(loginData));
-                }
-                // Forward to dashboard page
-                this.router.navigate(['dashboard']);
-            });
-        })
-        // Check for an error on request
+
+
+      // Get access token
+      const loginPromise: Promise<Token> =this.authenticationService.login( email, password);
+
+        loginPromise.then( (loginData: Token) => {
+          this.actions.getAccessTokenFullfiled(true, loginData);
+          // Get user details
+          this.authenticationService.getUser().then((userData: User) => {
+            this.actions.getUserDataFullfiled(true, userData);
+            // store token into cookie
+            if (rememberMe) {
+              this.cookieService.set(CookieNames.loginToken, JSON.stringify(loginData));
+            }
+            // Forward to dashboard page
+            this.router.navigate(['dashboard']);
+            this.messageService.connect();
+          });
+      })
+    // Check for an error on request
         .catch((response: Response | any) => {
             if (response instanceof Response) {
                 return Promise.reject(response);
@@ -130,8 +140,7 @@ export class LoginComponent implements OnInit
                     default:
                         this.formError.message = 'Something went wrong!';
                         this.formError.active = true;
-                }
-            } 
+                }}
 
             return Promise.resolve(response);
         });

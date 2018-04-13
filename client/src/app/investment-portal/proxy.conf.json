@@ -3,5 +3,6 @@
     "target": "https://investment-portal.duckdns.org/portal",
     "secure": false
   },
+  "ws":true,
   "changeOrigin": true
 }

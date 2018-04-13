@@ -8,6 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Token } from '../../types/authentication-types';
 import { AuthenticationActions } from '../../store/actions/authentication-actions';
 import { AuthenticationService } from './authentication.service';
+import { MessageService } from '../websocket/message.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,7 +18,8 @@ export class AuthGuard implements CanActivate {
               private ngRedux: NgRedux<AppState>,
               private cookieService: CookieService,
               private authActions: AuthenticationActions,
-              private authService: AuthenticationService) {
+              private authService: AuthenticationService,
+              private messageService: MessageService) {
     // subscribe on token from redux Store
     this.userStore$.subscribe((data: User) => {
       if (data != null) {
@@ -46,6 +48,7 @@ export class AuthGuard implements CanActivate {
           // Get user details
           this.authService.getUser().then((userData: User) => {
           this.authActions.getUserDataFullfiled(true, userData);
+            this.messageService.connect();
             this.router.navigate(['dashboard']);
           });
         }
