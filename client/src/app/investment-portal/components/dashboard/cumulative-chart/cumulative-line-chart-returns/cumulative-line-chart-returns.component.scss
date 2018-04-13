@@ -1,8 +1,4 @@
-div#values {
-  display: inline-block;
-  width: 100%;
-}
-
+/*
 div#market-value-parent {
   width: 50%;
   float: left;
@@ -10,7 +6,6 @@ div#market-value-parent {
 div#market-value {
   float: right;
   padding-right: 10px;
-  /*background-color: #DD1144;*/
 }
 
 div#period-value-parent {
@@ -22,8 +17,8 @@ div#period-value {
   overflow: hidden;
   float: left;
   padding-left: 10px;
-  /*background-color: #0086B3;*/
 }
+*/
 
 div#period-selector {
   padding-top: 0.5em;
@@ -35,7 +30,6 @@ div.period-box {
   display: inline-block;
   margin-left: 0.4em;
   margin-right: 0.4em;
-  /*background-color: #4CAF50;*/
   color: #9b9b9b;
   font-size: large;
   cursor: pointer;
@@ -49,22 +43,21 @@ div.period-box:hover {
   color: black;
 }
 
-td#period-value-percentage {
-padding-left: 0.2em;
-font-size: large;
-}
-
 .center {
-text-align: center;
+  text-align: center;
 }
 
-td.value {
-font-size: x-large;
-font-weight: bold;
+.value {
+  font-size: x-large;
+  font-weight: bold;
 }
 
 p {
-margin: 0;
+  margin: 0;
+}
+
+.period-value-percentage{
+  font-size: large;
 }
 
 .red {
@@ -73,5 +66,34 @@ margin: 0;
 
 .green {
   color: #478c00;
+}
 
+.container
+{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.flex-item-left
+{
+  flex-grow: 0;
+  flex-shrink: 0;
+  text-align: right;
+  flex-basis: 40%;
+}
+
+.flex-item-center
+{
+  flex-grow: 0;
+}
+
+.flex-item-right
+{
+  white-space: nowrap;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 40%;
 }

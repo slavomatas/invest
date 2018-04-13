@@ -2,7 +2,8 @@ export const locale = {
     lang: 'sk',
   data: {
     'DASHBOARD': {
-      'CUMULATIVE_CHART': 'Kumulatívny graf'
+      // Example of translation
+      // 'CUMULATIVE_CHART': 'Kumulatívny graf'
     }
   }
 };

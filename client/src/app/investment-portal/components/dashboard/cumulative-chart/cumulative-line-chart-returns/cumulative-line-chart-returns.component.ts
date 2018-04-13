@@ -32,15 +32,6 @@ export class LineChartReturnsComponent implements OnInit {
     periodMarketValuePercentage: 0
   };
 
-  private  definedPeriods: Map<string, string> = new Map([
-    ['1M', 'last month'],
-    ['3M', 'last 3 months'],
-    ['6M', 'last 6 months'],
-    ['9M', 'last 9 months'],
-    ['12M', 'last 12 months'],
-    ['ALL', 'all time']
-  ]);
-
   constructor(
     private portfolioService: PortfolioService,
     private actions: PortfolioActions,
