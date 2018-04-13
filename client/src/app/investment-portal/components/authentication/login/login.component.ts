@@ -29,6 +29,9 @@ export class LoginComponent implements OnInit
     messages: Array<string> = [];
     messageSub: Subscription;
 
+    messages: Array<string> = [];
+    messageSub: Subscription;
+
     constructor(
         private messageService: MessageService,
         private fuseConfig: FuseConfigService,
