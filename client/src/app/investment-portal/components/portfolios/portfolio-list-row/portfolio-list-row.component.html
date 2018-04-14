@@ -14,7 +14,7 @@
               <span *ngIf="portfolioData.cash == 0; else cash">(NO CASH)</span>
             </span>
             <span>
-              <br>{{portfolioData.lastChangeAbs}}&nbsp;
+              <br>${{portfolioData.lastChangeAbs}}&nbsp;
               <span *ngIf="portfolioData.lastChangePct == 0">&#8722;&#8722;</span>
               <span *ngIf="portfolioData.lastChangePct > 0">&#9650;</span>
               <span *ngIf="portfolioData.lastChangePct < 0">&#9660;</span>
