@@ -15,6 +15,7 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
 
   @Input() descriptionLimit: Number;
   @Input() portfolioData: PortfolioDetails;
+  @Input() showGuide: boolean;
 
   chartData: {name: string, value: number}[] = [];
 

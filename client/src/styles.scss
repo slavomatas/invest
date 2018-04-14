@@ -1,2 +1,9 @@
 // Import Fuse main library
 @import "app/core/scss/core";
+
+.touranchor--is-active {
+    background: #caedff9d;
+    border-radius: 3.8px;
+    padding: 1px;
+    z-index: 9999999;
+}

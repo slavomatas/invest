@@ -1,24 +1,27 @@
-<!-- filter -->
-<div id="filter-container" >
-  <mat-form-field id="filter-portfolio-type" flex-basis="auto">
-    <mat-select placeholder="Portfolio type" [(ngModel)]="selectedPortfolioType" (selectionChange)="onFilterSelectionChange($event)" >
-      <mat-option *ngFor="let portfolioType of portfolioTypes" [value]="portfolioType.value">
-        {{ portfolioType.viewValue }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<!-- start guide tour help button -->
+<div class="content">
+  <invest-help-button (clickEvent)="startTourClick()"></invest-help-button>
+  <!-- filter -->
+  <div id="filter-container">
+      <mat-form-field id="filter-portfolio-type" flex-basis="auto" tourAnchor="portfolio-list-step-1">
+        <mat-select placeholder="Portfolio type" [(ngModel)]="selectedPortfolioType" (selectionChange)="onFilterSelectionChange($event)" >
+          <mat-option *ngFor="let portfolioType of portfolioTypes" [value]="portfolioType.value">
+            {{ portfolioType.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  
+    <div id="list-container">
+      <!-- portfolio list -->
+      <invest-portfolio-list-row
+        *ngFor="let portfolio of portfolioList, let i = index"
+        [showGuide]="i == 0"
+        class="portfolio-list-item"
+        [portfolioData]="portfolio"
+        descriptionLimit="60">
+      </invest-portfolio-list-row>
+    </div>
+
+    <tour-step-template></tour-step-template>
 </div>
-
-<div id="list-container">
-  <!-- portfolio list -->
-  <invest-portfolio-list-row
-    *ngFor="let portfolio of portfolioList"
-    class="portfolio-list-item"
-    [portfolioData]="portfolio"
-    descriptionLimit="60">
-  </invest-portfolio-list-row>
-</div>
-
-
-
-

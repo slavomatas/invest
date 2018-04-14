@@ -1,5 +1,10 @@
 .help-icon-parent {
   width: 100%;
+  position: absolute;
+  right: 0px;
+  z-index: 99999;
+  padding-right: 50px;
+  padding-top: 20px;
 }
 
 .help-icon-child {

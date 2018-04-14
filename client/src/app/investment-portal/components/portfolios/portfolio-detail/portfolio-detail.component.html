@@ -1,4 +1,7 @@
 <div class="content page-layout blank" fusePerfectScrollbar="">
+  <div class="help-btn-parent">
+    <invest-help-button (clickEvent)="startGuideClick()"></invest-help-button>
+  </div>
 
   <!-- MAIN TABULAR VIEW -->
   <mat-tab-group id="portfolio-detail-root">
@@ -6,7 +9,7 @@
     <!-- OVERVIEW TAB -->
     <mat-tab label="Overview">
       <h1 tourAnchor="step-1">Summary</h1>
-      <button mat-raised-button (click)="startGuideClick()">Start Guide</button>
+
       <fuse-widget class="mat-white-bg">
         <div class="invest-summary-container">
 

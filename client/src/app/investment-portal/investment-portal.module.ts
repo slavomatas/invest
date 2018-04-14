@@ -41,6 +41,7 @@ import { environment } from '../../environments/environment';
 import * as Raven from 'raven-js';
 import { MessageService } from './services/websocket/message.service';
 import { TourService, TourMatMenuModule } from 'ngx-tour-md-menu';
+import { HelpButtonComponent } from './components/common-components/help-button/help-button.component';
 
 if (environment.production) {
   Raven
@@ -86,7 +87,8 @@ const routes = [
     PortfolioDetailPositionsComponent,
     PortfolioDetailPositionChartComponent,
     EditPositionDialogComponent,
-    PortfolioDetailTradesComponent
+    PortfolioDetailTradesComponent,
+    HelpButtonComponent
   ],
   imports: [
     SharedModule,

@@ -13,6 +13,8 @@ import { AppState } from '../../store/store';
 import { PortfolioDetails } from '../../types/types';
 import { cloneDeep } from 'lodash';
 import {MessageService} from "../../services/websocket/message.service";
+import { TourService } from 'ngx-tour-md-menu';
+import { demandDashboardTour } from '../../toures/tour-definitions';
 
 @Component({
   selector: 'invest-dashboard',
@@ -30,7 +32,8 @@ export class DashboardComponent {
     private translationLoader: FuseTranslationLoaderService,
     private actions: PortfolioActions,
     private messageService: MessageService,
-    private ngRedux: NgRedux<AppState>
+    private ngRedux: NgRedux<AppState>,
+    private tourService: TourService
   ) {
     this.translationLoader.loadTranslations(english, slovak);
 
@@ -58,5 +61,10 @@ export class DashboardComponent {
 
   sendToSocket(){
     this.messageService.sendMessage('pliisi pod ' + (this.count++)  );
+  }
+  
+  startTourClick() {
+    this.tourService.initialize(demandDashboardTour);
+    this.tourService.start();
   }
 }

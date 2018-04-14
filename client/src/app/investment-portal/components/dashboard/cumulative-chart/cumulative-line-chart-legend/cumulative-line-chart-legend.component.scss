@@ -10,7 +10,6 @@ div#market-value-parent {
 div#market-value {
   float: right;
   padding-right: 10px;
-  /*background-color: #DD1144;*/
 }
 
 div#period-value-parent {
@@ -22,7 +21,6 @@ div#period-value {
   overflow: hidden;
   float: left;
   padding-left: 10px;
-  /*background-color: #0086B3;*/
 }
 
 div#period-selector {
@@ -35,7 +33,6 @@ div.legend-box {
   display: inline-block;
   margin-left: 0.4em;
   margin-right: 0.4em;
-  /*background-color: #4CAF50;*/
   color: #9b9b9b;
   font-size: large;
 
@@ -58,7 +55,9 @@ td#period-value-percentage {
 }
 
 .center {
-  text-align: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 td.value {
