@@ -1,18 +1,7 @@
 <div id="wrapper">
   <div id="values" tourAnchor="dashboard-step-1">
-    <div id="market-value-parent">
-      <div id="market-value" class="center">
-        <tr>
-          <td class="value">
-            {{currencySymbol}}{{portfolioSummaryObject.marketValue}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            market value
-          </td>
-        </tr>
-      </div>
+    <div id="period-value-parent" class="value flex-item-left">
+      {{currencySymbol}}{{portfolioSummaryObject.periodMarketValue}}
     </div>
     <div class="value flex-item-center">
       &nbsp;&#8594;&nbsp;
