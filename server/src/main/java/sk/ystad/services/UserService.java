@@ -179,4 +179,15 @@ public class UserService implements UserDetailsService {
             ;
         }
     }
+
+    /**
+     * Update firstLogin flag used to determine if the user has ever logged in
+     * @param principal
+     * @param firstLogin
+     */
+    public void updateFirstLogin(Principal principal,boolean firstLogin) {
+        User user = userRepository.findByUsername(principal.getName());
+        user.setFirstLogin(firstLogin);
+        userRepository.save(user);
+    }
 }

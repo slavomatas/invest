@@ -1,6 +1,7 @@
 package sk.ystad.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.NotEmpty;
 import sk.ystad.model.auth.Role;
 import sk.ystad.model.users.portfolios.Portfolio;
@@ -49,6 +50,10 @@ public class User {
     @Column(name = "registrationConfirmed")
     private boolean registrationConfirmed;
 
+    @Column(name = "firstLogin")
+    @ColumnDefault("false")
+    private boolean firstLogin;
+
     /**
      * Roles are being eagerly loaded here because
      * they are a fairly small collection of items for this example.
@@ -81,6 +86,20 @@ public class User {
         this.registrationConfirmed = false;
         generateNewToken();
         this.roles = new ArrayList<>();
+    }
+
+    public User(String username, String password, String name, String email, String surname, String registrationToken, Date registrationTimestamp, boolean registrationConfirmed, boolean firstLogin, List<Role> roles, List<Portfolio> portfolios) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.surname = surname;
+        this.registrationToken = registrationToken;
+        this.registrationTimestamp = registrationTimestamp;
+        this.registrationConfirmed = registrationConfirmed;
+        this.firstLogin = firstLogin;
+        this.roles = roles;
+        this.portfolios = portfolios;
     }
 
     public Long getId() {
@@ -178,6 +197,14 @@ public class User {
 
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    public boolean isFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 }
 
