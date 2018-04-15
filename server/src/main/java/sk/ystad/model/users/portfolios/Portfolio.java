@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import sk.ystad.model.measurements.positions.Position;
 import sk.ystad.model.users.User;
+import sk.ystad.model.users.portfolios.positions.Trade;
 import sk.ystad.model.users.portfolios.positions.UserPosition;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -222,4 +224,14 @@ public class Portfolio {
     public void setModel(boolean model) {
         isModel = model;
     }
+
+    @Transient
+    public List<Trade> getAllTrades() {
+        List<Trade> trades = new ArrayList<>();
+        for (UserPosition position : usersPositions) {
+            trades.addAll(position.getTrades());
+        }
+        return trades;
+    }
+
 }

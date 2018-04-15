@@ -41,10 +41,11 @@ public class PositionService {
     private final PortfolioRepository portfolioRepository;
     @Autowired
     private final UserRepository userRepository;
+    private final RestCallingService restCallingService;
     private InfluxDB influxDB;
 
     @Autowired
-    public PositionService(PositionRepository positionRepository, TradeRepository tradeRepository, SecurityRepository securityRepository, UserPositionRepository userPositionRepository, PortfolioRepository portfolioRepository, UserRepository userRepository, InfluxDB influxDB) {
+    public PositionService(PositionRepository positionRepository, TradeRepository tradeRepository, SecurityRepository securityRepository, UserPositionRepository userPositionRepository, PortfolioRepository portfolioRepository, UserRepository userRepository, InfluxDB influxDB, RestCallingService restCallingService) {
         this.positionRepository = positionRepository;
         this.tradeRepository = tradeRepository;
         this.securityRepository = securityRepository;
@@ -52,6 +53,7 @@ public class PositionService {
         this.portfolioRepository = portfolioRepository;
         this.userRepository = userRepository;
         this.influxDB = influxDB;
+        this.restCallingService = restCallingService;
     }
 
     private static final Logger logger = LogManager
@@ -106,6 +108,7 @@ public class PositionService {
         UserPosition userPosition = positionRepository.findBySecuritySymbolAndPortfolio(symbol, portfolio);
         //Try to format date
         Date formatedTimestamp = null;
+
         try {
             formatedTimestamp = FormatingUtil.formatStringToDate(timestamp, "yyyy-MM-dd HH:mm:ss");
         } catch (ParseException e) {
@@ -117,16 +120,23 @@ public class PositionService {
         if (userPosition == null) {
             userPosition = new UserPosition(security, null, portfolio);
             userPositionRepository.save(userPosition);
+
             logger.info("Created position: " + userPosition);
         }
         Trade trade = new Trade(userPosition, price, amount, formatedTimestamp);
         tradeRepository.save(trade);
+        callCalculation(portfolio);
         logger.info("Added trade to repository  " + trade);
         return new ResponseEntity<>(trade, HttpStatus.OK);
     }
 
+    private void callCalculation(Portfolio portfolio) {
+        restCallingService.callRecalculation(portfolio);
+    }
+
     /**
      * Update trade in database
+     *
      * @param principal
      * @param trade
      * @return
@@ -135,22 +145,29 @@ public class PositionService {
         try {
             trade.setPosition(tradeRepository.findOne(trade.getTradeId()).getPosition());
             trade = tradeRepository.save(trade);
+            callCalculation(trade);
             logger.info("Updated trade: " + trade.toString());
             return new ResponseEntity<>(trade, HttpStatus.OK);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             logger.error("Failed to update trade: " + e.getMessage());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    private void callCalculation(Trade trade) {
+        try {
+            callCalculation(trade.getPosition().getPortfolio());
+        } catch (NullPointerException ignored) {
+        }
+    }
+
     public ResponseEntity getAllPositions(Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
         List<UserPosition> positions = portfolio.getUsersPositions();
 
         logger.info("Loading positions for portfolio: " + portfolio.toString());
         logger.info("Loaded positions: " + positions.size());
-        for (UserPosition position: positions) {
+        for (UserPosition position : positions) {
             try {
                 String queryStr = String.format("SELECT * FROM %s ORDER BY time DESC LIMIT 20", position.getSecurity().getSymbol());
                 Query query = new Query(queryStr, Measures.CLOSE_PRICE.getName());
@@ -159,12 +176,11 @@ public class PositionService {
                 List<List<Object>> values = queryResult.getResults().get(0).getSeries().get(0).getValues();
                 Collections.reverse(values);
                 List<TimeSeriesSimpleItem> last20Days = new ArrayList<>();
-                for (List<Object> v: values) {
+                for (List<Object> v : values) {
                     last20Days.add(new TimeSeriesSimpleItem((String) v.get(0), (Double) v.get(10)));
                 }
                 position.setPriceLast20Days(last20Days);
-            }
-            catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 logger.error("Failed to load positions: ", e);
                 return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -177,16 +193,15 @@ public class PositionService {
             List<List<Object>> values = queryResult.getResults().get(0).getSeries().get(0).getValues();
             List<String> columns = queryResult.getResults().get(0).getSeries().get(0).getColumns();
             for (int i = 1; i < values.get(0).size(); i++) {
-                Position p = new Position(columns.get(i),0.0);
-                for (UserPosition position: positions) {
+                Position p = new Position(columns.get(i), 0.0);
+                for (UserPosition position : positions) {
                     if (position.getSecurity().getSymbol().equals(p.getSymbol())) {
                         position.setMarketValue((Double) values.get(0).get(i));
                         position.setLastChangeMarketValue((Double) values.get(0).get(i) - (Double) values.get(1).get(i));
                     }
                 }
             }
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
