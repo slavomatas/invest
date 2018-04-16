@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PortfolioDetails, PortfolioPosition, TransactionTypes, Trade } from '../../../types/types';
+import {PortfolioDetails, PortfolioPosition, TransactionTypes, Trade, TypeOfPortfolio} from '../../../types/types';
 import { ActivatedRoute } from '@angular/router';
 import { findPortfolioById, updateTradeInPortfolio } from '../../../utils/portfolio-utils';
 import { NgRedux } from '@angular-redux/store';
@@ -28,6 +28,8 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
   portfolioList$ = this.ngRedux.select(state => state.portfolioList);
   portfolios: PortfolioDetails[];
+  modelPortfolioList$ = this.ngRedux.select(state => state.modelPortfolioList);
+  modelPortfolios: PortfolioDetails[];
   reduxPortfolio: PortfolioDetails;
 
   portfolioId: number;
@@ -55,7 +57,6 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
       }
     });
-
 
     // Following three event hooks are ugly workaround. Problem is we need to swap between two tabs during the tour.
     // We can subscribe to stepShow$ event, but at that point the step is already shown, but tab is not yet swapped.
@@ -94,6 +95,18 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
       }
       
     });
+    this.modelPortfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
+      if (reduxPortfolios != null && reduxPortfolios.length > 0) {
+
+        this.modelPortfolios = cloneDeep((reduxPortfolios));
+        if (this.portfolioId) {
+          this.update();
+        }
+
+      }
+    });
+
+    this.tourService.events$.subscribe(x => console.log(x));
   }
 
   ngOnInit() {
@@ -104,8 +117,13 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
        // get trades from BE
        this.portfolioService.getPortfolioPositions(this.reduxPortfolio).then((positions: PortfolioPosition[]) => {
         this.reduxPortfolio.positions = positions;
+        console.log("REST positions: ");
+        console.log(positions);
+        console.log(this.reduxPortfolio.positions);
         this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
         this.portfolioActions.updatePortfolio(this.reduxPortfolio);
+        this.portfolioActions.updateModelPortfolio(this.reduxPortfolio);
+        this.update();
       });
     });
   }
@@ -119,6 +137,10 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
   // need to call update of reduxPortfolio every time when something changes in REDUX so the change reflects in child elements with @Input
   update() {
       this.reduxPortfolio = findPortfolioById(this.portfolios, this.portfolioId);
+
+      if (this.reduxPortfolio == undefined) {
+        this.reduxPortfolio = findPortfolioById(this.modelPortfolios, this.portfolioId);
+      }
 
       // prepare data for table
       const portfolioSource: PortfolioDetails[] = [];
@@ -163,6 +185,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
           updateTradeInPortfolio(this.reduxPortfolio, result.symbol, createdTrade);
           this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
           this.portfolioActions.updatePortfolio(this.reduxPortfolio);
+          this.portfolioActions.updateModelPortfolio(this.reduxPortfolio);
         });
       }
     });

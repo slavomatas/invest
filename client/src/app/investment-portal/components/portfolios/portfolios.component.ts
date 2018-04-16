@@ -6,6 +6,7 @@ import { PortfolioService } from '../../services/portfolio/portfolio.service';
 import { cloneDeep } from 'lodash';
 import { TourService } from 'ngx-tour-md-menu';
 import { demandPortfolioListTour } from '../../toures/tour-definitions';
+import {PortfolioActions} from '../../store/actions/portfolio-actions';
 
 @Component({
   selector: 'invest-portfolios',
@@ -34,6 +35,7 @@ export class PortfoliosComponent implements OnInit {
   constructor(
     private ngRedux: NgRedux<AppState>,
     private portfolioService: PortfolioService,
+    private actions: PortfolioActions,
     private tourService: TourService
   ) {
 
@@ -76,6 +78,7 @@ export class PortfoliosComponent implements OnInit {
     if (!this.isModelFetched) {
       this.portfolioService.getPortfolios(TypeOfPortfolio.model).then((publicPortfolioList: PortfolioDetails[]) => {
         this.publicPortfolioList = cloneDeep(publicPortfolioList);
+        this.actions.getModelPortfolios(true, publicPortfolioList);
         this.isModelFetched = true;
         callback();
       });

@@ -10,6 +10,7 @@ export interface AppState {
     token: Token;
     portfolioTimeSeries: PortfolioTimeSeries[];
     portfolioList: PortfolioDetails[];
+    modelPortfolioList: PortfolioDetails[];
     displayedPortfolios: PortfolioDetails[];
     isGettingPortfoliosCumulativeData: boolean;
     cumulativeFetchError: string | undefined;
@@ -22,6 +23,7 @@ export interface AppState {
 export const INITIAL_STATE: AppState = {
     portfolioTimeSeries: [],
     portfolioList: [],
+    modelPortfolioList: [],
     displayedPortfolios: [],
     isGettingPortfoliosCumulativeData: false,
     cumulativeFetchError: undefined,
@@ -62,6 +64,17 @@ export function rootReducer(lastState: AppState, action: any): AppState {
             portfoliosDetailsFetchError: undefined
           };
         case PortfolioActions.FGET_PORTFOLIOS:
+          return {
+            ...lastState,
+            portfoliosDetailsFetchError: action.payload
+          };
+        case PortfolioActions.GET_MODEL_PORTFOLIOS:
+          return {
+            ...lastState,
+            modelPortfolioList: action.payload,
+            portfoliosDetailsFetchError: undefined
+          };
+        case PortfolioActions.FGET_MODEL_PORTFOLIOS:
           return {
             ...lastState,
             portfoliosDetailsFetchError: action.payload

@@ -31,9 +31,9 @@ public class UserPosition {
     private Portfolio portfolio;
 
     @Transient
-    private Double marketValue;
+    private Double marketValue = 0.0;
     @Transient
-    private Double lastChangeMarketValue;
+    private Double lastChangeMarketValue = 0.0;
 
     @Transient
     private List<TimeSeriesSimpleItem> priceLast20Days;
