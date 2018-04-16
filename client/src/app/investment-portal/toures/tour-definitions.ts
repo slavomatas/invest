@@ -95,5 +95,32 @@ export const demandPortfolioDetailTour: IStepOption[] = [
     anchorId: 'portfolio-detail-step-4',
     title: 'Welcome...',
     content: 'Here you can see...'
+  },
+  {
+    anchorId: 'portfolio-detail-step-5',
+    title: 'Welcome...',
+    content: 'Here you can see...'
+  },
+  {
+    anchorId: 'portfolio-detail-step-6',
+    title: 'Welcome...',
+    content: 'Here you can see...'
+  },
+  {
+    anchorId: 'portfolio-detail-step-7',
+    title: 'Welcome...',
+    content: 'Here you can see...'
+  },
+  {
+    anchorId: 'portfolio-detail-step-8',
+    title: 'Welcome...',
+    content: 'Here you can see...',
+    preventScrolling: false
+  },
+  {
+    anchorId: 'portfolio-detail-step-9',
+    title: 'Welcome...',
+    content: 'Here you can see...',
+    preventScrolling: false
   }
 ];

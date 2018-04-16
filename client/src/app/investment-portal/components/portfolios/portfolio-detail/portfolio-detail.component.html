@@ -8,7 +8,7 @@
 
     <!-- OVERVIEW TAB -->
     <mat-tab label="Overview">
-      <h1 tourAnchor="step-1">Summary</h1>
+      <h1>Summary</h1>
 
       <fuse-widget class="mat-white-bg">
         <div class="invest-summary-container">
@@ -17,19 +17,19 @@
 
             <ng-container matColumnDef="marketValue">
               <mat-header-cell *matHeaderCellDef> Market Value </mat-header-cell>
-              <mat-cell *matCellDef="let element" tourAnchor="step-2"> <span>${{element.marketValue}}</span> </mat-cell>
+              <mat-cell *matCellDef="let element" tourAnchor="portfolio-detail-step-1"> <span>${{element.marketValue}}</span> </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="latestChange">
               <mat-header-cell *matHeaderCellDef> Latest Change </mat-header-cell>
-              <mat-cell *matCellDef="let element"> 
+              <mat-cell *matCellDef="let element" tourAnchor="portfolio-detail-step-2"> 
                   ${{formatNumber(element.lastChangeAbs, false, 3)}} &#8594; {{formatNumber(element.lastChangePct, false, 3)}}%
               </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="week">
               <mat-header-cell *matHeaderCellDef> Week </mat-header-cell>
-              <mat-cell *matCellDef="let element" tourAnchor="step-3">
+              <mat-cell *matCellDef="let element" tourAnchor="portfolio-detail-step-3">
                 <div *ngIf="element.returns !== null && element.returns.hasOwnProperty('weekly'); else templateNull">
                   <div *ngIf="element.returns.weekly > 0" class="positive-placeholder">
                     {{formatNumber(element.returns.weekly, false, 3)}}%
@@ -103,7 +103,7 @@
       </fuse-widget>
 
       <fuse-widget class="mat-white-bg">
-        <mat-tab-group id="portfolio-detail-overview-tab" (selectedTabChange)="onMatTabClick()" >
+        <mat-tab-group id="portfolio-detail-overview-tab" (selectedIndexChange)="onIndexChange($event)" [selectedIndex]="currentTabIndex" (selectedTabChange)="onMatTabClick()" >
           <mat-tab label="Positions">
             <invest-portfolio-detail-positions [portfolio]="reduxPortfolio"></invest-portfolio-detail-positions>
           </mat-tab>

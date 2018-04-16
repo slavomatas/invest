@@ -32,13 +32,13 @@
 
             <!-- Price Column -->
             <ng-container matColumnDef="price">
-              <mat-header-cell *matHeaderCellDef> PRICE </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef tourAnchor="portfolio-detail-step-8"> PRICE </mat-header-cell>
               <mat-cell *matCellDef="let element"> ${{element.price | number}} </mat-cell>
             </ng-container>
              
             <!-- Buttons Column -->
             <ng-container matColumnDef="buttons">
-                <mat-header-cell *matHeaderCellDef> BUTTONS </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef tourAnchor="portfolio-detail-step-9"> BUTTONS </mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     <div fxLayout="row">
                         <div class="item item-edit">
