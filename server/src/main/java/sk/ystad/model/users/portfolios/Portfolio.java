@@ -51,6 +51,10 @@ public class Portfolio {
     @Column(name = "id_influx")
     private String idInflux;
 
+    @JsonIgnore
+    @Column(name = "new_id_influx")
+    private String newIdInflux;
+
     @Column(name = "is_closed")
     private boolean isClosed;
 
@@ -234,4 +238,11 @@ public class Portfolio {
         return trades;
     }
 
+    public String getNewIdInflux() {
+        return newIdInflux;
+    }
+
+    public void setNewIdInflux(String newIdInflux) {
+        this.newIdInflux = newIdInflux;
+    }
 }

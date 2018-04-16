@@ -332,14 +332,25 @@ public class PortfolioService {
 
     public void recalculatePortfolio(Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-        callCalculation(portfolio);
+        String newIdInflux = callCalculation(portfolio);
+        updateNewIdInflux(portfolio, newIdInflux);
     }
 
-    private void callCalculation(Portfolio portfolio) {
-        restCallingService.callRecalculation(portfolio);
+    private String callCalculation(Portfolio portfolio) {
+        return restCallingService.callRecalculation(portfolio);
     }
 
     public Portfolio getByInfluxId(String influxId) {
         return portfolioRepository.getByIdInflux(influxId);
+    }
+
+    /**
+     * Updates newIdInflux parameter
+     * @param portfolio
+     * @param newIdInflux
+     */
+    public void updateNewIdInflux(Portfolio portfolio, String newIdInflux) {
+        portfolio.setNewIdInflux(newIdInflux);
+        portfolioRepository.save(portfolio);
     }
 }
