@@ -44,6 +44,12 @@ export const demandDashboardTour: IStepOption[] = [
     title: 'Welcome...',
     content: 'Here you can see...',
     preventScrolling:	true
+  },
+  {
+    anchorId: 'dashboard-step-5',
+    title: 'Welcome...',
+    content: 'Here you can see...',
+    preventScrolling:	true
   }
 ];
 
