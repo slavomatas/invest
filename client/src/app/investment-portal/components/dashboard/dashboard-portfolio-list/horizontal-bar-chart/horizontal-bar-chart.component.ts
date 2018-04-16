@@ -23,7 +23,8 @@ export class HorizontalBarChartComponent implements OnChanges {
   showYAxisLabel = true;
   yAxisLabel = '';
   barPadding = 155;
-  view = [, 250 * this.portfoliosNum];
+  view: any[] = [ , 250];
+  showLegend = false;
 
   colorScheme = {
     domain: colorScheme
@@ -42,7 +43,6 @@ export class HorizontalBarChartComponent implements OnChanges {
       );
     }
     this.portfoliosNum = this.portfolioDetailsList.length;
-    this.view = [, 250 * this.portfoliosNum];
     this.colorScheme = {
       domain: getPortfoliosColors(this.portfolioDetailsList)
     };

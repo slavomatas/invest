@@ -1,26 +1,58 @@
-<div *ngIf="this.chartData" class="chart-container">
-  <ngx-charts-advanced-pie-chart
-    [scheme]="this.colorScheme"
-    [results]="this.chartData"
-    [gradient]="true"
-    [label]="this.portfolioDetails.name"
-    (select)="onSelect(this.portfolioDetails.id)">
-    <ng-template #tooltipTemplate let-model="model">
-      <span class="tooltip-name">{{model.name}}</span>
-      <br>
-      <span class="tooltip-value">${{model.value | number}}</span>
-    </ng-template>
-  </ngx-charts-advanced-pie-chart>
+<div *ngIf="showGuide" tourAnchor="dashboard-step-4">
+  <div *ngIf="this.chartData" class="chart-container">
+    <ngx-charts-advanced-pie-chart
+      [scheme]="this.colorScheme"
+      [results]="this.chartData"
+      [gradient]="true"
+      [label]="this.portfolioDetails.name"
+      (select)="onSelect(this.portfolioDetails.id)">
+      <ng-template #tooltipTemplate let-model="model">
+        <span class="tooltip-name">{{model.name}}</span>
+        <br>
+        <span class="tooltip-value">${{model.value | number}}</span>
+      </ng-template>
+    </ngx-charts-advanced-pie-chart>
 
-  <div *ngIf="percentage >= 0; then positive_percentage else negative_percentage"></div>
-  <ng-template #positive_percentage>
-      <td id="period-value-percentage" class="green percentage-component">
-      &#9650; ({{(percentage * 100).toFixed(2)}}%)
-  </ng-template>
-  <ng-template #negative_percentage>
-    <td id="period-value-percentage" class="red percentage-component">
-      &#9660; ({{(percentage * 100).toFixed(2)}}%)
-    </td>
-  </ng-template>
+    <div *ngIf="percentage >= 0; then positive_percentage else negative_percentage"></div>
+    <ng-template #positive_percentage>
+        <td id="period-value-percentage" class="green percentage-component">
+        &#9650; ({{(percentage * 100).toFixed(2)}}%)
+    </ng-template>
+    <ng-template #negative_percentage>
+      <td id="period-value-percentage" class="red percentage-component">
+        &#9660; ({{(percentage * 100).toFixed(2)}}%)
+      </td>
+    </ng-template>
+
+    <div class="clickable-div-component" (click)="onClick(this.portfolioDetails.id)"></div>
+  </div>
 </div>
 
+<div *ngIf="!showGuide">
+  <div *ngIf="this.chartData" class="chart-container">
+    <ngx-charts-advanced-pie-chart
+      [scheme]="this.colorScheme"
+      [results]="this.chartData"
+      [gradient]="true"
+      [label]="this.portfolioDetails.name">
+      <ng-template #tooltipTemplate let-model="model">
+        <span class="tooltip-name">{{model.name}}</span>
+        <br>
+        <span class="tooltip-value">${{model.value | number}}</span>
+      </ng-template>
+    </ngx-charts-advanced-pie-chart>
+
+    <div *ngIf="percentage >= 0; then positive_percentage else negative_percentage"></div>
+    <ng-template #positive_percentage>
+        <td id="period-value-percentage" class="green percentage-component">
+        &#9650; ({{(percentage * 100).toFixed(2)}}%)
+    </ng-template>
+    <ng-template #negative_percentage>
+      <td id="period-value-percentage" class="red percentage-component">
+        &#9660; ({{(percentage * 100).toFixed(2)}}%)
+      </td>
+    </ng-template>
+
+    <div class="clickable-div-component" (click)="onClick(this.portfolioDetails.id)"></div>
+  </div>
+</div>

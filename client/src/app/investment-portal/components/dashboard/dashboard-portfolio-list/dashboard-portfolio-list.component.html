@@ -1,8 +1,24 @@
-<div class="row" fxLayout="row" fxFlex="100" fxFill="100" *ngIf="nonClosedPortfolios != null">
-    <div  class="col-xs-6 col-md-6 col-sm-6 col-lg-6" fxFlex="50" fxFill sytle="padding-top: 20px!important; padding-bottom: 20px;" id="horizontal-bar-mobile-hide">
-      <invest-horizontal-bar-chart [portfolioDetailsList]="nonClosedPortfolios"></invest-horizontal-bar-chart>
-    </div>
-    <div tourAnchor="dashboard-step-4" class="col-xs-6 col-md-6 col-sm-6 col-lg-6" fxFlex="50" fxFill fxFlexOffset="50px" fxLayoutGap="100px" id="overview-mobile-view">
-      <invest-portfolio-overview *ngFor="let portfolio of nonClosedPortfolios" [portfolioDetails]="portfolio"></invest-portfolio-overview>
-    </div>
+<div *ngIf="nonClosedPortfolios != null">
+  <div class="widget-group p-12" fxLayout="row" fxFlex="100" fxLayoutWrap *fuseIfOnDom [@animateStagger]="{value:'50'}">
+    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget mat-white-bg" fxLayout="row" fxFlex="100" fxFlex.gt-xs="100" fxFlex.gt-md="50">
+      <div class="padding-top padding-bottom fuse-widget-front mat-elevation-z2" style="height: 274px;">
+        <invest-horizontal-bar-chart fxFill="100" [portfolioDetailsList]="nonClosedPortfolios"></invest-horizontal-bar-chart>
+      </div>
+    </fuse-widget>
+
+    <fuse-widget *ngFor="let portfolio of nonClosedPortfolios, let i = index" [@animate]="{value:'*',params:{y:'100%'}}" class="widget mat-white-bg"
+      fxLayout="row" fxFlex="100" fxFlex.gt-xs="100" fxFlex.gt-md="50">
+      <div class="padding-top padding-bottom fuse-widget-front mat-elevation-z2">
+        <invest-portfolio-overview [showGuide]="i === 0" class="" [portfolioDetails]="portfolio"></invest-portfolio-overview>
+      </div>
+    </fuse-widget>
+  </div>
 </div>
+<!-- 
+<div *ngIf="nonClosedPortfolios != null" class="horizontal-chart">
+  <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget mat-white-bg" fxLayout="row" fxFlex="50">
+    <div class="padding-top padding-bottom fuse-widget-front mat-elevation-z2">
+      <invest-horizontal-bar-chart fxFill="100" [portfolioDetailsList]="nonClosedPortfolios"></invest-horizontal-bar-chart>
+    </div>
+  </fuse-widget>
+</div> -->

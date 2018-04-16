@@ -22,6 +22,7 @@ interface Position {
 })
 export class PortfolioOverviewComponent implements OnChanges {
   @Input() portfolioDetails: PortfolioDetails;
+  @Input() showGuide: boolean;
 
   chartData: ChartData[] = [];
   percentage: number;
@@ -39,10 +40,6 @@ export class PortfolioOverviewComponent implements OnChanges {
     this.setChartData(this.portfolioDetails.positions);
   }
 
-  onSelect(portfolioId) {
-    this.router.navigate(['/portfolios/' + portfolioId + '/overview']);
-  }
-
   private setChartData(newData: Position[]) {
     for (const position of newData) {
       this.chartData.push(
@@ -52,5 +49,9 @@ export class PortfolioOverviewComponent implements OnChanges {
         }
       );
     }
+  }
+
+  onClick(portfolioId) {
+    this.router.navigate(['/portfolios/' + portfolioId + '/overview']);
   }
 }

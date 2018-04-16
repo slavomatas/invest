@@ -11,16 +11,8 @@
         <!-- / Cumulative Returns Graph -->
         </div>
       </fuse-widget>
-
-      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100" fxFlex.gt-xs="100" fxFlex.gt-md="50">
-        <!-- Front -->
-        <div class=" padding-top padding-bottom fuse-widget-front mat-elevation-z2">
-          <invest-dashboard-portfolio-list *ngIf="portfolioList$" [dashboardPortfolioList]="portfolioList$ | async"></invest-dashboard-portfolio-list>
-        </div>
-        <!-- / Front -->
-      </fuse-widget>
+      <invest-dashboard-portfolio-list *ngIf="portfolioList$" [dashboardPortfolioList]="portfolioList$ | async"></invest-dashboard-portfolio-list>
     </div>
-
   <button (click)="sendToSocket()">Send</button>
 
     <tour-step-template></tour-step-template>
