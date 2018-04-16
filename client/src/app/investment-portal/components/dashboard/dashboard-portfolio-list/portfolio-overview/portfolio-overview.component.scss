@@ -27,9 +27,24 @@
   font-size: medium;
 }
 
+.clickable-div-component {
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28%;
+  height: 100%;
+  z-index: 10;
+  font-size: 22px;
+  cursor: pointer;
+}
+
 
 @media only screen and (max-width: 600px) {
   .percentage-component {
     left: 51%;
+  }
+  .clickable-div-component {
+    width: 19%;
   }
 }
