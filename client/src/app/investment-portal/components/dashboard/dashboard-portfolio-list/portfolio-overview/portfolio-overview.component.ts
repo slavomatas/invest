@@ -22,6 +22,7 @@ interface Position {
 })
 export class PortfolioOverviewComponent implements OnChanges {
   @Input() portfolioDetails: PortfolioDetails;
+  @Input() showGuide: boolean;
 
   chartData: ChartData[] = [];
   percentage: number;
