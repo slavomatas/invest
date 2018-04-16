@@ -113,8 +113,27 @@ export class PortfolioService implements IPortfolioService {
 
             // add updated position into result array
             newPositionsArray.push(actPosition);
-          }
+          } else {
+            let quantity = 0;
+            responsePosition.trades.forEach((trade) => {
+              quantity += trade.amount;
+            });
 
+            const price = responsePosition.priceLast20Days[responsePosition.priceLast20Days.length - 1].value;
+
+            const newPosition: PortfolioPosition = {
+              symbol: responsePosition.security.symbol,
+              value: 0,
+              name: responsePosition.security.name,
+              quantity: quantity,
+              price: price,
+              currency: responsePosition.security.currency,
+              priceLast20Days: responsePosition.priceLast20Days,
+              lastChange: responsePosition.lastChangeMarketValue,
+              trades: responsePosition.trades
+            };
+            newPositionsArray.push(newPosition);
+          }
         });
 
         return newPositionsArray;
