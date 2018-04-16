@@ -34,8 +34,7 @@
       [scheme]="this.colorScheme"
       [results]="this.chartData"
       [gradient]="true"
-      [label]="this.portfolioDetails.name"
-      (select)="onSelect(this.portfolioDetails.id)">
+      [label]="this.portfolioDetails.name">
       <ng-template #tooltipTemplate let-model="model">
         <span class="tooltip-name">{{model.name}}</span>
         <br>

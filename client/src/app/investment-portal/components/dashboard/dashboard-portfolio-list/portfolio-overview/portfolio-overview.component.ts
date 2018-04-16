@@ -40,9 +40,6 @@ export class PortfolioOverviewComponent implements OnChanges {
     this.setChartData(this.portfolioDetails.positions);
   }
 
-  onSelect(portfolioId) {
-  }
-
   private setChartData(newData: Position[]) {
     for (const position of newData) {
       this.chartData.push(
@@ -55,7 +52,6 @@ export class PortfolioOverviewComponent implements OnChanges {
   }
 
   onClick(portfolioId) {
-    console.log('#miso call on click' + portfolioId);
     this.router.navigate(['/portfolios/' + portfolioId + '/overview']);
   }
 }
