@@ -4,6 +4,14 @@
   color: #039be5;
 }
 
+.mat-disabled 
+{
+  color: #9d9d9d!important;
+  a{
+    color: #9d9d9d!important;
+  }
+}
+
 .invest-card
 {
   display: flex;
@@ -12,7 +20,6 @@
 
   .portfolio-infobox
   {
-    // background-color: coral;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -24,61 +31,62 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      //background-color: cadetblue;
       border-bottom: 0.4em;
 
       .portfolio-data-stats
       {
         display: flex;
-        margin: 0 0.2em 0 0.2em;
-        flex: 2;
         flex-direction: column;
+        margin: 0 0.2em 0 0.2em;
+        flex-grow: 5;
+        flex-shrink: 3;
         justify-content: flex-start;
 
-        #portfolio-name
-        {
-          margin-bottom: 0.2em;
-          font-size: 24px;
-        }
-
-        .portfolio-data-info
+        .portfolio-data-group
         {
           display: flex;
           flex-direction: row;
-        
-          .portfolio-data-info-left
+          vertical-align: middle;
+          cursor: pointer;
+
+          #portfolio-name
           {
-            flex: 1;
-            margin: 0 0.2em 0 0.2em;
+            margin-bottom: 0.2em;
+            margin-right: 0.5em;
+            font-size: 24px;
+            flex-grow: 0;
+            width: 40%;
           }
 
-          .portfolio-data-info-right
-          {
-            flex: 1;
-            margin: 0 0.2em 0 0.2em;
+          .portfolio-data-info
+          {        
+            display: inline-flex;
+            justify-content: left;
+            align-items: center;
+            flex-grow: 1;
+            width: 60%;
           }
+        }
+
+        .portfolio-description
+        {
+          flex-grow: 1;
+          overflow-wrap: break-word;
         }
       }
 
       .portfolio-data-positions
       {
-        flex: 1;
         margin: 0 0.2em 0 0.2em;
         max-height: 86px;
+        width: 35%;
       }
-    }
 
-    .portfolio-description
-    {
-      //background-color: darkseagreen;
-      flex-grow: 1;
-      overflow-wrap: break-word;
     }
   }
 
   .portfolio-controls
   {
-    //background-color: crimson;
     padding: 0 0.5em 0 0.5em;
     display: flex;
     flex-direction: column;
@@ -96,4 +104,3 @@
 {
   color: #e50321
 }
-

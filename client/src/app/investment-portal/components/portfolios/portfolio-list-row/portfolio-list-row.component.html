@@ -1,32 +1,47 @@
-<mat-card class="invest-card">
+<mat-card [ngClass]="portfolioData.closed ? 'invest-card mat-disabled' : 'invest-card'">
+  <!--sup class="closed" *ngIf=portfolioData.closed>(CLOSED)</sup-->
   <!-- Information about portfolio -->
   <div class="portfolio-infobox">
     <div class="portfolio-data">
-      <div class=portfolio-data-stats>
-        <div class="mat-accent" id="portfolio-name">
+      <div class="portfolio-data-stats">
+        <div class="portfolio-data-group" routerLink="/portfolios/{{portfolioData.id}}/overview">
+          <div [ngClass]="portfolioData.closed ? 'mat-disabled' : 'mat-accent'" id="portfolio-name">
             <span *ngIf="showGuide" tourAnchor="portfolio-list-step-2">{{portfolioData.name}}</span>
             <span *ngIf="!showGuide">{{portfolioData.name}}</span>
-            <sup class="closed" *ngIf=portfolioData.closed>(CLOSED)</sup>
-        </div>
-        
-        <div class="portfolio-data-info">
-          <div class="portfolio-data-info-left">
+          </div>
+          
+          <div class="portfolio-data-info">
             <span>
               ${{portfolioData.marketValue}}
               <span *ngIf="portfolioData.cash == 0; else cash">(NO CASH)</span>
             </span>
             <span>
-              <br>${{portfolioData.lastChangeAbs}}&nbsp;
+              &nbsp;${{portfolioData.lastChangeAbs}}&nbsp;
               <span *ngIf="portfolioData.lastChangePct == 0">&#8722;&#8722;</span>
               <span *ngIf="portfolioData.lastChangePct > 0">&#9650;</span>
               <span *ngIf="portfolioData.lastChangePct < 0">&#9660;</span>
                 &nbsp;{{portfolioData.lastChangePct}}%
             </span>
           </div>
-          <div class="portfolio-data-info-right">
-            <div><strong>Strategy:&nbsp;</strong>not supported</div> <!-- not supported by backend yet -->
-            <div><strong>Use It As:&nbsp;</strong>not supported</div> <!-- not supported by backend yet -->
-          </div>
+        </div>
+
+        <div class="portfolio-description" *ngIf="portfolioData.description != null">
+          <!-- Portfolio description-->
+          <p class="inline" *ngIf="portfolioData.description.length > descriptionLimit">
+            <span>{{portfolioData.description | slice:0:limit}}</span>
+            <span class="inline" *ngIf="portfolioData.description.length > limit">
+              ...&nbsp;<a class="inline" (click)="descShowMore()">More</a>
+            </span>
+            <span>
+              &nbsp;
+              <a class="inline" *ngIf="portfolioData.description.length <= limit"
+                  (click)="descShowLess()">Less
+              </a>
+            </span>
+          </p>
+          <p class="inline" *ngIf="portfolioData.description.length <= descriptionLimit">
+            {{portfolioData.description}}
+          </p>
         </div>
       </div>
 
@@ -36,7 +51,6 @@
       <div class="portfolio-data-positions" *ngIf="!showGuide">
           <div *ngIf="true;then barChart"></div>
       </div>
-
       <ng-template #barChart>
         <ngx-charts-bar-vertical *ngIf="portfolioData.positions != null"
           [view]=""
@@ -53,24 +67,6 @@
           (select)="onSelect($event)">
         </ngx-charts-bar-vertical>
       </ng-template>
-      
-    </div>
-    <div class="portfolio-description" *ngIf="portfolioData.description != null">
-      <!-- Portfolio description-->
-      <p class="inline" *ngIf="portfolioData.description.length > descriptionLimit">
-        <strong>Description: </strong>{{portfolioData.description | slice:0:limit}}
-        <span class="inline" *ngIf="portfolioData.description.length > limit">
-          <a class="inline" (click)="descShowMore()">... More</a>
-        </span>
-        <span>
-          <a class="inline" *ngIf="portfolioData.description.length <= limit"
-              (click)="descShowLess()"> Less
-          </a>
-        </span>
-      </p>
-      <p class="inline" *ngIf="portfolioData.description.length <= descriptionLimit">
-        <strong>Description: </strong>{{portfolioData.description}}
-      </p>
     </div>
   </div>
   <!-- Portfolio control buttons -->
@@ -82,22 +78,13 @@
         <div *ngIf="true;then visibilityContent"></div>
     </div>
     <ng-template #visibilityContent>
-      <button>
-        <span matTooltip="View" matTooltipPosition="above">
-          <mat-icon>
-            <i class="material-icons" routerLink="/portfolios/{{portfolioData.id}}/overview">visibility</i>
-          </mat-icon>
-        </span>
-      </button>
-    </ng-template>
-
-    <div class="portfolio-control-element">
       <button (click)="managePortfolioUpdateOperation(portfolioData)">
         <span matTooltip="Edit" matTooltipPosition="above">
           <mat-icon><i class="material-icons">mode_edit</i></mat-icon>
         </span>
       </button>
-    </div>
+    </ng-template>
+
     <div class="portfolio-control-element">
       <button (click)="managePortfolioCloneOperation(portfolioData)">
         <span matTooltip="Copy" matTooltipPosition="above">
@@ -115,8 +102,8 @@
 
     <ng-template #deleteContent>
       <button (click)="managePortfolioRemoveOperation(portfolioData)">
-        <span matTooltip="Remove" matTooltipPosition="above">
-          <mat-icon><i class="material-icons">delete</i></mat-icon>
+        <span matTooltip="Close" matTooltipPosition="above">
+          <mat-icon><i class="material-icons">block</i></mat-icon>
         </span>
       </button>
     </ng-template>

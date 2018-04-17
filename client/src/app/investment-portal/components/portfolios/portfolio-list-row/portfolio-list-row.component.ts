@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { colorScheme } from '../../../constants/constants';
+import { colorScheme, greyScheme } from '../../../constants/constants';
 import { PortfolioDetails } from '../../../types/types';
 import { PortfolioService } from '../../../services/portfolio/portfolio.service';
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';
@@ -51,6 +51,11 @@ export class PortfolioListRowComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.limit = this.descriptionLimit;
+    if (this.portfolioData.closed){
+      this.colorScheme.domain = greyScheme;
+    } else {
+      this.colorScheme.domain = colorScheme;
+    }
   }
 
   managePortfolioUpdateOperation(portfolio: PortfolioDetails) {
