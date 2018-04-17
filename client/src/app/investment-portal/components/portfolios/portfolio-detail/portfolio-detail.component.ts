@@ -117,9 +117,6 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
        // get trades from BE
        this.portfolioService.getPortfolioPositions(this.reduxPortfolio).then((positions: PortfolioPosition[]) => {
         this.reduxPortfolio.positions = positions;
-        console.log("REST positions: ");
-        console.log(positions);
-        console.log(this.reduxPortfolio.positions);
         this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
         this.portfolioActions.updatePortfolio(this.reduxPortfolio);
         this.portfolioActions.updateModelPortfolio(this.reduxPortfolio);
