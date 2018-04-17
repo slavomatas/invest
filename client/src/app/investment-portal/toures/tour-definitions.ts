@@ -78,7 +78,6 @@ export const demandPortfolioDetailTour: IStepOption[] = [
   {
     anchorId: 'portfolio-detail-step-1',
     content: 'Shows the actual market value of the portfolio.',
-    route: 'portfolios/' + modelPortfolioId + '/overview'
   },
   {
     anchorId: 'portfolio-detail-step-2',
@@ -94,8 +93,7 @@ export const demandPortfolioDetailTour: IStepOption[] = [
   },
   {
     anchorId: 'portfolio-detail-step-5',
-    content: 'Here you can see the progress of securities in last 20 days. ',
-    route: 'portfolios/' + modelPortfolioId + '/overview'
+    content: 'Here you can see the progress of securities in last 20 days. '
   },
   {
     anchorId: 'portfolio-detail-step-6',
@@ -103,8 +101,7 @@ export const demandPortfolioDetailTour: IStepOption[] = [
   },
   {
     anchorId: 'portfolio-detail-step-7',
-    content: 'You can buy or sell positions right here. ',
-    route: 'portfolios/' + modelPortfolioId + '/overview'
+    content: 'You can buy or sell positions right here. '
   },
   {
     anchorId: 'portfolio-detail-step-8',
@@ -131,7 +128,7 @@ export const firstLoginTour: IStepOption[] = [
   demandPortfolioListTour[0],
   demandPortfolioListTour[1],
   demandPortfolioListTour[3],
-  demandPortfolioDetailTour[0],
-  demandPortfolioDetailTour[4],
-  demandPortfolioDetailTour[6]
+  Object.assign({route: 'portfolios/' + modelPortfolioId + '/overview'}, demandPortfolioDetailTour[0]),
+  Object.assign({route: 'portfolios/' + modelPortfolioId + '/overview'}, demandPortfolioDetailTour[4]),
+  Object.assign({route: 'portfolios/' + modelPortfolioId + '/overview'}, demandPortfolioDetailTour[6])
 ];
