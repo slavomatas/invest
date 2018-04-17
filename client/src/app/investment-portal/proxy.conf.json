@@ -4,6 +4,5 @@
     "secure": false,
     "ws":true,
   },
-  "ws":true,
   "changeOrigin": true
 }
