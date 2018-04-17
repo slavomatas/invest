@@ -61,8 +61,11 @@ export class DashboardComponent implements AfterViewInit {
         this.tourService.start();
       },
       2500);
-      // TODO update user.firstLogin
-      // for now we keep it without update for demo purpose
+
+      // TODO update user.firstLogin by calling REST
+      // for now we keep it without update on BE for demo purpose
+
+      this.actions.updateUserFirstLoginFlag(true);
     }
   }
 

@@ -16,6 +16,7 @@ export class PortfolioActions {
     static SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED = 'SET_PORTFOLIO_CUMULATIVE_CHART_SELECTED';
     static SET_CUMULATIVE_CHART_PERIOD = 'SET_CUMULATIVE_CHART_PERIOD';
     static SET_PORTFOLIO_SUMMARY = 'SET_PORTFOLIO_SUMMARY';
+    static UPDATE_FIRST_LOGIN_FLAG = 'UPDATE_FIRST_LOGIN_FLAG';
 
     constructor(private ngRedux: NgRedux<AppState>) { }
 
@@ -98,6 +99,13 @@ export class PortfolioActions {
       this.ngRedux.dispatch({
         type: PortfolioActions.GET_PORTFOLIOS,
         payload: newPortfolioList
+      });
+    }
+
+    public updateUserFirstLoginFlag(newValue: boolean) {
+      this.ngRedux.dispatch({
+        type: PortfolioActions.UPDATE_FIRST_LOGIN_FLAG,
+        payload: newValue
       });
     }
 
