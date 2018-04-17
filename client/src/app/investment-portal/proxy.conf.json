@@ -1,7 +1,7 @@
 {
   "/api": {
     "target": "https://investment-portal.duckdns.org/portal",
-    "secure": false,
+    "secure": true,
     "ws":true,
   },
   "changeOrigin": true
