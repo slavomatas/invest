@@ -1,5 +1,5 @@
 ///<reference path="../../../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit } from '@angular/core';
 import { FuseTranslationLoaderService } from '../../../core/services/translation-loader.service';
 
 import { locale as english } from './i18n/en';
@@ -14,7 +14,7 @@ import { PortfolioDetails } from '../../types/types';
 import { cloneDeep } from 'lodash';
 import {MessageService} from "../../services/websocket/message.service";
 import { TourService } from 'ngx-tour-md-menu';
-import { demandDashboardTour } from '../../toures/tour-definitions';
+import { demandDashboardTour, firstLoginTour } from '../../toures/tour-definitions';
 
 @Component({
   selector: 'invest-dashboard',
@@ -22,7 +22,7 @@ import { demandDashboardTour } from '../../toures/tour-definitions';
   styleUrls: ['./dashboard.component.scss'],
   animations: fuseAnimations
 })
-export class DashboardComponent {
+export class DashboardComponent implements AfterViewInit {
   public static colors: string[] = ['#b71c1c', '#311b92', '#1b5e20', '#ff6f00', '#bf360c',  '#212121'];
   count = 0;
   portfolioList$ = this.ngRedux.select(state => state.portfolioList);
@@ -51,6 +51,19 @@ export class DashboardComponent {
         this.actions.setCumulativeChartPeriod('ALL');
       }
     });
+
+  }
+
+  ngAfterViewInit() {
+    if (!this.ngRedux.getState().user.firstLogin) {
+      setTimeout(() => {
+        this.tourService.initialize(firstLoginTour);
+        this.tourService.start();
+      },
+      2500);
+      // TODO update user.firstLogin
+      // for now we keep it without update for demo purpose
+    }
   }
 
   private getDefaultDateFrom(dateTo: Date): Date {
@@ -59,10 +72,6 @@ export class DashboardComponent {
     return dateFrom;
   }
 
-  sendToSocket(){
-    this.messageService.sendMessage('pliisi pod ' + (this.count++)  );
-  }
-  
   startTourClick() {
     this.tourService.initialize(demandDashboardTour);
     this.tourService.start();

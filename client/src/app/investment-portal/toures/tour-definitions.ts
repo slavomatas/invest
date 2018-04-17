@@ -15,13 +15,7 @@ import { IStepOption } from 'ngx-tour-md-menu';
 //   endBtnTitle?: string;
 // }
 
-export const firstLoginTour: IStepOption[] = [
-  {
-    anchorId: 'flogin-step-1',
-    title: 'Welcome...',
-    content: 'Here you can see...'
-  }
-];
+const modelPortfolioId = 12;
 
 export const demandDashboardTour: IStepOption[] = [
   {
@@ -49,7 +43,8 @@ export const demandDashboardTour: IStepOption[] = [
     anchorId: 'dashboard-step-5',
     title: 'Portfolios overview',
     content: 'The portfolio consists of several securities, such as Apple, Google, etc. The amount of security you\'ve bought is called position. Here you can see the overview of your portfolios and it\'s percentual composition by securities. \n For more detailed view click on the chart.',
-    preventScrolling:	true
+    preventScrolling:	true,
+    route: 'dashboard'
   }
 ];
 
@@ -57,7 +52,8 @@ export const demandPortfolioListTour: IStepOption[] = [
   {
     anchorId: 'portfolio-list-step-1',
     title: 'Portfolios\' filter',
-    content: 'Filter the portfolios you want to see, whether it\'s your private or public modeled portfolios.'
+    content: 'Filter the portfolios you want to see, whether it\'s your private or public modeled portfolios.',
+    route: 'portfolios'
   },
   {
     anchorId: 'portfolio-list-step-2',
@@ -69,7 +65,8 @@ export const demandPortfolioListTour: IStepOption[] = [
   },
   {
     anchorId: 'portfolio-list-step-4',
-    content: 'See the detailed view of the portfolio.'
+    content: 'See the detailed view of the portfolio.',
+    route: 'portfolios'
   },
   {
     anchorId: 'portfolio-list-step-5',
@@ -80,7 +77,8 @@ export const demandPortfolioListTour: IStepOption[] = [
 export const demandPortfolioDetailTour: IStepOption[] = [
   {
     anchorId: 'portfolio-detail-step-1',
-    content: 'Shows the actual market value of the portfolio.'
+    content: 'Shows the actual market value of the portfolio.',
+    route: 'portfolios/' + modelPortfolioId + '/overview'
   },
   {
     anchorId: 'portfolio-detail-step-2',
@@ -96,7 +94,8 @@ export const demandPortfolioDetailTour: IStepOption[] = [
   },
   {
     anchorId: 'portfolio-detail-step-5',
-    content: 'Here you can see the progress of securities in last 20 days. '
+    content: 'Here you can see the progress of securities in last 20 days. ',
+    route: 'portfolios/' + modelPortfolioId + '/overview'
   },
   {
     anchorId: 'portfolio-detail-step-6',
@@ -104,7 +103,8 @@ export const demandPortfolioDetailTour: IStepOption[] = [
   },
   {
     anchorId: 'portfolio-detail-step-7',
-    content: 'You can buy or sell positions right here. '
+    content: 'You can buy or sell positions right here. ',
+    route: 'portfolios/' + modelPortfolioId + '/overview'
   },
   {
     anchorId: 'portfolio-detail-step-8',
@@ -116,4 +116,22 @@ export const demandPortfolioDetailTour: IStepOption[] = [
     content: 'You   can edit details of transactions right here.',
     preventScrolling: false
   }
+];
+
+
+export const firstLoginTour: IStepOption[] = [
+  {
+    anchorId: 'help-step',
+    content: 'You can run step-by-step guide on every screen by using this button.',
+    preventScrolling: false
+  },
+  demandDashboardTour[0],
+  demandDashboardTour[2],
+  demandDashboardTour[4],
+  demandPortfolioListTour[0],
+  demandPortfolioListTour[1],
+  demandPortfolioListTour[3],
+  demandPortfolioDetailTour[0],
+  demandPortfolioDetailTour[4],
+  demandPortfolioDetailTour[6]
 ];
