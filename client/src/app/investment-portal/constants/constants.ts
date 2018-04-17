@@ -3,3 +3,7 @@ export const colorScheme: string[] = [
   '#f032e6', '#d2f53c', '#fabebe', '#008080', '#e6beff', '#aa6e28', '#fffac8', '#800000',
   '#aaffc3', '#808000', '#ffd8b1', '#000080', '#808080'
   ];
+
+export const greyScheme: string[] = [
+  '#aaaaaa', '#888888', '#bbbbbb', '#999999', '#a8a8a8' 
+  ];
