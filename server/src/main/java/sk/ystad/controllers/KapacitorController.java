@@ -26,6 +26,7 @@ public class KapacitorController {
     @RequestMapping(value ="/kapacitor/alert", method = RequestMethod.POST)
     @ApiOperation(value = "Process alert from Kapacitor", notes = "")
     public void processAlert(@RequestBody KapacitorAlert kapacitorAlert) {
+        logger.info("Processed alert", kapacitorAlert.toString());
         kapacitorService.processAlert(kapacitorAlert);
     }
 }

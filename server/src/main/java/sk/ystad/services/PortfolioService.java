@@ -42,6 +42,8 @@ public class PortfolioService {
     private final UserPositionRepository userPositionRepository;
     private final UserService userService;
 
+    private final RestCallingService restCallingService;
+
     private static final Logger logger = LogManager
             .getLogger(ServerApplication.class);
 
@@ -53,7 +55,7 @@ public class PortfolioService {
                             SecurityRepository securityRepository,
                             TradeRepository tradeRepository,
                             UserPositionRepository userPositionRepository,
-                            UserService userService) {
+                            UserService userService, RestCallingService restCallingService) {
         this.influxDB = influxDB;
         this.userRepository = userRepository;
         this.portfolioRepository = portfolioRepository;
@@ -62,6 +64,7 @@ public class PortfolioService {
         this.tradeRepository = tradeRepository;
         this.userPositionRepository = userPositionRepository;
         this.userService = userService;
+        this.restCallingService = restCallingService;
     }
 
     public List<Portfolio> getByUserId(Principal principal) {
@@ -329,9 +332,25 @@ public class PortfolioService {
 
     public void recalculatePortfolio(Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        String newIdInflux = callCalculation(portfolio);
+        updateNewIdInflux(portfolio, newIdInflux);
+    }
+
+    private String callCalculation(Portfolio portfolio) {
+        return restCallingService.callRecalculation(portfolio);
     }
 
     public Portfolio getByInfluxId(String influxId) {
         return portfolioRepository.getByIdInflux(influxId);
+    }
+
+    /**
+     * Updates newIdInflux parameter
+     * @param portfolio
+     * @param newIdInflux
+     */
+    public void updateNewIdInflux(Portfolio portfolio, String newIdInflux) {
+        portfolio.setNewIdInflux(newIdInflux);
+        portfolioRepository.save(portfolio);
     }
 }
