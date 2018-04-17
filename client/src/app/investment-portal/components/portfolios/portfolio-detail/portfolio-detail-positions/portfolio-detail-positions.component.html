@@ -19,7 +19,7 @@
 
                 <!-- Quantity/amount Column -->
                 <ng-container matColumnDef="quantity">
-                  <mat-header-cell *matHeaderCellDef> QUANTITY </mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef tourAnchor="portfolio-detail-step-4"> QUANTITY </mat-header-cell>
                   <mat-cell *matCellDef="let element"> {{element.quantity | number}} </mat-cell>
                 </ng-container>
 
@@ -31,7 +31,7 @@
 
                 <!-- Last 20 days chart Column -->
                 <ng-container matColumnDef="priceLast20Days">
-                    <mat-header-cell *matHeaderCellDef> PRICE LAST 20 DAYS </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef tourAnchor="portfolio-detail-step-5"> PRICE LAST 20 DAYS </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                             <invest-portfolio-detail-position-chart [inputChartData]="element.priceLast20Days"  style="max-height: 40px!important;" ></invest-portfolio-detail-position-chart>
                     </mat-cell>
@@ -45,13 +45,13 @@
 
                 <!-- Last change Column -->
                 <ng-container matColumnDef="lastChange">
-                    <mat-header-cell *matHeaderCellDef> LAST CHANGE </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef tourAnchor="portfolio-detail-step-6"> LAST CHANGE </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.lastChange | number}} </mat-cell>
                 </ng-container>
 
                 <!-- Buttons Column -->
                 <ng-container matColumnDef="buttons">
-                    <mat-header-cell *matHeaderCellDef> BUTTONS </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef tourAnchor="portfolio-detail-step-7"> BUY/SELL </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <div fxLayout="row">
                             <div class="item item-edit">

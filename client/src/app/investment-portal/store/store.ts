@@ -97,6 +97,13 @@ export function rootReducer(lastState: AppState, action: any): AppState {
               ...lastState,
               token: undefined
             };
+        case PortfolioActions.UPDATE_FIRST_LOGIN_FLAG:
+            const user = lastState.user;
+            user.firstLogin = action.payload;
+            return <AppState> {
+              ...lastState,
+              user: user
+            };
         case AuthenticationActions.LOG_OUT:
           return INITIAL_STATE;
     }

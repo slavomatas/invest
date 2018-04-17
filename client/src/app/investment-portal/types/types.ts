@@ -18,6 +18,7 @@ export interface User {
     roleName: string,
     description: string
   }];
+  firstLogin: boolean;
 }
 
 export interface PortfolioDetails {

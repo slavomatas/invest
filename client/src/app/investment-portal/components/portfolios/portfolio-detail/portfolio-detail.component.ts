@@ -11,7 +11,8 @@ import { PortfolioService } from '../../../services/portfolio/portfolio.service'
 import { PortfolioActions } from '../../../store/actions/portfolio-actions';
 import { EditPositionDialogComponent, TradeFormObject, DialogTitle } from '../../portfolio-detail-overview/edit-position-dialog/edit-position-dialog.component';
 import * as moment from 'moment';
-import { TourService } from 'ngx-tour-md-menu';
+import { TourService, IStepOption } from 'ngx-tour-md-menu';
+import { demandPortfolioDetailTour } from '../../../toures/tour-definitions';
 
 
 @Component({
@@ -31,6 +32,9 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
   portfolioId: number;
   private paramsSubscription: any;
+  currentTabIndex: number = 0;
+
+  tourRunning: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +56,44 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.tourService.events$.subscribe(x => console.log(x));
+
+    // Following three event hooks are ugly workaround. Problem is we need to swap between two tabs during the tour.
+    // We can subscribe to stepShow$ event, but at that point the step is already shown, but tab is not yet swapped.
+    // That means that step content does not know to which element it should be displayed, so it's nowhere (it's position is undefined)
+    // Therefore we must start the tour again from specific step (the first step on the tab that needs to be swapped), to force updating step's position.
+    this.tourService.stepShow$.subscribe((step: IStepOption) => {
+      if (step.anchorId === 'portfolio-detail-step-8') {
+        if (this.currentTabIndex === 0) {
+          this.onIndexChange(1);
+          setTimeout(
+            () => {
+              this.tourService.startAt(7);
+            }, 500
+          ); 
+        } 
+      } else if (step.anchorId === 'portfolio-detail-step-7') {
+        if (this.currentTabIndex === 1) {
+          this.onIndexChange(0);
+          setTimeout(
+            () => {
+              this.tourService.startAt(6);
+            }, 500
+          ); 
+        } 
+      }
+    });
+
+    this.tourService.end$.subscribe(() => {
+      this.tourRunning = false;
+    });
+
+    this.tourService.start$.subscribe(() => {
+      if (!this.tourRunning) {
+        this.onIndexChange(0);
+        this.tourRunning = true;
+      }
+      
+    });
   }
 
   ngOnInit() {
@@ -71,32 +112,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
   startGuideClick() {
 
-    this.tourService.initialize([{
-      anchorId: 'step-1',
-      content: 'Some content',
-      placement: 'below',
-      title: 'First',
-    },
-    {
-      anchorId: 'step-2',
-      content: 'Some content',
-      placement: 'below',
-      title: 'Second',
-    },
-    {
-      anchorId: 'step-3',
-      content: 'Some content',
-      placement: 'below',
-      title: 'Third',
-    },
-    {
-      anchorId: 'step-4',
-      content: 'Some content',
-      placement: 'below',
-      title: 'Fourth',
-    }
-  ]);
-
+    this.tourService.initialize(demandPortfolioDetailTour);
     this.tourService.start();
   }
 
@@ -168,6 +184,10 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
 
   onMatTabClick() {
     this.reduxPortfolio = cloneDeep(this.reduxPortfolio);
+  }
+
+  onIndexChange(newValue: number) {
+    this.currentTabIndex = newValue;
   }
 }
 

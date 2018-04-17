@@ -38,7 +38,7 @@ export class LineChartComponent implements OnInit {
   tmpChartData: CumulativeChartData[] = [];
   cumulativeChartSelectedPeriod: string;
   dataEmpty = undefined;
-  
+
 
   // view: any[] = [900, 400];
 
@@ -62,9 +62,9 @@ export class LineChartComponent implements OnInit {
   };
 
   refLines = [
-   
+
     { value: 0, name: 'zero' },
- 
+
    ];
   // line, area
   autoScale = true;
