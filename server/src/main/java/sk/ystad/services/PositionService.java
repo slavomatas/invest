@@ -186,23 +186,25 @@ public class PositionService {
             }
         }
 
-        try {
-            String queryStr = String.format("SELECT * FROM %s ORDER BY time DESC LIMIT 2", portfolio.getIdInflux());
-            Query query = new Query(queryStr, Measures.PORTFOLIO_POSITIONS.getName());
-            QueryResult queryResult = this.influxDB.query(query);
-            List<List<Object>> values = queryResult.getResults().get(0).getSeries().get(0).getValues();
-            List<String> columns = queryResult.getResults().get(0).getSeries().get(0).getColumns();
-            for (int i = 1; i < values.get(0).size(); i++) {
-                Position p = new Position(columns.get(i), 0.0);
-                for (UserPosition position : positions) {
-                    if (position.getSecurity().getSymbol().equals(p.getSymbol())) {
-                        position.setMarketValue((Double) values.get(0).get(i));
-                        position.setLastChangeMarketValue((Double) values.get(0).get(i) - (Double) values.get(1).get(i));
+        if (portfolio.getIdInflux() != null) {
+            try {
+                String queryStr = String.format("SELECT * FROM %s ORDER BY time DESC LIMIT 2", portfolio.getIdInflux());
+                Query query = new Query(queryStr, Measures.PORTFOLIO_POSITIONS.getName());
+                QueryResult queryResult = this.influxDB.query(query);
+                List<List<Object>> values = queryResult.getResults().get(0).getSeries().get(0).getValues();
+                List<String> columns = queryResult.getResults().get(0).getSeries().get(0).getColumns();
+                for (int i = 1; i < values.get(0).size(); i++) {
+                    Position p = new Position(columns.get(i), 0.0);
+                    for (UserPosition position : positions) {
+                        if (position.getSecurity().getSymbol().equals(p.getSymbol())) {
+                            position.setMarketValue((Double) values.get(0).get(i));
+                            position.setLastChangeMarketValue((Double) values.get(0).get(i) - (Double) values.get(1).get(i));
+                        }
                     }
                 }
+            } catch (NullPointerException e) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-        } catch (NullPointerException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(positions, HttpStatus.OK);
