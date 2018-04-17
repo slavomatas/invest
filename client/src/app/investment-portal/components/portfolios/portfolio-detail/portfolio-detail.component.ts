@@ -70,8 +70,8 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
             () => {
               this.tourService.startAt(7);
             }, 500
-          ); 
-        } 
+          );
+        }
       } else if (step.anchorId === 'portfolio-detail-step-7') {
         if (this.currentTabIndex === 1) {
           this.onIndexChange(0);
@@ -79,8 +79,8 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
             () => {
               this.tourService.startAt(6);
             }, 500
-          ); 
-        } 
+          );
+        }
       }
     });
 
@@ -93,7 +93,7 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
         this.onIndexChange(0);
         this.tourRunning = true;
       }
-      
+
     });
     this.modelPortfolioList$.subscribe((reduxPortfolios: PortfolioDetails[]) => {
       if (reduxPortfolios != null && reduxPortfolios.length > 0) {
@@ -106,7 +106,6 @@ export class PortfolioDetailComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.tourService.events$.subscribe(x => console.log(x));
   }
 
   ngOnInit() {
