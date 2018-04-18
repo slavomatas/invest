@@ -120,7 +120,7 @@ export class LoginComponent implements OnInit
             }
             // Forward to dashboard page
             this.router.navigate(['dashboard']);
-            this.messageService.connect();
+            // this.messageService.connect();
           });
       })
     // Check for an error on request

@@ -48,7 +48,7 @@ export class AuthGuard implements CanActivate {
           // Get user details
           this.authService.getUser().then((userData: User) => {
           this.authActions.getUserDataFullfiled(true, userData);
-            this.messageService.connect();
+            // this.messageService.connect();
             this.router.navigate(['dashboard']);
           });
         }

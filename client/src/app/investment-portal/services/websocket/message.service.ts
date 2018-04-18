@@ -78,11 +78,11 @@ export class MessageService {
 
    public sendMessage(message) {
 
-      this.stompClient.send('/app/send/message', {}, message);
+      // this.stompClient.send('/app/send/message', {}, message);
    }
 
   public subscribeToDefaults() {
-    this.sendMessage('{"command":"subscribe_to","values":[{"event":"portfolios_change"}]}');
+    // this.sendMessage('{"command":"subscribe_to","values":[{"event":"portfolios_change"}]}');
   }
 
   private onMessage(message: Message) {
